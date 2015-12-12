@@ -18,6 +18,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class NewEvent_Teacher extends AppCompatActivity {
@@ -41,13 +43,24 @@ ImageButton test;
         setContentView(R.layout.activity_new_event__teacher);
 
         DATE= (TextView) findViewById(R.id.dateText);
-        eventTitle = (EditText) findViewById(R.id.eventTitle);
-        eventDescription = (EditText) findViewById(R.id.eventDescription);
-        EventButton = (Button) findViewById(R.id.addEventButton);
+        eventTitle = (EditText) findViewById(R.id.taskTitle);
+        eventDescription = (EditText) findViewById(R.id.taskDescription);
+        EventButton = (Button) findViewById(R.id.editButton);
         test=(ImageButton)findViewById(R.id.test);
 
         Bundle from= getIntent().getExtras();
         role = from.getString("role");
+
+        String string_date = "12-December-2012";
+
+        SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy");
+        Date d = null;
+        try {
+            d = f.parse(string_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        final long milliseconds = d.getTime();
 
         final Date date2= new Date(Year-1900,Month,Day+1);
 
@@ -66,7 +79,7 @@ ImageButton test;
                         calendar.put("addedByRole", role);
                         calendar.put("eventTitle", myTitle);
                         calendar.put("eventDescription", myDesc);
-                        calendar.put("dueDate", date2);
+                        calendar.put("test", milliseconds);
                         calendar.saveInBackground();
                         Toast.makeText(getApplicationContext(), "Event details successfully stored", Toast.LENGTH_LONG).show();
                         Intent i = new Intent(NewEvent_Teacher.this, MainActivity.class);
@@ -92,10 +105,10 @@ ImageButton test;
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 
-                Year=year;
-                Month=month;
-                Day=dayOfMonth;
-                date1 = new Date(Year-1900,Month,Day);
+                Year = year;
+                Month = month;
+                Day = dayOfMonth;
+                date1 = new Date(Year - 1900, Month, Day);
                 DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                 DATE.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
                 Toast.makeText(getApplicationContext(), dayOfMonth + "/" + Month + "/" + year, Toast.LENGTH_LONG).show();

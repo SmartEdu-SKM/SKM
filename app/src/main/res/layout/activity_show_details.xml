@@ -26,16 +26,16 @@
         android:text="Description"
         android:id="@+id/description"
         android:textSize="25sp"
+        android:layout_below="@+id/title_details"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="51dp"
-        android:layout_below="@+id/title" />
+        android:layout_marginTop="51dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
-        android:id="@+id/editButton"
+        android:text="OK"
+        android:id="@+id/okButton"
         android:background="#ff8d94"
         android:textColor="#ffff"
         android:layout_alignParentBottom="true"
@@ -55,30 +55,54 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/test"
+        android:id="@+id/dateIcon"
         android:background="@drawable/ic_calender"
-        android:onClick="open"
         android:layout_alignBottom="@+id/dateText"
         android:layout_toLeftOf="@+id/dateText"
         android:layout_toStartOf="@+id/dateText"
         android:backgroundTint="#ff8d94" />
 
-
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/taskTitle"
+        android:text="title details"
+        android:id="@+id/title_details"
+        android:textSize="20sp"
         android:layout_below="@+id/title"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/taskDescription"
+        android:text="description details"
+        android:textSize="20sp"
+        android:id="@+id/desc_details"
         android:layout_below="@+id/description"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/delButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#ff8d94"
+        android:textColor="#ffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EDIT"
+        android:id="@+id/editButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="#ff8d94"
+        android:textColor="#ffff" />
 
 
 </RelativeLayout>

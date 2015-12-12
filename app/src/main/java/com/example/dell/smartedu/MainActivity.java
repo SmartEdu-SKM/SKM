@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity{
                     task_intent.putExtra("role","Teacher");
                     startActivity(task_intent);
                 } else if (position == 2) {
-                    Intent student_intent = new Intent(MainActivity.this, Students.class);
+                    Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
                     startActivity(student_intent);
                 } else if (position == 3) {
                 } else if (position == 4) {

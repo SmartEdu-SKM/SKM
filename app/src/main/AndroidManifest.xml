@@ -80,8 +80,11 @@
         </activity>
         <activity
             android:name=".NewEvent_Teacher"
-            android:label="@string/title_activity_new_event__teacher"  >
-
+            android:label="@string/title_activity_new_event__teacher" >
+        </activity>
+        <activity
+            android:name=".teacher_classes"
+            android:label="@string/title_activity_teacher_classes" >
         </activity>
     </application>
 

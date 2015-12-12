@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#13ff77">
+    android:background="#ffff">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -44,7 +44,9 @@
             android:layout_height="wrap_content"
             android:text="Add task"
             android:id="@+id/addButton"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="#ff8d94"
+            android:textColor="#ffff" />
 
         <ListView
             android:layout_width="match_parent"
