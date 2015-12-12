@@ -57,11 +57,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/test"
         android:background="@drawable/ic_calender"
-        android:onClick="open"
         android:layout_alignBottom="@+id/dateText"
         android:layout_toLeftOf="@+id/dateText"
         android:layout_toStartOf="@+id/dateText"
-        android:backgroundTint="#ff8d94" />
+        android:backgroundTint="#ff8d94"
+        android:onClick="open" />
 
 
     <EditText

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     ArrayAdapter adapter=null;
     ArrayList<String> taskLt;
     String [] items;
+    ImageButton cal;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -250,10 +252,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         //taskLt.remove(position);
                         //adapter.notifyDataSetChanged();
                         //taskList.setAdapter(adapter);
-                        Intent to_tasks = new Intent(Tasks.this, Tasks.class);
-                        to_tasks.putExtra("role", role);
-                        startActivity(to_tasks);
-                        finish();
+
+                        onRestart();
+
 
                         dialog.dismiss();
 
@@ -273,11 +274,19 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         Desc = (EditText) dialog_in.findViewById(R.id.taskDescription);
                         myDate = (TextView) dialog_in.findViewById(R.id.dateText);
                         EditButton = (Button) dialog_in.findViewById(R.id.editButton);
-
+                        cal = (ImageButton) dialog_in.findViewById(R.id.test);
                         Title.setText(details[0]);
                         Desc.setText(details[1]);
                         myDate.setText(details[2]);
-
+                        final int[] flag = {0};
+                        cal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                open(view);
+                                flag[0] = 1;
+                                myDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
+                            }
+                        });
 
                         EditButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
@@ -290,22 +299,27 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                                         if (e == null) {
                                             objectRet.get(0).put("TaskName", ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
                                             objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.taskDescription)).getText().toString());
+                                            if (flag[0] == 1) {
+                                                Day = Daycal;
+                                                Month = Monthcal;
+                                                Year = Yearcal;
+                                            } else {
+                                                String[] datenew = myDate.getText().toString().split("/");
 
-                                            String[] datenew = myDate.getText().toString().split("/");
+                                                final String[] datedetailsnew = new String[3];
+                                                int j = 0;
 
-                                            final String[] datedetailsnew = new String[3];
-                                            int j = 0;
-
-                                            for (String x : datenew) {
-                                                datedetailsnew[j++] = x;
+                                                for (String x : datenew) {
+                                                    datedetailsnew[j++] = x;
+                                                }
+                                                Log.d("Post retrieval", datedetailsnew[0]);
+                                                Toast.makeText(getApplicationContext(), datedetailsnew[0], Toast.LENGTH_LONG);
+                                                Day = Integer.parseInt(datedetailsnew[0]);
+                                                Month = Integer.parseInt(datedetailsnew[1]);
+                                                Year = Integer.parseInt(datedetailsnew[2]);
                                             }
-                                            Log.d("Post retrieval", datedetailsnew[0]);
-                                            Toast.makeText(getApplicationContext(), datedetailsnew[0], Toast.LENGTH_LONG);
-                                            Day = Integer.parseInt(datedetailsnew[0]);
-                                            Month = Integer.parseInt(datedetailsnew[1]);
-                                            Year = Integer.parseInt(datedetailsnew[2]);
                                             String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
-
+                                            Toast.makeText(getApplicationContext(), "updated date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
 
                                             SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
                                             Date d = null;
@@ -325,10 +339,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                                     }
                                 });
                                 dialog_in.dismiss();
-                                Intent to_tasks = new Intent(Tasks.this, Tasks.class);
-                                to_tasks.putExtra("role", role);
-                                startActivity(to_tasks);
-                                finish();
+                                onRestart();
                             }
 
                         });
@@ -359,6 +370,16 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent to_tasks = new Intent(Tasks.this, Tasks.class);
+        to_tasks.putExtra("role", role);
+        startActivity(to_tasks);
+        finish();
+
+    }
+
     public void open(View view)
     {
 
@@ -372,12 +393,12 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 
                 Yearcal = year;
-                Monthcal = month;
+                Monthcal = month+1;
                 Daycal = dayOfMonth;
                 date1 = new Date(Year - 1900, Month, Day);
                 DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                 myDate.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
-                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + Month+1 + "/" + year, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), Daycal + "/" + Monthcal + "/" + Year, Toast.LENGTH_LONG).show();
                 dialogcal.dismiss();
 
             }
