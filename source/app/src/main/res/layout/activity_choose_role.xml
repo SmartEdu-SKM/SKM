@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:id="@+id/addrole">
+
+        <LinearLayout
+            android:id="@+id/container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#72231F">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Student"
+        android:id="@+id/button_student"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#25010101"
+        android:textColor="#FFFF"
+        android:textSize="40sp"
+        android:onClick="chooseStudent"
+        android:layout_gravity="center_horizontal"
+         />
+
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#72231F">
+
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Teacher"
+        android:id="@+id/button_teacher"
+        android:onClick="chooseTeacher"
+        android:layout_centerVertical="true"
+            android:background="#61010101"
+            android:textColor="#FFFF"
+            android:textSize="40sp"
+        android:layout_gravity="center_horizontal" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="#72231F">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Parent"
+            android:id="@+id/button_parent"
+            android:background="#25010101"
+            android:textColor="#FFFF"
+            android:textSize="40sp"
+            android:onClick="chooseParent"
+            android:layout_gravity="center_horizontal" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">SmartEdu</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+
+    <string name="nav_item_dashboard">Dashboard</string>
+    <string name="nav_item_tasks">Tasks</string>
+    <string name="nav_item_attendance">Attendance</string>
+    <string name="nav_item_timetable">Time Table</string>
+    <string name="nav_item_assignments">Assignments</string>
+    <string name="nav_item_grades">Grades</string>
+    <string name="nav_item_schedule">Schedule</string>
+    <string name="nav_item_settings">Settings</string>
+    <string name="nav_item_anotherrole">Choose another Role</string>
+    <string name="nav_item_logout">Logout</string>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_dashboard</item>
+        <item>@string/nav_item_tasks</item>
+        <item>@string/nav_item_attendance</item>
+        <item>@string/nav_item_timetable</item>
+        <item>@string/nav_item_assignments</item>
+        <item>@string/nav_item_grades</item>
+        <item>@string/nav_item_schedule</item>
+        <item>@string/nav_item_settings</item>
+        <item>@string/nav_item_anotherrole</item>
+        <item>@string/nav_item_logout</item>
+    </string-array>
+   <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+    <string name="title_section1">a</string>
+    <string name="title_section2">b</string>
+    <string name="title_section3">c</string>
+    <string name="title_messages">Messages</string>
+    <string name="title_friends">Friends</string>
+    <string name="title_home">Home</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login">login</string>
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="title_activity_students">Students</string>
+    <string name="title_activity_new_student">NewStudent</string>
+    <string name="title_activity_student_info">StudentInfo</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_role">Role</string>
+    <string name="title_activity_add_role">AddRole</string>
+    <string name="title_activity_choose_role">ChooseRole</string>
+    <string name="title_activity_student_home_activity">student_home_activity</string>
+    <string name="title_activity_parent_home_activity">parent_home_activity</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_calendar">Calendar</string>
+    <string name="title_activity_new_event__teacher">NewEvent_Teacher</string>
+    <string name="title_activity_teacher_classes">teacher_classes</string>
+</resources>
