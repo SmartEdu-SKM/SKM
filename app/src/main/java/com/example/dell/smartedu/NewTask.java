@@ -149,7 +149,7 @@ public class NewTask extends BaseActivity {
                 date1 = new Date(Year - 1900, Month, Day);
                 DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                 DATE.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
-                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + Month+1 + "/" + year, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month+1) + "/" + year, Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }

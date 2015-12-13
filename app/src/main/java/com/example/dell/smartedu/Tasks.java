@@ -282,6 +282,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         cal.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                myDate.setText(details[2]);
                                 open(view);
                                 flag[0] = 1;
                                 myDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
@@ -392,13 +393,14 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 
+                date1=null;
                 Yearcal = year;
                 Monthcal = month+1;
                 Daycal = dayOfMonth;
-                date1 = new Date(Year - 1900, Month, Day);
+                date1 = new Date(Yearcal - 1900, Monthcal-1, Daycal);
                 DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                 myDate.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
-                Toast.makeText(getApplicationContext(), Daycal + "/" + Monthcal + "/" + Year, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
                 dialogcal.dismiss();
 
             }
