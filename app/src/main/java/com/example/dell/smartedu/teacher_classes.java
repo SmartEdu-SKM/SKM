@@ -45,7 +45,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Students");
+        getSupportActionBar().setTitle("Classes");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -205,7 +205,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -216,7 +216,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
