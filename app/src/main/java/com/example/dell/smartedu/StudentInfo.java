@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-public class StudentInfo extends FragmentActivity implements FragmentDrawer.FragmentDrawerListener{
+public class StudentInfo extends FragmentActivity implements FragmentDrawer.FragmentDrawerListener, ActionBar.TabListener{
     ViewPager Tab;
     TabPagerAdapter TabAdapter;
     ActionBar actionBar;
@@ -43,13 +43,40 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
         Tab.setAdapter(TabAdapter);
 
         actionBar = getActionBar();
+        if (
+                actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+        }
         //Enable Tabs on Action Bar
         if (
                 actionBar != null) {
 
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         }
-        ActionBar.TabListener tabListener = new ActionBar.TabListener(){
+
+
+        if (
+                actionBar != null) {
+            Tab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageSelected(int postion) {
+
+                    actionBar.setSelectedNavigationItem(postion);
+                }
+
+                @Override
+                public void onPageScrolled(int arg0, float arg1, int arg2) {
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int arg0) {
+                }
+            });
+
+        }
+
+
+       /*ActionBar.TabListener tabListener = new ActionBar.TabListener(){
 
             @Override
             public void onTabReselected(android.app.ActionBar.Tab tab,
@@ -69,7 +96,7 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
                                         FragmentTransaction ft) {
                 // TODO Auto-generated method stub
 
-            }};
+            }}; */
         //Add New Tab
         // actionBar.addTab(actionBar.newTab().setText("Android").setTabListener(tabListener));
         //actionBar.addTab(actionBar.newTab().setText("iOS").setTabListener(tabListener));
@@ -119,5 +146,21 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
             Intent i = new Intent(StudentInfo.this, login.class);
             startActivity(i);
         }
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+        Tab.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
     }
 }

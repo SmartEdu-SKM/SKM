@@ -86,6 +86,10 @@
             android:name=".teacher_classes"
             android:label="@string/title_activity_teacher_classes" >
         </activity>
+        <activity
+            android:name=".TimeTable"
+            android:label="@string/title_activity_time_table" >
+        </activity>
     </application>
 
 </manifest>

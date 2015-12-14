@@ -59,4 +59,5 @@
     <string name="title_activity_calendar">Calendar</string>
     <string name="title_activity_new_event__teacher">NewEvent_Teacher</string>
     <string name="title_activity_teacher_classes">teacher_classes</string>
+    <string name="title_activity_time_table">TimeTable</string>
 </resources>

@@ -20,7 +20,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                                 ArrayList<String> studentLt = new ArrayList<String>();
                                 ArrayAdapter adapter = new ArrayAdapter(Students.this, android.R.layout.simple_list_item_1, studentLt);
-                                Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                                 Log.d("user", "Retrieved " + studentListRet.size() + " students");
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
@@ -162,6 +161,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Students.this, NewStudent.class);
+                i.putExtra("id",id);
                 startActivity(i);
             }
         });
