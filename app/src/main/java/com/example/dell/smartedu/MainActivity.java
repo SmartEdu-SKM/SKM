@@ -59,14 +59,14 @@ public class MainActivity extends BaseActivity{
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
                     startActivity(student_intent);
                 } else if (position == 3) {
+                    Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
+                    startActivity(schedule_intent);
                 } else if (position == 4) {
                 } else if (position == 5) {
                 }
             }
         });
-
         ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-
     }
 
     @Override

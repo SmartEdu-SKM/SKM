@@ -90,6 +90,10 @@
             android:name=".TimeTable"
             android:label="@string/title_activity_time_table" >
         </activity>
+        <activity
+            android:name=".Schedule"
+            android:label="@string/title_activity_schedule" >
+        </activity>
     </application>
 
 </manifest>
