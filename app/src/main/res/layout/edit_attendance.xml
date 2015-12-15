@@ -64,9 +64,9 @@
         android:layout_alignBottom="@+id/dateText"
 
         android:backgroundTint="#fff"
-        android:onClick="open"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:nestedScrollingEnabled="false" />
 
 
     <EditText
