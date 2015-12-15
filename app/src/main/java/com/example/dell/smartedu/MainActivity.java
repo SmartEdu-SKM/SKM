@@ -47,9 +47,9 @@ public class MainActivity extends BaseActivity{
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (position == 0) {
-                    Intent calendar_intent = new Intent(MainActivity.this, NewEvent_Teacher.class);
-                   calendar_intent.putExtra("role","Teacher");
-                    startActivity(calendar_intent);
+                    Intent attendance_intent = new Intent(MainActivity.this, AddAttendance.class);
+                   attendance_intent.putExtra("role","Teacher");
+                    startActivity(attendance_intent);
 
                 } else if (position == 1) {
                     Intent task_intent = new Intent(MainActivity.this, Tasks.class);

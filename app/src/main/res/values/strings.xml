@@ -61,4 +61,6 @@
     <string name="title_activity_teacher_classes">teacher_classes</string>
     <string name="title_activity_time_table">TimeTable</string>
     <string name="title_activity_schedule">Schedule</string>
+    <string name="title_activity_add_attendance">AddAttendance</string>
+    <string name="title_activity_add_attendance__students">AddAttendance_Students</string>
 </resources>

@@ -94,6 +94,22 @@
             android:name=".Schedule"
             android:label="@string/title_activity_schedule" >
         </activity>
+        <activity
+            android:name=".AddAttendance"
+            android:label="@string/title_activity_add_attendance"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AddAttendance_Students"
+            android:label="@string/title_activity_add_attendance__students"
+            android:parentActivityName=".AddAttendance" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.AddAttendance" />
+        </activity>
     </application>
 
 </manifest>

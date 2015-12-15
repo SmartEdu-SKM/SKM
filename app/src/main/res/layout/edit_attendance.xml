@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.dell.smartedu.NewEvent_Teacher"
+    android:orientation="horizontal"
+    android:onClick="okClick"
+    android:background="#5856D6">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Number of Absents"
+        android:id="@+id/absentDays_head"
+        android:textSize="25sp"
+        android:layout_marginTop="57dp"
+        android:layout_below="@+id/dateText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Days"
+        android:id="@+id/totalDays_head"
+        android:textSize="25sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/absentDays" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/doneButton"
+        android:background="#2B2B2B"
+        android:textColor="#ffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateText"
+        android:layout_marginTop="45dp"
+        android:textSize="25sp"
+        android:layout_marginLeft="10dp"
+        android:text="Date"
+
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/test"
+        android:layout_toEndOf="@+id/test"
+        android:textColor="#ffff" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test"
+        android:background="@drawable/ic_calender"
+        android:layout_alignBottom="@+id/dateText"
+
+        android:backgroundTint="#fff"
+        android:onClick="open"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/absentDays"
+
+        android:layout_below="@+id/absentDays_head"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalDays"
+        android:layout_below="@+id/totalDays_head"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"/>
+
+
+</RelativeLayout>
+
