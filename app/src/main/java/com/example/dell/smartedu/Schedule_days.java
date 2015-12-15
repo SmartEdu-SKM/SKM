@@ -53,6 +53,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
     Button editButton;
     EditText Desc;
     Button EditButton;
+    int flag=1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,11 +139,11 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
                 infodisplay.setText(details[2].trim());
 
                 String[] sttimes = details[0].split(":");
-                long time=TimeUnit.MINUTES.toMillis(Integer.parseInt(sttimes[0])*60 + Integer.parseInt(sttimes[1]));
+                long time = TimeUnit.MINUTES.toMillis(Integer.parseInt(sttimes[0]) * 60 + Integer.parseInt(sttimes[1]));
 
                 final String[] scheduleId = new String[1];
                 ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
-                scheduleQuery.whereEqualTo("startTime",time);
+                scheduleQuery.whereEqualTo("startTime", time);
                 scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
                 scheduleQuery.whereEqualTo("addedByRole", role);
                 scheduleQuery.whereEqualTo("day", day);
@@ -202,7 +203,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
                             public void onClick(View v) {
 
                                 ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
-                                taskQuery.whereEqualTo("objectId",scheduleId[0]);
+                                taskQuery.whereEqualTo("objectId", scheduleId[0]);
                                 taskQuery.findInBackground(new FindCallback<ParseObject>() {
                                     public void done(List<ParseObject> objectRet, ParseException e) {
 
@@ -329,7 +330,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
     }
 
     public void  add(View v)
-    {
+    {   flag=0;
         int start=Integer.parseInt(starthours.getSelectedItem().toString())*60 + Integer.parseInt(startmins.getSelectedItem().toString());
         int end=Integer.parseInt(endhours.getSelectedItem().toString())*60 + Integer.parseInt(endmins.getSelectedItem().toString());
         long startmilli= TimeUnit.MINUTES.toMillis(start);
@@ -355,11 +356,55 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
     }
 
 
-    public boolean checkTime(long start,long end)
-    {
+    public boolean checkTime(final long start, final long end)
+    {    Log.d("user", "checking and flag = " + String.valueOf(flag));
 
-        return true;
+
+        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
+        taskQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
+        taskQuery.whereEqualTo("day", day);
+        taskQuery.whereEqualTo("addedByRole", role);
+        taskQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> scheduleListRet, ParseException e) {
+                if (e == null) {
+                    if (scheduleListRet.size() == 0) {
+                        Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.d("user", "checking new schedule timings with " + scheduleListRet.size() + " schedules");
+                        Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
+                        for (int i = 0; i < scheduleListRet.size(); i++) {
+                            ParseObject u = (ParseObject) scheduleListRet.get(i);
+                            long ret_start = u.getLong("startTime");
+                            long ret_end = u.getLong("endTime");
+                            if (start >= ret_start && start < ret_end) {
+                                Log.d("user", "here");
+                                flag = 1;
+                                break;
+                            }
+                            if (end > ret_start && end <= ret_end) {
+                                flag = 1;
+                                break;
+                            }
+                            if (start < ret_start && end > ret_end) {
+                                flag = 1;
+                                break;
+                            }
+                        }
+
+                    }
+                } else {
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
+        Log.d("user", "checking and flag = " + String.valueOf(flag));
+        if(flag==1)
+            return true;
+        else
+            return false;
     }
+
+
 
 
     @Override
