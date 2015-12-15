@@ -55,7 +55,7 @@ public class NewTask extends BaseActivity {
         getSupportActionBar().setTitle("New Task");*/
 
         taskTitle = (EditText) findViewById(R.id.taskTitle);
-        taskDescription = (EditText) findViewById(R.id.taskDescription);
+        taskDescription = (EditText) findViewById(R.id.scheduleinfo);
         addTaskButton = (Button) findViewById(R.id.addTaskButton);
 
         DATE= (TextView) findViewById(R.id.dateText);

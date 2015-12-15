@@ -44,7 +44,7 @@ ImageButton test;
 
         DATE= (TextView) findViewById(R.id.dateText);
         eventTitle = (EditText) findViewById(R.id.taskTitle);
-        eventDescription = (EditText) findViewById(R.id.taskDescription);
+        eventDescription = (EditText) findViewById(R.id.scheduleinfo);
         EventButton = (Button) findViewById(R.id.editButton);
         test=(ImageButton)findViewById(R.id.test);
 

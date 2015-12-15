@@ -75,7 +75,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/taskDescription"
+        android:id="@+id/scheduleinfo"
         android:layout_below="@+id/description"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
