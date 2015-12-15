@@ -115,8 +115,17 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         String item = ((TextView) view).getText().toString();
 
+                                        String[] itemValues = item.split(". ");
+
+                                        final String[] details = new String[2];
+                                        int j = 0;
+
+                                        for (String x : itemValues) {
+                                            details[j++] = x;
+                                        }
+
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                        studentQuery.whereEqualTo("name", item);
+                                        studentQuery.whereEqualTo("name", details[1].trim());
                                         studentQuery.whereEqualTo("class", classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {

@@ -11,11 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.akshdeep.smartedu.*;
-import com.example.akshdeep.smartedu.MainActivity;
-
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     String id;
+    private String fragments[] ={"Info","Attendance","Result"};
     public TabPagerAdapter(FragmentManager fm, String id) {
         super(fm);
         this.id=id;
@@ -50,7 +48,12 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return 3; //No of Tabs
+        return fragments.length; //No of Tabs
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position){
+        return fragments[position];
     }
 
 }
