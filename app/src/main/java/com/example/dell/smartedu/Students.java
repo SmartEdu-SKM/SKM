@@ -95,7 +95,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 for (int i = 0; i < studentListRet.size(); i++) {
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
+                                    int rollnumber=u.getInt("rollNumber");
                                     String name = u.getString("name");
+                                    name= String.valueOf(rollnumber) + ". " + name;
                                     //name += "\n";
                                     // name += u.getInt("age");
 
