@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,9 +23,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
     Button editButton;
     Button doneButton;
     EditText editabsentDays;
-    EditText editpercentage;
+    //EditText editpercentage;
     EditText edittotalDays;
     TextView absentDays;
     TextView percentage;
@@ -45,14 +44,15 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
     TextView myDate;
     TextView editmyDate;
     Date date1;
-    CalendarView calendar;
+   // CalendarView calendar;
+    Calendar calendar;
     ImageView cal;
     int Year;
     int Month;
     int Day;
-    int Yearcal;
-    int Monthcal;
-    int Daycal;
+    //int Yearcal;
+    //int Monthcal;
+    //int Daycal;
 
     private FragmentDrawer drawerFragment;
 
@@ -64,7 +64,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_students);
+        setContentView(R.layout.activity_add_attendance__students);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -260,9 +260,15 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         edittotalDays = (EditText) dialog_in.findViewById(R.id.totalDays);
         editmyDate = (TextView) dialog_in.findViewById(R.id.dateText);
 
+        calendar = Calendar.getInstance();
+        //System.out.println("Current time =&gt; " + calendar.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        final String string_current_date = df.format(calendar.getTime());
+        editmyDate.setText(string_current_date);
 
         doneButton = (Button) dialog_in.findViewById(R.id.doneButton);
-        cal = (ImageButton) dialog_in.findViewById(R.id.test);
+       /* cal = (ImageButton) dialog_in.findViewById(R.id.test);
         //final int[] flag = {0};
         cal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,12 +277,12 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                 //flag[0] = 1;
                 editmyDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
             }
-        });
+        });*/
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (editabsentDays.equals("") || edittotalDays.equals("") || ((editmyDate.getText().equals("Date")))) {
+                if (editabsentDays.equals("") || edittotalDays.equals("")) {
                     Toast.makeText(getApplicationContext(), "Attendance details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
                     ParseObject attendance= new ParseObject("Attendance");
@@ -288,12 +294,21 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                     float percent = ((total - abs) / total) * 100;
                     attendance.put("percentage", percent);
 
-                    Day = Daycal;
-                    Month = Monthcal;
-                    Year = Yearcal;
+                    String[] date = string_current_date.trim().split("/");
+                    final String[] datedetails = new String[3];
+                    int j = 0;
+
+                    for (String x : date) {
+                        datedetails[j++] = x;
+                    }
+
+                    Day = Integer.parseInt(datedetails[0]);
+                    Month = Integer.parseInt(datedetails[1]);
+                    Year = Integer.parseInt(datedetails[2]);
+
 
                     String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
-                    Toast.makeText(getApplicationContext(), "updated date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "current date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
 
                     SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
                     Date d = null;
@@ -330,19 +345,26 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
         editabsentDays.setText(absentDays.getText().toString().trim());
         edittotalDays.setText(totalDays.getText().toString().trim());
-        editmyDate.setText(myDate.getText().toString().trim());
 
         doneButton = (Button) dialog_in.findViewById(R.id.doneButton);
         cal = (ImageButton) dialog_in.findViewById(R.id.test);
-        final int[] flag = {0};
-        cal.setOnClickListener(new View.OnClickListener() {
+        //final int[] flag = {0};
+
+        calendar = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        final String string_current_date = df.format(calendar.getTime());
+        editmyDate.setText(string_current_date);
+
+
+     /*   cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 open(view);
                 flag[0] = 1;
                 myDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
             }
-        });
+        }); */
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -362,12 +384,8 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                                 float total = Float.parseFloat(edittotalDays.getText().toString());
                                 float percent = ((total - abs) / total) * 100;
                                 objectRet.get(0).put("percentage", percent);
-                                if (flag[0] == 1) {
-                                    Day = Daycal;
-                                    Month = Monthcal;
-                                    Year = Yearcal;
-                                } else {
-                                    String[] datenew = myDate.getText().toString().split("/");
+
+                                    String[] datenew = string_current_date.split("/");
 
                                     final String[] datedetailsnew = new String[3];
                                     int j = 0;
@@ -380,9 +398,9 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                                     Day = Integer.parseInt(datedetailsnew[0]);
                                     Month = Integer.parseInt(datedetailsnew[1]);
                                     Year = Integer.parseInt(datedetailsnew[2]);
-                                }
+
                                 String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
-                                Toast.makeText(getApplicationContext(), "updated date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "current date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
 
                                 SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
                                 Date d = null;
@@ -412,7 +430,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
     }
 
-    public void open(View view)
+   /* public void open(View view)
     {
 
         final Dialog dialogcal = new Dialog(AddAttendance_Students.this);
@@ -440,7 +458,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
 
 
-    }
+    }*/
 
 
     @Override
@@ -451,6 +469,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
             startActivity(nouser);
         }
     }
+
 
 }
 
