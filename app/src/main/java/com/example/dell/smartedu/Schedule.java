@@ -31,7 +31,7 @@ public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDra
         drawerFragment.setDrawerListener(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        TabAdapter = new ScheduleTabsAdapter(getSupportFragmentManager());
+        TabAdapter = new ScheduleTabsAdapter(getSupportFragmentManager(),"Teacher");
 
         Tab = (ViewPager)findViewById(R.id.pager);
         Tab.setOnPageChangeListener(
