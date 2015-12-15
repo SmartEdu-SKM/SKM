@@ -1,36 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:id="@+id/scrollView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/scheduleday"
-            android:textColor="#010001"
-            android:layout_gravity="center_horizontal" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/scheduleday"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
-    <fragment
-        android:id="@+id/fragment_navigation_drawer"
-        android:name="com.example.dell.smartedu.FragmentDrawer"
-        android:layout_width="@dimen/nav_drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:layout="@layout/fragment_navigation_drawer"
-        tools:layout="@layout/fragment_navigation_drawer" />
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/scheduleList"
+                android:layout_alignTop="@+id/addSchedule"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:id="@+id/addSchedule"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
-</android.support.v4.widget.DrawerLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -13,16 +13,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 
 public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
-    public ScheduleTabsAdapter(FragmentManager fm) {
+    String role;
+    public ScheduleTabsAdapter(FragmentManager fm,String role) {
         super(fm);
-
+        this.role=role;
         // TODO Auto-generated constructor stub
     }
 
     @Override
     public Fragment getItem(int i) {
         Bundle bundle=new Bundle();
-       // bundle.putString("id",id);
+       bundle.putString("role",role);
         Fragment day = new Schedule_days();
         switch (i) {
             case 0:
