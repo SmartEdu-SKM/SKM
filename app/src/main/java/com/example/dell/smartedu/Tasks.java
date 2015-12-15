@@ -162,8 +162,8 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                 dialog.setContentView(R.layout.activity_show_details);
                 dialog.setTitle("Task Details");
 
-                myTitle = (TextView) dialog.findViewById(R.id.title_details);
-                myDesc = (TextView) dialog.findViewById(R.id.desc_details);
+                myTitle = (TextView) dialog.findViewById(R.id.start_time);
+                myDesc = (TextView) dialog.findViewById(R.id.end_time);
                 myDate = (TextView) dialog.findViewById(R.id.dateText);
 
                 myTitle.setText(details[0].trim());
@@ -271,7 +271,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         dialog_in.setTitle("Edit Details");
 
                         Title = (EditText) dialog_in.findViewById(R.id.taskTitle);
-                        Desc = (EditText) dialog_in.findViewById(R.id.taskDescription);
+                        Desc = (EditText) dialog_in.findViewById(R.id.scheduleinfo);
                         myDate = (TextView) dialog_in.findViewById(R.id.dateText);
                         EditButton = (Button) dialog_in.findViewById(R.id.editButton);
                         cal = (ImageButton) dialog_in.findViewById(R.id.test);
@@ -299,7 +299,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
                                         if (e == null) {
                                             objectRet.get(0).put("TaskName", ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
-                                            objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.taskDescription)).getText().toString());
+                                            objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
                                             if (flag[0] == 1) {
                                                 Day = Daycal;
                                                 Month = Monthcal;
