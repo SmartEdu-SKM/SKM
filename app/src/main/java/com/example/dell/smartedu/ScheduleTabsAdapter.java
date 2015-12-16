@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
     String role;
+    private String fragments[] ={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
     public ScheduleTabsAdapter(FragmentManager fm,String role) {
         super(fm);
         this.role=role;
@@ -23,7 +24,7 @@ public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int i) {
         Bundle bundle=new Bundle();
-       bundle.putString("role",role);
+       bundle.putString("role", role);
        // Fragment day = new Schedule_days();
         switch (i) {
             case 0:
@@ -76,7 +77,12 @@ public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return 7; //No of Tabs
+        return fragments.length; //No of Tabs
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position){
+        return fragments[position];
     }
 
 }
