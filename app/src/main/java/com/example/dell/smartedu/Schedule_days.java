@@ -63,6 +63,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
         taskQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
         taskQuery.whereEqualTo("day", day);
         taskQuery.whereEqualTo("addedByRole", role);
+        taskQuery.addAscendingOrder("startTime");
         taskQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
                 if (e == null) {
@@ -292,7 +293,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
 
 
 
-        startmins.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*startmins.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedstartmins = Integer.parseInt(startmins.getSelectedItem().toString());
@@ -310,8 +311,41 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        });*/
 
+
+        endhours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int selectedendhours = Integer.parseInt(endhours.getSelectedItem().toString());
+                if(!(selectedendhours==Integer.parseInt(starthours.getSelectedItem().toString()))) {
+                    String[] mins_end = new String[60];
+                    for (int i = 0; i < 60; i++) {
+                        mins_end[i] = String.valueOf(i);
+                    }
+
+                    ArrayAdapter<String> adapter_end = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item, mins_end);
+                    endmins.setAdapter(adapter_end);
+                }else
+                {
+                    int selectedstartmins = Integer.parseInt(startmins.getSelectedItem().toString());
+                    String[] mins_end = new String[60 - selectedstartmins];
+                    int x = selectedstartmins + 1;
+                    for (int i = 0; i < 59 - selectedstartmins; i++) {
+                        mins_end[i] = String.valueOf(x);
+                        x++;
+                    }
+                    ArrayAdapter<String> adapter_end = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_spinner_item, mins_end);
+                    endmins.setAdapter(adapter_end);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override

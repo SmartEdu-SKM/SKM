@@ -82,6 +82,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
                     studentQuery.whereEqualTo("class", classRef[0]);
+                    studentQuery.addAscendingOrder("rollNumber");
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -125,6 +126,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                         }
 
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0]));
                                         studentQuery.whereEqualTo("name", details[1].trim());
                                         studentQuery.whereEqualTo("class", classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {

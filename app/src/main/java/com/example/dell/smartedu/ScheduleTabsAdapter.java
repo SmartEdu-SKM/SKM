@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
     String role;
-    private String fragments[] ={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+    private String fragments[] ={"Mon","Tues","Wed","Thu","Fri","Sat","Sun"};
     public ScheduleTabsAdapter(FragmentManager fm,String role) {
         super(fm);
         this.role=role;
