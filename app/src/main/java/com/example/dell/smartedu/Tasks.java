@@ -292,55 +292,59 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         EditButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
 
-                                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-                                taskQuery.whereEqualTo("objectId", taskid);
-                                taskQuery.findInBackground(new FindCallback<ParseObject>() {
-                                    public void done(List<ParseObject> objectRet, ParseException e) {
+                                if (Title.equals("") || Desc.equals("") ) {
+                                    Toast.makeText(getApplicationContext(), "Event details cannot be empty!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
+                                    taskQuery.whereEqualTo("objectId", taskid);
+                                    taskQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> objectRet, ParseException e) {
 
-                                        if (e == null) {
-                                            objectRet.get(0).put("TaskName", ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
-                                            objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
-                                            if (flag[0] == 1) {
-                                                Day = Daycal;
-                                                Month = Monthcal;
-                                                Year = Yearcal;
-                                            } else {
-                                                String[] datenew = myDate.getText().toString().split("/");
+                                            if (e == null) {
+                                                objectRet.get(0).put("TaskName", ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
+                                                objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
+                                                if (flag[0] == 1) {
+                                                    Day = Daycal;
+                                                    Month = Monthcal;
+                                                    Year = Yearcal;
+                                                } else {
+                                                    String[] datenew = myDate.getText().toString().split("/");
 
-                                                final String[] datedetailsnew = new String[3];
-                                                int j = 0;
+                                                    final String[] datedetailsnew = new String[3];
+                                                    int j = 0;
 
-                                                for (String x : datenew) {
-                                                    datedetailsnew[j++] = x;
+                                                    for (String x : datenew) {
+                                                        datedetailsnew[j++] = x;
+                                                    }
+                                                    Log.d("Post retrieval", datedetailsnew[0]);
+                                                    Toast.makeText(getApplicationContext(), datedetailsnew[0], Toast.LENGTH_LONG);
+                                                    Day = Integer.parseInt(datedetailsnew[0]);
+                                                    Month = Integer.parseInt(datedetailsnew[1]);
+                                                    Year = Integer.parseInt(datedetailsnew[2]);
                                                 }
-                                                Log.d("Post retrieval", datedetailsnew[0]);
-                                                Toast.makeText(getApplicationContext(), datedetailsnew[0], Toast.LENGTH_LONG);
-                                                Day = Integer.parseInt(datedetailsnew[0]);
-                                                Month = Integer.parseInt(datedetailsnew[1]);
-                                                Year = Integer.parseInt(datedetailsnew[2]);
-                                            }
-                                            String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
-                                            Toast.makeText(getApplicationContext(), "updated date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
+                                                String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
+                                                Toast.makeText(getApplicationContext(), "updated date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
 
-                                            SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
-                                            Date d = null;
-                                            try {
-                                                d = f.parse(string_date);
-                                            } catch (java.text.ParseException e1) {
-                                                e.printStackTrace();
-                                            }
-                                            long newmilliseconds = d.getTime();
-                                            objectRet.get(0).put("dueDate", newmilliseconds);
-                                            objectRet.get(0).saveEventually();
+                                                SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+                                                Date d = null;
+                                                try {
+                                                    d = f.parse(string_date);
+                                                } catch (java.text.ParseException e1) {
+                                                    e.printStackTrace();
+                                                }
+                                                long newmilliseconds = d.getTime();
+                                                objectRet.get(0).put("dueDate", newmilliseconds);
+                                                objectRet.get(0).saveEventually();
 
-                                        } else {
-                                            Log.d("Post retrieval", "Error: " + e.getMessage());
+                                            } else {
+                                                Log.d("Post retrieval", "Error: " + e.getMessage());
+                                            }
+
                                         }
-
-                                    }
-                                });
-                                dialog_in.dismiss();
-                                onRestart();
+                                    });
+                                    dialog_in.dismiss();
+                                    onRestart();
+                                }
                             }
 
                         });
