@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,10 +22,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -75,7 +72,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
                         Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
                     } else {
                         Log.d("user", "Retrieved " + scheduleListRet.size() + " schedules");
-                        Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
                             ParseObject u = (ParseObject) scheduleListRet.get(i);
@@ -131,7 +128,7 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
                 infodisplay = (TextView) show_dialog.findViewById(R.id.info);
 
                 starttimedisplay.setText(details[0].trim());
-                endtimedisplay.setText(details[1]);
+                endtimedisplay.setText(details[1].trim());
 
                 infodisplay.setText(details[2].trim());
 
@@ -319,14 +316,14 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                add(view);
-                dialog.dismiss();
+                add(view, dialog);
+                //dialog.dismiss();
             }
         });
         dialog.show();
     }
 
-    public void  add(View v)
+    public void  add(View v, Dialog dialog)
     {   flag=0;
         int start=Integer.parseInt(starthours.getSelectedItem().toString())*60 + Integer.parseInt(startmins.getSelectedItem().toString());
         int end=Integer.parseInt(endhours.getSelectedItem().toString())*60 + Integer.parseInt(endmins.getSelectedItem().toString());
@@ -349,56 +346,109 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
            schedule.put("endTime", endmilli);
             schedule.saveEventually();
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }
     }
 
 
     public boolean checkTime(final long start, final long end)
-    {    Log.d("user", "checking and flag = " + String.valueOf(flag));
-
+    {   // Log.d("user", "checking and flag = " + String.valueOf(flag));
+        final int[] check = new int[1];
 
         ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
         taskQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
         taskQuery.whereEqualTo("day", day);
         taskQuery.whereEqualTo("addedByRole", role);
-        taskQuery.findInBackground(new FindCallback<ParseObject>() {
+
+        try {
+            List<ParseObject> scheduleListRet = taskQuery.find();
+            if (scheduleListRet.size() == 0) {
+                Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
+            } else {
+                check[0] = 0;
+                Log.d("user", "checking new schedule timings with " + scheduleListRet.size() + " schedules");
+                Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
+                for (int i = 0; i < scheduleListRet.size(); i++) {
+
+                    ParseObject u = (ParseObject) scheduleListRet.get(i);
+                    long ret_start = u.getLong("startTime");
+                    long ret_end = u.getLong("endTime");
+                    if (start >= ret_start && start < ret_end) {
+                        Log.d("user", "here");
+                        // Schedule_days.this.flag = 1;
+
+                        //flag=1;
+                        check[0] = 1;
+                        return true;
+                        //break;
+                    }
+                    if (end > ret_start && end <= ret_end) {
+                        //Schedule_days.this.flag = 1;
+                        check[0] = 1;
+                        return true;
+                       // break;
+                    }
+                    if (start < ret_start && end > ret_end) {
+                        Schedule_days.this.flag = 1;
+                        check[0] = 1;
+                        return true;
+                       // break;
+                    }
+                }
+                //Log.d("user", "checking and flag = " + String.valueOf(check[0]));
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+       /* taskQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
                 if (e == null) {
                     if (scheduleListRet.size() == 0) {
                         Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
                     } else {
+                        check[0] = 0;
                         Log.d("user", "checking new schedule timings with " + scheduleListRet.size() + " schedules");
                         Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         for (int i = 0; i < scheduleListRet.size(); i++) {
+
                             ParseObject u = (ParseObject) scheduleListRet.get(i);
                             long ret_start = u.getLong("startTime");
                             long ret_end = u.getLong("endTime");
                             if (start >= ret_start && start < ret_end) {
                                 Log.d("user", "here");
-                                flag = 1;
+                                // Schedule_days.this.flag = 1;
+
+                                //flag=1;
+                                check[0] = 1;
                                 break;
                             }
                             if (end > ret_start && end <= ret_end) {
-                                flag = 1;
+                                Schedule_days.this.flag = 1;
+                                check[0] = 1;
                                 break;
                             }
                             if (start < ret_start && end > ret_end) {
-                                flag = 1;
+                                Schedule_days.this.flag = 1;
+                                check[0] = 1;
                                 break;
                             }
                         }
-
+                        //Log.d("user", "checking and flag = " + String.valueOf(check[0]));
                     }
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }
         });
-        Log.d("user", "checking and flag = " + String.valueOf(flag));
-        if(flag==1)
+        //Log.d("user", "checking and flag = " + String.valueOf(this.flag));
+       Log.d("user", "checking and flag = " + String.valueOf(check[0]));
+        if(check[0] ==1)
             return true;
         else
-            return false;
+            return false;*/
+
     }
 
 

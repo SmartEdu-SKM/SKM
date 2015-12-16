@@ -1,11 +1,5 @@
 package com.example.dell.smartedu;
 
-/**
- * Created by Shubham Bhasin on 07-Nov-15.
- */
-/**
- * Created by Shubham Bhasin on 07-Nov-15.
- */
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
