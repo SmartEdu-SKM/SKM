@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity{
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (position == 0) {
-                    Intent attendance_intent = new Intent(MainActivity.this, AddAttendance.class);
+                    Intent attendance_intent = new Intent(MainActivity.this, AddAttendance_Students.class);
                    attendance_intent.putExtra("role","Teacher");
                     startActivity(attendance_intent);
 

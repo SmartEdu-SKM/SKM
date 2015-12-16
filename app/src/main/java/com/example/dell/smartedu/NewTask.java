@@ -21,9 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Dell on 10/7/2015.
- */
+
 public class NewTask extends BaseActivity {
 
     private Toolbar mToolbar;
