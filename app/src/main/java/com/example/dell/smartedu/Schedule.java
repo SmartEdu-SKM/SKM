@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,20 +20,45 @@ public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDra
     ActionBar actionBar;
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
-
+    TabLayout tabLayout;
+    String role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+       /* drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        drawerFragment.setDrawerListener(this);
+        drawerFragment.setDrawerListener(this);*/
+        Bundle fromrole= getIntent().getExtras();
+        role = fromrole.getString("role");
+        Tab = (ViewPager) findViewById(R.id.pager);
+        Tab.setAdapter(new ScheduleTabsAdapter(getSupportFragmentManager(), role));
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        TabAdapter = new ScheduleTabsAdapter(getSupportFragmentManager(),"Teacher");
 
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(Tab);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Tab.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Tab.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                Tab.setCurrentItem(tab.getPosition());
+            }
+        });
+
+        /*
         Tab = (ViewPager)findViewById(R.id.pager);
         Tab.setOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -77,7 +103,7 @@ public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDra
             });
 
         }
-
+*/
 
        /*ActionBar.TabListener tabListener = new ActionBar.TabListener(){
 

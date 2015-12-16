@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDrawerListener{
 
-    TextView Schedule_day;
     ListView scheduleList;
     Button scheduleAdd;
     EditText info;
@@ -61,8 +60,6 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
         final View schedule = inflater.inflate(R.layout.fragment_schedule_days, container, false);
         day= getArguments().getString("day");
         role=getArguments().getString("role");
-        Schedule_day= (TextView)schedule.findViewById(R.id.scheduleday);
-        Schedule_day.setText(day);
         scheduleList=(ListView)schedule.findViewById(R.id.scheduleList);
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
         ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
