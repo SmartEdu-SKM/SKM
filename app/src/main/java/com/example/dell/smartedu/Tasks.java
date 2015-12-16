@@ -105,6 +105,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
         taskQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
         taskQuery.whereEqualTo("addedByRole", role);
+        taskQuery.addAscendingOrder("dueDate");
         taskQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> taskListRet, ParseException e) {
                 if (e == null) {
