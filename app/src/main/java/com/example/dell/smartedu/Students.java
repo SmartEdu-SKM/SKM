@@ -126,8 +126,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                             details[j++] = x;
                                         }
 
+                                        Log.d("user", "rno: " + details[0].trim()+"name "+details[1]);  //extracts Chit as Chi and query fails???
+
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0]));
+                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0].trim()));
                                         studentQuery.whereEqualTo("name", details[1].trim());
                                         studentQuery.whereEqualTo("class", classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
