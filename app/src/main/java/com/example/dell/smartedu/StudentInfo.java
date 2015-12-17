@@ -20,6 +20,8 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
     private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
     TabLayout tabLayout;
+    String classId;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,13 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
 
        // mToolbar = (Toolbar) findViewById(R.id.toolbar);
                Intent from_student = getIntent();
-        String id = from_student.getStringExtra("id");
+        id = from_student.getStringExtra("id");
+        classId = from_student.getStringExtra("classId");
         Toast.makeText(StudentInfo.this, "id of student selected is = " + id, Toast.LENGTH_LONG).show();
         //TabAdapter = new TabPagerAdapter(getSupportFragmentManager(),id);
 
         Tab = (ViewPager) findViewById(R.id.pager);
-        Tab.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), id));
+        Tab.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), id,classId));
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);

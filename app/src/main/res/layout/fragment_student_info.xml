@@ -23,7 +23,7 @@
         android:layout_gravity="center_horizontal" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/student_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
@@ -39,11 +39,19 @@
         android:textColor="#040404" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/student_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:textColor="#ff3021" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Student"
+        android:id="@+id/delete_student"
+        android:layout_gravity="right" />
 
 </LinearLayout>
 

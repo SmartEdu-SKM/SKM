@@ -33,6 +33,7 @@ public class NewStudent extends BaseActivity {
     EditText studentAge;
     EditText studentRno;
     Notification_bar noti_bar;
+    String classId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class NewStudent extends BaseActivity {
         getSupportActionBar().setTitle("New Student");
 
         Intent from_students = getIntent();
-        final String id = from_students.getStringExtra("id");
+        classId = from_students.getStringExtra("id");
 
         studentName = (EditText) findViewById(R.id.studentName);
         studentAge = (EditText) findViewById(R.id.studentAge);
@@ -68,7 +69,7 @@ public class NewStudent extends BaseActivity {
 
                     final ParseObject[] classRef = new ParseObject[1];
                     final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                    classQuery.whereEqualTo("objectId", id);
+                    classQuery.whereEqualTo("objectId",classId);
                     classQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -95,7 +96,7 @@ public class NewStudent extends BaseActivity {
 
                                                 Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
                                                 Intent i = new Intent(NewStudent.this, Students.class);
-                                                i.putExtra("id", id);
+                                                i.putExtra("id",classId);
                                                 startActivity(i);
                                                 finish();
                                             }
