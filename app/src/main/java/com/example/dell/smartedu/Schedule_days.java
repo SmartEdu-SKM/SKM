@@ -59,12 +59,12 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
         role=getArguments().getString("role");
         scheduleList=(ListView)schedule.findViewById(R.id.scheduleList);
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
-        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
-        taskQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
-        taskQuery.whereEqualTo("day", day);
-        taskQuery.whereEqualTo("addedByRole", role);
-        taskQuery.addAscendingOrder("startTime");
-        taskQuery.findInBackground(new FindCallback<ParseObject>() {
+        ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
+        scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
+        scheduleQuery.whereEqualTo("day", day);
+        scheduleQuery.whereEqualTo("addedByRole", role);
+        scheduleQuery.addAscendingOrder("startTime");
+        scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
                 if (e == null) {
                     //Log.d("user", "Retrieved " + userList.size() + " users");
