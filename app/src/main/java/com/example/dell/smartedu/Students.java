@@ -37,6 +37,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     //ArrayList<Task> myList;
     ListView studentList;
     Notification_bar noti_bar;
+    String classId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         Intent from_student = getIntent();
-        final String id = from_student.getStringExtra("id");
+        classId = from_student.getStringExtra("id");
         addStudentButton = (Button)findViewById(R.id.addButton);
         studentList = (ListView) findViewById(R.id.studentList);
 
@@ -64,14 +65,14 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Toast.makeText(Students.this, "id class selected is = " +id, Toast.LENGTH_LONG).show();
+        Toast.makeText(Students.this, "id class selected is = " +classId, Toast.LENGTH_LONG).show();
 
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", id);
+        classQuery.whereEqualTo("objectId",classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -137,6 +138,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                                     //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
                                                     Intent to_student_info = new Intent(Students.this, StudentInfo.class);
                                                     to_student_info.putExtra("id", id);
+                                                    to_student_info.putExtra("classId",classId);
                                                     startActivity(to_student_info);
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
@@ -174,7 +176,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Students.this, NewStudent.class);
-                i.putExtra("id",id);
+                i.putExtra("id",classId);
                 startActivity(i);
             }
         });
