@@ -50,6 +50,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
     int Year;
     int Month;
     int Day;
+    String role;
     //int Yearcal;
     //int Monthcal;
     //int Daycal;
@@ -74,9 +75,9 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        Intent from_student = getIntent();
-        final String id = from_student.getStringExtra("id");
-
+       Intent from_student = getIntent();
+        //final String id = from_student.getStringExtra("id");
+        role=from_student.getStringExtra("role");
         studentList = (ListView) findViewById(R.id.studentList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -88,7 +89,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Toast.makeText(AddAttendance_Students.this, "id class selected is = " + id, Toast.LENGTH_LONG).show();
+        //Toast.makeText(AddAttendance_Students.this, "id class selected is = " + id, Toast.LENGTH_LONG).show();
 
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
@@ -111,6 +112,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
                         studentQuery.whereEqualTo("class", classRef[0]);
+                        studentQuery.addAscendingOrder("rollNumber");
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
@@ -124,11 +126,12 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                                     for (int i = 0; i < studentListRet.size(); i++) {
                                         ParseObject u = (ParseObject) studentListRet.get(i);
                                         //  if(u.getString("class").equals(id)) {
-                                        String name = u.getNumber("rollNumber").toString().trim();
+                                        String rollnumber = u.getNumber("rollNumber").toString().trim();
+                                        String name=u.getString("name");
                                         //name += "\n";
                                         // name += u.getInt("age");
-
-                                        adapter.add(name);
+                                        String student=rollnumber + ". " + name;
+                                        adapter.add(student);
                                         // }
 
                                     }
@@ -140,8 +143,8 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                                     studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                            String item = ((TextView) view).getText().toString();
-                                            int itemvalue = Integer.parseInt(item);
+                                            String[] item = ((TextView) view).getText().toString().split(". ");
+                                            int itemvalue = Integer.parseInt(item[0]);
 
                                             final ParseObject[] studentRef = new ParseObject[1];
                                             ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
