@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -28,6 +31,13 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private static final int RESULT_LOAD_IMAGE = 1;
     private File selectedFile;
+    EditText Password;
+    EditText ConfirmPassword;
+    EditText UserName;
+    Button changeButton;
+    String password;
+    String confirmPassword;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +64,70 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case R.id.menu_name:
 
                 Toast.makeText(getApplicationContext(), "To change username module", Toast.LENGTH_SHORT).show();
+                final Dialog dialog1 = new Dialog(BaseActivity.this);
+                dialog1.setContentView(R.layout.change_username);
+                dialog1.setTitle("Change UserName");
 
+                UserName = (EditText) dialog1.findViewById(R.id.username);
+                changeButton = (Button) dialog1.findViewById(R.id.change_userButton);
+
+                changeButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        userName= UserName.getText().toString().trim();
+
+                        if (userName.equals("")) {
+                            Toast.makeText(getApplicationContext(), "User Name cannot be empty", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            ParseUser currentUser = ParseUser.getCurrentUser();
+                            currentUser.setUsername(userName);
+                            currentUser.saveInBackground();
+                            Toast.makeText(getApplicationContext(), "User Name change successful", Toast.LENGTH_LONG).show();
+
+                            dialog1.dismiss();
+                        }
+                    }
+
+                });
+
+                dialog1.show();
                 break;
+
+
 
             case R.id.menu_password:
                 Toast.makeText(getApplicationContext(), "To change password module", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(BaseActivity.this);
+                dialog.setContentView(R.layout.change_password);
+                dialog.setTitle("Change Password");
 
+                Password = (EditText) dialog.findViewById(R.id.password);
+                ConfirmPassword = (EditText) dialog.findViewById(R.id.confirm_password);
+                changeButton = (Button) dialog.findViewById(R.id.change_passButton);
+
+                changeButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        password= Password.getText().toString().trim();
+                        confirmPassword= ConfirmPassword.getText().toString().trim();
+                        if (!password.equals(confirmPassword)) {
+                            Toast.makeText(getApplicationContext(), "Password does not match", Toast.LENGTH_LONG).show();
+
+                        } else {
+
+                            ParseUser currentUser = ParseUser.getCurrentUser();
+                            currentUser.setPassword(password);
+                            currentUser.saveInBackground();
+                            Toast.makeText(getApplicationContext(), "Password change successful", Toast.LENGTH_LONG).show();
+
+                            dialog.dismiss();
+                        }
+                    }
+
+                });
+
+                dialog.show();
                 break;
 
         }
