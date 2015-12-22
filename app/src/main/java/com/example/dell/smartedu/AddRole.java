@@ -2,7 +2,6 @@ package com.example.dell.smartedu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,7 +17,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class AddRole extends AppCompatActivity {
+public class AddRole extends BaseActivity {
 
     private Toolbar mToolbar;
 
