@@ -72,19 +72,14 @@ public class NewStudent extends BaseActivity {
                     final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
 
 
-                  //  final String[] userRef = new String[1];
-                    final ParseObject[] users = {new ParseObject("User")};
-                    //sa Set up a new Parse user
-                   /* final ParseUser user = new ParseUser();
+                    final ParseUser[] userRef = {new ParseUser()};
+                    // Set up a new Parse user
+                    final ParseUser user = new ParseUser();
                     user.setUsername(name + rollno);
-                    user.setPassword(rollno + name + rollno);*/
-                   // user.saveInBackground();
-                    ParseUser user=new ParseUser();
-                    user.put("username",name+rollno);
-                    user.put("password",rollno + name + rollno);
-                    user.saveInBackground();
+                    user.setPassword(rollno + name + rollno);
 
-                    Toast.makeText(NewStudent.this, "Student User made ",
+
+                    Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
                             Toast.LENGTH_LONG).show();
 
                    /* Parse.User.signUp(username, password).then(function(newUser) {
@@ -92,61 +87,29 @@ public class NewStudent extends BaseActivity {
                     });*/
 
 
-                    ParseQuery<ParseUser> useraddedinfo=ParseQuery.getQuery("User");
-                    useraddedinfo.whereEqualTo("username", name + rollno);
-                    useraddedinfo.findInBackground(new FindCallback<ParseUser>() {
+                    user.signUpInBackground(new SignUpCallback() {
                         @Override
-                        public void done(List<ParseUser> usersList, ParseException e) {
-                            if (e == null) {
-                                if(usersList.size()!=0) {
-                                    users[0] = usersList.get(0);
-                                    addStudent(users[0]);
-                                }else
-                                {
-                                    Toast.makeText(NewStudent.this, "no user added so no retrieved",
+                        public void done(ParseException e) {// Handle the response
+
+                            if (e != null) {
+                                // Show the error message
+                                Toast.makeText(NewStudent.this, e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                               userRef[0] = user;
+                                try {
+                                    ParseUser.become(sessionToken);
+                                    addStudent(userRef[0]);
+                                } catch (ParseException e1) {
+                                    Toast.makeText(NewStudent.this,"cant add student",
                                             Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Toast.makeText(NewStudent.this, "here",
-                                        Toast.LENGTH_LONG).show();
+
                             }
+
                         }
                     });
 
-
-                    /*user.signUpInBackground(new SignUpCallback() {
-                       @Override
-                       public void done(ParseException e) {// Handle the response
-
-                           if (e != null) {
-                               // Show the error message
-                               Toast.makeText(NewStudent.this, e.getMessage(),
-                                       Toast.LENGTH_LONG).show();
-                           } else {
-
-                               userRef[0] = user.getObjectId();
-                               ParseUser.becomeInBackground(sessionToken, new LogInCallback() {
-                                   public void done(ParseUser user1, ParseException e) {
-                                       if (user1 != null) {
-                                           // The current user is now set to user.
-                                       } else {
-                                           // The token could not be validated.
-                                       }
-                                   }
-                               });
-                               // Toast.makeText(NewStudent.this, "Student User made "+ userRef[0]+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
-                               //doesnt change back the current user to original here
-                               /*Intent refresh=new Intent(NewStudent.this,NewStudent.class);
-                                startActivity(refresh);
-                               addStudent(userRef[0]);
-                           }
-
-                       }
-                   });*/
-
-                   /* Intent refresh=new Intent(NewStudent.this,Students.class);
-                    refresh.putExtra("id", classId);
-                    startActivity(refresh);*/
 
                             }
                         }
@@ -154,10 +117,10 @@ public class NewStudent extends BaseActivity {
                 }
 
 
-    protected void addStudent(final ParseObject userRef){
+    protected void addStudent(final ParseUser userRef){
 
 
-        Toast.makeText(NewStudent.this, "Student User made "+ userRef.getObjectId(),Toast.LENGTH_LONG).show();
+        Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
         final ParseObject[] classRef = new ParseObject[1];
         final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
         classQuery.whereEqualTo("objectId",classId);
