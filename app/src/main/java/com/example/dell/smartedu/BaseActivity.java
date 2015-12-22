@@ -261,4 +261,15 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(getApplicationContext(),login.class);
+            startActivity(nouser);
+        }
+
+    }
 }

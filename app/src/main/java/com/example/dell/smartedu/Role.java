@@ -78,5 +78,14 @@ public class Role extends BaseActivity implements FragmentDrawer.FragmentDrawerL
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(getApplicationContext(),login.class);
+            startActivity(nouser);
+        }
+    }
 
 }

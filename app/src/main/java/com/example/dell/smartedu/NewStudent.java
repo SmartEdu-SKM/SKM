@@ -10,10 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import java.util.List;
 
@@ -67,62 +69,122 @@ public class NewStudent extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "Student details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
 
-                    final ParseObject[] classRef = new ParseObject[1];
-                    final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                    classQuery.whereEqualTo("objectId",classId);
-                    classQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> studentListRet, ParseException e) {
-                            if (e == null) {
-                                Log.d("class", "Retrieved the class");
-                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                                classRef[0] = studentListRet.get(0);
-
-                                ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                studentQuery.whereEqualTo("class", classRef[0]);
-                                studentQuery.whereEqualTo("rollNumber", rollno);
-                                studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                    public void done(List<ParseObject> studentListRet, ParseException e) {
-                                        if (e == null) {
-
-                                            if(studentListRet.size()==0){
-                                                ParseObject student = new ParseObject("Student");
-                                                student.put("addedBy", ParseUser.getCurrentUser());
-                                                student.put("name", name);
-                                                student.put("age", age);
-                                                student.put("rollNumber", rollno);
-                                                student.put("class",classRef[0]);
-                                                student.saveInBackground();
-
-                                                Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
-                                                Intent i = new Intent(NewStudent.this, Students.class);
-                                                i.putExtra("id",classId);
-                                                startActivity(i);
-                                                finish();
-                                            }
-                                            else{
-                                                Toast.makeText(getApplicationContext(), "Unique Roll Number in a class Constraint Violated", Toast.LENGTH_LONG).show();
-                                            }
-
-                                            }
-
-                                        else {
-                                            //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
-                                            Log.d("user", "ErrorInner: " + e.getMessage());
-                                        }
-                                    }
-                                });
+                    final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
 
 
+                    final ParseUser[] userRef = {new ParseUser()};
+                    // Set up a new Parse user
+                    final ParseUser user = new ParseUser();
+                    user.setUsername(name + rollno);
+                    user.setPassword(rollno + name + rollno);
+
+
+                    Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
+                            Toast.LENGTH_LONG).show();
+
+                   /* Parse.User.signUp(username, password).then(function(newUser) {
+                        Parse.User.become(sessionToken);
+                    });*/
+
+
+                    user.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {// Handle the response
+
+                            if (e != null) {
+                                // Show the error message
+                                Toast.makeText(NewStudent.this, e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
                             } else {
-                                //Toast.makeText(NewStudent.this, "errorOuter", Toast.LENGTH_LONG).show();
-                                Log.d("user", "ErrorOuter: " + e.getMessage());
+                               userRef[0] = user;
+                                try {
+                                    ParseUser.become(sessionToken);
+                                    addStudent(userRef[0]);
+                                } catch (ParseException e1) {
+                                    Toast.makeText(NewStudent.this,"cant add student",
+                                            Toast.LENGTH_LONG).show();
+                                }
+
                             }
+
                         }
                     });
+
 
                             }
                         }
                     });
                 }
+
+
+    protected void addStudent(final ParseUser userRef){
+
+
+        Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
+        final ParseObject[] classRef = new ParseObject[1];
+        final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+        classQuery.whereEqualTo("objectId",classId);
+        classQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> studentListRet, ParseException e) {
+                if (e == null) {
+                    Log.d("class", "Retrieved the class");
+                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+
+                    classRef[0] = studentListRet.get(0);
+
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                    studentQuery.whereEqualTo("class", classRef[0]);
+                    studentQuery.whereEqualTo("rollNumber", rollno);
+                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                        public void done(List<ParseObject> studentListRet, ParseException e) {
+                            if (e == null) {
+
+                                if(studentListRet.size()==0){
+                                    ParseObject student = new ParseObject("Student");
+                                    student.put("addedBy", ParseUser.getCurrentUser());
+                                    student.put("name", name);
+                                    student.put("age", age);
+                                    student.put("rollNumber", rollno);
+                                    student.put("class",classRef[0]);
+                                    student.put("userId",userRef);
+                                    student.saveInBackground();
+
+                                    Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(NewStudent.this, Students.class);
+                                    i.putExtra("id",classId);
+                                    startActivity(i);
+                                    finish();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Unique Roll Number in a class Constraint Violated", Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+
+                            else {
+                                //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+                                Log.d("user", "ErrorInner: " + e.getMessage());
+                            }
+                        }
+                    });
+
+
+                } else {
+                    //Toast.makeText(NewStudent.this, "errorOuter", Toast.LENGTH_LONG).show();
+                    Log.d("user", "ErrorOuter: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(NewStudent.this,login.class);
+            startActivity(nouser);
+        }
+    }
+
             }
