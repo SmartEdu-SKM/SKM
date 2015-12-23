@@ -35,8 +35,6 @@ public class AddMarks extends BaseActivity {
         studentId = from_stud_result.getString("studentId");
         classId = from_stud_result.getString("classId");
 
-
-
         examDesc = (EditText) findViewById(R.id.examDesc);
         marksObtained = (EditText) findViewById(R.id.marksDesc);
         outOf = (EditText) findViewById(R.id.outOfDesc);
@@ -68,14 +66,17 @@ public class AddMarks extends BaseActivity {
                                         if (examDesc.equals("") || marksObtained.equals("") || outOf.equals("")) {
                                             Toast.makeText(getApplicationContext(), "Marks details cannot be empty!", Toast.LENGTH_LONG).show();
                                         } else {
+                                            ParseObject exam=new ParseObject("Exam");
+                                            exam.put("class",classRef[0]);
+                                            exam.put("examName", examDesc.getText().toString());
+                                            exam.put("totalMarks",Float.parseFloat(outOf.getText().toString()));
+                                            exam.saveEventually();
+
+
                                             ParseObject marks = new ParseObject("Marks");
                                             marks.put("student", studentRef[0]);
-                                            marks.put("class", classRef[0]);
-                                            marks.put("exam", examDesc.getText().toString());
+                                            marks.put("exam", exam);
                                             marks.put("marksObtained", Float.parseFloat(marksObtained.getText().toString()));
-                                            marks.put("outOf", Float.parseFloat(outOf.getText().toString()));
-                                            marks.put("subject",sub);
-
                                             marks.saveEventually();
 
                                             Toast.makeText(getApplicationContext(), "Marks details added!", Toast.LENGTH_LONG).show();

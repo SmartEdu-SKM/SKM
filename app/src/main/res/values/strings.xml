@@ -64,4 +64,6 @@
     <string name="title_activity_add_attendance">AddAttendance</string>
     <string name="title_activity_add_attendance__students">AddAttendance_Students</string>
     <string name="title_activity_add_marks">AddMarks</string>
+    <string name="title_activity_teacher_exams">teacher_exams</string>
+    <string name="title_activity_teacher_newexam">teacher_newexam</string>
 </resources>

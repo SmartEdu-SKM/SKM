@@ -52,18 +52,30 @@ public class MainActivity extends BaseActivity{
                     startActivity(attendance_intent);
 
                 } else if (position == 1) {
-                    Intent task_intent = new Intent(MainActivity.this, Tasks.class);
+                    /*Intent task_intent = new Intent(MainActivity.this, Tasks.class);
                     task_intent.putExtra("role","Teacher");
-                    startActivity(task_intent);
+                    startActivity(task_intent);*/
+                    Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    addexam_intent.putExtra("role","Teacher");
+                    addexam_intent.putExtra("for","marks");
+                    startActivity(addexam_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    student_intent.putExtra("for","students");
                     startActivity(student_intent);
                 } else if (position == 3) {
                     Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
                     schedule_intent.putExtra("role","Teacher");
                     startActivity(schedule_intent);
                 } else if (position == 4) {
+                    Intent addmarks_intent = new Intent(MainActivity.this, AddMarks.class);
+                    addmarks_intent.putExtra("role","Teacher");
+                    startActivity(addmarks_intent);
                 } else if (position == 5) {
+                    Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    addexam_intent.putExtra("role","Teacher");
+                    addexam_intent.putExtra("for","marks");
+                    startActivity(addexam_intent);
                 }
             }
         });

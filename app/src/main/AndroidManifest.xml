@@ -114,6 +114,14 @@
             android:name=".AddMarks"
             android:label="@string/title_activity_add_marks" >
         </activity>
+        <activity
+            android:name=".teacher_exams"
+            android:label="@string/title_activity_teacher_exams" >
+        </activity>
+        <activity
+            android:name=".teacher_newexam"
+            android:label="@string/title_activity_teacher_newexam" >
+        </activity>
     </application>
 
 </manifest>

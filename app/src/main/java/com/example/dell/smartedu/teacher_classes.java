@@ -30,12 +30,14 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
-
+    String _for;
     MyDBHandler dbHandler;
     // Students students = new Students();
     //ArrayList<Task> myList;
     ListView classList;
     Notification_bar noti_bar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,8 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         getSupportActionBar().setTitle("Classes");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        Intent from_home=getIntent();
+        _for=from_home.getStringExtra("for");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         classList = (ListView) findViewById(R.id.classesList);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -138,9 +142,16 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                             ParseObject u = (ParseObject) classObjRet.get(0);
                             String id = u.getObjectId();
                             Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
-                            Intent  to_student=new Intent(teacher_classes.this,Students.class);
-                            to_student.putExtra("id",id);
-                            startActivity(to_student);
+                            if(_for.equals("students")) {
+                                Intent to_student = new Intent(teacher_classes.this, Students.class);
+                                to_student.putExtra("id", id);
+                                startActivity(to_student);
+                            }else if(_for.equals("marks"))
+                            {
+                                Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
+                                to_exams.putExtra("id", id);
+                                startActivity(to_exams);
+                            }
                         } else {
                             Log.d("user", "Error: " + e.getMessage());
                         }
