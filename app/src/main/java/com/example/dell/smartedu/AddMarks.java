@@ -1,6 +1,7 @@
 package com.example.dell.smartedu;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +16,13 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
-public class AddMarks extends BaseActivity {
+public class AddMarks extends AppCompatActivity {
 
     String studentId;
     String classId;
     String sub;
     TextView subject;
-    EditText examDesc;
+    TextView examDesc;
     EditText marksObtained;
     EditText outOf;
     Button addMarks;
@@ -35,11 +36,10 @@ public class AddMarks extends BaseActivity {
         studentId = from_stud_result.getString("studentId");
         classId = from_stud_result.getString("classId");
 
-        examDesc = (EditText) findViewById(R.id.examDesc);
+        examDesc = (TextView) findViewById(R.id.exam);
         marksObtained = (EditText) findViewById(R.id.marksDesc);
-        outOf = (EditText) findViewById(R.id.outOfDesc);
-        addMarks = (Button) findViewById(R.id.addMarks);
-        subject= (TextView) findViewById(R.id.subjectText);
+            addMarks = (Button) findViewById(R.id.addMarks);
+
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");

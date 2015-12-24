@@ -52,13 +52,9 @@ public class MainActivity extends BaseActivity{
                     startActivity(attendance_intent);
 
                 } else if (position == 1) {
-                    /*Intent task_intent = new Intent(MainActivity.this, Tasks.class);
+                    Intent task_intent = new Intent(MainActivity.this, Tasks.class);
                     task_intent.putExtra("role","Teacher");
-                    startActivity(task_intent);*/
-                    Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    addexam_intent.putExtra("role","Teacher");
-                    addexam_intent.putExtra("for","marks");
-                    startActivity(addexam_intent);
+                    startActivity(task_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
                     student_intent.putExtra("for","students");
@@ -68,14 +64,15 @@ public class MainActivity extends BaseActivity{
                     schedule_intent.putExtra("role","Teacher");
                     startActivity(schedule_intent);
                 } else if (position == 4) {
-                    Intent addmarks_intent = new Intent(MainActivity.this, AddMarks.class);
+                    Intent addmarks_intent = new Intent(MainActivity.this, teacher_classes.class);
                     addmarks_intent.putExtra("role","Teacher");
+                    addmarks_intent.putExtra("for","exam");
                     startActivity(addmarks_intent);
                 } else if (position == 5) {
-                    Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
+                  /*  Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
                     addexam_intent.putExtra("role","Teacher");
-                    addexam_intent.putExtra("for","marks");
-                    startActivity(addexam_intent);
+                    addexam_intent.putExtra("for","exam");
+                    startActivity(addexam_intent);*/
                 }
             }
         });

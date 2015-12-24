@@ -30,18 +30,9 @@
         android:text="Exam Description"
         android:id="@+id/exam"
         android:textSize="25sp"
-        android:layout_below="@+id/subjectText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/examDesc"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/exam"/>
+        android:layout_marginTop="123dp"
+        android:layout_below="@+id/container_toolbar"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,9 +42,7 @@
         android:textSize="25sp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/examDesc"
-        android:layout_marginTop="30dp"/>
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -62,26 +51,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/marks"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Out Of"
-        android:id="@+id/outOf"
-        android:textSize="25sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/marksDesc"
-        android:layout_marginTop="30dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/outOfDesc"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/outOf"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -93,30 +62,6 @@
         android:background="#5856D6"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/subjectText"
-        android:textSize="25sp"
-        android:text="subject"
-        android:textColor="#5856D6"
-        android:layout_below="@+id/container_toolbar"
-        android:layout_alignRight="@+id/exam"
-        android:layout_alignEnd="@+id/exam" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:text="Subject:"
-        android:textSize="25sp"
-        android:onClick="open"
-        android:backgroundTint="#ff8d94"
-        android:textColor="#5856D6"
-        android:layout_above="@+id/exam"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

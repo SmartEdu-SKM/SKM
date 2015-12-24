@@ -146,7 +146,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 Intent to_student = new Intent(teacher_classes.this, Students.class);
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);
-                            }else if(_for.equals("marks"))
+                            }else if(_for.equals("exam"))
                             {
                                 Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
                                 to_exams.putExtra("id", id);

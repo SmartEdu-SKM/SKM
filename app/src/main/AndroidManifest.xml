@@ -122,6 +122,10 @@
             android:name=".teacher_newexam"
             android:label="@string/title_activity_teacher_newexam" >
         </activity>
+        <activity
+            android:name=".teacher_marks_studentlist"
+            android:label="@string/title_activity_teacher_marks_studentlist" >
+        </activity>
     </application>
 
 </manifest>
