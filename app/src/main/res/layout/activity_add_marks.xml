@@ -14,13 +14,6 @@
         android:orientation="vertical">
 
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:name="com.example.dell.smartedu.Notification_bar"
-            android:id="@+id/noti"
-            android:layout_gravity="center_horizontal"
-            tools:layout="@layout/fragment_notification_bar" />
     </LinearLayout>
 
 
