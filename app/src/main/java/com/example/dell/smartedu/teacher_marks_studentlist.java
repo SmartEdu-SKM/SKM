@@ -234,6 +234,8 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
 
                                                 marksobject.put("marksObtained", Float.parseFloat(obtmarks));
                                                 marksobject.saveEventually();
+                                                Toast.makeText(getApplicationContext(), "Marks Edited", Toast.LENGTH_LONG)
+                                                        .show();
                                             }
                                             marks_add.dismiss();
                                         }
@@ -254,6 +256,8 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                                     marksobj.put("student", studentobject);
                                                     marksobj.put("marksObtained", Integer.parseInt(obtmarks));
                                                     marksobj.saveEventually();
+                                                    Toast.makeText(getApplicationContext(), "Marks Added", Toast.LENGTH_LONG)
+                                                            .show();
                                                 }
                                                 marks_add.dismiss();
                                             }

@@ -1,6 +1,5 @@
 package com.example.dell.smartedu;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class student_info extends Fragment implements FragmentDrawer.FragmentDrawerListener{
@@ -68,12 +65,34 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                             studentRef[0] = studentListRet.get(0);
 
                             ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery("Attendance");
-                            attendanceQuery.whereEqualTo("student", studentRef[0]);
+                            attendanceQuery.whereEqualTo("student", ParseObject.createWithoutData("Student",studentId));
                             attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> attendanceListRet, ParseException e) {
                                     if (e == null) {
                                         if(attendanceListRet.size()!=0) {
                                             attendanceListRet.get(0).deleteEventually();
+                                            Log.d("user", "Deleted: " + "student attendance");
+                                        }else
+                                        {
+
+                                        }
+                                    } else {
+                                        Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                                        Log.d("user", "Error: " + e.getMessage());
+                                    }
+                                }
+                            });
+
+                            ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery("Marks");
+                            marksQuery.whereEqualTo("student", ParseObject.createWithoutData("Student",studentId));
+                            marksQuery.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> marksListRet, ParseException e) {
+                                    if (e == null) {
+                                        if(marksListRet.size()!=0) {
+                                            for(int i=0; i<marksListRet.size(); i++) {
+                                                marksListRet.get(i).deleteEventually();
+                                                Log.d("user", "Deleted: " + "student marks");
+                                            }
                                         }else
                                         {
 

@@ -47,7 +47,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Students");
+        getSupportActionBar().setTitle("Exams");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
