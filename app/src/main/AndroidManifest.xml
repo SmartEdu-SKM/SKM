@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -114,7 +115,6 @@
             android:name=".AddMarks"
             android:label="@string/title_activity_add_marks" >
         </activity>
-
         <activity
             android:name=".teacher_exams"
             android:label="@string/title_activity_teacher_exams" >
@@ -127,7 +127,22 @@
             android:name=".teacher_marks_studentlist"
             android:label="@string/title_activity_teacher_marks_studentlist" >
         </activity>
-
+        <activity
+            android:name=".UploadMaterial"
+            android:label="@string/title_activity_upload_material"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UploadImage"
+            android:label="@string/title_activity_upload_image"
+            android:parentActivityName=".UploadMaterial" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.UploadMaterial" />
+        </activity>
     </application>
 
 </manifest>
