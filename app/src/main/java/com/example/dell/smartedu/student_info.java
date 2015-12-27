@@ -15,6 +15,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -82,10 +83,13 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                 }
                             });
 
-                            String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
+
+
+                           /* String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
                             ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-                            roleQuery.whereEqualTo("createdBy", ParseObject.createWithoutData("User",userid));
-                            roleQuery.whereEqualTo("roleNmae","Student");
+                            roleQuery.whereEqualTo("createdBy", ParseUser.createWithoutData("User", userid));
+
+                            roleQuery.whereEqualTo("roleName","Student");
                             roleQuery.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> attendanceListRet, ParseException e) {
                                     if (e == null) {
@@ -101,7 +105,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                         Log.d("user", "Error: " + e.getMessage());
                                     }
                                 }
-                            });
+                            });*/
 
 
 

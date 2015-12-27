@@ -114,7 +114,7 @@ public class NewStudent extends BaseActivity {
                     roleobject.saveInBackground();
 
                     try {
-                       
+
                         Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
                                 Toast.LENGTH_LONG).show();
                         ParseUser.become(presession);
@@ -183,19 +183,7 @@ public class NewStudent extends BaseActivity {
 
     }
 
-    /*protected void addRole(final String role, final String user)
-    {
 
-                        Log.d("role", "added " + role + " role by " + ParseUser.getCurrentUser().getObjectId());
-                        ParseObject roleobject = new ParseObject("Role");
-                        roleobject.put("createdBy",ParseObject.createWithoutData("User",user));
-                        roleobject.put("roleName", role);
-                        roleobject.saveInBackground();
-
-
-
-}
-*/
 
     protected void addStudent(final ParseUser userRef){
 
