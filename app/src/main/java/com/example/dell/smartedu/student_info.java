@@ -65,13 +65,33 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                             studentRef[0] = studentListRet.get(0);
 
                             ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery("Attendance");
-                            attendanceQuery.whereEqualTo("student", ParseObject.createWithoutData("Student",studentId));
+                            attendanceQuery.whereEqualTo("student", ParseObject.createWithoutData("Student", studentId));
                             attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> attendanceListRet, ParseException e) {
+                                    if (e == null) {
+                                        if (attendanceListRet.size() != 0) {
+                                            attendanceListRet.get(0).deleteEventually();
+                                            Log.d("user", "Deleted: " + "student attendance");
+                                        } else {
+
+                                        }
+                                    } else {
+                                        Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                                        Log.d("user", "Error: " + e.getMessage());
+                                    }
+                                }
+                            });
+
+                            String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
+                            ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
+                            roleQuery.whereEqualTo("createdBy", ParseObject.createWithoutData("User",userid));
+                            roleQuery.whereEqualTo("roleNmae","Student");
+                            roleQuery.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> attendanceListRet, ParseException e) {
                                     if (e == null) {
                                         if(attendanceListRet.size()!=0) {
                                             attendanceListRet.get(0).deleteEventually();
-                                            Log.d("user", "Deleted: " + "student attendance");
+                                            Log.d("role", "Deleted from roles");
                                         }else
                                         {
 
@@ -82,6 +102,8 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                     }
                                 }
                             });
+
+
 
                             ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery("Marks");
                             marksQuery.whereEqualTo("student", ParseObject.createWithoutData("Student",studentId));

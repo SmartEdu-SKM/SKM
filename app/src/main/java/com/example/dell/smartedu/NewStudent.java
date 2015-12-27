@@ -71,51 +71,131 @@ public class NewStudent extends BaseActivity {
 
                     final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
 
-
-                    final ParseUser[] userRef = {new ParseUser()};
-                    // Set up a new Parse user
-                    final ParseUser user = new ParseUser();
-                    user.setUsername(name + rollno);
-                    user.setPassword(rollno + name + rollno);
-
-
-                    Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
-                            Toast.LENGTH_LONG).show();
-
-                   /* Parse.User.signUp(username, password).then(function(newUser) {
-                        Parse.User.become(sessionToken);
-                    });*/
-
-
-                    user.signUpInBackground(new SignUpCallback() {
-                        @Override
-                        public void done(ParseException e) {// Handle the response
-
-                            if (e != null) {
-                                // Show the error message
-                                Toast.makeText(NewStudent.this, e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                               userRef[0] = user;
-                                try {
-                                    ParseUser.become(sessionToken);
-                                    addStudent(userRef[0]);
-                                } catch (ParseException e1) {
-                                    Toast.makeText(NewStudent.this,"cant add student",
-                                            Toast.LENGTH_LONG).show();
-                                }
-
-                            }
-
-                        }
-                    });
-
+                    addParentUser(name, age, rollno, sessionToken);
+                    addStudentUser(name, age, rollno, sessionToken);
 
                             }
                         }
                     });
                 }
 
+
+
+
+    protected void addStudentUser(String Name,int Age,int Rollno, final String presession)
+    {
+        final ParseUser[] userRef = {new ParseUser()};
+        // Set up a new Parse user
+        final ParseUser user = new ParseUser();
+        user.setUsername(Name + Rollno);
+        user.setPassword(Rollno + Name + Rollno);
+
+
+
+                   /* Parse.User.signUp(username, password).then(function(newUser) {
+                        Parse.User.become(sessionToken);
+                    });*/
+
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {// Handle the response
+
+                if (e != null) {
+                    // Show the error message
+                    Toast.makeText(NewStudent.this, e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    userRef[0] = user;
+                    Log.d("role", "added Student role by " + ParseUser.getCurrentUser().getObjectId());
+                    ParseObject roleobject = new ParseObject("Role");
+                    roleobject.put("createdBy",ParseUser.getCurrentUser());
+                    roleobject.put("roleName", "Student");
+                    roleobject.saveInBackground();
+
+                    try {
+                       
+                        Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
+                                Toast.LENGTH_LONG).show();
+                        ParseUser.become(presession);
+                        addStudent(userRef[0]);
+                    } catch (ParseException e1) {
+                        Toast.makeText(NewStudent.this, "cant add student",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+        });
+
+    }
+
+
+
+
+
+    protected void addParentUser(String Name,int Age,int Rollno, final String presession)
+    {
+        final ParseUser[] userRef = {new ParseUser()};
+        // Set up a new Parse user
+        final ParseUser user = new ParseUser();
+        user.setUsername("parent_" + Name + Rollno);
+        user.setPassword(Rollno + Name + Rollno);
+
+
+
+                   /* Parse.User.signUp(username, password).then(function(newUser) {
+                        Parse.User.become(sessionToken);
+                    });*/
+
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {// Handle the response
+
+                if (e != null) {
+                    // Show the error message
+                    Toast.makeText(NewStudent.this, e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    userRef[0] = user;
+                    Toast.makeText(NewStudent.this, "Parent User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
+                            Toast.LENGTH_LONG).show();
+                   // addRole("Parent", ParseUser.getCurrentUser().getObjectId());
+                    Log.d("role", "added Parent role by " + ParseUser.getCurrentUser().getObjectId());
+                    ParseObject roleobject = new ParseObject("Role");
+                    roleobject.put("createdBy",ParseUser.getCurrentUser());
+                    roleobject.put("roleName", "Parent");
+                    roleobject.saveInBackground();
+                    try {
+
+                        ParseUser.become(presession);
+                    } catch (ParseException e1) {
+                        Toast.makeText(NewStudent.this,"cant add parent",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+        });
+
+    }
+
+    /*protected void addRole(final String role, final String user)
+    {
+
+                        Log.d("role", "added " + role + " role by " + ParseUser.getCurrentUser().getObjectId());
+                        ParseObject roleobject = new ParseObject("Role");
+                        roleobject.put("createdBy",ParseObject.createWithoutData("User",user));
+                        roleobject.put("roleName", role);
+                        roleobject.saveInBackground();
+
+
+
+}
+*/
 
     protected void addStudent(final ParseUser userRef){
 
