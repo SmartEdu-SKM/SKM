@@ -74,7 +74,7 @@ public class NewTask extends BaseActivity {
 
 
                 if (myTitle.equals("") || myDesc.equals("") || ((DATE.getText().equals("Select Due Date")))) {
-                    Toast.makeText(getApplicationContext(), "Event details cannot be empty!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Task details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
                     ParseObject task = new ParseObject("Task");
                     task.put("createdBy", ParseUser.getCurrentUser());

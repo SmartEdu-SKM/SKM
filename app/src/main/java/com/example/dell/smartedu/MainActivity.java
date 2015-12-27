@@ -69,10 +69,10 @@ public class MainActivity extends BaseActivity{
                     addmarks_intent.putExtra("for","exam");
                     startActivity(addmarks_intent);
                 } else if (position == 5) {
-                  /*  Intent addexam_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    addexam_intent.putExtra("role","Teacher");
-                    addexam_intent.putExtra("for","exam");
-                    startActivity(addexam_intent);*/
+                    Intent upload_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    upload_intent.putExtra("role","Teacher");
+                    upload_intent.putExtra("for","upload");
+                    startActivity(upload_intent);
                 }
             }
         });
