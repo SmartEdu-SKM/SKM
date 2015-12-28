@@ -36,6 +36,8 @@ public class NewStudent extends BaseActivity {
     EditText studentRno;
     Notification_bar noti_bar;
     String classId;
+    String parentId;
+    String studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class NewStudent extends BaseActivity {
                 age = Integer.parseInt(studentAge.getText().toString().trim());
                 rollno = Integer.parseInt(studentRno.getText().toString().trim());
 
-                if (name.equals(null) || (age==0) || (rollno== -1)){
+                if (name.equals(null) || (age == 0) || (rollno == -1)) {
                     Toast.makeText(getApplicationContext(), "Student details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
 
@@ -73,16 +75,56 @@ public class NewStudent extends BaseActivity {
 
                     addParentUser(name, age, rollno, sessionToken);
                     addStudentUser(name, age, rollno, sessionToken);
+                    addParent(name,rollno);
 
-                            }
-                        }
-                    });
+                }
+            }
+        });
                 }
 
 
 
+    protected void addParent(final String Name, final int Rollno)
+    {
+        ParseQuery<ParseUser> user=ParseUser.getQuery();
+        user.whereEqualTo("username","parent_"+Name+Rollno);
+        user.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parentobjects, ParseException e) {
+                if(e==null) {
+                    if(parentobjects.size()!=0) {
+                        Log.d("user", "parent found");
+                        final ParseUser user_parent =parentobjects.get(0);
+                        ParseQuery<ParseUser> user=ParseUser.getQuery();
+                        user.whereEqualTo("username",Name+Rollno);
+                        user.findInBackground(new FindCallback<ParseUser>() {
+                            @Override
+                            public void done(List<ParseUser> objects, ParseException e) {
+                                if(e==null) {
+                                    if(objects.size()!=0) {
+                                        Log.d("user", "student found");
+                                        ParseUser user_student =objects.get(0);
+                                        ParseObject parent=new ParseObject("Parent");
+                                        parent.put("userId",user_parent);
+                                        parent.put("child",user_student);
+                                        parent.saveEventually();
+                                    }
+                                }else
+                                {
+                                    Log.d("user", "no student");
+                                }
+                            }
+                        });
+                    }
+                }else
+                {
+                    Log.d("user", "no parent");
+                }
+            }
+        });
+    }
 
-    protected void addStudentUser(String Name,int Age,int Rollno, final String presession)
+    protected void addStudentUser(final String Name,int Age, final int Rollno, final String presession)
     {
         final ParseUser[] userRef = {new ParseUser()};
         // Set up a new Parse user
@@ -109,13 +151,13 @@ public class NewStudent extends BaseActivity {
                     userRef[0] = user;
                     Log.d("role", "added Student role by " + ParseUser.getCurrentUser().getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy",ParseUser.getCurrentUser());
+                    roleobject.put("createdBy", ParseUser.getCurrentUser());
                     roleobject.put("roleName", "Student");
                     roleobject.saveInBackground();
 
                     try {
 
-                        Toast.makeText(NewStudent.this, "Student User made "+ " "+ParseUser.getCurrentUser().getObjectId(),
+                        Toast.makeText(NewStudent.this, "Student User made " + " " + ParseUser.getCurrentUser().getObjectId(),
                                 Toast.LENGTH_LONG).show();
                         ParseUser.become(presession);
                         addStudent(userRef[0]);
@@ -186,8 +228,6 @@ public class NewStudent extends BaseActivity {
 
 
     protected void addStudent(final ParseUser userRef){
-
-
         Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
         final ParseObject[] classRef = new ParseObject[1];
         final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
