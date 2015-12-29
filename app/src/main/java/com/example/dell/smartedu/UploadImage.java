@@ -25,6 +25,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,17 +54,23 @@ public class UploadImage extends ListActivity {
             public void done(List<ParseObject> images, ParseException e) {
                 if(e == null){
 
+                    if(images.size()!=0) {
+                    ParseObject u = (ParseObject) images.get(0);
+
+                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
+
+
                    // if(images.size()!=0) {
                      //   for (int i = 0; i < images.size(); i++) {
                        //     if (images.get(i).get("imageContent") != null) {
-                                adapter = new ImageLoaderAdapter(UploadImage.this, images);
+                                adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
                                 //lv.setAdapter(adapter);
                                 setListAdapter(adapter);
 
                                 adapter.notifyDataSetChanged();
                      //       }
                        // }
-                  //  }
+                   }
 
                 }else{
                     Toast.makeText(UploadImage.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -94,7 +101,7 @@ public class UploadImage extends ListActivity {
 
         //lv = (ListView)findViewById(R.id.imageList);
 
-       // queryImagesFromParse();
+       queryImagesFromParse();
 
         //initialize
         mAddImageBtn = (Button)findViewById(R.id.addImageButton);
@@ -167,7 +174,7 @@ public class UploadImage extends ListActivity {
                                         public void done(ParseException e) {
                                             if (e == null) {
 
-                                                objectRet.get(0).put("imageContent", file);
+                                                objectRet.get(0).add("imageContent", file);
                                                 objectRet.get(0).saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {

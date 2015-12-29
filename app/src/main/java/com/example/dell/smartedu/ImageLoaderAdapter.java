@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.parse.ParseObject;
+import com.parse.ParseFile;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class ImageLoaderAdapter extends ArrayAdapter<ParseObject>{
+public class ImageLoaderAdapter extends ArrayAdapter<ParseFile>{
     private Context mContext;
-    private List<ParseObject> mImages;
+    private List<ParseFile> mImages;
 
-    public ImageLoaderAdapter(Context context, List<ParseObject> images){
+    public ImageLoaderAdapter(Context context, List<ParseFile> images){
         super(context, R.layout.single_row, images);
 
         mContext = context;
@@ -40,10 +40,12 @@ public class ImageLoaderAdapter extends ArrayAdapter<ParseObject>{
         }
 
 
-        ParseObject object = mImages.get(position);
+        ParseFile file = mImages.get(position);
         //get the image
 
-        Picasso.with(getContext().getApplicationContext()).load(object.getParseFile("imageContent").getUrl()).noFade().into(holder.homeImage);
+
+
+        Picasso.with(getContext().getApplicationContext()).load(file.getUrl()).noFade().into(holder.homeImage);
 
 
 

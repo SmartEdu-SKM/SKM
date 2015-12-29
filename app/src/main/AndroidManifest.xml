@@ -143,6 +143,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dell.smartedu.UploadMaterial" />
         </activity>
+        <activity
+            android:name=".ViewImageUploads"
+            android:label="@string/title_activity_view_image_uploads"
+            android:parentActivityName=".UploadMaterial" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.UploadMaterial" />
+        </activity>
     </application>
 
 </manifest>
