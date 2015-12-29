@@ -2,6 +2,8 @@ package com.example.dell.smartedu;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -38,15 +42,21 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     Button uploadButton;
     Button editButton;
     Button doneButton;
+    Button okButton;
+    Button delButton;
+    Button removeDueDate;
 
     TextView myDate;
     TextView editmyDate;
     TextView myDueDate;
+    TextView myType;
+    TextView mySubject;
     EditText subject;
     Date date1;
     CalendarView calendarView;
     Calendar calendar;
     ImageView cal;
+    ImageView imageUpload;
     int Year;
     int Month;
     int Day;
@@ -54,6 +64,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     String typeSelected;
     String subjectDesc;
     String uploadId;
+    String uploadid;
     Spinner type;
     int Yearcal;
     int Monthcal;
@@ -117,10 +128,15 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
                                     String name = u.getString("type");
                                     name += "\n";
+                                    name += u.getString("subject");
 
-                                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                    final String dateString = formatter.format(new Date(u.getLong("dueDate")));
-                                    name += dateString;
+                                    if (u.getLong("dueDate") != 0) {
+                                        name += "\n";
+
+                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                        final String dateString = formatter.format(new Date(u.getLong("dueDate")));
+                                        name += dateString;
+                                    }
 
                                     adapter.add(name);
 
@@ -130,35 +146,139 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                 uploadList.setAdapter(adapter);
 
 
-                                  /*  uploadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                            String[] item = ((TextView) view).getText().toString().split(". ");
-                                            int itemvalue = Integer.parseInt(item[0]);
+                                uploadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                                        // selected item
+                                        String[] product = ((TextView) view).getText().toString().split("\n");
+                                        final String[] details = new String[3];
+                                        details[2] = "";
+                                        int i = 0;
 
-                                            final ParseObject[] studentRef = new ParseObject[1];
-                                            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                            studentQuery.whereEqualTo("rollNumber", itemvalue);
-                                            studentQuery.whereEqualTo("class", classRef[0]);
-                                            studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                public void done(List<ParseObject> studentListRet, ParseException e) {
-                                                    if (e == null) {
-                                                        Log.d("class", "Retrieved the class");
-                                                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                                                        studentRef[0] = studentListRet.get(0);
-                                                        information(studentRef[0], view);
-
-                                                    } else {
-                                                        Toast.makeText(AddAttendance_Students.this, "error", Toast.LENGTH_LONG).show();
-                                                        Log.d("user", "Error: " + e.getMessage());
-                                                    }
-                                                }
-                                            });
-
-
+                                        for (String x : product) {
+                                            details[i++] = x;
                                         }
-                                    }); */
+
+                                        final Dialog dialog = new Dialog(UploadMaterial.this);
+                                        dialog.setContentView(R.layout.show_upload_details);
+                                        dialog.setTitle("Upload Details");
+
+                                        myType = (TextView) dialog.findViewById(R.id.typeDesc);
+                                        mySubject = (TextView) dialog.findViewById(R.id.subject);
+                                        myDate = (TextView) dialog.findViewById(R.id.uploadDate);
+                                        myDueDate = (TextView) dialog.findViewById(R.id.dueDate);
+                                        imageUpload = (ImageView) dialog.findViewById(R.id.imageUpload);
+
+                                        myType.setText(details[0].trim());
+                                        mySubject.setText(details[1]);
+
+                                        final long milliseconds;
+                                        if (!details[2].equals("")) {
+                                            myDueDate.setText(details[2].trim());
+
+                                            String[] date = details[2].split("/");
+                                            final String[] datedetails = new String[3];
+                                            int j = 0;
+
+                                            for (String x : date) {
+                                                datedetails[j++] = x;
+                                            }
+
+                                            Day = Integer.parseInt(datedetails[0]);
+                                            Month = Integer.parseInt(datedetails[1]);
+                                            Year = Integer.parseInt(datedetails[2]);
+
+                                            String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
+                                            //Toast.makeText(Tasks.this, "date = " + string_date, Toast.LENGTH_LONG).show();
+                                            SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+                                            Date d = null;
+                                            try {
+                                                d = f.parse(string_date);
+                                            } catch (java.text.ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            milliseconds = d.getTime();
+                                        }
+                                        else {
+                                            myDueDate.setText("Not Set");
+                                            milliseconds = 0;
+                                        }
+
+                                        //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
+
+                                        ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
+                                        uploadQuery.whereEqualTo("type", details[0].trim());
+                                        uploadQuery.whereEqualTo("subject", details[1].trim());
+                                        uploadQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+                                        uploadQuery.whereEqualTo("dueDate", milliseconds);
+                                        uploadQuery.findInBackground(new FindCallback<ParseObject>() {
+                                            public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
+                                                if (e == null) {
+                                                    ParseObject u = (ParseObject) uploadListRet.get(0);
+
+                                                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                                    final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
+                                                    myDate.setText(dateString.trim());
+
+                                                    if (u.get("imageContent") != null) {
+                                                        ParseFile imageFile = (ParseFile) u.get("imageContent");
+                                                        imageFile.getDataInBackground(new GetDataCallback() {
+                                                            @Override
+                                                            public void done(byte[] data, ParseException e) {
+                                                                if (e == null) {
+                                                                    Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                                                    imageUpload.setImageBitmap(bmp);
+                                                                } else {
+                                                                    Log.d("test",
+                                                                            "There was a problem downloading the data.");
+                                                                }
+                                                            }
+
+                                                        });
+                                                    }
+
+                                                    uploadid = u.getObjectId();
+                                                    Log.d("user", "upload id: " + uploadid);
+                                                } else {
+                                                    Log.d("user", "Error: " + e.getMessage());
+                                                }
+                                            }
+                                        });
+
+                                        okButton = (Button) dialog.findViewById(R.id.okButton);
+                                        delButton = (Button) dialog.findViewById(R.id.delButton);
+
+                                        okButton.setOnClickListener(new View.OnClickListener() {
+
+                                            public void onClick(View v) {
+
+                                                dialog.dismiss();
+
+                                            }
+                                        });
+
+                                        dialog.show();
+
+
+                                        delButton.setOnClickListener(new View.OnClickListener() {
+                                            public void onClick(View v) {
+
+                                                ParseObject.createWithoutData("ImageUploads", uploadid).deleteEventually();
+
+
+                                                onRestart();
+
+
+                                                dialog.dismiss();
+
+                                            }
+                                        });
+                                        dialog.show();
+                                    }
+
+
+                                });
+
 
                             } else {
                                 Toast.makeText(UploadMaterial.this, "error", Toast.LENGTH_LONG).show();
@@ -190,10 +310,11 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dialog_upload.setTitle("Upload Material");
 
 
-        myDate = (TextView) dialog_upload.findViewById(R.id.dateText);
+        myDate = (TextView) dialog_upload.findViewById(R.id.dateText1);
         myDueDate= (TextView) dialog_upload.findViewById(R.id.deadline);
         subject=(EditText) dialog_upload.findViewById(R.id.subject);
         cal=(ImageView) dialog_upload.findViewById(R.id.calButton);
+        removeDueDate=(Button) dialog_upload.findViewById(R.id.removeDueDate);
 
         final String[] values=new String[2];
             values[0]="Assignment";
@@ -260,7 +381,16 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         });
 
 
+        removeDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                myDueDate.setText("Deadline Date");
+                Daycal=0;
+                Monthcal=0;
+                Yearcal=0;
+            }
+        });
 
 
 
@@ -283,7 +413,10 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                     upload.put("uploadDate", upload_date_milliseconds);
 
 
+                    if(Daycal==0 && Monthcal==0 && Yearcal==0)
+                        upload.put("dueDate", 0);
 
+                    else {
                         String string_duedate = String.valueOf(Daycal) + "-" + String.valueOf(Monthcal) + "-" + String.valueOf(Yearcal);
 
                         Toast.makeText(getApplicationContext(), "updated duedate = " + Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
@@ -297,6 +430,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                         }
                         long due_date_milliseconds = d.getTime();
                         upload.put("dueDate", due_date_milliseconds);
+                    }
 
 
                     upload.saveInBackground(new SaveCallback() {
@@ -367,6 +501,16 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
     }
 
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent to_uploads = new Intent(UploadMaterial.this, UploadMaterial.class);
+        to_uploads.putExtra("id", classId);
+        startActivity(to_uploads);
+        finish();
+
+    }
 
     @Override
     protected void onPostResume () {

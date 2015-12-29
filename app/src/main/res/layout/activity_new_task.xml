@@ -30,7 +30,7 @@
         android:text="Title"
         android:id="@+id/title"
         android:textSize="25sp"
-        android:layout_below="@+id/dateText"
+        android:layout_below="@+id/dateText1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp" />
@@ -77,7 +77,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateText"
+        android:id="@+id/dateText1"
         android:layout_toRightOf="@+id/title"
         android:layout_toEndOf="@+id/title"
         android:layout_marginTop="30sp"
@@ -91,9 +91,9 @@
         android:id="@+id/test"
         android:background="@drawable/ic_calender"
         android:onClick="open"
-        android:layout_alignBottom="@+id/dateText"
-        android:layout_toLeftOf="@+id/dateText"
-        android:layout_toStartOf="@+id/dateText"
+        android:layout_alignBottom="@+id/dateText1"
+        android:layout_toLeftOf="@+id/dateText1"
+        android:layout_toStartOf="@+id/dateText1"
         android:backgroundTint="#ff8d94" />
 
 
