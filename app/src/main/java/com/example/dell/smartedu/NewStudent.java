@@ -72,9 +72,10 @@ public class NewStudent extends BaseActivity {
                 } else {
 
                     final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
-                    addParentUser(name, age, rollno, sessionToken);
                     addStudentUser(name, age, rollno, sessionToken);
-                    addParent(name,rollno);
+                    addParentUser(name, age, rollno, sessionToken);
+
+                   // addParent(name, rollno);
 
                 }
             }
@@ -112,6 +113,10 @@ public class NewStudent extends BaseActivity {
                     roleobject.put("roleName", "Student");
                     roleobject.saveInBackground();
 
+                    ParseObject parent=new ParseObject("Parent");
+                    parent.put("child",user_student);
+                    parent.saveEventually();
+
                     try {
 
                         ParseUser.become(presession);
@@ -132,7 +137,7 @@ public class NewStudent extends BaseActivity {
 
 
 
-    protected void addParentUser(String Name,int Age,int Rollno, final String presession)
+    protected void addParentUser(final String Name,int Age, final int Rollno, final String presession)
     {
         final ParseUser[] userRef = {new ParseUser()};
         // Set up a new Parse user
@@ -155,9 +160,54 @@ public class NewStudent extends BaseActivity {
                             Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy",user_parent);
+                    roleobject.put("createdBy", user_parent);
                     roleobject.put("roleName", "Parent");
                     roleobject.saveInBackground();
+
+
+
+
+                    ParseQuery<ParseUser> user=ParseUser.getQuery();
+                    user.whereEqualTo("username",Name + Rollno);
+                    user.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if (e == null) {
+                                if (objects.size() != 0) {
+                                    Log.d("user", "student user found");
+                                    ParseUser student_user = objects.get(0);
+
+                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
+                                    parent_relation.whereEqualTo("child", student_user);
+                                    parent_relation.findInBackground(new FindCallback<ParseObject>() {
+                                        @Override
+                                        public void done(List<ParseObject> objects, ParseException e) {
+                                            if (e == null) {
+                                                if (objects.size() != 0) {
+                                                    objects.get(0).put("userId", user_parent);
+                                                    objects.get(0).saveEventually();
+                                                } else {
+
+                                                }
+
+                                            } else {
+                                                Log.d("user", "relation not found");
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Log.d("user", "query logic error in student...size = " + objects.size());
+                                }
+                            } else {
+                                Log.d("user", "no student");
+                            }
+                        }
+                    });
+
+
+
+
+
                     try {
 
                         ParseUser.become(presession);
@@ -234,8 +284,9 @@ public class NewStudent extends BaseActivity {
 
     protected void addParent(final String Name, final int Rollno)
     {
+        Log.d("user", "parent child realtion");
         ParseQuery<ParseUser> user=ParseUser.getQuery();
-        user.whereEqualTo("username","parent_"+ Name + Rollno);
+        user.whereEqualTo("username", "parent_" + Name + Rollno);
         user.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parentobjects, ParseException e) {
@@ -256,6 +307,9 @@ public class NewStudent extends BaseActivity {
                                         parent.put("userId",user_parent);
                                         parent.put("child",user_student);
                                         parent.saveEventually();
+                                    }else
+                                    {
+                                        Log.d("user", "query logic error in student");
                                     }
                                 }else
                                 {
@@ -263,6 +317,9 @@ public class NewStudent extends BaseActivity {
                                 }
                             }
                         });
+                    }else
+                    {
+                        Log.d("user", "query logic error in parent");
                     }
                 }else
                 {
