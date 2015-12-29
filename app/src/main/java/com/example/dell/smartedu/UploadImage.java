@@ -1,6 +1,7 @@
 package com.example.dell.smartedu;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +24,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -39,7 +42,9 @@ public class UploadImage extends ListActivity {
 
     protected Button mAddImageBtn;
     protected Button mUploadImageBtn;
+    Button doneButton;
     protected ImageView mPreviewImageView;
+    ImageView viewImage;
     protected ListView lv;
     String uploadId;
     String classId;
@@ -77,6 +82,7 @@ public class UploadImage extends ListActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -102,6 +108,18 @@ public class UploadImage extends ListActivity {
         //lv = (ListView)findViewById(R.id.imageList);
 
        queryImagesFromParse();
+
+
+        lv = getListView();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+                onListItemClick(v,pos,id);
+            }
+        });
+
+
+
 
         //initialize
         mAddImageBtn = (Button)findViewById(R.id.addImageButton);
@@ -179,10 +197,11 @@ public class UploadImage extends ListActivity {
                                                     @Override
                                                     public void done(ParseException e) {
                                                         Toast.makeText(getApplicationContext(), "Success Uploading iMage!", Toast.LENGTH_LONG).show();
-                                                        Intent to_upload_material = new Intent(UploadImage.this, UploadMaterial.class);
-                                                        to_upload_material.putExtra("id", classId);
-                                                        startActivity(to_upload_material);
-                                                        finish();
+
+                                                       Intent to_upload_image = new Intent(UploadImage.this, UploadImage.class);
+                                                        to_upload_image.putExtra("uploadId", uploadId);
+                                                        startActivity(to_upload_image);
+                                                        //finish();
                                                     }
                                                 });
                                             } else {
@@ -211,6 +230,25 @@ public class UploadImage extends ListActivity {
 
 
     }
+
+    protected void onListItemClick(View v, int pos, long id) {
+        ParseFile  itemValue    = (ParseFile) lv.getItemAtPosition(pos);
+
+        final Dialog dialog = new Dialog(UploadImage.this);
+        dialog.setContentView(R.layout.view_image);
+        dialog.setTitle("Image");
+        viewImage=(ImageView) dialog.findViewById(R.id.viewImage);
+
+        Picasso.with(this)
+                .load(itemValue.getUrl()).into(viewImage);
+
+
+
+                dialog.dismiss();
+
+        dialog.show();
+    }
+
 
     //inner helper method
     private Uri getOutputMediaFileUri(int mediaTypeImage) {
@@ -285,6 +323,8 @@ public class UploadImage extends ListActivity {
             Toast.makeText(getApplicationContext(), "Cancelled!", Toast.LENGTH_LONG).show();
         }
     }
+
+
 
 
 }

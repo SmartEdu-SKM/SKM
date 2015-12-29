@@ -224,6 +224,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                     final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
                                                     myDate.setText(dateString.trim());
 
+                                                    myType.setText(u.get("type").toString().trim());
+
                                                     // if (u.get("imageContent") != null) {
                                                     //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
                                                     List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
