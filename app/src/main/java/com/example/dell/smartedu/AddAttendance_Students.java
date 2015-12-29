@@ -228,7 +228,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                         absentDays = (TextView) dialog2.findViewById(R.id.absentDays);
                         totalDays = (TextView) dialog2.findViewById(R.id.totalDays);
                         percentage = (TextView) dialog2.findViewById(R.id.percentage);
-                        myDate = (TextView) dialog2.findViewById(R.id.dateText);
+                        myDate = (TextView) dialog2.findViewById(R.id.dateText1);
 
                         ParseObject u = attendanceListRet.get(0);
                         absentDays.setText(u.getNumber("absentDays").toString().trim());
@@ -267,7 +267,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
         editabsentDays = (EditText) dialog_in.findViewById(R.id.absentDays);
         edittotalDays = (EditText) dialog_in.findViewById(R.id.totalDays);
-        editmyDate = (TextView) dialog_in.findViewById(R.id.dateText);
+        editmyDate = (TextView) dialog_in.findViewById(R.id.dateText1);
 
         calendar = Calendar.getInstance();
         //System.out.println("Current time =&gt; " + calendar.getTime());
@@ -350,7 +350,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
 
         editabsentDays = (EditText) dialog_in.findViewById(R.id.absentDays);
         edittotalDays = (EditText) dialog_in.findViewById(R.id.totalDays);
-        editmyDate = (TextView) dialog_in.findViewById(R.id.dateText);
+        editmyDate = (TextView) dialog_in.findViewById(R.id.dateText1);
 
         editabsentDays.setText(absentDays.getText().toString().trim());
         edittotalDays.setText(totalDays.getText().toString().trim());

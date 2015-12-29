@@ -42,7 +42,7 @@ ImageButton test;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event__teacher);
 
-        DATE= (TextView) findViewById(R.id.dateText);
+        DATE= (TextView) findViewById(R.id.dateText1);
         eventTitle = (EditText) findViewById(R.id.taskTitle);
         eventDescription = (EditText) findViewById(R.id.scheduleinfo);
         EventButton = (Button) findViewById(R.id.editButton);

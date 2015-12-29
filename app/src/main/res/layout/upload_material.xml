@@ -17,7 +17,7 @@
         android:id="@+id/typeHead"
         android:textSize="25sp"
         android:layout_marginTop="57dp"
-        android:layout_below="@+id/dateText"
+        android:layout_below="@+id/dateText1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateText"
+        android:id="@+id/dateText1"
         android:layout_marginTop="45dp"
         android:textSize="25sp"
         android:layout_marginLeft="10dp"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/test"
         android:background="@drawable/ic_calender"
-        android:layout_alignBottom="@+id/dateText"
+        android:layout_alignBottom="@+id/dateText1"
 
         android:backgroundTint="#fff"
         android:layout_alignParentLeft="true"
@@ -121,6 +121,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="10dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:id="@+id/removeDueDate"
+        android:textSize="11sp"
+        android:textColor="#ffff"
+        android:background="#040404"
+        android:layout_alignTop="@+id/deadline"
+        android:layout_alignRight="@+id/calButton"
+        android:layout_alignEnd="@+id/calButton"
+        android:layout_above="@+id/textView19" />
 
 
 </RelativeLayout>

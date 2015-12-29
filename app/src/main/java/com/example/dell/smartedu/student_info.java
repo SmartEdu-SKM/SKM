@@ -87,14 +87,14 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                                       user_student[0] = (ParseUser) studentListRet.get(0).get("userId");
                                                       //userid = String.valueOf(studentListRet.get(0).get("userId"));
 
-                                                      ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery("Parent");
-                                                      attendanceQuery.whereEqualTo("child", user_student[0]);
-                                                      attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                          public void done(List<ParseObject> attendanceListRet, ParseException e) {
+                                                      ParseQuery<ParseObject> parentQuery = ParseQuery.getQuery("Parent");
+                                                      parentQuery.whereEqualTo("child", user_student[0]);
+                                                      parentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                          public void done(List<ParseObject> parentListRet, ParseException e) {
                                                               if (e == null) {
-                                                                  if (attendanceListRet.size() != 0) {
-                                                                      parent_user[0] = (ParseUser) attendanceListRet.get(0).get("userId");
-                                                                      attendanceListRet.get(0).deleteEventually();
+                                                                  if (parentListRet.size() != 0) {
+                                                                      parent_user[0] = (ParseUser) parentListRet.get(0).get("userId");
+                                                                      parentListRet.get(0).deleteEventually();
                                                                       Log.d("user", "Deleted: Parent child relation");
                                                                   } else {
 
