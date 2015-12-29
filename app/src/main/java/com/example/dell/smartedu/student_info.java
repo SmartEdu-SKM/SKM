@@ -86,15 +86,16 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                                   if (studentListRet.size() != 0) {
                                                       user_student[0] = (ParseUser) studentListRet.get(0).get("userId");
                                                       //userid = String.valueOf(studentListRet.get(0).get("userId"));
+
                                                       ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery("Parent");
-                                                      attendanceQuery.whereEqualTo("child", ParseUser.createWithoutData("User", user_student[0].getObjectId()));
+                                                      attendanceQuery.whereEqualTo("child", user_student[0]);
                                                       attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
                                                           public void done(List<ParseObject> attendanceListRet, ParseException e) {
                                                               if (e == null) {
                                                                   if (attendanceListRet.size() != 0) {
-                                                                      parent_user[0] = (ParseUser) attendanceListRet.get(0);
+                                                                      parent_user[0] = (ParseUser) attendanceListRet.get(0).get("userId");
                                                                       attendanceListRet.get(0).deleteEventually();
-                                                                      Log.d("user", "Deleted: " + "student attendance");
+                                                                      Log.d("user", "Deleted: Parent child relation");
                                                                   } else {
 
                                                                   }
@@ -114,7 +115,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                                                   for (int i = 0; i < objects.size(); i++) {
                                                                       if (objects.get(i) == parent_user[0]) {
                                                                           userid = objects.get(i).getObjectId().trim();
-                                                                          Log.d("userQuery", "UserId: " + userid);
+                                                                          Log.d("userQuery", " Parent UserId: " + userid);
                                                                           break;
                                                                       }
                                                                   }
@@ -212,7 +213,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                                                   for (int i = 0; i < objects.size(); i++) {
                                                                       if (objects.get(i) == userRef[0]) {
                                                                           userid = objects.get(i).getObjectId().trim();
-                                                                          Log.d("userQuery", "UserId: " + userid);
+                                                                          Log.d("userQuery", "Student UserId: " + userid);
                                                                           break;
                                                                       }
                                                                   }
@@ -226,7 +227,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
                                                                           if (e == null) {
                                                                               if (roleListRet.size() != 0) {
                                                                                   roleListRet.get(0).deleteEventually();
-                                                                                  Log.d("role", "Deleted from roles");
+                                                                                  Log.d("role", "Student Deleted from roles");
                                                                               } else {
 
                                                                                   Log.d("role", "Not Added");
