@@ -143,6 +143,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dell.smartedu.UploadMaterial" />
         </activity>
+        <activity
+            android:name=".student_exams"
+            android:label="@string/title_activity_student_exams"
+            android:parentActivityName=".student_home_activity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.student_home_activity" />
+        </activity>
+        <activity
+            android:name=".UploadMaterial_students"
+            android:label="@string/title_activity_upload_material_students"
+            android:parentActivityName=".student_home_activity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.student_home_activity" />
+        </activity>
+        <activity
+            android:name=".UploadImage_students"
+            android:label="@string/title_activity_upload_image_students"
+            android:parentActivityName=".UploadMaterial_students" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.UploadMaterial_students" />
+        </activity>
     </application>
 
 </manifest>

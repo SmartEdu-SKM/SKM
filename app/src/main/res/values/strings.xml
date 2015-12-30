@@ -71,5 +71,8 @@
     <string name="title_activity_upload_material">UploadMaterial</string>
     <string name="title_activity_upload_image">UploadImage</string>
     <string name="title_activity_view_image_uploads">ViewImageUploads</string>
+    <string name="title_activity_student_exams">student_exams</string>
+    <string name="title_activity_upload_material_students">UploadMaterial_students</string>
+    <string name="title_activity_upload_image_students">UploadImage_students</string>
 
 </resources>

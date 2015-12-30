@@ -225,8 +225,8 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
                         dialog2.setContentView(R.layout.show_attendance);
                         dialog2.setTitle("Attendance Information");
                         editButton = (Button) dialog2.findViewById(R.id.editButton);
-                        absentDays = (TextView) dialog2.findViewById(R.id.absentDays);
-                        totalDays = (TextView) dialog2.findViewById(R.id.totalDays);
+                        absentDays = (TextView) dialog2.findViewById(R.id.exam);
+                        totalDays = (TextView) dialog2.findViewById(R.id.totalMarks);
                         percentage = (TextView) dialog2.findViewById(R.id.percentage);
                         myDate = (TextView) dialog2.findViewById(R.id.dateText1);
 
@@ -265,8 +265,8 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         dialog_in.setContentView(R.layout.edit_attendance);
         dialog_in.setTitle("Edit Details");
 
-        editabsentDays = (EditText) dialog_in.findViewById(R.id.absentDays);
-        edittotalDays = (EditText) dialog_in.findViewById(R.id.totalDays);
+        editabsentDays = (EditText) dialog_in.findViewById(R.id.exam);
+        edittotalDays = (EditText) dialog_in.findViewById(R.id.totalMarks);
         editmyDate = (TextView) dialog_in.findViewById(R.id.dateText1);
 
         calendar = Calendar.getInstance();
@@ -348,8 +348,8 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         dialog_in.setContentView(R.layout.edit_attendance);
         dialog_in.setTitle("Edit Details");
 
-        editabsentDays = (EditText) dialog_in.findViewById(R.id.absentDays);
-        edittotalDays = (EditText) dialog_in.findViewById(R.id.totalDays);
+        editabsentDays = (EditText) dialog_in.findViewById(R.id.exam);
+        edittotalDays = (EditText) dialog_in.findViewById(R.id.totalMarks);
         editmyDate = (TextView) dialog_in.findViewById(R.id.dateText1);
 
         editabsentDays.setText(absentDays.getText().toString().trim());

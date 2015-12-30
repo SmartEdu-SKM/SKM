@@ -90,6 +90,8 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                 ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
                                 //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
+                                
+
                                 Log.d("user", "Retrieved " + examListRet.size() + " students");
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                                 for (int i = 0; i < examListRet.size(); i++) {
