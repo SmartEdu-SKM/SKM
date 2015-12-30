@@ -78,7 +78,8 @@ public class ImageAdapter extends BaseAdapter {
     };
 
     private Integer[] mThumbIdsStudent = {
-            R.drawable.task_image, R.drawable.task_image,
-            R.drawable.task_image, R.drawable.timetable_image
+            R.drawable.attendance, R.drawable.task_image,
+            R.drawable.task_image, R.drawable.timetable_image,
+            R.drawable.marks, R.drawable.uploads
     };
 }

@@ -30,7 +30,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
-        android:layout_below="@+id/absentDays" />
+        android:layout_below="@+id/exam" />
 
     <Button
         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/absentDays"
+        android:id="@+id/exam"
 
         android:layout_below="@+id/absentDays_head"
         android:layout_alignParentLeft="true"
@@ -83,7 +83,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/totalDays"
+        android:id="@+id/totalMarks"
         android:layout_below="@+id/totalDays_head"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
