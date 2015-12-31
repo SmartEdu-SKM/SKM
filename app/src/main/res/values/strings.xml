@@ -74,5 +74,6 @@
     <string name="title_activity_student_exams">student_exams</string>
     <string name="title_activity_upload_material_students">UploadMaterial_students</string>
     <string name="title_activity_upload_image_students">UploadImage_students</string>
+    <string name="title_activity_teacher_message">teacher_message</string>
 
 </resources>

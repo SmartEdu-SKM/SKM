@@ -167,6 +167,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dell.smartedu.UploadMaterial_students" />
         </activity>
+        <activity
+            android:name=".teacher_message"
+            android:label="@string/title_activity_teacher_message" >
+        </activity>
     </application>
 
 </manifest>

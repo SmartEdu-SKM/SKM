@@ -73,6 +73,7 @@ public class NewStudent extends BaseActivity {
 
                     final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
                     addStudentUser(name, age, rollno, sessionToken);
+                    sleep(3000);
                     addParentUser(name, age, rollno, sessionToken);
 
                    // addParent(name, rollno);
@@ -85,7 +86,13 @@ public class NewStudent extends BaseActivity {
 
 
 
+    protected void sleep(int time)
+    {
+        for(int x=0;x<time;x++)
+        {
 
+        }
+    }
     protected void addStudentUser(final String Name,int Age, final int Rollno, final String presession)
     {
         final ParseUser[] userRef = {new ParseUser()};
@@ -168,7 +175,7 @@ public class NewStudent extends BaseActivity {
 
 
                     ParseQuery<ParseUser> user=ParseUser.getQuery();
-                    user.whereEqualTo("username",Name + Rollno);
+                    user.whereEqualTo("username",Name +String.valueOf(Rollno));
                     user.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {
@@ -176,7 +183,6 @@ public class NewStudent extends BaseActivity {
                                 if (objects.size() != 0) {
                                     Log.d("user", "student user found");
                                     ParseUser student_user = objects.get(0);
-
                                     ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
                                     parent_relation.whereEqualTo("child", student_user);
                                     parent_relation.findInBackground(new FindCallback<ParseObject>() {
