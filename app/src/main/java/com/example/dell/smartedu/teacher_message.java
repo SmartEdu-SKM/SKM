@@ -44,6 +44,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
 
     EditText message;
+    Button broadcast;
     Button sendmessage;
     Spinner role;
 
@@ -62,7 +63,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
-
+        broadcast=(Button)findViewById(R.id.broadcast);;
         studentList = (ListView) findViewById(R.id.studentList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -79,6 +80,16 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
+        broadcast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                broadcasting(classId);
+            }
+        });
+
+
+
+
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
         classQuery.whereEqualTo("objectId",classId);
@@ -172,19 +183,162 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
             }
         });
 
-
-
-        // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
-
-
-
-
-
-
-
     }
 
 
+
+    protected void broadcasting(String classid)
+    {
+        final Dialog marks_add=new Dialog(teacher_message.this);
+        marks_add.setContentView(R.layout.teacher_message);
+        marks_add.setTitle("give message");
+        role = (Spinner) marks_add.findViewById(R.id.role);
+        ArrayAdapter<String> adapter;
+        List<String> list;
+        list = new ArrayList<String>();
+        list.add("Student");
+        list.add("Parent");
+        adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        role.setAdapter(adapter);
+        message = (EditText)marks_add.findViewById(R.id.message);
+        sendmessage=(Button)marks_add.findViewById(R.id.send_message);
+
+        sendmessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(message.getText().equals("")||role.getSelectedItem().toString().equals(""))
+                {
+                    Toast.makeText(getApplicationContext(), "no message or role not selected", Toast.LENGTH_LONG).show();
+                }else
+                {
+                    if(role.getSelectedItem().equals("Student"))
+                    {
+
+                        final ParseObject[] classRef = new ParseObject[1];
+                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+                        classQuery.whereEqualTo("objectId", classId);
+                        classQuery.findInBackground(new FindCallback<ParseObject>() {
+                            public void done(List<ParseObject> studentListRet, ParseException e) {
+                                if (e == null) {
+                                    classRef[0] = studentListRet.get(0);
+                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                                    studentQuery.whereEqualTo("class", classRef[0]);
+                                    studentQuery.addAscendingOrder("rollNumber");
+                                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> studentListRet, ParseException e) {
+                                            if (e == null) {
+
+                                                for (int i = 0; i < studentListRet.size(); i++) {
+                                                    ParseUser client_user = (ParseUser) studentListRet.get(i).get("userId");
+                                                    ParseObject newmessage = new ParseObject("Message");
+                                                    newmessage.put("from", ParseUser.getCurrentUser());
+                                                    newmessage.put("to", client_user);
+                                                    newmessage.put("message", message.getText().toString());
+                                                    newmessage.saveEventually();
+                                                    marks_add.dismiss();
+
+                                                }
+
+                                            } else {
+                                                Toast.makeText(teacher_message.this, "error broadcasting to students", Toast.LENGTH_LONG).show();
+                                                Log.d("user", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    });
+
+
+                                } else {
+                                    Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
+                                    Log.d("user", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+
+
+                    }else       //if parent selected
+                    {
+
+                        final ParseObject[] classRef = new ParseObject[1];
+                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+                        classQuery.whereEqualTo("objectId", classId);
+                        classQuery.findInBackground(new FindCallback<ParseObject>() {
+                            public void done(List<ParseObject> studentListRet, ParseException e) {
+                                if (e == null) {
+                                    classRef[0] = studentListRet.get(0);
+                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                                    studentQuery.whereEqualTo("class", classRef[0]);
+                                    studentQuery.addAscendingOrder("rollNumber");
+                                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> studentListRet, ParseException e) {
+                                            if (e == null) {
+
+                                                for (int i = 0; i < studentListRet.size(); i++) {
+
+
+                                                    ParseUser student_ofclient=(ParseUser)studentListRet.get(i).get("userId");
+                                                    ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery("Parent");
+                                                         parent_relation.whereEqualTo("child",student_ofclient);
+                                                         parent_relation.findInBackground(new FindCallback<ParseObject>() {
+                                                             @Override
+                                                             public void done(List<ParseObject> objects, ParseException e) {
+                                                                 if (e == null) {
+                                                                     if (objects.size() != 0) {
+
+                                                                             ParseUser client_user = (ParseUser) objects.get(0).get("userId");
+                                                                             ParseObject newmessage = new ParseObject("Message");
+                                                                             newmessage.put("from", ParseUser.getCurrentUser());
+                                                                             newmessage.put("to", client_user);
+                                                                             newmessage.put("message", message.getText().toString());
+                                                                             newmessage.saveEventually();
+                                                                             marks_add.dismiss();
+
+                                                                     } else {
+                                                                         Log.d("user", "Error in query");
+                                                                     }
+                                                                 } else {
+                                                                     Log.d("user", "Error in finding parent child relation");
+                                                                 }
+                                                             }
+                                                         });
+
+                                                }
+
+                                            } else {
+                                                Toast.makeText(teacher_message.this, "error broadcasting to parents", Toast.LENGTH_LONG).show();
+                                                Log.d("user", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    });
+
+
+                                } else {
+                                    Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
+                                    Log.d("user", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                }
+
+            }
+        });
+        marks_add.show();
+    }
 
     protected void giveMessage(final ParseObject studentobject)
     {
@@ -208,7 +362,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
             @Override
             public void onClick(View v) {
 
-                if(message.getText().equals(""))
+                if(message.getText().equals("")||role.getSelectedItem().toString().equals(""))
                 {
                     Toast.makeText(getApplicationContext(), "no message", Toast.LENGTH_LONG).show();
                 }else
