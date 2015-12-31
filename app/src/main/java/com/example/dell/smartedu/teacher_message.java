@@ -280,29 +280,29 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                                                     ParseUser student_ofclient=(ParseUser)studentListRet.get(i).get("userId");
                                                     ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery("Parent");
-                                                         parent_relation.whereEqualTo("child",student_ofclient);
-                                                         parent_relation.findInBackground(new FindCallback<ParseObject>() {
-                                                             @Override
-                                                             public void done(List<ParseObject> objects, ParseException e) {
-                                                                 if (e == null) {
-                                                                     if (objects.size() != 0) {
+                                                    parent_relation.whereEqualTo("child",student_ofclient);
+                                                    parent_relation.findInBackground(new FindCallback<ParseObject>() {
+                                                        @Override
+                                                        public void done(List<ParseObject> objects, ParseException e) {
+                                                            if (e == null) {
+                                                                if (objects.size() != 0) {
 
-                                                                             ParseUser client_user = (ParseUser) objects.get(0).get("userId");
-                                                                             ParseObject newmessage = new ParseObject("Message");
-                                                                             newmessage.put("from", ParseUser.getCurrentUser());
-                                                                             newmessage.put("to", client_user);
-                                                                             newmessage.put("message", message.getText().toString());
-                                                                             newmessage.saveEventually();
-                                                                             marks_add.dismiss();
+                                                                    ParseUser client_user = (ParseUser) objects.get(0).get("userId");
+                                                                    ParseObject newmessage = new ParseObject("Message");
+                                                                    newmessage.put("from", ParseUser.getCurrentUser());
+                                                                    newmessage.put("to", client_user);
+                                                                    newmessage.put("message", message.getText().toString());
+                                                                    newmessage.saveEventually();
+                                                                    marks_add.dismiss();
 
-                                                                     } else {
-                                                                         Log.d("user", "Error in query");
-                                                                     }
-                                                                 } else {
-                                                                     Log.d("user", "Error in finding parent child relation");
-                                                                 }
-                                                             }
-                                                         });
+                                                                } else {
+                                                                    Log.d("user", "Error in query");
+                                                                }
+                                                            } else {
+                                                                Log.d("user", "Error in finding parent child relation");
+                                                            }
+                                                        }
+                                                    });
 
                                                 }
 
@@ -351,7 +351,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         list = new ArrayList<String>();
         list.add("Student");
         list.add("Parent");
-                adapter = new ArrayAdapter<String>(getApplicationContext(),
+        adapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         role.setAdapter(adapter);
