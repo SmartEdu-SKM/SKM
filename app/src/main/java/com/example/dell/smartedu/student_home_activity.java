@@ -57,6 +57,8 @@ public class student_home_activity extends BaseActivity{
             public void done(List<ParseObject> studListRet, ParseException e) {
                 if (e == null) {
 
+                    if(studListRet.size()!=0){
+
                     ParseObject u = (ParseObject) studListRet.get(0);
                     studentId = u.getObjectId();
                     classRef[0] = (ParseObject) u.get("class");
@@ -86,14 +88,18 @@ public class student_home_activity extends BaseActivity{
                                             task_intent.putExtra("role", "Student");
                                             startActivity(task_intent);
                                         } else if (position == 2) {
+                                            Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
+                                            message_intent.putExtra("role", "Student");
+                                            startActivity(message_intent);
 
                                         } else if (position == 3) {
                                             Intent schedule_intent = new Intent(student_home_activity.this, Schedule.class);
-                                            schedule_intent.putExtra("role","Student");
+                                            schedule_intent.putExtra("role", "Student");
                                             startActivity(schedule_intent);
 
                                         } else if (position == 4) {
                                             Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
+                                            exam_intent.putExtra("role", "Student");
                                             exam_intent.putExtra("classId", classId);
                                             exam_intent.putExtra("studentId", studentId);
                                             startActivity(exam_intent);
@@ -112,6 +118,7 @@ public class student_home_activity extends BaseActivity{
 
                         }
                     });
+                }
 
 
                 } else {

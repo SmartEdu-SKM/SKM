@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -155,8 +154,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
-                                                    ParseObject student =studentListRet.get(0);
-                                                    giveMessage(student);
+                                                    if(studentListRet.size()!=0) {
+                                                        ParseObject student = studentListRet.get(0);
+                                                        giveMessage(student);
+                                                    }
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
                                                 }
@@ -191,7 +192,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     {
         final Dialog marks_add=new Dialog(teacher_message.this);
         marks_add.setContentView(R.layout.teacher_message);
-        marks_add.setTitle("give message");
+        marks_add.setTitle("Give Message");
         role = (Spinner) marks_add.findViewById(R.id.role);
         ArrayAdapter<String> adapter;
         List<String> list;
@@ -239,6 +240,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put("message", message.getText().toString());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
+                                                    Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
+
 
                                                 }
 
@@ -294,6 +297,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put("message", message.getText().toString());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
+                                                                    Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
+
 
                                                                 } else {
                                                                     Log.d("user", "Error in query");
@@ -344,7 +349,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     {
         final Dialog marks_add=new Dialog(teacher_message.this);
         marks_add.setContentView(R.layout.teacher_message);
-        marks_add.setTitle("give message");
+        marks_add.setTitle("Give Message");
         role = (Spinner) marks_add.findViewById(R.id.role);
         ArrayAdapter<String> adapter;
         List<String> list;
@@ -376,6 +381,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         newmessage.put("message", message.getText().toString());
                         newmessage.saveEventually();
                         marks_add.dismiss();
+                        Toast.makeText(teacher_message.this, "Message Successfully Sent to Student", Toast.LENGTH_LONG).show();
+
                     }else       //if parent selected
                     {
                         ParseUser student_ofclient=(ParseUser)studentobject.get("userId");
@@ -395,6 +402,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         newmessage.put("message", message.getText().toString());
                                         newmessage.saveEventually();
                                         marks_add.dismiss();
+                                        Toast.makeText(teacher_message.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
+
                                     }else
                                     {
                                         Log.d("user", "Error in query");
@@ -423,49 +432,4 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent i = new Intent(teacher_message.this,MainActivity.class);
-                startActivity(i);
-                finish();
-                //do your own thing here
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
-    }
-
-    private void displayView(int position) {
-
-        if(position==0)
-        {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
-        }
-
-        if(position==2)
-        {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(teacher_message.this,ChooseRole.class);
-            startActivity(i);
-        }
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(teacher_message.this, login.class);
-            startActivity(i);
-        }
-    }
 }
