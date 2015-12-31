@@ -154,6 +154,11 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 Intent to_uploads = new Intent(teacher_classes.this, UploadMaterial.class);
                                 to_uploads.putExtra("id", id);
                                 startActivity(to_uploads);
+                            }else if(_for.equals("message"))
+                            {
+                                Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
+                                to_message.putExtra("id", id);
+                                startActivity(to_message);
                             }
                         } else {
                             Log.d("user", "Error: " + e.getMessage());
