@@ -43,6 +43,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
     String studentId;
     String examid;
     String examName;
+    String role;
 
     Number totalMarks;
     Number marksObtained;
@@ -61,13 +62,17 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Exams");
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Student");
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
+
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("classId");
         studentId= from_student.getStringExtra("studentId");
-        addExamButton = (Button)findViewById(R.id.addExam);
+        role= from_student.getStringExtra("role");
+
+        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
+
+
         examsList = (ListView) findViewById(R.id.examList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);

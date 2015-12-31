@@ -65,7 +65,9 @@
             android:layout_height="wrap_content"
             android:text="Send Message"
             android:id="@+id/send_message"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+        android:background="#323b43"
+        android:textColor="#ffff" />
 
 
 
