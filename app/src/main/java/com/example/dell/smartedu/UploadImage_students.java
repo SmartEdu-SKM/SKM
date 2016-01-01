@@ -136,7 +136,7 @@ public class UploadImage_students extends ListActivity {
         Picasso.with(this)
                 .load(itemValue.getUrl()).into(viewImage);
 
-
+       // saveImage();
 
         dialog.dismiss();
 

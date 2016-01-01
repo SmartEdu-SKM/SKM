@@ -175,6 +175,14 @@
             android:name=".view_messages"
             android:label="@string/title_activity_view_messages" >
         </activity>
+        <activity
+            android:name=".AddAttendance_everyday"
+            android:label="@string/title_activity_add_attendance_everyday"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
