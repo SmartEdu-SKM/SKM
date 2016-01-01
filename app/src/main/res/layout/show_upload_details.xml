@@ -16,14 +16,14 @@
         android:id="@+id/typeHead"
         android:textSize="25sp"
         android:layout_marginTop="57dp"
-        android:layout_below="@+id/dateText1"
+        android:layout_below="@+id/date"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateText1"
+        android:id="@+id/date"
         android:layout_marginTop="45dp"
         android:textSize="18sp"
         android:layout_marginLeft="10dp"
@@ -42,7 +42,7 @@
 
         android:backgroundTint="#fff"
         android:nestedScrollingEnabled="false"
-        android:layout_alignBottom="@+id/dateText1"
+        android:layout_alignBottom="@+id/date"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -84,7 +84,7 @@
         android:background="@drawable/ic_calender"
         android:backgroundTint="#fff"
         android:nestedScrollingEnabled="false"
-        android:layout_below="@+id/dateText1"
+        android:layout_below="@+id/date"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -96,8 +96,8 @@
         android:text="(put on)"
         android:textColor="#ffff"
         android:layout_alignBottom="@+id/imageButton"
-        android:layout_alignLeft="@+id/dateText1"
-        android:layout_alignStart="@+id/dateText1" />
+        android:layout_alignLeft="@+id/date"
+        android:layout_alignStart="@+id/date" />
 
     <TextView
         android:layout_width="wrap_content"

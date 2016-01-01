@@ -349,7 +349,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dialog_upload.setTitle("Upload Material");
 
 
-        myDate = (TextView) dialog_upload.findViewById(R.id.dateText1);
+        myDate = (TextView) dialog_upload.findViewById(R.id.date);
         myDueDate= (TextView) dialog_upload.findViewById(R.id.deadline);
         subject=(EditText) dialog_upload.findViewById(R.id.subject);
         cal=(ImageView) dialog_upload.findViewById(R.id.calButton);

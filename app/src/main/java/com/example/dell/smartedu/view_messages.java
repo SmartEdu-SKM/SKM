@@ -22,7 +22,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +43,10 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     Notification_bar noti_bar;
     TextView message;
     String role;
-
+    TextView messageFrom;
+    Button delete;
+    Button ok;
+    TextView messagedate;
 
 
     @Override
@@ -108,12 +113,22 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                     Log.d("user", "Retrieved " + messageListRet.size() + " messages");
                                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                                     for (int i = 0; i < messageListRet.size(); i++) {
-                                        ParseObject u = (ParseObject) messageListRet.get(i);
+                                        ParseObject u = messageListRet.get(i);
                                         //  if(u.getString("class").equals(id)) {
-                                        String name = u.getString("message");
+                                        ParseUser senderuser = (ParseUser)u.get("from");
+
+                                        String from= null;
+                                        try {
+                                            from = senderuser.fetchIfNeeded().getUsername();
+                                        } catch (ParseException e1) {
+                                            e1.printStackTrace();
+                                        }
                                         //name += "\n";
                                         // name += u.getInt("age");
-
+                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                                        Log.d("user", String.valueOf(u.getLong("sentAt")));
+                                        final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+                                        String name=from + "\nat " + dateString;
                                         adapter.add(name);
                                         // }
 
@@ -126,23 +141,83 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                     messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                            final String item = ((TextView) view).getText().toString().trim();
+                                            String item = ((TextView) view).getText().toString();
 
-                                            ParseQuery<ParseObject> msgQuery = ParseQuery.getQuery("Message");
-                                            msgQuery.whereEqualTo("message", item);
-                                            msgQuery.whereEqualTo("to", ParseUser.getCurrentUser());
-                                            msgQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                public void done(List<ParseObject> msgListRet, ParseException e) {
+                                            String[] itemValues = item.split("\nat ");
+
+                                            final String[] details = new String[2];
+                                            int j = 0;
+
+                                            for (String x : itemValues) {
+                                                details[j++] = x;
+                                            }
+
+                                            Log.d("user", "from " + details[0].trim() + " at " + details[1]);  //extracts Chit as Chi and query fails???
+                                            final Dialog dialog = new Dialog(view_messages.this);
+                                            dialog.setContentView(R.layout.messsage_info);
+                                            dialog.setTitle("Message");
+                                            message=(TextView)dialog.findViewById(R.id.message);
+                                            messageFrom=(TextView)dialog.findViewById(R.id.message_from);
+                                            messagedate=(TextView)dialog.findViewById(R.id.date);
+                                            delete=(Button)dialog.findViewById(R.id.delButton);
+                                            ok=(Button)dialog.findViewById(R.id.okButton);
+
+                                            messageFrom.setText(details[0]);
+                                            messagedate.setText(details[1]);
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            ParseQuery<ParseUser> user=ParseUser.getQuery();
+                                            user.whereEqualTo("username",details[0]);
+                                            user.findInBackground(new FindCallback<ParseUser>() {
+                                                @Override
+                                                public void done(List<ParseUser> objects, ParseException e) {
                                                     if (e == null) {
-                                                        ParseObject u = msgListRet.get(0);
-                                                        callDialog(view,item);
+                                                        if (objects.size() != 0) {
+                                                            ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
+                                                            getMessageQuery.whereEqualTo("from", objects.get(0));
+                                                            getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
 
+                                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                                                            Date d = null;
+                                                            try {
+                                                                d = f.parse(details[1].trim());
+                                                            } catch (java.text.ParseException x) {
+                                                                x.printStackTrace();
+                                                            }
+                                                            final long milliseconds = d.getTime();
+                                                            Log.d("user", String.valueOf(milliseconds));
+                                                            getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                            getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                                    if (e == null) {
+                                                                        if (objects.size() != 0) {
 
+                                                                            message.setText(objects.get(0).getString("message"));
+                                                                                                                                                   } else {
+                                                                            Log.d("user", "query logic in getting messages");
+                                                                        }
+                                                                    } else {
+                                                                        Log.d("user", "no message retrived");
+                                                                    }
+                                                                }
+                                                            });
+                                                        } else {
+                                                            Log.d("user", "query logic error");
+                                                        }
                                                     } else {
-                                                        Log.d("user", "Error: " + e.getMessage());
+                                                        Log.d("user", "error in getting user");
                                                     }
                                                 }
                                             });
+
+                                            dialog.show();
+
 
 
                                         }
@@ -166,18 +241,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
 
     }
 
-    public void callDialog(View view, String item){
-        Dialog dialog = new Dialog(view_messages.this);
-        dialog.setContentView(R.layout.view_message);
-        dialog.setTitle("Message");
 
-        message= (TextView) dialog.findViewById(R.id.message);
-        message.setText(item);
-
-        dialog.dismiss();
-
-        dialog.show();
-    }
 
     @Override
     protected void onPostResume() {
