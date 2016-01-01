@@ -17,7 +17,7 @@
         android:id="@+id/absentDays_head"
         android:textSize="25sp"
         android:layout_marginTop="57dp"
-        android:layout_below="@+id/dateText1"
+        android:layout_below="@+id/date"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateText1"
+        android:id="@+id/date"
         android:layout_marginTop="45dp"
         android:textSize="25sp"
         android:layout_marginLeft="10dp"
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/test"
         android:background="@drawable/ic_calender"
-        android:layout_alignBottom="@+id/dateText1"
+        android:layout_alignBottom="@+id/date"
 
         android:backgroundTint="#fff"
         android:onClick="open"
@@ -113,12 +113,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dateText1"
+        android:layout_below="@+id/date"
         android:text="Attendance upto the date"
         android:layout_marginTop="50dp"
         android:textSize="15sp"
         android:id="@+id/textView13"
-        android:layout_alignTop="@+id/dateText1"
+        android:layout_alignTop="@+id/date"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#ffff" />

@@ -22,7 +22,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -238,6 +240,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put("from", ParseUser.getCurrentUser());
                                                     newmessage.put("to", client_user);
                                                     newmessage.put("message", message.getText().toString());
+                                                    newmessage.put("sentAt", (new Date()).getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
@@ -295,6 +298,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put("from", ParseUser.getCurrentUser());
                                                                     newmessage.put("to", client_user);
                                                                     newmessage.put("message", message.getText().toString());
+                                                                    newmessage.put("sentAt", (new Date()).getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
                                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
@@ -379,6 +383,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         newmessage.put("from",ParseUser.getCurrentUser());
                         newmessage.put("to",client_user);
                         newmessage.put("message", message.getText().toString());
+                        newmessage.put("sentAt", (new Date()).getTime());
                         newmessage.saveEventually();
                         marks_add.dismiss();
                         Toast.makeText(teacher_message.this, "Message Successfully Sent to Student", Toast.LENGTH_LONG).show();
@@ -400,6 +405,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         newmessage.put("from",ParseUser.getCurrentUser());
                                         newmessage.put("to",client_user);
                                         newmessage.put("message", message.getText().toString());
+                                        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+                                        newmessage.put("sentAt", (new Date()).getTime());
                                         newmessage.saveEventually();
                                         marks_add.dismiss();
                                         Toast.makeText(teacher_message.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();

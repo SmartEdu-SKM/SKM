@@ -172,6 +172,10 @@
             android:label="@string/title_activity_teacher_message" >
         </activity>
         <activity
+            android:name=".message_read"
+            android:label="@string/title_activity_view_messages" >
+        </activity>
+        <activity
             android:name=".view_messages"
             android:label="@string/title_activity_view_messages" >
         </activity>

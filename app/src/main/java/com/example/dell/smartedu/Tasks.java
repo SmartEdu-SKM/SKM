@@ -165,7 +165,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
                 myTitle = (TextView) dialog.findViewById(R.id.start_time);
                 myDesc = (TextView) dialog.findViewById(R.id.end_time);
-                myDate = (TextView) dialog.findViewById(R.id.dateText1);
+                myDate = (TextView) dialog.findViewById(R.id.date);
 
                 myTitle.setText(details[0].trim());
                 myDesc.setText(details[1]);
@@ -273,7 +273,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
                         Title = (EditText) dialog_in.findViewById(R.id.taskTitle);
                         Desc = (EditText) dialog_in.findViewById(R.id.scheduleinfo);
-                        myDate = (TextView) dialog_in.findViewById(R.id.dateText1);
+                        myDate = (TextView) dialog_in.findViewById(R.id.date);
                         EditButton = (Button) dialog_in.findViewById(R.id.editButton);
                         cal = (ImageButton) dialog_in.findViewById(R.id.test);
                         Title.setText(details[0]);

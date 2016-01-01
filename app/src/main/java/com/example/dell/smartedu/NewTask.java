@@ -56,7 +56,7 @@ public class NewTask extends BaseActivity {
         taskDescription = (EditText) findViewById(R.id.scheduleinfo);
         addTaskButton = (Button) findViewById(R.id.addTaskButton);
 
-        DATE= (TextView) findViewById(R.id.dateText1);
+        DATE= (TextView) findViewById(R.id.date);
         test=(ImageButton)findViewById(R.id.test);
 
         Log.i("abcd", "tasktitle is......" + taskTitle);
