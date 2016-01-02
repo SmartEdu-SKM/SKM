@@ -190,7 +190,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
     }
 
-    public void save(View view){
+    public void save(final View view){
 
         for (int i = 0; i < adapter.getCount(); i++)
         {
@@ -216,7 +216,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                 Year = Integer.parseInt(datedetails[2]);
 
 
-                String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
+                final String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
                 Toast.makeText(AddAttendance_everyday.this, "current date = " + Day + "/" + Month + "/" + Year, Toast.LENGTH_LONG).show();
 
                 SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
@@ -237,15 +237,15 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                 classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
                 classQuery.whereEqualTo("classTeacher", true);
                 classQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> studentListRet, ParseException e) {
+                    public void done(final List<ParseObject> classListRet, ParseException e) {
                         if (e == null) {
                             Log.d("class", "Retrieved the class");
                             //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                            if (studentListRet.size() == 0) {
+                            if (classListRet.size() == 0) {
                                 Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
                             } else {
-                                classRef[0] = studentListRet.get(0);
+                                classRef[0] = classListRet.get(0);
                         final ParseObject[] studentRef = new ParseObject[1];
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
                         studentQuery.whereEqualTo("rollNumber", itemvalue);
@@ -265,7 +265,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                        attQuery.findInBackground(new FindCallback<ParseObject>() {
                                            public void done(List<ParseObject> attListRet, ParseException e) {
                                                if (e == null) {
-                                                   if (attListRet.size() != 0) {
+                                                   if (attListRet.size() == classListRet.size()) {
                                                        Toast.makeText(getApplicationContext(), "Attendance Already added for today", Toast.LENGTH_LONG).show();
                                                    } else {
                                                        ParseObject attendance = new ParseObject("AttendanceDaily");
@@ -273,12 +273,13 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                                        attendance.put("date", newmilliseconds);
                                                        if (item.isChecked()) {
                                                            attendance.put("p_a", "A");
+                                                           giveMessageParent(view, studentRef[0], string_date);
                                                            Log.d("user", item.getName() + " is Checked!!");
                                                        } else
                                                            attendance.put("p_a", "P");
 
                                                        attendance.saveEventually();
-                                                       Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
+                                                      // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
 
                                                    }
                                                }else {
@@ -302,10 +303,41 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                     });
 
         }
+        Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
 
         Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
         task_intent.putExtra("role", role);
         startActivity(task_intent);
+    }
+
+    public void giveMessageParent(View view, final ParseObject studentRef, final String string_date) {
+
+        Log.d("user", "in give message");
+        ParseUser student_ofclient = (ParseUser) studentRef.get("userId");
+        ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
+        parent_relation.whereEqualTo("child", student_ofclient);
+        parent_relation.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() != 0) {
+                        ParseUser client_user = (ParseUser) objects.get(0).get("userId");
+                        ParseObject newmessage = new ParseObject("Message");
+                        newmessage.put("from", ParseUser.getCurrentUser());
+                        newmessage.put("to", client_user);
+                        newmessage.put("message", studentRef.get("name") + " was absent today on " + string_date);
+                        // SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy");
+                        newmessage.put("sentAt", (new Date()).getTime());
+                        newmessage.saveEventually();
+                        //Toast.makeText(AddAttendance_everyday.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
+
+
+                    }
+                } else {
+                    Log.d("user", "Error in query");
+                }
+            }
+        });
     }
 
 
