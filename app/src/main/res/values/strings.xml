@@ -77,5 +77,6 @@
     <string name="title_activity_teacher_message">teacher_message</string>
     <string name="title_activity_view_messages">view_messages</string>
     <string name="title_activity_add_attendance_everyday">AddAttendance_everyday</string>
+    <string name="title_activity_view_attendance">view_attendance</string>
 
 </resources>

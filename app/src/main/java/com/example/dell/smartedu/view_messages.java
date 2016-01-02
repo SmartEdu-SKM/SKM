@@ -182,6 +182,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                             getMessageQuery.whereEqualTo("from", objects.get(0));
                                                             getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
 
+
+
                                                             SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
                                                             Date d = null;
                                                             try {
@@ -200,7 +202,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                                         if (objects.size() != 0) {
 
                                                                             message.setText(objects.get(0).getString("message"));
-                                                                                                                                                   } else {
+                                                                        } else {
                                                                             Log.d("user", "query logic in getting messages");
                                                                         }
                                                                     } else {

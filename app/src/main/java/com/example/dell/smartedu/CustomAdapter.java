@@ -177,7 +177,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
         final Dialog dialog2 = new Dialog(context);
         dialog2.setContentView(R.layout.show_attendance_daily);
         dialog2.setTitle("Attendance Information");
-        absentDays = (TextView) dialog2.findViewById(R.id.exam);
+        this.absentDays = (TextView) dialog2.findViewById(R.id.exam);
         this.totalDays = (TextView) dialog2.findViewById(R.id.totalMarks);
         this.percentage = (TextView) dialog2.findViewById(R.id.percentage);
         myDate = (TextView) dialog2.findViewById(R.id.dateText1);

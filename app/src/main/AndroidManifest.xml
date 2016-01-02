@@ -187,6 +187,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dell.smartedu.MainActivity" />
         </activity>
+        <activity
+            android:name=".view_attendance"
+            android:label="@string/title_activity_view_attendance" >
+        </activity>
     </application>
 
 </manifest>
