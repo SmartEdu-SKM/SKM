@@ -82,6 +82,10 @@ public class student_home_activity extends BaseActivity{
                                     public void onItemClick(AdapterView<?> parent, View v,
                                                             int position, long id) {
                                         if (position == 0) {
+                                            Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
+                                            atten_intent.putExtra("role", "Student");
+                                            atten_intent.putExtra("id",studentId);
+                                            startActivity(atten_intent);
 
                                         } else if (position == 1) {
                                             Intent task_intent = new Intent(student_home_activity.this, Tasks.class);
