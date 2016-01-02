@@ -189,6 +189,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                             } catch (java.text.ParseException x) {
                                                                 x.printStackTrace();
                                                             }
+                                                            Log.d("user", String.valueOf(d));
                                                             final long milliseconds = d.getTime();
                                                             Log.d("user", String.valueOf(milliseconds));
                                                             getMessageQuery.whereEqualTo("sentAt", milliseconds);
