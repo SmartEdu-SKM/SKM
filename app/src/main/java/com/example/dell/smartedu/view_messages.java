@@ -23,9 +23,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by Dell on 10/7/2015.
@@ -125,9 +124,11 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                         }
                                         //name += "\n";
                                         // name += u.getInt("age");
-                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                                         Log.d("user", String.valueOf(u.getLong("sentAt")));
+                                        Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
                                         final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+                                        Log.d("user", dateString);
                                         String name=from + "\nat " + dateString;
                                         adapter.add(name);
                                         // }
@@ -184,15 +185,18 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-                                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                                            Log.d("user", details[1]);
                                                             Date d = null;
                                                             try {
                                                                 d = f.parse(details[1].trim());
                                                             } catch (java.text.ParseException x) {
                                                                 x.printStackTrace();
                                                             }
+                                                            java.util.Calendar calendar= Calendar.getInstance();
                                                             Log.d("user", String.valueOf(d));
-                                                            final long milliseconds = d.getTime();
+                                                            calendar.setTime(d);
+                                                            final long milliseconds = calendar.getTimeInMillis();
                                                             Log.d("user", String.valueOf(milliseconds));
                                                             getMessageQuery.whereEqualTo("sentAt", milliseconds);
                                                             getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
