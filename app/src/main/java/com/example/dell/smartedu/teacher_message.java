@@ -242,9 +242,15 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                                 //   format.parse(format.format(new Date(calendar.getTimeInMillis())));
+                                                    String date= format.format(new Date(calendar.getTimeInMillis()));
+                                                    Date d=null;
+                                                    try {
+                                                        d=format.parse(date);
+                                                    } catch (java.text.ParseException e1) {
+                                                        e1.printStackTrace();
+                                                    }
 
-                                                    newmessage.put("sentAt", calendar.getTimeInMillis());
+                                                    newmessage.put("sentAt", d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
@@ -304,9 +310,15 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put("message", message.getText().toString());
                                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                                                    //   format.parse(format.format(new Date(calendar.getTimeInMillis())));
+                                                                    String date= format.format(new Date(calendar.getTimeInMillis()));
+                                                                    Date d=null;
+                                                                    try {
+                                                                        d=format.parse(date);
+                                                                    } catch (java.text.ParseException e1) {
+                                                                        e1.printStackTrace();
+                                                                    }
 
-                                                                    newmessage.put("sentAt", calendar.getTimeInMillis());
+                                                                    newmessage.put("sentAt", d.getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
                                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
@@ -393,9 +405,15 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         newmessage.put("message", message.getText().toString());
                         java.util.Calendar calendar= Calendar.getInstance();
                         SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                        //   format.parse(format.format(new Date(calendar.getTimeInMillis())));
+                        String date= format.format(new Date(calendar.getTimeInMillis()));
+                        Date d=null;
+                        try {
+                            d=format.parse(date);
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
 
-                        newmessage.put("sentAt", calendar.getTimeInMillis());
+                        newmessage.put("sentAt", d.getTime());
                         newmessage.saveEventually();
                         marks_add.dismiss();
                         Toast.makeText(teacher_message.this, "Message Successfully Sent to Student", Toast.LENGTH_LONG).show();
