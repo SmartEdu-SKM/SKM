@@ -21,7 +21,7 @@ public class MainActivity extends BaseActivity{
 
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
-
+    String role="Teacher";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity{
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -38,22 +38,22 @@ public class MainActivity extends BaseActivity{
 
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);//pass role
         drawerFragment.setDrawerListener(this);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this,"Teacher"));
+        gridview.setAdapter(new ImageAdapter(this,role));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (position == 0) {
                     Intent attendance_intent = new Intent(MainActivity.this, AddAttendance_everyday.class);
-                   attendance_intent.putExtra("role","Teacher");
+                   attendance_intent.putExtra("role",role);
                     startActivity(attendance_intent);
 
                 } else if (position == 1) {
                     Intent task_intent = new Intent(MainActivity.this, Tasks.class);
-                    task_intent.putExtra("role","Teacher");
+                    task_intent.putExtra("role",role);
                     startActivity(task_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
@@ -61,23 +61,23 @@ public class MainActivity extends BaseActivity{
                     startActivity(student_intent);
                 } else if (position == 3) {
                     Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
-                    schedule_intent.putExtra("role","Teacher");
+                    schedule_intent.putExtra("role",role);
                     startActivity(schedule_intent);
                 } else if (position == 4) {
                     Intent addmarks_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    addmarks_intent.putExtra("role","Teacher");
+                    addmarks_intent.putExtra("role",role);
                     addmarks_intent.putExtra("for","exam");
                     startActivity(addmarks_intent);
                 } else if (position == 5) {
                     Intent upload_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    upload_intent.putExtra("role","Teacher");
+                    upload_intent.putExtra("role",role);
                     upload_intent.putExtra("for","upload");
                     startActivity(upload_intent);
 
                 }else if (position == 6) {
 
                     Intent message_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    message_intent.putExtra("role","Teacher");
+                    message_intent.putExtra("role",role);
                     message_intent.putExtra("for","message");
                     startActivity(message_intent);
                 }

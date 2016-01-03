@@ -175,20 +175,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             final ParseUser currentUser = ParseUser.getCurrentUser();
             // Create the ParseFile
             final ParseFile file = new ParseFile(image);
-            // Upload the image into Parse Cloud
 
-            // Create a New Class called "ImageUpload" in Parse
-          /*  ParseObject imgupload = new ParseObject("UserPhoto");
 
-            // Create a column named "ImageName" and set the string
-            imgupload.put("createdBy", ParseUser.getCurrentUser());
-
-            // Create a column named "ImageFile" and insert the image
-            imgupload.put("imageFile", file);
-
-            // Create the class and the columns
-            imgupload.saveInBackground();
-*/
             file.saveInBackground(new SaveCallback() {
 
                 @Override

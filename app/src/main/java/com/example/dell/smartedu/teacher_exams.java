@@ -57,7 +57,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         examsList = (ListView) findViewById(R.id.examList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
 
         //  myList = dbHandler.getAllTasks();

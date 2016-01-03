@@ -46,9 +46,11 @@ public class student_home_activity extends BaseActivity{
 
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Student");
         drawerFragment.setDrawerListener(this);
 
+        final GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(), "Student"));
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
@@ -76,8 +78,7 @@ public class student_home_activity extends BaseActivity{
                                     }
                                 }
 
-                                GridView gridview = (GridView) findViewById(R.id.gridview);
-                                gridview.setAdapter(new ImageAdapter(getApplicationContext(), "Student"));
+
                                 gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     public void onItemClick(AdapterView<?> parent, View v,
                                                             int position, long id) {
