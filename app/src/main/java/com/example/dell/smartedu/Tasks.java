@@ -88,16 +88,16 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         taskListnew =(ListView) findViewById(R.id.taskList);
 
         myList = dbHandler.getAllTasks();
-
+        Bundle fromrole= getIntent().getExtras();
+        role = fromrole.getString("role");
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
         
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Bundle fromrole= getIntent().getExtras();
-        role = fromrole.getString("role");
+
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);

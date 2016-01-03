@@ -27,7 +27,7 @@ public class parent_home_activity extends BaseActivity{
 
     String classId;
     String studentId;
-
+String role="Parent";
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -47,7 +47,7 @@ public class parent_home_activity extends BaseActivity{
 
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
         final ParseObject[] childRef = new ParseObject[1];

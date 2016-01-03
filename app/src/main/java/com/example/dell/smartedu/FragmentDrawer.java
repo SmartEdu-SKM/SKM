@@ -35,6 +35,7 @@ import java.util.List;
 public class FragmentDrawer extends Fragment {
 
     private static String TAG = FragmentDrawer.class.getSimpleName();
+    private static String role;
 
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -45,7 +46,7 @@ public class FragmentDrawer extends Fragment {
     private FragmentDrawerListener drawerListener;
     private TextView accountUsername;
     private TextView accountEmail;
-    private de.hdodenhof.circleimageview.CircleImageView accountProfile;
+     private de.hdodenhof.circleimageview.CircleImageView accountProfile;
 
     public FragmentDrawer() {
 
@@ -59,12 +60,12 @@ public class FragmentDrawer extends Fragment {
         List<NavDrawerItem> data = new ArrayList<>();
 
 
-        // preparing navigation drawer items
-        for (int i = 0; i < titles.length; i++) {
-            NavDrawerItem navItem = new NavDrawerItem();
-            navItem.setTitle(titles[i]);
-            data.add(navItem);
-        }
+            for (int i = 0; i < titles.length; i++) {
+                NavDrawerItem navItem = new NavDrawerItem();
+                navItem.setTitle(titles[i]);
+                data.add(navItem);
+            }
+
         return data;
     }
 
@@ -73,7 +74,8 @@ public class FragmentDrawer extends Fragment {
         super.onCreate(savedInstanceState);
 
         // drawer labels
-        titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);//////////////////
+        titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_none);
+
     }
 
     @Override
@@ -173,9 +175,30 @@ public class FragmentDrawer extends Fragment {
     }
 
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar,String role) {
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+        Log.d("user",role);
+        this.role=role;
+
+
+        if(this.role.equals("Teacher")) {
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_teacher);//////////////////
+        }else if(this.role.equals("Student"))
+        {
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_student);//////////////////
+        }else if(this.role.equals("Parent"))
+        {
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_parent);//////////////////
+            Log.d("user","Parent role selected");
+        }else if(this.role.equals(""))
+        {
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_none);//////////////////
+        }
+
+        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        recyclerView.setAdapter(adapter);
+
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {

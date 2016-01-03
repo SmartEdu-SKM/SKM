@@ -81,7 +81,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         studentList = (ListView) findViewById(R.id.studentList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
         //  myList = dbHandler.getAllTasks();
