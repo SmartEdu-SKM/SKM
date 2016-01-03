@@ -232,27 +232,6 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                     public void onClick(View v) {
 
                         ParseObject.createWithoutData("Task", taskid).deleteEventually();
-                       /* ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-                        taskQuery.whereEqualTo("objectId", id);
-                        taskQuery.findInBackground(new FindCallback<ParseObject>() {
-                            public void done(List<ParseObject> objectRet, ParseException e) {
-                                if (e == null) {
-                                    ParseObject object = (ParseObject) objectRet.get(0);
-
-                                    object.deleteInBackground();
-
-                                    //object.saveInBackground();
-                                    Toast.makeText(getApplicationContext(), "Task Deleted", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "here", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-
-                        }); */
-                        //taskLt.remove(position);
-                        //adapter.notifyDataSetChanged();
-                        //taskList.setAdapter(adapter);
 
                         onRestart();
 

@@ -32,7 +32,6 @@ import java.util.Calendar;
 public class view_messages extends BaseActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-    Button addExamButton;
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
@@ -68,15 +67,6 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
-
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
 
         messageList= (ListView) findViewById(R.id.messageList);
 
@@ -89,8 +79,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                 if (messageListRet.size() != 0) {
 
                                     ArrayList<String> messageLt = new ArrayList<String>();
-                                    //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
-                                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
                                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                                             getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
 
@@ -172,6 +161,67 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                     dialog.dismiss();
                                                 }
                                             });
+
+                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                            Log.d("user", details[1]);
+                                            Date d = null;
+                                            try {
+                                                d = f.parse(details[1].trim());
+                                            } catch (java.text.ParseException x) {
+                                                x.printStackTrace();
+                                            }
+                                            final java.util.Calendar calendar= Calendar.getInstance();
+                                            Log.d("user", String.valueOf(d));
+                                            calendar.setTime(d);
+
+                                            delete.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+
+                                                    ParseQuery<ParseUser> user=ParseUser.getQuery();
+                                                    user.whereEqualTo("username",details[0]);
+                                                    user.findInBackground(new FindCallback<ParseUser>() {
+                                                        @Override
+                                                        public void done(List<ParseUser> objects, ParseException e) {
+                                                            if (e == null) {
+                                                                if (objects.size() != 0) {
+                                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
+                                                                    getMessageQuery.whereEqualTo("from", objects.get(0));
+                                                                    getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+
+                                                                    final long milliseconds = calendar.getTimeInMillis();
+                                                                    Log.d("user", String.valueOf(milliseconds));
+                                                                    getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                                    getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                        @Override
+                                                                        public void done(List<ParseObject> objects, ParseException e) {
+                                                                            if (e == null) {
+                                                                                if (objects.size() != 0) {
+                                                                                   objects.get(0).deleteEventually();
+                                                                                    dialog.dismiss();
+                                                                                    onRestart();
+                                                                                } else {
+                                                                                    Log.d("user", "query logic in deleting messages");
+                                                                                }
+                                                                            } else {
+                                                                                Log.d("user", "no message retrived");
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    Log.d("user", "query logic error");
+                                                                }
+                                                            } else {
+                                                                Log.d("user", "error in getting user");
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            });
+
+
                                             ParseQuery<ParseUser> user=ParseUser.getQuery();
                                             user.whereEqualTo("username",details[0]);
                                             user.findInBackground(new FindCallback<ParseUser>() {
@@ -182,20 +232,6 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                             ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
                                                             getMessageQuery.whereEqualTo("from", objects.get(0));
                                                             getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
-
-
-
-                                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                                            Log.d("user", details[1]);
-                                                            Date d = null;
-                                                            try {
-                                                                d = f.parse(details[1].trim());
-                                                            } catch (java.text.ParseException x) {
-                                                                x.printStackTrace();
-                                                            }
-                                                            java.util.Calendar calendar= Calendar.getInstance();
-                                                            Log.d("user", String.valueOf(d));
-                                                            calendar.setTime(d);
                                                             final long milliseconds = calendar.getTimeInMillis();
                                                             Log.d("user", String.valueOf(milliseconds));
                                                             getMessageQuery.whereEqualTo("sentAt", milliseconds);
@@ -230,6 +266,9 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                         }
                                     });
 
+                                }else
+                                {
+                                    Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
                                 }
 
                             } else {
@@ -239,16 +278,17 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                         }
                     });
 
-
-
-        // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
-
-
-
-
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent to_view_messages = new Intent(view_messages.this, view_messages.class);
+        to_view_messages.putExtra("role", role);
+        startActivity(to_view_messages);
+        finish();
+    }
 
     @Override
     protected void onPostResume() {
