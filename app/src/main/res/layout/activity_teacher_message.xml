@@ -41,12 +41,29 @@
                     tools:layout="@layout/fragment_notification_bar" />
             </LinearLayout>
 
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Broadcast"
                 android:id="@+id/broadcast"
-                android:layout_gravity="center_horizontal" />
+
+                 />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send to Selected"
+                    android:id="@+id/selected"
+                    android:layout_toEndOf="@+id/broadcast"
+                    android:nestedScrollingEnabled="false"
+                    android:onClick="sendToSelected" />
+            </RelativeLayout>
+
+
 
             <ListView
                 android:layout_width="match_parent"

@@ -26,7 +26,7 @@ public class student_home_activity extends BaseActivity{
     ArrayList<Task> myList;
     String studentId;
     String classId;
-
+    String role="Student";
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -35,7 +35,7 @@ public class student_home_activity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home_activity);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Student");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,11 +46,11 @@ public class student_home_activity extends BaseActivity{
 
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Student");
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
         final GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(getApplicationContext(), "Student"));
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(), role));
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
@@ -84,27 +84,27 @@ public class student_home_activity extends BaseActivity{
                                                             int position, long id) {
                                         if (position == 0) {
                                             Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
-                                            atten_intent.putExtra("role", "Student");
+                                            atten_intent.putExtra("role", role);
                                             atten_intent.putExtra("id",studentId);
                                             startActivity(atten_intent);
 
                                         } else if (position == 1) {
                                             Intent task_intent = new Intent(student_home_activity.this, Tasks.class);
-                                            task_intent.putExtra("role", "Student");
+                                            task_intent.putExtra("role", role);
                                             startActivity(task_intent);
                                         } else if (position == 2) {
                                             Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
-                                            message_intent.putExtra("role", "Student");
+                                            message_intent.putExtra("role", role);
                                             startActivity(message_intent);
 
                                         } else if (position == 3) {
                                             Intent schedule_intent = new Intent(student_home_activity.this, Schedule.class);
-                                            schedule_intent.putExtra("role", "Student");
+                                            schedule_intent.putExtra("role",role);
                                             startActivity(schedule_intent);
 
                                         } else if (position == 4) {
                                             Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
-                                            exam_intent.putExtra("role", "Student");
+                                            exam_intent.putExtra("role", role);
                                             exam_intent.putExtra("classId", classId);
                                             exam_intent.putExtra("studentId", studentId);
                                             startActivity(exam_intent);
