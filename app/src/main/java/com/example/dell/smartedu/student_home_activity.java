@@ -113,6 +113,14 @@ public class student_home_activity extends BaseActivity{
                                             Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
                                             exam_intent.putExtra("id", classId);
                                             startActivity(exam_intent);
+                                        }else if (position == 6) {
+
+                                        }else if (position == 7) {
+                                            Intent messsagetoteacher_intent = new Intent(student_home_activity.this, message_to_teacher.class);
+                                            messsagetoteacher_intent.putExtra("role", role);
+                                            messsagetoteacher_intent.putExtra("classId", classId);
+                                            messsagetoteacher_intent.putExtra("studentId", studentId);
+                                            startActivity(messsagetoteacher_intent);
                                         }
                                     }
                                 });
