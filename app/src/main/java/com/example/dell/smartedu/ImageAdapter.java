@@ -70,17 +70,19 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.attendance, R.drawable.task_image,
             R.drawable.students, R.drawable.timetable_image,
             R.drawable.marks, R.drawable.uploads,
-            R.drawable.messages
+            R.drawable.messages,R.drawable.sent_messages
     };
 
     private Integer[] mThumbIdsParent = {
             R.drawable.attendance, R.drawable.task_image,
-            R.drawable.messages, R.drawable.marks
+            R.drawable.read_messages, R.drawable.marks,
+            R.drawable.sent_messages, R.drawable.messages
     };
 
     private Integer[] mThumbIdsStudent = {
             R.drawable.attendance, R.drawable.task_image,
-            R.drawable.messages, R.drawable.timetable_image,
-            R.drawable.marks, R.drawable.uploads
+            R.drawable.read_messages, R.drawable.timetable_image,
+            R.drawable.marks, R.drawable.uploads,
+            R.drawable.sent_messages,R.drawable.messages
     };
 }

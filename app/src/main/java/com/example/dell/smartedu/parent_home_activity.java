@@ -117,6 +117,12 @@ String role="Parent";
 
                                             } else if (position == 5) {
 
+                                                Intent messsagetoteacher_intent = new Intent(parent_home_activity.this, message_to_teacher.class);
+                                                messsagetoteacher_intent.putExtra("role", "Parent");
+                                                messsagetoteacher_intent.putExtra("classId", classId);
+                                                messsagetoteacher_intent.putExtra("studentId", studentId);
+                                                startActivity(messsagetoteacher_intent);
+
                                             }
                                         }
                                     });
