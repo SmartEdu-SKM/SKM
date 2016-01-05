@@ -8,7 +8,9 @@
     android:layout_height="match_parent"
     android:background="#13ff77">
 
-
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -17,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="575dp"
             android:orientation="vertical"
             android:weightSum="1"
             android:id="@+id/student">
@@ -76,6 +78,7 @@
 
 
     </LinearLayout>
+    </ScrollView>
 
 
     <fragment

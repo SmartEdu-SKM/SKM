@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity{
 
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);//pass role
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);//pass role
         drawerFragment.setDrawerListener(this);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -48,39 +48,46 @@ public class MainActivity extends BaseActivity{
                                     int position, long id) {
                 if (position == 0) {
                     Intent attendance_intent = new Intent(MainActivity.this, AddAttendance_everyday.class);
-                   attendance_intent.putExtra("role",role);
+                    attendance_intent.putExtra("role", role);
                     startActivity(attendance_intent);
 
                 } else if (position == 1) {
                     Intent task_intent = new Intent(MainActivity.this, Tasks.class);
-                    task_intent.putExtra("role",role);
+                    task_intent.putExtra("role", role);
                     startActivity(task_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    student_intent.putExtra("for","students");
+                    student_intent.putExtra("for", "students");
                     startActivity(student_intent);
                 } else if (position == 3) {
                     Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
-                    schedule_intent.putExtra("role",role);
+                    schedule_intent.putExtra("role", role);
                     startActivity(schedule_intent);
                 } else if (position == 4) {
                     Intent addmarks_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    addmarks_intent.putExtra("role",role);
-                    addmarks_intent.putExtra("for","exam");
+                    addmarks_intent.putExtra("role", role);
+                    addmarks_intent.putExtra("for", "exam");
                     startActivity(addmarks_intent);
                 } else if (position == 5) {
                     Intent upload_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    upload_intent.putExtra("role",role);
-                    upload_intent.putExtra("for","upload");
+                    upload_intent.putExtra("role", role);
+                    upload_intent.putExtra("for", "upload");
                     startActivity(upload_intent);
 
-                }else if (position == 6) {
+                } else if (position == 6) {
 
                     Intent message_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    message_intent.putExtra("role",role);
-                    message_intent.putExtra("for","message");
+                    message_intent.putExtra("role", role);
+                    message_intent.putExtra("for", "message");
                     startActivity(message_intent);
+                } else if (position == 7) {
+
+                    Intent read_message_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    read_message_intent.putExtra("role", role);
+                    startActivity(read_message_intent);
+
                 }
+
             }
         });
         ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());

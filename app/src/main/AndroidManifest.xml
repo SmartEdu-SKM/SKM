@@ -191,6 +191,10 @@
             android:name=".view_attendance"
             android:label="@string/title_activity_view_attendance" >
         </activity>
+        <activity
+            android:name=".message_to_teacher"
+            android:label="@string/title_activity_message_to_teacher" >
+        </activity>
     </application>
 
 </manifest>
