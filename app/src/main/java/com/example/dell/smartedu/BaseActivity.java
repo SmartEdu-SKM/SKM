@@ -38,6 +38,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     String password;
     String confirmPassword;
     String userName;
+    String role="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,9 +225,184 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private void displayView(int position) {
 
+        if(this.role.equals("")){
+            if(position==0)
+            {
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                Intent i = new Intent(BaseActivity.this, login.class);
+                startActivity(i);
+            }
+        }
+        else if(this.role.equals("Teacher")){
+            if (position == 0) { //dashboard
+                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(i);
+            }
+
+            if (position == 1) { //tasks
+                Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("role", role);
+                startActivity(task_intent);
+            }
+
+            if (position == 2) { //attendance
+                Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
+                attendance_intent.putExtra("role", role);
+                startActivity(attendance_intent);
+            }
+
+            if (position == 3) { //schedule
+                Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("role", role);
+                startActivity(schedule_intent);
+            }
+
+            if (position == 4) { //assignments
+                Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                upload_intent.putExtra("role", role);
+                upload_intent.putExtra("for", "upload");
+                startActivity(upload_intent);
+
+            }
+
+            if (position == 5) { //grades
+                Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                addmarks_intent.putExtra("role", role);
+                addmarks_intent.putExtra("for", "exam");
+                startActivity(addmarks_intent);
+            }
+
+            if(position==7) //choose another role
+            {
+                Intent i = new Intent(BaseActivity.this,ChooseRole.class);
+                startActivity(i);
+            }
+
+            if(position==8) //logout
+            {
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                Intent i = new Intent(BaseActivity.this, login.class);
+                startActivity(i);
+            }
+
+        }
+
+        else if(this.role.equals("Student")){
+            if (position == 0) { //dashboard
+                Intent i = new Intent(getApplicationContext(),student_home_activity.class);
+                startActivity(i);
+            }
+
+            if (position == 1) { //tasks
+                Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("role", role);
+                startActivity(task_intent);
+            }
+
+            if (position == 2) { //attendance
+               // Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
+                //attendance_intent.putExtra("role", role);
+                //startActivity(attendance_intent);
+            }
+
+            if (position == 3) { //schedule
+                Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("role", role);
+                startActivity(schedule_intent);
+            }
+
+            if (position == 4) { //assignments
+               /* Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                upload_intent.putExtra("role", role);
+                upload_intent.putExtra("for", "upload");
+                startActivity(upload_intent); */
+
+            }
+
+            if (position == 5) { //grades
+               /* Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                addmarks_intent.putExtra("role", role);
+                addmarks_intent.putExtra("for", "exam");
+                startActivity(addmarks_intent); */
+            }
+
+            if(position==7) //choose another role
+            {
+                Intent i = new Intent(BaseActivity.this,ChooseRole.class);
+                startActivity(i);
+            }
+
+            if(position==8) //logout
+            {
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                Intent i = new Intent(BaseActivity.this, login.class);
+                startActivity(i);
+            }
+
+        }
+
+        else if(role.equals("Parent")){
+            if (position == 0) { //dashboard
+                Intent i = new Intent(getApplicationContext(),parent_home_activity.class);
+                startActivity(i);
+            }
+
+            if (position == 1) { //tasks
+                Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("role", role);
+                startActivity(task_intent);
+            }
+
+            if (position == 2) { //attendance
+                // Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
+                //attendance_intent.putExtra("role", role);
+                //startActivity(attendance_intent);
+            }
+
+            if (position == 3) { //schedule
+                Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("role", role);
+                startActivity(schedule_intent);
+            }
+
+            if (position == 4) { //assignments
+               /* Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                upload_intent.putExtra("role", role);
+                upload_intent.putExtra("for", "upload");
+                startActivity(upload_intent); */
+
+            }
+
+            if (position == 5) { //grades
+               /* Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                addmarks_intent.putExtra("role", role);
+                addmarks_intent.putExtra("for", "exam");
+                startActivity(addmarks_intent); */
+            }
+
+            if(position==7) //choose another role
+            {
+                Intent i = new Intent(BaseActivity.this,ChooseRole.class);
+                startActivity(i);
+            }
+
+            if(position==8) //logout
+            {
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                Intent i = new Intent(BaseActivity.this, login.class);
+                startActivity(i);
+            }
+
+        }
+
+        /*
         if (position == 0) {
             /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
+            startActivity(i);*/ /*
         }
 
         if (position == 2) {
@@ -246,7 +422,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
             Intent i = new Intent(BaseActivity.this, login.class);
             startActivity(i);
-        }
+        }*/
 
     }
 

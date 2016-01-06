@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.parse.ParseUser;
@@ -18,6 +19,10 @@ public class Role extends BaseActivity implements FragmentDrawer.FragmentDrawerL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role);
+
+        role="";
+        Log.d("user", role);
+
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "*no role*");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

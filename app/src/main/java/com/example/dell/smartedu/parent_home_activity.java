@@ -27,7 +27,6 @@ public class parent_home_activity extends BaseActivity{
 
     String classId;
     String studentId;
-String role="Parent";
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -35,6 +34,9 @@ String role="Parent";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home_activity);
+
+        role="Parent";
+        Log.d("user",role);
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
