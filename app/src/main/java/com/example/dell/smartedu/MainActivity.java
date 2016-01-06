@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -21,11 +22,13 @@ public class MainActivity extends BaseActivity{
 
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
-    String role="Teacher";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        role="Teacher";
+        Log.d("user", role);
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -98,6 +101,7 @@ public class MainActivity extends BaseActivity{
         });
         ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
     }
+
 
     @Override
     protected void onPostResume() {

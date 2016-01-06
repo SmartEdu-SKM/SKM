@@ -109,7 +109,7 @@ public class UploadImage_students extends ListActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-                onListItemClick(v,pos,id);
+                onListItemClick(v, pos, id);
             }
         });
 
@@ -136,13 +136,27 @@ public class UploadImage_students extends ListActivity {
         Picasso.with(this)
                 .load(itemValue.getUrl()).into(viewImage);
 
-       // saveImage();
+        viewImage.setOnClickListener(new View.OnClickListener() {
 
-        dialog.dismiss();
+            public void onClick(View v) {
+
+                saveImage();
+                dialog.dismiss();
+
+            }
+        });
 
         dialog.show();
+
     }
 
+    public void saveImage(){
+        Uri imageUri= getOutputMediaFileUri(2);
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(imageUri);
+        getApplicationContext().sendBroadcast(scanIntent);
+
+    }
 
     //inner helper method
     private Uri getOutputMediaFileUri(int mediaTypeImage) {

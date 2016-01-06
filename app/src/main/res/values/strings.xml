@@ -25,10 +25,9 @@
         <item>@string/nav_item_dashboard1</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
-        <item>@string/nav_item_timetable</item>
+        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_assignments</item>
         <item>@string/nav_item_grades</item>
-        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_anotherrole</item>
         <item>@string/nav_item_logout</item>
@@ -39,10 +38,9 @@
         <item>@string/nav_item_dashboard2</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
-        <item>@string/nav_item_timetable</item>
+        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_assignments</item>
         <item>@string/nav_item_grades</item>
-        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_anotherrole</item>
         <item>@string/nav_item_logout</item>
@@ -52,10 +50,9 @@
         <item>@string/nav_item_dashboard3</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
-        <item>@string/nav_item_timetable</item>
+        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_assignments</item>
         <item>@string/nav_item_grades</item>
-        <item>@string/nav_item_schedule</item>
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_anotherrole</item>
         <item>@string/nav_item_logout</item>

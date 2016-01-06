@@ -26,7 +26,6 @@ public class student_home_activity extends BaseActivity{
     ArrayList<Task> myList;
     String studentId;
     String classId;
-    String role="Student";
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -34,6 +33,10 @@ public class student_home_activity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home_activity);
+
+        role="Student";
+        Log.d("user",role);
+
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -116,7 +119,7 @@ public class student_home_activity extends BaseActivity{
                                             startActivity(exam_intent);
                                         }else if (position == 6) {
                                             Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
-                                            message_intent.putExtra("role", "Parent");
+                                            message_intent.putExtra("role", role);
                                             message_intent.putExtra("_for","sent");
                                             startActivity(message_intent);
                                         }else if (position == 7) {
