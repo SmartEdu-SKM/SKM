@@ -95,6 +95,7 @@ public class student_home_activity extends BaseActivity{
                                         } else if (position == 2) {
                                             Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
                                             message_intent.putExtra("role", role);
+                                            message_intent.putExtra("_for","received");
                                             startActivity(message_intent);
 
                                         } else if (position == 3) {
@@ -114,7 +115,10 @@ public class student_home_activity extends BaseActivity{
                                             exam_intent.putExtra("id", classId);
                                             startActivity(exam_intent);
                                         }else if (position == 6) {
-
+                                            Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
+                                            message_intent.putExtra("role", "Parent");
+                                            message_intent.putExtra("_for","sent");
+                                            startActivity(message_intent);
                                         }else if (position == 7) {
                                             Intent messsagetoteacher_intent = new Intent(student_home_activity.this, message_to_teacher.class);
                                             messsagetoteacher_intent.putExtra("role", role);
