@@ -45,6 +45,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     Button delete;
     Button ok;
     TextView messagedate;
+    String _for;
+    TextView title;
 
 
     @Override
@@ -59,179 +61,357 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         getSupportActionBar().setTitle("Messages");
         Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
+        _for = from_student.getStringExtra("_for");
+        noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
+        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
 
 
-        messageList= (ListView) findViewById(R.id.messageList);
+        messageList = (ListView) findViewById(R.id.messageList);
 
+if(_for.equals("received")){
+        ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery("Message");
+        messageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+        messageQuery.whereEqualTo("delByReceiver",false);
+        messageQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> messageListRet, ParseException e) {
+                if (e == null) {
+                    if (messageListRet.size() != 0) {
 
-                    ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery("Message");
-                    messageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
-                    messageQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> messageListRet, ParseException e) {
-                            if (e == null) {
-                                if (messageListRet.size() != 0) {
+                        ArrayList<String> messageLt = new ArrayList<String>();
 
-                                    ArrayList<String> messageLt = new ArrayList<String>();
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
 
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                            getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
+                            @Override
+                            public View getView(int position, View convertView,
+                                                ViewGroup parent) {
+                                View view = super.getView(position, convertView, parent);
 
-                                        @Override
-                                        public View getView(int position, View convertView,
-                                                            ViewGroup parent) {
-                                            View view = super.getView(position, convertView, parent);
-
-                                            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                                TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                                            textView.setTextColor(Color.WHITE);
+                                textView.setTextColor(Color.WHITE);
 
-                                            return view;
-                                        }
-                                    };
+                                return view;
+                            }
+                        };
 
 
-                                    Log.d("user", "Retrieved " + messageListRet.size() + " messages");
-                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                    for (int i = 0; i < messageListRet.size(); i++) {
-                                        ParseObject u = messageListRet.get(i);
-                                        //  if(u.getString("class").equals(id)) {
-                                        ParseUser senderuser = (ParseUser)u.get("from");
+                        Log.d("user", "Retrieved " + messageListRet.size() + " messages");
+                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                        for (int i = 0; i < messageListRet.size(); i++) {
+                            ParseObject u = messageListRet.get(i);
+                            //  if(u.getString("class").equals(id)) {
+                            ParseUser senderuser = (ParseUser) u.get("from");
 
-                                        String from= null;
-                                        try {
-                                            from = senderuser.fetchIfNeeded().getUsername();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
-                                        }
-                                        //name += "\n";
-                                        // name += u.getInt("age");
-                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                        Log.d("user", String.valueOf(u.getLong("sentAt")));
-                                        Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
-                                        final String dateString = formatter.format(new Date(u.getLong("sentAt")));
-                                        Log.d("user", dateString);
-                                        String name=from + "\nat " + dateString;
-                                        adapter.add(name);
-                                        // }
+                            String from = null;
+                            try {
+                                from = senderuser.fetchIfNeeded().getUsername();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                            //name += "\n";
+                            // name += u.getInt("age");
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                            Log.d("user", String.valueOf(u.getLong("sentAt")));
+                            Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
+                            final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+                            Log.d("user", dateString);
+                            String name = from + "\nat " + dateString;
+                            adapter.add(name);
+                            // }
+
+                        }
+
+
+                        messageList.setAdapter(adapter);
+
+
+                        messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                                String item = ((TextView) view).getText().toString();
+
+                                String[] itemValues = item.split("\nat ");
+
+                                final String[] details = new String[2];
+                                int j = 0;
+
+                                for (String x : itemValues) {
+                                    details[j++] = x;
+                                }
+
+                                Log.d("user", "from " + details[0].trim() + " at " + details[1]);  //extracts Chit as Chi and query fails???
+                                final Dialog dialog = new Dialog(view_messages.this);
+                                dialog.setContentView(R.layout.messsage_info);
+                                dialog.setTitle("Message");
+                                title=(TextView)dialog.findViewById(R.id.title);
+                                message = (TextView) dialog.findViewById(R.id.message);
+                                messageFrom = (TextView) dialog.findViewById(R.id.message_from);
+                                messagedate = (TextView) dialog.findViewById(R.id.date);
+                                delete = (Button) dialog.findViewById(R.id.delButton);
+                                ok = (Button) dialog.findViewById(R.id.okButton);
+
+                                title.setText("From:");
+                                messageFrom.setText(details[0]);
+                                messagedate.setText(details[1]);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                Log.d("user", details[1]);
+                                Date d = null;
+                                try {
+                                    d = f.parse(details[1].trim());
+                                } catch (java.text.ParseException x) {
+                                    x.printStackTrace();
+                                }
+                                final java.util.Calendar calendar = Calendar.getInstance();
+                                Log.d("user", String.valueOf(d));
+                                calendar.setTime(d);
+
+                                delete.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        ParseQuery<ParseUser> user = ParseUser.getQuery();
+                                        user.whereEqualTo("username", details[0]);
+                                        user.findInBackground(new FindCallback<ParseUser>() {
+                                            @Override
+                                            public void done(List<ParseUser> objects, ParseException e) {
+                                                if (e == null) {
+                                                    if (objects.size() != 0) {
+                                                        ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
+                                                        getMessageQuery.whereEqualTo("from", objects.get(0));
+                                                        getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+
+                                                        final long milliseconds = calendar.getTimeInMillis();
+                                                        Log.d("user", String.valueOf(milliseconds));
+                                                        getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                        getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                            @Override
+                                                            public void done(List<ParseObject> objects, ParseException e) {
+                                                                if (e == null) {
+                                                                    if (objects.size() != 0) {
+                                                                        objects.get(0).put("delByReceiver",true);
+                                                                        objects.get(0).saveInBackground();
+                                                                        sleep(1000);
+                                                                        if(objects.get(0).getBoolean("delBySender")) {
+                                                                            objects.get(0).deleteEventually();
+                                                                        }
+                                                                        dialog.dismiss();
+                                                                        onRestart();
+                                                                    } else {
+                                                                        Log.d("user", "query logic in deleting messages");
+                                                                    }
+                                                                } else {
+                                                                    Log.d("user", "no message retrived");
+                                                                }
+                                                            }
+                                                        });
+                                                    } else {
+                                                        Log.d("user", "query logic error");
+                                                    }
+                                                } else {
+                                                    Log.d("user", "error in getting user");
+                                                }
+                                            }
+                                        });
+
 
                                     }
+                                });
 
 
-                                    messageList.setAdapter(adapter);
+                                ParseQuery<ParseUser> user = ParseUser.getQuery();
+                                user.whereEqualTo("username", details[0]);
+                                user.findInBackground(new FindCallback<ParseUser>() {
+                                    @Override
+                                    public void done(List<ParseUser> objects, ParseException e) {
+                                        if (e == null) {
+                                            if (objects.size() != 0) {
+                                                ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
+                                                getMessageQuery.whereEqualTo("from", objects.get(0));
+                                                getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+                                                final long milliseconds = calendar.getTimeInMillis();
+                                                Log.d("user", String.valueOf(milliseconds));
+                                                getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                    @Override
+                                                    public void done(List<ParseObject> objects, ParseException e) {
+                                                        if (e == null) {
+                                                            if (objects.size() != 0) {
 
-
-                                    messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                            String item = ((TextView) view).getText().toString();
-
-                                            String[] itemValues = item.split("\nat ");
-
-                                            final String[] details = new String[2];
-                                            int j = 0;
-
-                                            for (String x : itemValues) {
-                                                details[j++] = x;
-                                            }
-
-                                            Log.d("user", "from " + details[0].trim() + " at " + details[1]);  //extracts Chit as Chi and query fails???
-                                            final Dialog dialog = new Dialog(view_messages.this);
-                                            dialog.setContentView(R.layout.messsage_info);
-                                            dialog.setTitle("Message");
-                                            message=(TextView)dialog.findViewById(R.id.message);
-                                            messageFrom=(TextView)dialog.findViewById(R.id.message_from);
-                                            messagedate=(TextView)dialog.findViewById(R.id.date);
-                                            delete=(Button)dialog.findViewById(R.id.delButton);
-                                            ok=(Button)dialog.findViewById(R.id.okButton);
-
-                                            messageFrom.setText(details[0]);
-                                            messagedate.setText(details[1]);
-
-                                            ok.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dialog.dismiss();
-                                                }
-                                            });
-
-                                            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                            Log.d("user", details[1]);
-                                            Date d = null;
-                                            try {
-                                                d = f.parse(details[1].trim());
-                                            } catch (java.text.ParseException x) {
-                                                x.printStackTrace();
-                                            }
-                                            final java.util.Calendar calendar= Calendar.getInstance();
-                                            Log.d("user", String.valueOf(d));
-                                            calendar.setTime(d);
-
-                                            delete.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-
-                                                    ParseQuery<ParseUser> user=ParseUser.getQuery();
-                                                    user.whereEqualTo("username",details[0]);
-                                                    user.findInBackground(new FindCallback<ParseUser>() {
-                                                        @Override
-                                                        public void done(List<ParseUser> objects, ParseException e) {
-                                                            if (e == null) {
-                                                                if (objects.size() != 0) {
-                                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                                                    getMessageQuery.whereEqualTo("from", objects.get(0));
-                                                                    getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
-
-                                                                    final long milliseconds = calendar.getTimeInMillis();
-                                                                    Log.d("user", String.valueOf(milliseconds));
-                                                                    getMessageQuery.whereEqualTo("sentAt", milliseconds);
-                                                                    getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                        @Override
-                                                                        public void done(List<ParseObject> objects, ParseException e) {
-                                                                            if (e == null) {
-                                                                                if (objects.size() != 0) {
-                                                                                   objects.get(0).deleteEventually();
-                                                                                    dialog.dismiss();
-                                                                                    onRestart();
-                                                                                } else {
-                                                                                    Log.d("user", "query logic in deleting messages");
-                                                                                }
-                                                                            } else {
-                                                                                Log.d("user", "no message retrived");
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                } else {
-                                                                    Log.d("user", "query logic error");
-                                                                }
+                                                                message.setText(objects.get(0).getString("message"));
                                                             } else {
-                                                                Log.d("user", "error in getting user");
+                                                                Log.d("user", "query logic in getting messages");
                                                             }
+                                                        } else {
+                                                            Log.d("user", "no message retrived");
                                                         }
-                                                    });
+                                                    }
+                                                });
+                                            } else {
+                                                Log.d("user", "query logic error");
+                                            }
+                                        } else {
+                                            Log.d("user", "error in getting user");
+                                        }
+                                    }
+                                });
+
+                                dialog.show();
 
 
-                                                }
-                                            });
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
 
 
-                                            ParseQuery<ParseUser> user=ParseUser.getQuery();
-                                            user.whereEqualTo("username",details[0]);
+
+        if(_for.equals("sent")){
+            ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery("Message");
+            messageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
+            messageQuery.whereEqualTo("delBySender",false);
+            messageQuery.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> messageListRet, ParseException e) {
+                    if (e == null) {
+                        if (messageListRet.size() != 0) {
+
+                            ArrayList<String> messageLt = new ArrayList<String>();
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                    getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
+
+                                @Override
+                                public View getView(int position, View convertView,
+                                                    ViewGroup parent) {
+                                    View view = super.getView(position, convertView, parent);
+
+                                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+
+            /*YOUR CHOICE OF COLOR*/
+                                    textView.setTextColor(Color.WHITE);
+
+                                    return view;
+                                }
+                            };
+
+
+                            Log.d("user", "Retrieved " + messageListRet.size() + " messages");
+                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                            for (int i = 0; i < messageListRet.size(); i++) {
+                                ParseObject u = messageListRet.get(i);
+                                //  if(u.getString("class").equals(id)) {
+                                ParseUser receiveruser = (ParseUser) u.get("to");
+
+                                String to = null;
+                                try {
+                                    to = receiveruser.fetchIfNeeded().getUsername();
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+                                //name += "\n";
+                                // name += u.getInt("age");
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                Log.d("user", String.valueOf(u.getLong("sentAt")));
+                                Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
+                                final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+                                Log.d("user", dateString);
+                                String name = to + "\nat " + dateString;
+                                adapter.add(name);
+                                // }
+
+                            }
+
+
+                            messageList.setAdapter(adapter);
+
+
+                            messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                                    String item = ((TextView) view).getText().toString();
+
+                                    String[] itemValues = item.split("\nat ");
+
+                                    final String[] details = new String[2];
+                                    int j = 0;
+
+                                    for (String x : itemValues) {
+                                        details[j++] = x;
+                                    }
+
+                                    Log.d("user", "from " + details[0].trim() + " at " + details[1]);  //extracts Chit as Chi and query fails???
+                                    final Dialog dialog = new Dialog(view_messages.this);
+                                    dialog.setContentView(R.layout.messsage_info);
+                                    dialog.setTitle("Message");
+                                    title=(TextView)dialog.findViewById(R.id.title);
+                                    message = (TextView) dialog.findViewById(R.id.message);
+                                    messageFrom = (TextView) dialog.findViewById(R.id.message_from);
+                                    messagedate = (TextView) dialog.findViewById(R.id.date);
+                                    delete = (Button) dialog.findViewById(R.id.delButton);
+                                    ok = (Button) dialog.findViewById(R.id.okButton);
+
+                                    title.setText("To:");
+                                    messageFrom.setText(details[0]);
+                                    messagedate.setText(details[1]);
+
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                                    SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                    Log.d("user", details[1]);
+                                    Date d = null;
+                                    try {
+                                        d = f.parse(details[1].trim());
+                                    } catch (java.text.ParseException x) {
+                                        x.printStackTrace();
+                                    }
+                                    final java.util.Calendar calendar = Calendar.getInstance();
+                                    Log.d("user", String.valueOf(d));
+                                    calendar.setTime(d);
+
+                                    delete.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            ParseQuery<ParseUser> user = ParseUser.getQuery();
+                                            user.whereEqualTo("username", details[0]);
                                             user.findInBackground(new FindCallback<ParseUser>() {
                                                 @Override
                                                 public void done(List<ParseUser> objects, ParseException e) {
                                                     if (e == null) {
                                                         if (objects.size() != 0) {
                                                             ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                                            getMessageQuery.whereEqualTo("from", objects.get(0));
-                                                            getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+                                                            getMessageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
+                                                            getMessageQuery.whereEqualTo("to",objects.get(0) );
+
                                                             final long milliseconds = calendar.getTimeInMillis();
                                                             Log.d("user", String.valueOf(milliseconds));
                                                             getMessageQuery.whereEqualTo("sentAt", milliseconds);
@@ -240,10 +420,16 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                                 public void done(List<ParseObject> objects, ParseException e) {
                                                                     if (e == null) {
                                                                         if (objects.size() != 0) {
-
-                                                                            message.setText(objects.get(0).getString("message"));
+                                                                            objects.get(0).put("delBySender",true);
+                                                                            objects.get(0).saveInBackground();
+                                                                            sleep(1000);
+                                                                            if(objects.get(0).getBoolean("delByReceiver")) {
+                                                                                objects.get(0).deleteEventually();
+                                                                            }
+                                                                            dialog.dismiss();
+                                                                            onRestart();
                                                                         } else {
-                                                                            Log.d("user", "query logic in getting messages");
+                                                                            Log.d("user", "query logic in deleting messages");
                                                                         }
                                                                     } else {
                                                                         Log.d("user", "no message retrived");
@@ -259,33 +445,83 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                                                 }
                                             });
 
-                                            dialog.show();
-
-
 
                                         }
                                     });
 
-                                }else
-                                {
-                                    Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
-                                }
 
-                            } else {
-                                Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
-                                Log.d("user", "Error: " + e.getMessage());
-                            }
+                                    ParseQuery<ParseUser> user = ParseUser.getQuery();
+                                    user.whereEqualTo("username", details[0]);
+                                    user.findInBackground(new FindCallback<ParseUser>() {
+                                        @Override
+                                        public void done(List<ParseUser> objects, ParseException e) {
+                                            if (e == null) {
+                                                if (objects.size() != 0) {
+                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
+                                                    getMessageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
+                                                    getMessageQuery.whereEqualTo("to",objects.get(0) );
+                                                    final long milliseconds = calendar.getTimeInMillis();
+                                                    Log.d("user", String.valueOf(milliseconds));
+                                                    getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                    getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                        @Override
+                                                        public void done(List<ParseObject> objects, ParseException e) {
+                                                            if (e == null) {
+                                                                if (objects.size() != 0) {
+
+                                                                    message.setText(objects.get(0).getString("message"));
+                                                                } else {
+                                                                    Log.d("user", "query logic in getting messages");
+                                                                }
+                                                            } else {
+                                                                Log.d("user", "no message retrived");
+                                                            }
+                                                        }
+                                                    });
+                                                } else {
+                                                    Log.d("user", "query logic error");
+                                                }
+                                            } else {
+                                                Log.d("user", "error in getting user");
+                                            }
+                                        }
+                                    });
+
+                                    dialog.show();
+
+
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
                         }
-                    });
+
+                    } else {
+                        Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
+                        Log.d("user", "Error: " + e.getMessage());
+                    }
+                }
+            });
+        }
+
+
+
 
     }
 
+    protected void sleep(int time)
+    {
+        for(int x=0;x<time;x++)
+        {}
+    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         Intent to_view_messages = new Intent(view_messages.this, view_messages.class);
         to_view_messages.putExtra("role", role);
+        to_view_messages.putExtra("_for",_for);
         startActivity(to_view_messages);
         finish();
     }

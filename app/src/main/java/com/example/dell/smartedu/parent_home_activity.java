@@ -102,6 +102,7 @@ String role="Parent";
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
                                                 message_intent.putExtra("role", "Parent");
+                                                message_intent.putExtra("_for","received");
                                                 startActivity(message_intent);
 
                                             } else if (position == 3) {
@@ -113,7 +114,10 @@ String role="Parent";
                                                 startActivity(exam_intent);
 
                                             } else if (position == 4) {
-
+                                                Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
+                                                message_intent.putExtra("role", "Parent");
+                                                message_intent.putExtra("_for","sent");
+                                                startActivity(message_intent);
 
                                             } else if (position == 5) {
 
