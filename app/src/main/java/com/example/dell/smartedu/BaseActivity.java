@@ -220,21 +220,14 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
+
+
         displayView(position);
     }
 
     private void displayView(int position) {
 
-        if(this.role.equals("")){
-            if(position==0)
-            {
-                ParseUser.logOut();
-                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-                Intent i = new Intent(BaseActivity.this, login.class);
-                startActivity(i);
-            }
-        }
-        else if(this.role.equals("Teacher")){
+        if(this.role.equals("Teacher")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(i);
@@ -397,7 +390,17 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(i);
             }
 
+        } else{
+            if(position==0)
+            {
+               
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                Intent i = new Intent(BaseActivity.this, login.class);
+                startActivity(i);
+            }
         }
+
 
         /*
         if (position == 0) {
