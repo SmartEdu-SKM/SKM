@@ -237,36 +237,5 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         }
     }*/
 
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
-    }
 
-    private void displayView(int position) {
-
-        if(position==0)
-        {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
-        }
-
-        if(position==2)
-        {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(teacher_classes.this,ChooseRole.class);
-            startActivity(i);
-        }
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(teacher_classes.this, login.class);
-            startActivity(i);
-        }
-    }
 }

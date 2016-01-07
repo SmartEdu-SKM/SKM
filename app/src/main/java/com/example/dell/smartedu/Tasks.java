@@ -45,7 +45,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     ArrayList<Task> myList;
     ListView taskList;
     ListView taskListnew;
-    String role;
+
     TextView myTitle;
     TextView myDesc;
     TextView myDate;
@@ -419,37 +419,4 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         }
     }
 
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
-    }
-
-    private void displayView(int position) {
-
-        if(position==0)
-        {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
-        }
-
-        if(position==2)
-        {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(Tasks.this,ChooseRole.class);
-            startActivity(i);
-        }
-
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(Tasks.this, login.class);
-            startActivity(i);
-        }
-    }
 }

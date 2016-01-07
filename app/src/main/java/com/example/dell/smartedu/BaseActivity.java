@@ -393,7 +393,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         } else{
             if(position==0)
             {
-               
+
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
                 Intent i = new Intent(BaseActivity.this, login.class);

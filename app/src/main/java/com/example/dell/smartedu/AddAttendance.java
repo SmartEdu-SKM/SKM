@@ -32,7 +32,7 @@ public class AddAttendance extends BaseActivity implements FragmentDrawer.Fragme
     //ArrayList<Task> myList;
     ListView classList;
     Notification_bar noti_bar;
-    String role;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

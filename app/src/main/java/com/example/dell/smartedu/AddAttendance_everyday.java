@@ -45,7 +45,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
     int Year;
     int Month;
     int Day;
-    String role;
+
     //int Yearcal;
     //int Monthcal;
     //int Daycal;

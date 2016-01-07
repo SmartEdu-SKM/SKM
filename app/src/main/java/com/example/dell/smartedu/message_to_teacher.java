@@ -38,7 +38,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     ListView teacherList;
     Notification_bar noti_bar;
     String classId;
-    String role;
+
     Button selected_button;
     EditText message;
     Button broadcast;
