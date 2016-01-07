@@ -20,8 +20,8 @@ public class Role extends BaseActivity implements FragmentDrawer.FragmentDrawerL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_role);
 
-        role="";
-        Log.d("user", role);
+        super.role="";
+        Log.d("user role", role);
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "*no role*");
@@ -47,41 +47,7 @@ public class Role extends BaseActivity implements FragmentDrawer.FragmentDrawerL
         startActivity(i);
     }
 
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
 
-        displayView(position);
-    }
-
-    private void displayView(int position) {
-
-        if(position==0)
-        {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
-        }
-
-        if(position==2)
-        {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(Role.this,ChooseRole.class);
-            startActivity(i);
-        }
-
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(Role.this, login.class);
-            startActivity(i);
-        }
-
-    }
 
     @Override
     protected void onPostResume() {
