@@ -206,6 +206,8 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                                     newmessage.put("from", ParseUser.getCurrentUser());
                                                     newmessage.put("to", client_user);
                                                     newmessage.put("message", message.getText().toString());
+                                                    newmessage.put("delBySender",false);
+                                                    newmessage.put("delByReceiver",false);
 
                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -335,6 +337,8 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
             newmessage.put("from",ParseUser.getCurrentUser());
             newmessage.put("to",client_user);
             newmessage.put("message", message.getText().toString());
+            newmessage.put("delBySender",false);
+            newmessage.put("delByReceiver",false);
             java.util.Calendar calendar= Calendar.getInstance();
             SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
             String date= format.format(new Date(calendar.getTimeInMillis()));

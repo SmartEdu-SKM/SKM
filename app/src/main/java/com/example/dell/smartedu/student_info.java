@@ -61,15 +61,13 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
             deleteStudentData();
 
 
+            Intent to_student = new Intent(getActivity(), Students.class);
+            to_student.putExtra("id", classId);
 
+            startActivity(to_student);
 
-                Intent to_student = new Intent(getActivity(), Students.class);
-                to_student.putExtra("id", classId);
-
-                startActivity(to_student);
-
-            }
-        });
+        }
+    });
         return android;
     }
 
@@ -167,7 +165,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
 
         );
 
-        Toast.makeText(getActivity(), "Parent deleted",Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "Parent deleted", Toast.LENGTH_LONG).show();
 
 
     }
@@ -295,6 +293,7 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
 
         ParseObject.createWithoutData("Student",studentId).deleteEventually();
     }
+
     @Override
     public void onDrawerItemSelected(View view, int position) {
 
