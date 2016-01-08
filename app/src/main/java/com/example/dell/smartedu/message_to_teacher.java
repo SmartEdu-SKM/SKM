@@ -78,7 +78,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Toast.makeText(message_to_teacher.this, "id class selected is = " +classId, Toast.LENGTH_LONG).show();
+        Toast.makeText(message_to_teacher.this, "id class selected is = " +studentId, Toast.LENGTH_LONG).show();
 
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);

@@ -104,6 +104,8 @@ public class parent_home_activity extends BaseActivity{
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
                                                 message_intent.putExtra("role", "Parent");
+                                                message_intent.putExtra("classId", classId);
+                                                message_intent.putExtra("studentId", studentId);
                                                 message_intent.putExtra("_for","received");
                                                 startActivity(message_intent);
 
@@ -116,18 +118,11 @@ public class parent_home_activity extends BaseActivity{
                                                 startActivity(exam_intent);
 
                                             } else if (position == 4) {
-                                                Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
-                                                message_intent.putExtra("role", "Parent");
-                                                message_intent.putExtra("_for","sent");
-                                                startActivity(message_intent);
+
 
                                             } else if (position == 5) {
 
-                                                Intent messsagetoteacher_intent = new Intent(parent_home_activity.this, message_to_teacher.class);
-                                                messsagetoteacher_intent.putExtra("role", "Parent");
-                                                messsagetoteacher_intent.putExtra("classId", classId);
-                                                messsagetoteacher_intent.putExtra("studentId", studentId);
-                                                startActivity(messsagetoteacher_intent);
+
 
                                             }
                                         }

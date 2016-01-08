@@ -79,22 +79,16 @@ public class MainActivity extends BaseActivity{
 
                 } else if (position == 6) {
 
-                    Intent message_intent = new Intent(MainActivity.this, teacher_classes.class);
-                    message_intent.putExtra("role", role);
-                    message_intent.putExtra("for", "message");
-                    startActivity(message_intent);
-                } else if (position == 7) {
-
-                    Intent read_message_intent = new Intent(MainActivity.this,view_messages.class);
-                    read_message_intent.putExtra("role", role);
-                    read_message_intent.putExtra("_for","sent");
-                    startActivity(read_message_intent);
-
-                }else if(position==8){
                     Intent read_message_intent = new Intent(MainActivity.this,view_messages.class);
                     read_message_intent.putExtra("role", role);
                     read_message_intent.putExtra("_for", "received");
                     startActivity(read_message_intent);
+                } else if (position == 7) {
+
+
+
+                }else if(position==8){
+
                 }
 
             }
