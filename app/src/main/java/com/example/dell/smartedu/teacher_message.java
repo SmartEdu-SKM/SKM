@@ -7,13 +7,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -23,8 +21,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Dell on 10/7/2015.
@@ -467,6 +467,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         newmessage.put("from",ParseUser.getCurrentUser());
                         newmessage.put("to",client_user);
                         newmessage.put("message", message.getText().toString());
+                        newmessage.put("delBySender",false);
+                        newmessage.put("delByReceiver",false);
                         java.util.Calendar calendar= Calendar.getInstance();
                         SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                         String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -497,7 +499,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         newmessage.put("from", ParseUser.getCurrentUser());
                                         newmessage.put("to", client_user);
                                         newmessage.put("message", message.getText().toString());
-
+                                        newmessage.put("delBySender",false);
+                                        newmessage.put("delByReceiver",false);
 
                                         java.util.Calendar calendar = Calendar.getInstance();
                                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
