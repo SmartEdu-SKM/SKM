@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:text="Broadcast"
                         android:id="@+id/broadcast"
-
+                        android:layout_alignParentRight="true"
                         />
 
                     <Button
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:text="Send to Selected"
                         android:id="@+id/selected"
-                        android:layout_toEndOf="@+id/broadcast"
+
                         android:nestedScrollingEnabled="false"
                         android:onClick="sendToSelected" />
                 </RelativeLayout>
