@@ -99,6 +99,8 @@ public class student_home_activity extends BaseActivity{
                                             Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
                                             message_intent.putExtra("role", role);
                                             message_intent.putExtra("_for","received");
+                                            message_intent.putExtra("classId", classId);
+                                            message_intent.putExtra("studentId", studentId);
                                             startActivity(message_intent);
 
                                         } else if (position == 3) {
@@ -118,16 +120,10 @@ public class student_home_activity extends BaseActivity{
                                             exam_intent.putExtra("id", classId);
                                             startActivity(exam_intent);
                                         }else if (position == 6) {
-                                            Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
-                                            message_intent.putExtra("role", role);
-                                            message_intent.putExtra("_for","sent");
-                                            startActivity(message_intent);
+
+
                                         }else if (position == 7) {
-                                            Intent messsagetoteacher_intent = new Intent(student_home_activity.this, message_to_teacher.class);
-                                            messsagetoteacher_intent.putExtra("role", role);
-                                            messsagetoteacher_intent.putExtra("classId", classId);
-                                            messsagetoteacher_intent.putExtra("studentId", studentId);
-                                            startActivity(messsagetoteacher_intent);
+
                                         }
                                     }
                                 });
