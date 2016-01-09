@@ -9,7 +9,7 @@
     android:background="#13ff77">
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="1"
+
         android:id="@+id/student">
 
         <LinearLayout
@@ -43,9 +43,22 @@
 
         <Button
             android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:text="Share Code"
+            android:id="@+id/shareCode"
+
+            android:background="#010101"
+            android:textColor="#ffff"
+            android:onClick="shareCode" />
+
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Student"
             android:id="@+id/addButton"
+            android:layout_alignParentTop="true"
+            android:textColor="#ffff"
+            android:background="#080808"
             android:layout_gravity="center_horizontal" />
 
         <ListView
@@ -58,7 +71,7 @@
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <fragment
