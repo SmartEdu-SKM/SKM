@@ -113,8 +113,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
 
                     Log.d("user", "Retrieved " + taskListRet.size() + " users");
-                    Toast.makeText(getApplicationContext(), taskListRet.toString(), Toast.LENGTH_LONG)
-                            .show();
+                    //Toast.makeText(getApplicationContext(), taskListRet.toString(), Toast.LENGTH_LONG).show();
                     items = new String[taskListRet.size()];
                     for (int i = 0; i < taskListRet.size(); i++) {
                         ParseObject u = (ParseObject) taskListRet.get(i);

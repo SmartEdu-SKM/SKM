@@ -260,8 +260,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                             Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_student;
-                    Toast.makeText(Students.this, "Student User made " + " " + user_student.getObjectId(),
-                            Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Students.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Student role of " + user_student.getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
                     roleobject.put("createdBy", user_student);
@@ -319,8 +318,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                             Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_parent;
-                    Toast.makeText(Students.this, "Parent User made "+ " "+user_parent.getObjectId(),
-                            Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Students.this, "Parent User made "+ " "+user_parent.getObjectId(),Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
                     roleobject.put("createdBy", user_parent);
