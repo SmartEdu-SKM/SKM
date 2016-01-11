@@ -8,7 +8,9 @@
     android:layout_height="match_parent"
     android:background="#13ff77">
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -53,7 +55,7 @@
 
     </LinearLayout>
 
-
+</ScrollView>
     <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="com.example.dell.smartedu.FragmentDrawer"
