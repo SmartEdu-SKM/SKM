@@ -53,7 +53,25 @@ public class NewTask extends BaseActivity {
         getSupportActionBar().setTitle("New Task");*/
 
         taskTitle = (EditText) findViewById(R.id.taskTitle);
+      /*  taskTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(taskTitle.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                return false;
+            }
+        }); */
         taskDescription = (EditText) findViewById(R.id.scheduleinfo);
+      /*  taskDescription.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(taskDescription.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                return false;
+            }
+        }); */
         addTaskButton = (Button) findViewById(R.id.addTaskButton);
 
         DATE= (TextView) findViewById(R.id.date);
@@ -167,4 +185,6 @@ public class NewTask extends BaseActivity {
             startActivity(nouser);
         }
     }
+
+
 }

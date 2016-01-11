@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -112,8 +111,7 @@ public class NewStudent extends BaseActivity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_student;
-                    Toast.makeText(NewStudent.this, "Student User made " + " " + user_student.getObjectId(),
-                            Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(NewStudent.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Student role of " + user_student.getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
                     roleobject.put("createdBy", user_student);
@@ -163,8 +161,7 @@ public class NewStudent extends BaseActivity {
                             Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_parent;
-                    Toast.makeText(NewStudent.this, "Parent User made "+ " "+user_parent.getObjectId(),
-                            Toast.LENGTH_LONG).show();
+                   // Toast.makeText(NewStudent.this, "Parent User made "+ " "+user_parent.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
                     ParseObject roleobject = new ParseObject("Role");
                     roleobject.put("createdBy", user_parent);
@@ -232,7 +229,7 @@ public class NewStudent extends BaseActivity {
 
 
     protected void addStudent(final ParseUser userRef){
-        Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
+       // Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
         final ParseObject[] classRef = new ParseObject[1];
         final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
         classQuery.whereEqualTo("objectId", classId);
