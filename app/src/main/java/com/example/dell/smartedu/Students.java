@@ -269,20 +269,25 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     roleobject.saveInBackground();
 
                     ParseObject parent=new ParseObject("Parent");
-                    parent.put("child",user_student);
+                    parent.put("child", user_student);
                     parent.saveEventually();
+
+                    u.put("userId", user_student);
+
 
                     try {
 
                         ParseUser.become(presession);
                        // Log.d("student", "adding userId");
                        // u.put("userId", user_student);
+                        u.put("addedBy",ParseUser.getCurrentUser());
 
                     } catch (ParseException e1) {
                         Toast.makeText(Students.this, "cant add student",
                                 Toast.LENGTH_LONG).show();
                     }
-                    addStudent(userRef[0],rollno);
+                    u.saveInBackground();
+                    //addStudent(userRef[0],rollno);
 
                 }
 

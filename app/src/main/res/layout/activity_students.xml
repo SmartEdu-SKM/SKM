@@ -44,7 +44,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="37dp"
-            android:text="Share Code"
+            android:text="Create Id&apos;s"
             android:id="@+id/shareCode"
 
             android:background="#010101"
