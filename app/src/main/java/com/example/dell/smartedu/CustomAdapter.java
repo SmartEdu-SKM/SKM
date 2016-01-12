@@ -57,7 +57,8 @@ public CustomAdapter(Context context, Model[] resource, ParseObject classRef) {
         this.context = context;
         this.modelItems = resource;
         this.classRef=classRef;
-        }
+
+}
 
    /* public void clearList() {
         searchArrayList.clear();
@@ -73,23 +74,29 @@ public View getView(int position, View convertView, ViewGroup parent) {
     CheckBox cb;
     LayoutInflater inflater = ((Activity) context).getLayoutInflater();
     if (convertView == null){
+
         convertView = inflater.inflate(R.layout.list_row, parent, false);
     name = (TextView) convertView.findViewById(R.id.textView1);
     name.setOnClickListener(this);
     cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
     cb.setOnClickListener(this);
     convertView.setTag(new ModelViewHolder(name, cb));
-    name.setText(modelItems[position].getName());
-    if (modelItems[position].getValue() == 1)
-        cb.setChecked(true);
-    else
-        cb.setChecked(false);
+
+
+
+
     }else{
         ModelViewHolder viewHolder = (ModelViewHolder) convertView
                 .getTag();
         cb = viewHolder.getCheckBox();
         name = viewHolder.getTextView();
     }
+
+    name.setText(modelItems[position].getName());
+    if (modelItems[position].getValue() == 1)
+        cb.setChecked(true);
+    else
+        cb.setChecked(false);
     cb.setTag(item);
         return convertView;
         }

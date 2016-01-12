@@ -121,6 +121,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                     for (int i = 0; i < studentListRet.size(); i++) {
                                         ParseObject u = (ParseObject) studentListRet.get(i);
                                         //  if(u.getString("class").equals(id)) {
+
                                         String rollnumber = u.getNumber("rollNumber").toString().trim();
                                         String name=u.getString("name");
                                         //name += "\n";
@@ -128,6 +129,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                         String student=rollnumber + ". " + name;
                                         modelItems[i]= new Model(student,0);
                                        // adapter.add(student);
+
                                         // }
 
                                     }
