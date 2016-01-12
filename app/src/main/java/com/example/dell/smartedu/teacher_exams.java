@@ -43,16 +43,19 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_exams);
 
+        Intent from_student = getIntent();
+        classId = from_student.getStringExtra("id");
+        role=from_student.getStringExtra("role");
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Exams");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        Intent from_student = getIntent();
-        classId = from_student.getStringExtra("id");
+
         addExamButton = (Button)findViewById(R.id.addExam);
         examsList = (ListView) findViewById(R.id.examList);
 

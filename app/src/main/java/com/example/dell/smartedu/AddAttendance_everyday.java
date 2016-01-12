@@ -63,6 +63,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
     //ArrayList<Task> myList;
     ListView studentList;
     Notification_bar noti_bar;
+    String classId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         Intent from_student = getIntent();
         //final String id = from_student.getStringExtra("id");
         role=from_student.getStringExtra("role");
+        classId=from_student.getStringExtra("id");
         studentList = (ListView) findViewById(R.id.studentList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -88,6 +90,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+        classQuery.whereEqualTo("objectId", classId);
         classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
         classQuery.whereEqualTo("classTeacher", true);
         classQuery.findInBackground(new FindCallback<ParseObject>() {

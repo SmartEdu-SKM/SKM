@@ -48,16 +48,19 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students);
 
+        Intent from_student = getIntent();
+        classId = from_student.getStringExtra("id");
+        role=from_student.getStringExtra("role");
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Students");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        Intent from_student = getIntent();
-        classId = from_student.getStringExtra("id");
+
         addStudentButton = (Button)findViewById(R.id.addButton);
         studentList = (ListView) findViewById(R.id.studentList);
 
