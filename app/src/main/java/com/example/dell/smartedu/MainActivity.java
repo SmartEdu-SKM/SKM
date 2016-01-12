@@ -50,7 +50,8 @@ public class MainActivity extends BaseActivity{
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (position == 0) {
-                    Intent attendance_intent = new Intent(MainActivity.this, AddAttendance_everyday.class);
+                    Intent attendance_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    attendance_intent.putExtra("for","attendance");
                     attendance_intent.putExtra("role", role);
                     startActivity(attendance_intent);
 
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity{
                     startActivity(task_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
+                    student_intent.putExtra("role",role);
                     student_intent.putExtra("for", "students");
                     startActivity(student_intent);
                 } else if (position == 3) {

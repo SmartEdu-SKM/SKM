@@ -27,6 +27,15 @@ public class ChooseRole extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_role);
 
+        String sessionToken = ParseUser.getCurrentUser().getSessionToken();
+        try {
+
+            ParseUser.become(sessionToken);
+
+        } catch (ParseException e1) {
+            Log.d("session", e1.getMessage());
+        }
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -173,4 +182,17 @@ public class ChooseRole extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(getApplicationContext(),login.class);
+            startActivity(nouser);
+        }
+
+    }
 }
+
+

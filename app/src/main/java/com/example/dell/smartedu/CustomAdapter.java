@@ -99,61 +99,69 @@ public View getView(int position, View convertView, ViewGroup parent) {
         switch (v.getId()) {
             case R.id.textView1:
                 // Do stuff accordingly...
-                String[] item = ((TextView) v).getText().toString().split(". ");
-                final int itemvalue = Integer.parseInt(item[0]);
-                Log.d("classRef", classRef.toString());
-                final ParseObject[] studentRef = new ParseObject[1];
-                ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                studentQuery.whereEqualTo("rollNumber", itemvalue);
-                studentQuery.whereEqualTo("class", classRef);
-                //Log.d("class", itemvalue + "");
-                studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> studentListRet, ParseException e) {
-                        if (e == null) {
-                            Log.d("class", "Retrieved the class");
-                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                if ( context instanceof AddAttendance_everyday ) {
+                    String[] item = ((TextView) v).getText().toString().split(". ");
+                    final int itemvalue = Integer.parseInt(item[0]);
+                    Log.d("classRef", classRef.toString());
+                    final ParseObject[] studentRef = new ParseObject[1];
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                    studentQuery.whereEqualTo("rollNumber", itemvalue);
+                    studentQuery.whereEqualTo("class", classRef);
+                    //Log.d("class", itemvalue + "");
+                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                        public void done(List<ParseObject> studentListRet, ParseException e) {
+                            if (e == null) {
+                                Log.d("class", "Retrieved the class");
+                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                            if (studentListRet.size() != 0)  {
-                                studentRef[0] = studentListRet.get(0);
-                               // Log.d("class object id", classRef[0].getObjectId());
+                                if (studentListRet.size() != 0) {
+                                    studentRef[0] = studentListRet.get(0);
+                                    // Log.d("class object id", classRef[0].getObjectId());
 
-                ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
-                attQuery.whereEqualTo("student", studentRef[0]);
-                Log.d("class", itemvalue+"");
-                attQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> attListRet, ParseException e) {
-                        if (e == null) {
-                            Log.d("class", "Retrieved the class"+attListRet.size());
-                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                    ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
+                                    attQuery.whereEqualTo("student", studentRef[0]);
+                                    Log.d("class", itemvalue + "");
+                                    attQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> attListRet, ParseException e) {
+                                            if (e == null) {
+                                                if (attListRet.size() != 0) {
+                                                    Log.d("class", "Retrieved the class" + attListRet.size());
+                                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                            //studentRef[0] = studentListRet.get(0);
-                            //information(studentRef[0], v);
-                            int present=0;
-                            int absent=0;
-                            int totalDays=0;
-                            double percentage=0.0;
-                            for(int i=0; i<attListRet.size(); i++){
-                                ParseObject u= attListRet.get(i);
-                                if(u.get("p_a").equals("A")){
-                                    absent++;
+                                                    //studentRef[0] = studentListRet.get(0);
+                                                    //information(studentRef[0], v);
+                                                    double present = 0;
+                                                    double absent = 0;
+                                                    double totalDays = 0;
+                                                    double percentage = 0.0;
+                                                    for (int i = 0; i < attListRet.size(); i++) {
+                                                        ParseObject u = attListRet.get(i);
+                                                        if (u.get("p_a").equals("A")) {
+                                                            absent++;
+                                                        }
+                                                        totalDays++;
+                                                    }
+                                                    present = totalDays - absent;
+                                                    percentage = (present / totalDays) * 100;
+                                                    information(v, absent, totalDays, percentage);
+                                                }else{
+                                                    Toast.makeText(getContext(), "No Attendance Added", Toast.LENGTH_LONG).show();
+                                                }
+
+                                            } else {
+                                                Toast.makeText(getContext(), "error", Toast.LENGTH_LONG).show();
+                                                Log.d("user", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    });
                                 }
-                                totalDays++;
-                            }
-                            present=totalDays-absent;
-                            percentage=(present/totalDays)*100;
-                            information(v,absent,totalDays,percentage);
-
-                        } else {
-                            Toast.makeText(getContext(), "error", Toast.LENGTH_LONG).show();
-                            Log.d("user", "Error: " + e.getMessage());
-                        }
-                    }
-                });}} else {
+                            } else {
                                 Toast.makeText(context, "error", Toast.LENGTH_LONG).show();
                                 Log.d("user", "Error: " + e.getMessage());
                             }
                         }
                     });
+                }
 
 
 
@@ -172,7 +180,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
         }
     }
 
-    public void information(final View view, int absent, int totalDays, double percentage){
+    public void information(final View view, double absent, double totalDays, double percentage){
 
         final Dialog dialog2 = new Dialog(context);
         dialog2.setContentView(R.layout.show_attendance_daily);
@@ -196,7 +204,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
         final String string_current_date = df.format(calendar.getTime());
         myDate.setText(string_current_date);
 
-        dialog2.dismiss();
+       // dialog2.dismiss();
         dialog2.show();
 
     }

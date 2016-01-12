@@ -41,15 +41,20 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_classes);
 
+        Intent from_home=getIntent();
+        _for=from_home.getStringExtra("for");
+        role=from_home.getStringExtra("role");
+
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Classes");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
-        Intent from_home=getIntent();
-        _for=from_home.getStringExtra("for");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+
+
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         classList = (ListView) findViewById(R.id.classesList);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -142,23 +147,33 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                             Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
                             if(_for.equals("students")) {
                                 Intent to_student = new Intent(teacher_classes.this, Students.class);
+                                to_student.putExtra("role",role);
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);
                             }else if(_for.equals("exam"))
                             {
                                 Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
+                                to_exams.putExtra("role",role);
                                 to_exams.putExtra("id", id);
                                 startActivity(to_exams);
                             }else if(_for.equals("upload"))
                             {
                                 Intent to_uploads = new Intent(teacher_classes.this, UploadMaterial.class);
+                                to_uploads.putExtra("role",role);
                                 to_uploads.putExtra("id", id);
                                 startActivity(to_uploads);
                             }else if(_for.equals("message"))
                             {
                                 Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
+                                to_message.putExtra("role",role);
                                 to_message.putExtra("id", id);
                                 startActivity(to_message);
+                            }else if(_for.equals("attendance"))
+                            {
+                                Intent to_att = new Intent(teacher_classes.this, AddAttendance_everyday.class);
+                                to_att.putExtra("role", role);
+                                to_att.putExtra("id",id);
+                                startActivity(to_att);
                             }
                         } else {
                             Log.d("user", "Error: " + e.getMessage());

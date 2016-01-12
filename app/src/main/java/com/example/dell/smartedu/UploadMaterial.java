@@ -85,16 +85,19 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_material);
 
+        Intent from_main = getIntent();
+        classId=from_main.getStringExtra("id");
+        role=from_main.getStringExtra("role");
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        Intent from_main = getIntent();
-        classId=from_main.getStringExtra("id");
+
         uploadList = (ListView) findViewById(R.id.uploadList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
