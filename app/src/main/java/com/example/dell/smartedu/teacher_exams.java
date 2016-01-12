@@ -130,6 +130,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                                     Intent to_marksstudent = new Intent(teacher_exams.this, teacher_marks_studentlist.class);
                                                     to_marksstudent.putExtra("examid", examid);
                                                     to_marksstudent.putExtra("classId", classId);
+                                                    to_marksstudent.putExtra("role",role);
 
                                                     startActivity(to_marksstudent);
                                                 } else {

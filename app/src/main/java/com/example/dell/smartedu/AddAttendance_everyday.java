@@ -322,6 +322,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
         Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
         task_intent.putExtra("role", role);
+        task_intent.putExtra("id",classId);
         startActivity(task_intent);
     }
 
