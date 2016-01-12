@@ -79,17 +79,22 @@ public View getView(int position, View convertView, ViewGroup parent) {
     cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
     cb.setOnClickListener(this);
     convertView.setTag(new ModelViewHolder(name, cb));
-    name.setText(modelItems[position].getName());
+    /*name.setText(modelItems[position].getName());
     if (modelItems[position].getValue() == 1)
         cb.setChecked(true);
     else
-        cb.setChecked(false);
+        cb.setChecked(false);*/
     }else{
         ModelViewHolder viewHolder = (ModelViewHolder) convertView
                 .getTag();
         cb = viewHolder.getCheckBox();
         name = viewHolder.getTextView();
     }
+    name.setText(modelItems[position].getName());
+    if (modelItems[position].getValue() == 1)
+        cb.setChecked(true);
+    else
+        cb.setChecked(false);
     cb.setTag(item);
         return convertView;
         }

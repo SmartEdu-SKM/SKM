@@ -124,11 +124,16 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         String item = ((TextView) view).getText().toString();
+                                        Log.d("user", item);
 
-                                        String[] itemValues = item.split(". ");
+                                        //item  = item.replaceAll("[\n\r\\s]", "");
+                                        String[] itemValues = item.split("\\. ");
 
                                         final String[] details = new String[2];
                                         int j = 0;
+                                        for(int i=0; i<=1; i++){
+                                            Log.d("user", itemValues[i]);
+                                        }
 
                                         for (String x : itemValues) {
                                             details[j++] = x;
@@ -143,13 +148,15 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
-                                                    ParseObject u = (ParseObject) studentListRet.get(0);
-                                                    String id = u.getObjectId();
-                                                    //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
-                                                    Intent to_student_info = new Intent(Students.this, StudentInfo.class);
-                                                    to_student_info.putExtra("id", id);
-                                                    to_student_info.putExtra("classId",classId);
-                                                    startActivity(to_student_info);
+                                                    if(studentListRet.size()!=0) {
+                                                        ParseObject u = (ParseObject) studentListRet.get(0);
+                                                        String id = u.getObjectId();
+                                                        //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
+                                                        Intent to_student_info = new Intent(Students.this, StudentInfo.class);
+                                                        to_student_info.putExtra("id", id);
+                                                        to_student_info.putExtra("classId", classId);
+                                                        startActivity(to_student_info);
+                                                    }
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
                                                 }
