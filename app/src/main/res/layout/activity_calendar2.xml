@@ -7,7 +7,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:gravity="top|left|bottom|center_vertical|right"
+    android:gravity="top|start|bottom|center_vertical|end"
     android:background="#ff8d94"
     tools:context="com.example.dell.smartedu.Calendar">
 
@@ -17,7 +17,7 @@
     <CalendarView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </CalendarView>
 

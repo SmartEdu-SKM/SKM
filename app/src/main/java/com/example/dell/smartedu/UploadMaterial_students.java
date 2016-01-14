@@ -226,21 +226,44 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                                     // if (u.get("imageContent") != null) {
                                                     //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
                                                     List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
-                                                    if (!pFileList.isEmpty()) {
-                                                        ParseFile pFile = pFileList.get(0);
-                                                        byte[] bitmapdata = new byte[0];  // here it throws error
-                                                        try {
-                                                            bitmapdata = pFile.getData();
-                                                            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-                                                            imageUpload.setImageBitmap(bitmap);
-                                                        } catch (ParseException e1) {
-                                                            e1.printStackTrace();
+                                                    if (u.get("imageContent") != null) {
+                                                        if (!pFileList.isEmpty()) {
+                                                            ParseFile pFile = pFileList.get(0);
+                                                            byte[] bitmapdata = new byte[0];  // here it throws error
+                                                            try {
+                                                                bitmapdata = pFile.getData();
+                                                                Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                                                                imageUpload.setImageBitmap(bitmap);
+                                                            } catch (ParseException e1) {
+                                                                e1.printStackTrace();
+                                                            }
+                                                            // Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
                                                         }
-                                                        // Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
                                                     }
 
                                                     uploadid = u.getObjectId();
                                                     Log.d("user", "upload id: " + uploadid);
+
+                                                    viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
+
+
+                                                    viewAllButton.setOnClickListener(new View.OnClickListener() {
+
+                                                        public void onClick(View v) {
+
+                                                            Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
+                                                            to_upload_image.putExtra("classId", classId);
+                                                            to_upload_image.putExtra("uploadId", uploadid);
+                                                            startActivity(to_upload_image);
+
+                                                            dialog.dismiss();
+
+
+                                                        }
+                                                    });
+
+                                                    dialog.show();
+
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
                                                 }
@@ -248,28 +271,6 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                         });
 
 
-                                        viewAllButton= (Button) dialog.findViewById(R.id.viewAll);
-
-
-
-
-
-                                        viewAllButton.setOnClickListener(new View.OnClickListener() {
-
-                                            public void onClick(View v) {
-
-                                                Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
-                                                to_upload_image.putExtra("classId", classId);
-                                                to_upload_image.putExtra("uploadId", uploadid);
-                                                startActivity(to_upload_image);
-
-                                                dialog.dismiss();
-
-
-                                            }
-                                        });
-
-                                        dialog.show();
 
                                     }
 

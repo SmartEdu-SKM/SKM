@@ -223,35 +223,43 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
                                         uploadQuery.whereEqualTo("topic", details[0].trim());
                                         uploadQuery.whereEqualTo("subject", details[1].trim());
+                                        uploadQuery.whereEqualTo("class", ParseObject.createWithoutData("Class", classId));
                                         uploadQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
                                         uploadQuery.whereEqualTo("dueDate", milliseconds);
                                         uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
                                                 if (e == null) {
-                                                    ParseObject u = (ParseObject) uploadListRet.get(0);
+                                                    if (uploadListRet.size() != 0) {
+                                                        ParseObject u = (ParseObject) uploadListRet.get(0);
 
-                                                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                                    final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
-                                                    myDate.setText(dateString.trim());
+                                                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                                        final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
+                                                        myDate.setText(dateString.trim());
 
-                                                    myType.setText(u.get("type").toString().trim());
+                                                        myType.setText(u.get("type").toString().trim());
 
-                                                    // if (u.get("imageContent") != null) {
-                                                    //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
-                                                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
-                                                    if (!pFileList.isEmpty()) {
-                                                        ParseFile pFile = pFileList.get(0);
-                                                        byte[] bitmapdata = new byte[0];  // here it throws error
-                                                        try {
-                                                            bitmapdata = pFile.getData();
-                                                            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-                                                            imageUpload.setImageBitmap(bitmap);
-                                                        } catch (ParseException e1) {
-                                                            e1.printStackTrace();
+                                                        // if (u.get("imageContent") != null) {
+                                                        //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
+
+                                                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
+
+                                                        if (u.get("imageContent") != null) {
+                                                            if (!pFileList.isEmpty()) {
+                                                                ParseFile pFile = pFileList.get(0);
+                                                                byte[] bitmapdata = new byte[0];  // here it throws error
+                                                                try {
+                                                                    bitmapdata = pFile.getData();
+                                                                    Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                                                                    imageUpload.setImageBitmap(bitmap);
+                                                                } catch (ParseException e1) {
+                                                                    e1.printStackTrace();
+                                                                }
+                                                                // Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+                                                            }
                                                         }
-                                                        // Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-                                                    }
-                                                    //pFileList = u.getList("imageContent");
+
+
+                                                        //pFileList = u.getList("imageContent");
                                                         /*ParseFile imageFile = (ParseFile) u.get("imageContent");
                                                         imageFile.getDataInBackground(new GetDataCallback() {
                                                             @Override
@@ -266,62 +274,63 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                             }
 
                                                         }); */
-                                                    //  }
+                                                        //  }
 
-                                                    uploadid = u.getObjectId();
-                                                    Log.d("user", "upload id: " + uploadid);
+                                                        uploadid = u.getObjectId();
+                                                        Log.d("user", "upload id: " + uploadid);
+
+                                                        okButton = (Button) dialog.findViewById(R.id.okButton);
+                                                        delButton = (Button) dialog.findViewById(R.id.delButton);
+                                                        viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
+
+                                                        viewAllButton.setOnClickListener(new View.OnClickListener() {
+
+                                                            public void onClick(View v) {
+
+                                                                Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
+                                                                to_upload_image.putExtra("classId", classId);
+                                                                to_upload_image.putExtra("uploadId", uploadid);
+                                                                startActivity(to_upload_image);
+
+
+                                                            }
+                                                        });
+
+                                                        okButton.setOnClickListener(new View.OnClickListener() {
+
+                                                            public void onClick(View v) {
+
+                                                                dialog.dismiss();
+
+                                                            }
+                                                        });
+
+                                                        dialog.show();
+
+
+                                                        delButton.setOnClickListener(new View.OnClickListener() {
+                                                            public void onClick(View v) {
+
+                                                                ParseObject.createWithoutData("ImageUploads", uploadid).deleteEventually();
+
+
+                                                                onRestart();
+
+
+                                                                dialog.dismiss();
+
+                                                            }
+                                                        });
+                                                        dialog.show();
+
+
+                                                    }
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
                                                 }
                                             }
                                         });
 
-                                        okButton = (Button) dialog.findViewById(R.id.okButton);
-                                        delButton = (Button) dialog.findViewById(R.id.delButton);
-                                        viewAllButton= (Button) dialog.findViewById(R.id.viewAll);
-
-                                        okButton.setOnClickListener(new View.OnClickListener() {
-
-                                            public void onClick(View v) {
-
-                                                dialog.dismiss();
-
-                                            }
-                                        });
-
-                                        dialog.show();
-
-
-                                        delButton.setOnClickListener(new View.OnClickListener() {
-                                            public void onClick(View v) {
-
-                                                ParseObject.createWithoutData("ImageUploads", uploadid).deleteEventually();
-
-
-                                                onRestart();
-
-
-                                                dialog.dismiss();
-
-                                            }
-                                        });
-                                        dialog.show();
-
-
-
-
-                                        viewAllButton.setOnClickListener(new View.OnClickListener() {
-
-                                            public void onClick(View v) {
-
-                                                Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
-                                                to_upload_image.putExtra("classId", classId);
-                                                to_upload_image.putExtra("uploadId", uploadid);
-                                                startActivity(to_upload_image);
-
-
-                                            }
-                                        });
 
                                     }
 

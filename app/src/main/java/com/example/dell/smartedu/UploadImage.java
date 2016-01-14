@@ -43,17 +43,21 @@ public class UploadImage extends ListActivity {
     protected Button mAddImageBtn;
     protected Button mUploadImageBtn;
     Button doneButton;
-    protected ImageView mPreviewImageView;
+    protected ImageView mPreviewImageView[];
+
     ImageView viewImage;
     protected ListView lv;
     String uploadId;
     String classId;
     ImageLoaderAdapter adapter;
+    File mediaStorageDir;
 
     private Uri mMediaUri;
 
     public void queryImagesFromParse(){
+        Log.d("user", "Object Id: uploadImage: " + uploadId);
         ParseQuery<ParseObject> imagesQuery = new ParseQuery<>("ImageUploads");
+        imagesQuery.whereEqualTo("objectId",uploadId.trim());
         imagesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> images, ParseException e) {
@@ -68,11 +72,13 @@ public class UploadImage extends ListActivity {
                    // if(images.size()!=0) {
                      //   for (int i = 0; i < images.size(); i++) {
                        //     if (images.get(i).get("imageContent") != null) {
-                                adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
-                                //lv.setAdapter(adapter);
-                                setListAdapter(adapter);
+                        if (u.get("imageContent") != null) {
+                            adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
+                            //lv.setAdapter(adapter);
+                            setListAdapter(adapter);
 
-                                adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
+                        }
                      //       }
                        // }
                    }
@@ -103,7 +109,7 @@ public class UploadImage extends ListActivity {
         classId=from_upload_material.getStringExtra("classId");
         uploadId=from_upload_material.getStringExtra("uploadId");
 
-        Log.d("user", "Object Id: uploadImage" + uploadId);
+
 
         //lv = (ListView)findViewById(R.id.imageList);
 
@@ -124,7 +130,11 @@ public class UploadImage extends ListActivity {
         //initialize
         mAddImageBtn = (Button)findViewById(R.id.addImageButton);
         mUploadImageBtn = (Button)findViewById(R.id.uploadImageButton);
-        mPreviewImageView = (ImageView)findViewById(R.id.previewImageView);
+        mPreviewImageView  = new ImageView[3];
+
+        mPreviewImageView[0] = (ImageView)findViewById(R.id.previewImageView1);
+        mPreviewImageView[1]= (ImageView) findViewById(R.id.previewImageView2);
+        mPreviewImageView[2]= (ImageView) findViewById(R.id.previewImageView3);
 
         //listen to add button click
         mAddImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +180,7 @@ public class UploadImage extends ListActivity {
             public void onClick(View v) {
 
                 try{
+                    //String path= (String) mPreviewImageView[i].getTag();
                     //convert image to bytes for upload.
                     final byte[][] fileBytes = {FileHelper.getByteArrayFromFile(UploadImage.this, mMediaUri)};
                     if(fileBytes[0] == null){
@@ -256,7 +267,7 @@ public class UploadImage extends ListActivity {
         if(isExternalStorageAvailable()){
             //get the URI
             //get external storage dir
-            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "UPLOADIMAGES");
+            mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "UPLOADIMAGES");
             //create subdirectore if it does not exist
             if(!mediaStorageDir.exists()){
                 //create dir
@@ -306,7 +317,20 @@ public class UploadImage extends ListActivity {
                 }else{
                     mMediaUri = data.getData();
                     //set previews
-                    mPreviewImageView.setImageURI(mMediaUri);
+                    if(mPreviewImageView[0].getDrawable() == null){
+                        mPreviewImageView[0].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getAbsolutePath();
+                        //mPreviewImageView[0].setTag(path);
+                    }
+                    else if(mPreviewImageView[1].getDrawable() == null){
+                        mPreviewImageView[1].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getPath();
+                        //mPreviewImageView[1].setTag(path);
+                    }else {
+                        mPreviewImageView[2].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getPath();
+                        //mPreviewImageView[2].setTag(path);
+                    }
                 }
             }else {
 
@@ -314,8 +338,14 @@ public class UploadImage extends ListActivity {
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
                 //set previews
-
-                mPreviewImageView.setImageURI(mMediaUri);
+                if(mPreviewImageView[0].getDrawable() == null){
+                    mPreviewImageView[0].setImageURI(mMediaUri);
+                }
+                else if(mPreviewImageView[1].getDrawable() == null){
+                    mPreviewImageView[1].setImageURI(mMediaUri);
+                }else {
+                    mPreviewImageView[2].setImageURI(mMediaUri);
+                }
 
             }
 
