@@ -44,6 +44,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     Button broadcast;
     Button sendmessage;
 
+
     Model[] modelItems;
     CustomAdapter customAdapter;
     String studentId;
@@ -69,6 +70,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         broadcast=(Button)findViewById(R.id.broadcast);;
         teacherList = (ListView) findViewById(R.id.studentList);
         selected_button=(Button)findViewById(R.id.selected);
+        selected_button.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
@@ -139,11 +141,12 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
                                 customAdapter = new CustomAdapter(message_to_teacher.this, modelItems, classRef[0]);
                                 teacherList.setAdapter(customAdapter);
+                                selected_button.setVisibility(View.VISIBLE);
 
                                 selected_button.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        sendToSelected(classRef[0]);
+                                        sendToSelected();
                                     }
                                 });
 
@@ -251,7 +254,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     }
 
 
-    protected void sendToSelected(final ParseObject classobject)
+    protected void sendToSelected()
     {
         int count=0;
         for(int i=0;i<customAdapter.getCount();i++)

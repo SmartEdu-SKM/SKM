@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -20,17 +21,43 @@ import java.util.List;
 public class AddRole extends BaseActivity {
 
     private Toolbar mToolbar;
+    Button teacher;
+    Button student;
+    Button parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_role);
-
+        teacher=(Button)findViewById(R.id.button_teacher);
+        student=(Button)findViewById(R.id.button_student);
+        parent=(Button)findViewById(R.id.button_parent);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Add Role");
+
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            addParent();
+            }
+        });
+
+        student.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             addStudent();
+            }
+        });
+
+        teacher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             addTeacher();
+            }
+        });
     }
 
     @Override
@@ -55,7 +82,7 @@ public class AddRole extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addStudent(View v) {
+    public void addStudent() {
 
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
@@ -104,7 +131,7 @@ public class AddRole extends BaseActivity {
 
     }
 
-    public void addTeacher(View v) {
+    public void addTeacher() {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
         roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
@@ -152,7 +179,7 @@ public class AddRole extends BaseActivity {
 
     }
 
-    public void addParent(View v) {
+    public void addParent() {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
         roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());

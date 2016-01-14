@@ -42,6 +42,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     String name;
     Integer age;
     Integer rollno;
+    Button createIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
         addStudentButton = (Button)findViewById(R.id.addButton);
         studentList = (ListView) findViewById(R.id.studentList);
-
+        createIDs=(Button)findViewById(R.id.shareCode);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
@@ -118,6 +119,12 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
                                 studentList.setAdapter(adapter);
+                                createIDs.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        shareCode();
+                                    }
+                                });
 
 
                                 studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -203,7 +210,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
     }
 
-    public void shareCode(View view){
+    public void shareCode(){
 
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
@@ -19,8 +20,9 @@ public class login extends AppCompatActivity {
 
     EditText user;
     EditText pass;
+Button login;
+    TextView notAUser;
 
-    TextView t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,23 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         user =(EditText)findViewById(R.id.userEmailInput);
         pass= (EditText)findViewById(R.id.userPasswordInput);
-        t=(TextView)findViewById(R.id.userEmailText);
+       notAUser=(TextView)findViewById(R.id.noUser);
+        login=(Button)findViewById(R.id.login);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLogin();
+            }
+        });
+
+
+        notAUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickNoUser();
+            }
+        });
 
     }
 
@@ -42,7 +60,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    public void onClick(View v) {
+    public void onClickLogin() {
         // get The User name and Password
         String userName=user.getText().toString();
         String password=pass.getText().toString();
@@ -74,7 +92,7 @@ public class login extends AppCompatActivity {
 
 
 
-    public void onClickNoUser(View v)
+    public void onClickNoUser()
     {
         Intent intent = new Intent(login.this , SignUp.class);
         startActivity(intent);
