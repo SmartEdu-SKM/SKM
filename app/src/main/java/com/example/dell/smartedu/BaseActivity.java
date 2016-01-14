@@ -243,7 +243,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-                Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
+                Intent attendance_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                attendance_intent.putExtra("for","attendance");
                 attendance_intent.putExtra("role", role);
                 startActivity(attendance_intent);
             }
