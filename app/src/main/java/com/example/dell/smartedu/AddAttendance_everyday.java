@@ -112,9 +112,9 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
-                                    modelItems= new Model[studentListRet.size()];
+                                    modelItems = new Model[studentListRet.size()];
                                     //ArrayList<String> studentLt = new ArrayList<String>();
-                                   // ArrayAdapter adapter = new ArrayAdapter(AddAttendance_everyday.this, android.R.layout.simple_list_item_1, studentLt);
+                                    // ArrayAdapter adapter = new ArrayAdapter(AddAttendance_everyday.this, android.R.layout.simple_list_item_1, studentLt);
                                     //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                                     Log.d("user", "Retrieved " + studentListRet.size() + " students");
@@ -124,12 +124,12 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                         //  if(u.getString("class").equals(id)) {
 
                                         String rollnumber = u.getNumber("rollNumber").toString().trim();
-                                        String name=u.getString("name");
+                                        String name = u.getString("name");
                                         //name += "\n";
                                         // name += u.getInt("age");
-                                        String student=rollnumber + ". " + name;
-                                        modelItems[i]= new Model(student,0);
-                                       // adapter.add(student);
+                                        String student = rollnumber + ". " + name;
+                                        modelItems[i] = new Model(student, 0);
+                                        // adapter.add(student);
 
                                         // }
 
@@ -185,7 +185,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         });
 
                     }
-                }else{
+                } else {
                     Toast.makeText(AddAttendance_everyday.this, "error", Toast.LENGTH_LONG).show();
                     Log.d("user", "Error: " + e.getMessage());
                 }
@@ -197,12 +197,10 @@ saveButton=(Button)findViewById(R.id.saveButton);
         // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
 
 
-
-
-
     }
 
-    public void save(){
+    public void save() {
+
 
         calendar = java.util.Calendar.getInstance();
         //System.out.println("Current time =&gt; " + calendar.getTime());
@@ -235,102 +233,122 @@ saveButton=(Button)findViewById(R.id.saveButton);
         }
         final long newmilliseconds = d.getTime();
 
-        ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
-        attQuery.whereEqualTo("date", newmilliseconds);
-        attQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> attListRet, ParseException e) {
-                if (e == null) {
-                    Log.d("user in attendaily", "Retrieved " + attListRet.size() + " students");
-                    if (attListRet.size() != 0) {
-
-                        Toast.makeText(getApplicationContext(), "Attendance Already added for today", Toast.LENGTH_LONG).show();
-                    } else {
-
-                        for (int i = 0; i < adapter.getCount(); i++) {
-                            final Model item = adapter.getItem(i);
-
-
-
-
-                            String[] studentdetails = item.getName().split(". ");
-                            final int itemvalue = Integer.parseInt(studentdetails[0]);
-
-
-                            final ParseObject[] classRef = new ParseObject[1];
-                            ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                            classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
-                            classQuery.whereEqualTo("classTeacher", true);
-                            classQuery.findInBackground(new FindCallback<ParseObject>() {
-                                public void done(final List<ParseObject> classListRet, ParseException e) {
-                                    if (e == null) {
-                                        //Log.d("class", "Retrieved the class");
-                                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                                        if (classListRet.size() == 0) {
-                                            Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
-                                        } else {
-                                            classRef[0] = classListRet.get(0);
-                                            final ParseObject[] studentRef = new ParseObject[1];
-                                            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                            studentQuery.whereEqualTo("rollNumber", itemvalue);
-                                            studentQuery.whereEqualTo("class", classRef[0]);
-                                            studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                public void done(final List<ParseObject> studentListRet, ParseException e) {
-                                                    if (e == null) {
-                                                        if (studentListRet.size() != 0) {
-                                                            // Log.d("class", "Retrieved the class");
-                                                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-
-                                                            studentRef[0] = studentListRet.get(0);
-
-
-                                                            ParseObject attendance = new ParseObject("AttendanceDaily");
-                                                            attendance.put("student", studentRef[0]);
-                                                            attendance.put("date", newmilliseconds);
-                                                            if (item.isChecked()) {
-                                                                attendance.put("p_a", "A");
-                                                                giveMessageParent(studentRef[0], string_date);
-                                                                //sleep(1000);
-                                                                Log.d("user", item.getName() + " is Checked!!");
-                                                            } else
-                                                                attendance.put("p_a", "P");
-
-                                                            attendance.saveEventually();
-                                                            // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
-
-
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                                                        Log.d("user", "Error: " + e.getMessage());
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                                        Log.d("user", "Error: " + e.getMessage());
-                                    }
-                                }
-                            });
-                        }
-
-
-                        Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
-                    }
-                } else
-            {
-                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                Log.d("user", "Error: " + e.getMessage());
+        try {
+        int checked=0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            final Model item = adapter.getItem(i);
+            if (item.isChecked()) {
+                checked = 1;
+                break;
             }
+
         }
-    });
+
+        if (checked==0)
+            Toast.makeText(getApplicationContext(), "None Selected", Toast.LENGTH_LONG).show();
+
+        else{
+
+                ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
+                attQuery.whereEqualTo("date", newmilliseconds);
+                attQuery.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> attListRet, ParseException e) {
+                        if (e == null) {
+                            Log.d("user in attendaily", "Retrieved " + attListRet.size() + " students");
+                            if (attListRet.size() != 0) {
+
+                                Toast.makeText(getApplicationContext(), "Attendance Already added for today", Toast.LENGTH_LONG).show();
+                            } else {
+
+                                for (int i = 0; i < adapter.getCount(); i++) {
+                                    final Model item = adapter.getItem(i);
+
+
+                                    String[] studentdetails = item.getName().split("\\. ");
+                                    final int itemvalue = Integer.parseInt(studentdetails[0]);
+
+
+                                    final ParseObject[] classRef = new ParseObject[1];
+                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+                                    classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
+                                    classQuery.whereEqualTo("classTeacher", true);
+                                    classQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(final List<ParseObject> classListRet, ParseException e) {
+                                            if (e == null) {
+                                                //Log.d("class", "Retrieved the class");
+                                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+
+                                                if (classListRet.size() == 0) {
+                                                    Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    classRef[0] = classListRet.get(0);
+                                                    final ParseObject[] studentRef = new ParseObject[1];
+                                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
+                                                    studentQuery.whereEqualTo("rollNumber", itemvalue);
+                                                    studentQuery.whereEqualTo("class", classRef[0]);
+                                                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                        public void done(final List<ParseObject> studentListRet, ParseException e) {
+                                                            if (e == null) {
+                                                                if (studentListRet.size() != 0) {
+                                                                    // Log.d("class", "Retrieved the class");
+                                                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+
+
+                                                                    studentRef[0] = studentListRet.get(0);
+
+
+                                                                    ParseObject attendance = new ParseObject("AttendanceDaily");
+                                                                    attendance.put("student", studentRef[0]);
+                                                                    attendance.put("date", newmilliseconds);
+                                                                    if (item.isChecked()) {
+                                                                        attendance.put("p_a", "A");
+                                                                        giveMessageParent(studentRef[0], string_date);
+                                                                        //sleep(1000);
+                                                                        Log.d("user", item.getName() + " is Checked!!");
+                                                                    } else
+                                                                        attendance.put("p_a", "P");
+
+                                                                    attendance.saveEventually();
+                                                                    // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
+
+
+                                                                }
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                                                                Log.d("user", "Error: " + e.getMessage());
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                                                Log.d("user", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    });
+                                }
+
+
+                                Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                            Log.d("user", "Error: " + e.getMessage());
+                        }
+                    }
+                });
+
 
         Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
         task_intent.putExtra("role", role);
-        task_intent.putExtra("id",classId);
+        task_intent.putExtra("id", classId);
         startActivity(task_intent);
+    }} catch (Exception ex)
+
+        {
+            Toast.makeText(getApplicationContext(), "error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+            Log.d("user", "Error: " + ex.getMessage());
+        }
     }
 
     public void giveMessageParent(final ParseObject studentRef, final String string_date) {

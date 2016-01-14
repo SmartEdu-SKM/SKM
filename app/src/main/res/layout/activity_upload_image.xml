@@ -57,11 +57,28 @@
         android:textColor="#ffff" />
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/previewImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="1"
+        android:id="@+id/previewImageView1"
         android:layout_above="@+id/uploadImageButton"
         android:layout_toRightOf="@+id/uploadImageButton"
+        android:layout_toEndOf="@+id/uploadImageButton" />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="2"
+        android:id="@+id/previewImageView2"
+        android:layout_above="@+id/uploadImageButton"
+        android:layout_toRightOf="@+id/previewImageView1"
+        android:layout_toEndOf="@+id/uploadImageButton" />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="3"
+        android:id="@+id/previewImageView3"
+        android:layout_above="@+id/uploadImageButton"
+        android:layout_toRightOf="@+id/previewImageView2"
         android:layout_toEndOf="@+id/uploadImageButton" />
 
 

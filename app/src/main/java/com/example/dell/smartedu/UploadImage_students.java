@@ -49,6 +49,7 @@ public class UploadImage_students extends ListActivity {
 
     public void queryImagesFromParse(){
         ParseQuery<ParseObject> imagesQuery = new ParseQuery<>("ImageUploads");
+        imagesQuery.whereEqualTo("objectId",uploadId);
         imagesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> images, ParseException e) {
@@ -63,11 +64,13 @@ public class UploadImage_students extends ListActivity {
                         // if(images.size()!=0) {
                         //   for (int i = 0; i < images.size(); i++) {
                         //     if (images.get(i).get("imageContent") != null) {
-                        adapter = new ImageLoaderAdapter(UploadImage_students.this, pFileList);
-                        //lv.setAdapter(adapter);
-                        setListAdapter(adapter);
+                        if (u.get("imageContent") != null) {
+                            adapter = new ImageLoaderAdapter(UploadImage_students.this, pFileList);
+                            //lv.setAdapter(adapter);
+                            setListAdapter(adapter);
 
-                        adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
+                        }
                         //       }
                         // }
                     }
@@ -114,11 +117,6 @@ public class UploadImage_students extends ListActivity {
         });
 
 
-
-
-        //initialize
-
-        mPreviewImageView = (ImageView)findViewById(R.id.previewImageView);
 
 
 

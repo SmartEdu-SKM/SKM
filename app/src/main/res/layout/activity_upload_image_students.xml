@@ -4,12 +4,7 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#006064">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1"
-        android:id="@+id/student">
+
 
         <LinearLayout
             android:id="@+id/container_toolbar"
@@ -30,7 +25,7 @@
             android:layout_gravity="center_horizontal"
 
             />
-    </LinearLayout>
+
 
 
 </RelativeLayout>

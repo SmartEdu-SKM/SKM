@@ -30,13 +30,22 @@ public class ChooseRole extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_role);
-        String sessionToken = ParseUser.getCurrentUser().getSessionToken();
+
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(getApplicationContext(),login.class);
+            startActivity(nouser);
+        }
+
         try {
+            String sessionToken = ParseUser.getCurrentUser().getSessionToken();
 
             ParseUser.become(sessionToken);
 
         } catch (ParseException e1) {
             Log.d("session", e1.getMessage());
+            Toast.makeText(getApplicationContext(), "Error in choose role "+e1.getMessage(), Toast.LENGTH_LONG)
+                    .show();
         }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

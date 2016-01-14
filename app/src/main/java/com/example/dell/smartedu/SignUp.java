@@ -1,30 +1,23 @@
 package com.example.dell.smartedu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
-import android.os.Handler;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SignUp extends AppCompatActivity  {
 
@@ -32,8 +25,12 @@ public class SignUp extends AppCompatActivity  {
     EditText EmailSignup;
     EditText PasswordSignup;
     EditText ConfirmPasswordSignup;
+
+    TextView already;
+
     Button signUp;
     TextView alreadyUser;
+
 
 
     @Override
@@ -44,6 +41,8 @@ public class SignUp extends AppCompatActivity  {
         EmailSignup= (EditText)findViewById(R.id.emailSignup);
         PasswordSignup= (EditText)findViewById(R.id.passwordSignup);
         ConfirmPasswordSignup= (EditText)findViewById(R.id.confirmPasswordSignup);
+
+
         signUp=(Button)findViewById(R.id.signUpButton);
         alreadyUser=(TextView)findViewById(R.id.already);
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -55,11 +54,13 @@ public class SignUp extends AppCompatActivity  {
 
 
         alreadyUser.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 onClickAlreadyUser();
             }
         });
+
         if(ParseUser.getCurrentUser()!=null)
         {
             Intent i=new Intent(SignUp.this,Role.class);
@@ -119,6 +120,29 @@ public class SignUp extends AppCompatActivity  {
     {
         Intent intent = new Intent(getApplicationContext(),login.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            Log.d("Activity", "Touch event " + event.getRawX() + "," + event.getRawY() + " " + x + "," + y + " rect " + w.getLeft() + "," + w.getTop() + "," + w.getRight() + "," + w.getBottom() + " coords " + scrcoords[0] + "," + scrcoords[1]);
+            if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) {
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 
     @Override
