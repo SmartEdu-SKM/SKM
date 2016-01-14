@@ -36,7 +36,6 @@
         android:layout_height="match_parent"
         android:text="Student"
         android:id="@+id/button_student"
-        android:onClick="addStudent"
         android:layout_gravity="center_horizontal"
         android:background="#2a010101"
         android:textColor="#FFFF"
@@ -63,7 +62,6 @@
         android:background="#49010101"
         android:textColor="#FFFF"
         android:textSize="40sp"
-        android:onClick="addTeacher"
         android:layout_gravity="center_horizontal" />
 
         </RelativeLayout>
@@ -80,7 +78,6 @@
         android:text="Parent"
         android:id="@+id/button_parent"
 
-        android:onClick="addParent"
         android:layout_gravity="center_horizontal"
         android:background="#25010101"
         android:textColor="#FFFF"

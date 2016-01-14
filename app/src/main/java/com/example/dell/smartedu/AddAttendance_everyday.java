@@ -82,7 +82,8 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         role=from_student.getStringExtra("role");
         classId=from_student.getStringExtra("id");
         studentList = (ListView) findViewById(R.id.studentList);
-
+saveButton=(Button)findViewById(R.id.saveButton);
+        saveButton.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
@@ -137,7 +138,13 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
                                     adapter = new CustomAdapter(AddAttendance_everyday.this, modelItems, classRef[0]);
                                     studentList.setAdapter(adapter);
-
+                                    saveButton.setVisibility(View.VISIBLE);
+                                    saveButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            save();
+                                        }
+                                    });
 
                                     /*
                                     studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -195,7 +202,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
     }
 
-    public void save(final View view){
+    public void save(){
 
         calendar = java.util.Calendar.getInstance();
         //System.out.println("Current time =&gt; " + calendar.getTime());
@@ -283,7 +290,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                                             attendance.put("date", newmilliseconds);
                                                             if (item.isChecked()) {
                                                                 attendance.put("p_a", "A");
-                                                                giveMessageParent(view, studentRef[0], string_date);
+                                                                giveMessageParent(studentRef[0], string_date);
                                                                 //sleep(1000);
                                                                 Log.d("user", item.getName() + " is Checked!!");
                                                             } else
@@ -326,7 +333,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         startActivity(task_intent);
     }
 
-    public void giveMessageParent(View view, final ParseObject studentRef, final String string_date) {
+    public void giveMessageParent(final ParseObject studentRef, final String string_date) {
 
         Log.d("user", "in give message");
         ParseUser student_ofclient = (ParseUser) studentRef.get("userId");

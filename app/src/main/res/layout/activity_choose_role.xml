@@ -41,7 +41,6 @@
         android:background="#25010101"
         android:textColor="#FFFF"
         android:textSize="40sp"
-        android:onClick="chooseStudent"
         android:layout_gravity="center_horizontal"
          />
 
@@ -58,8 +57,7 @@
         android:layout_height="match_parent"
         android:text="Teacher"
         android:id="@+id/button_teacher"
-        android:onClick="chooseTeacher"
-        android:layout_centerVertical="true"
+            android:layout_centerVertical="true"
             android:background="#61010101"
             android:textColor="#FFFF"
             android:textSize="40sp"
@@ -81,7 +79,6 @@
             android:background="#25010101"
             android:textColor="#FFFF"
             android:textSize="40sp"
-            android:onClick="chooseParent"
             android:layout_gravity="center_horizontal" />
 
         </RelativeLayout>

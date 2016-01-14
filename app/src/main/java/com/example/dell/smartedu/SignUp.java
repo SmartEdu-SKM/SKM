@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public class SignUp extends AppCompatActivity  {
     EditText EmailSignup;
     EditText PasswordSignup;
     EditText ConfirmPasswordSignup;
+    Button signUp;
+    TextView alreadyUser;
 
 
     @Override
@@ -41,6 +44,22 @@ public class SignUp extends AppCompatActivity  {
         EmailSignup= (EditText)findViewById(R.id.emailSignup);
         PasswordSignup= (EditText)findViewById(R.id.passwordSignup);
         ConfirmPasswordSignup= (EditText)findViewById(R.id.confirmPasswordSignup);
+        signUp=(Button)findViewById(R.id.signUpButton);
+        alreadyUser=(TextView)findViewById(R.id.already);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUser();
+            }
+        });
+
+
+        alreadyUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickAlreadyUser();
+            }
+        });
         if(ParseUser.getCurrentUser()!=null)
         {
             Intent i=new Intent(SignUp.this,Role.class);
@@ -50,7 +69,7 @@ public class SignUp extends AppCompatActivity  {
     }
 
 
-    public void addUser(View view)
+    public void addUser()
     {
         String userName = UserNameSignup.getText().toString();
         String password = PasswordSignup.getText().toString();
@@ -96,7 +115,7 @@ public class SignUp extends AppCompatActivity  {
     }
 
 
-    public void onClickAlreadyUser(View v)
+    public void onClickAlreadyUser()
     {
         Intent intent = new Intent(getApplicationContext(),login.class);
         startActivity(intent);

@@ -46,6 +46,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     Button removeDueDate;
     Button addMoreButton;
     Button viewAllButton;
+    Button upload;
 
     TextView myDate;
     TextView editmyDate;
@@ -99,7 +100,13 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         uploadList = (ListView) findViewById(R.id.uploadList);
-
+        upload=(Button)findViewById(R.id.uploadButton);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadNew();
+            }
+        });
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
@@ -345,7 +352,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     }
 
 
-    public void uploadNew(final View view){
+    public void uploadNew(){
 
         final Dialog dialog_upload = new Dialog(UploadMaterial.this);
         dialog_upload.setContentView(R.layout.upload_material);
@@ -418,7 +425,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
             @Override
             public void onClick(View v) {
 
-                open(view);
+                open();
                 myDueDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
             }
         });
@@ -537,7 +544,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
 
 
-    public void open(View view)
+    public void open()
     {
 
         final Dialog dialogcal = new Dialog(UploadMaterial.this);
