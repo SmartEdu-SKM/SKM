@@ -50,8 +50,7 @@
                 android:id="@+id/uploadButton"
                 android:layout_gravity="center_horizontal"
                 android:background="#f7000000"
-                android:textColor="#ffff"
-                android:onClick="uploadNew" />
+                android:textColor="#ffff" />
 
             <ListView
                 android:layout_width="match_parent"

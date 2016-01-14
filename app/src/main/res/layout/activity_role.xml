@@ -57,7 +57,6 @@
         android:layout_centerHorizontal="true"
         android:textColor="#FFFF"
         android:textSize="40sp"
-        android:onClick="addRole"
         android:layout_gravity="center_horizontal"
         android:background="#38010101" />
 
@@ -74,7 +73,6 @@
         android:layout_height="wrap_content"
         android:text="Choose Role ?"
         android:id="@+id/button_chooserole"
-        android:onClick="chooseRole"
         android:layout_gravity="center_horizontal"
         android:background="#24010101"
         android:layout_marginRight="39dp"

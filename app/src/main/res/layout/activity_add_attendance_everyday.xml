@@ -48,8 +48,7 @@
                 android:id="@+id/saveButton"
                 android:layout_gravity="center_horizontal"
                 android:textColor="#ffff"
-                android:background="#080808"
-                android:onClick="save" />
+                android:background="#080808" />
 
             <ListView
                 android:layout_width="match_parent"

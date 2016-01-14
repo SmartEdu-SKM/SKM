@@ -71,6 +71,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         broadcast=(Button)findViewById(R.id.broadcast);;
         studentList = (ListView) findViewById(R.id.studentList);
         selected_button=(Button)findViewById(R.id.selected);
+        selected_button.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
@@ -138,7 +139,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                                 customAdapter = new CustomAdapter(teacher_message.this, modelItems, classRef[0]);
                                 studentList.setAdapter(customAdapter);
-
+                                selected_button.setVisibility(View.VISIBLE);
                                 selected_button.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {

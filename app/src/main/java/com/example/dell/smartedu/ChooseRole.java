@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -21,12 +22,14 @@ import java.util.List;
 public class ChooseRole extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    Button student;
+    Button parent;
+    Button teacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_role);
-
         String sessionToken = ParseUser.getCurrentUser().getSessionToken();
         try {
 
@@ -41,6 +44,30 @@ public class ChooseRole extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Choose Role");
+        student=(Button)findViewById(R.id.button_student);
+        parent=(Button)findViewById(R.id.button_parent);
+        teacher=(Button)findViewById(R.id.button_teacher);
+
+        teacher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTeacher();
+            }
+        });
+
+        parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseParent();
+            }
+        });
+
+        student.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseStudent();
+            }
+        });
     }
 
     @Override
@@ -65,7 +92,7 @@ public class ChooseRole extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void chooseTeacher(View v) {
+    public void chooseTeacher() {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
         roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
@@ -105,7 +132,7 @@ public class ChooseRole extends AppCompatActivity {
 
     }
 
-    public void chooseStudent(View v) {
+    public void chooseStudent() {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
         roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
@@ -144,7 +171,7 @@ public class ChooseRole extends AppCompatActivity {
 
     }
 
-    public void chooseParent(View v) {
+    public void chooseParent() {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
         roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());

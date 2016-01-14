@@ -41,7 +41,8 @@
         android:id="@+id/userEmailInput"
         android:layout_alignBottom="@+id/userEmailText"
         android:width="300dp"
-        android:layout_toEndOf="@+id/userEmailText" />
+        android:layout_toEndOf="@+id/userEmailText"
+        android:layout_toRightOf="@+id/userEmailText"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
         android:id="@+id/userPasswordInput"
         android:layout_alignBottom="@+id/passwordText"
         android:layout_toEndOf="@+id/userEmailText"
+        android:layout_toRightOf="@+id/passwordText"
         android:width="300dp" />
 
     <Button
@@ -60,7 +62,7 @@
         android:id="@+id/login"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onClick"/>
+        android:layout_alignParentRight="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +71,8 @@
         android:text="Not A SmartEdu User?"
         android:id="@+id/noUser"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        />
 
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        />
 </RelativeLayout>

@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
+=======
+import android.widget.Button;
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
@@ -23,9 +27,13 @@ public class login extends AppCompatActivity {
 
     EditText user;
     EditText pass;
+<<<<<<< HEAD
     TextView noUser;
+=======
+Button login;
+    TextView notAUser;
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
 
-    TextView t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +41,25 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         user =(EditText)findViewById(R.id.userEmailInput);
         pass= (EditText)findViewById(R.id.userPasswordInput);
+<<<<<<< HEAD
         t=(TextView)findViewById(R.id.userEmailText);
         noUser=(TextView) findViewById(R.id.noUser);
 
         noUser.setOnClickListener(new View.OnClickListener() {
+=======
+       notAUser=(TextView)findViewById(R.id.noUser);
+        login=(Button)findViewById(R.id.login);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLogin();
+            }
+        });
+
+
+        notAUser.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
             @Override
             public void onClick(View v) {
                 onClickNoUser();
@@ -55,7 +78,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    public void onClick(View v) {
+    public void onClickLogin() {
         // get The User name and Password
         String userName=user.getText().toString().trim();
         String password=pass.getText().toString().trim();

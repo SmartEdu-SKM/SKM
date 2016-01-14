@@ -9,7 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+<<<<<<< HEAD
 import android.view.inputmethod.InputMethodManager;
+=======
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +29,12 @@ public class SignUp extends AppCompatActivity  {
     EditText EmailSignup;
     EditText PasswordSignup;
     EditText ConfirmPasswordSignup;
+<<<<<<< HEAD
     TextView already;
+=======
+    Button signUp;
+    TextView alreadyUser;
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
 
 
     @Override
@@ -35,15 +45,32 @@ public class SignUp extends AppCompatActivity  {
         EmailSignup= (EditText)findViewById(R.id.emailSignup);
         PasswordSignup= (EditText)findViewById(R.id.passwordSignup);
         ConfirmPasswordSignup= (EditText)findViewById(R.id.confirmPasswordSignup);
+<<<<<<< HEAD
         already= (TextView) findViewById(R.id.already);
 
         already.setOnClickListener(new View.OnClickListener() {
+=======
+        signUp=(Button)findViewById(R.id.signUpButton);
+        alreadyUser=(TextView)findViewById(R.id.already);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUser();
+            }
+        });
+
+
+        alreadyUser.setOnClickListener(new View.OnClickListener() {
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
             @Override
             public void onClick(View v) {
                 onClickAlreadyUser();
             }
         });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 50aafe1c56528dbd62d27b41eb195dae799721ee
         if(ParseUser.getCurrentUser()!=null)
         {
             Intent i=new Intent(SignUp.this,Role.class);
@@ -53,7 +80,7 @@ public class SignUp extends AppCompatActivity  {
     }
 
 
-    public void addUser(View view)
+    public void addUser()
     {
         String userName = UserNameSignup.getText().toString();
         String password = PasswordSignup.getText().toString();

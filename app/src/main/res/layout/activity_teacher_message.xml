@@ -59,8 +59,7 @@
                     android:text="Send to Selected"
                     android:id="@+id/selected"
                     android:layout_toEndOf="@+id/broadcast"
-                    android:nestedScrollingEnabled="false"
-                    android:onClick="sendToSelected" />
+                    android:nestedScrollingEnabled="false" />
             </RelativeLayout>
 
 
