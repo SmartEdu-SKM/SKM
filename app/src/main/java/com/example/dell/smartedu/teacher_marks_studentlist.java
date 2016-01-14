@@ -127,7 +127,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         String item = ((TextView) view).getText().toString();
 
-                                        String[] itemValues = item.split(". ");
+                                        String[] itemValues = item.split("\\. ");
 
                                         final String[] details = new String[2];
                                         int j = 0;

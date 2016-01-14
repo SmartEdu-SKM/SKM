@@ -91,9 +91,7 @@
         android:text="Already a SmartEdu User?"
         android:id="@+id/already"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onClickAlreadyUser"
-        />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"

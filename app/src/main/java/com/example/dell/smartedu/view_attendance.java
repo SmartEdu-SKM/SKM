@@ -76,9 +76,9 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 
                     //studentRef[0] = studentListRet.get(0);
                     //information(studentRef[0], v);
-                    int present = 0;
-                    int absent = 0;
-                    int totalDays = 0;
+                    double present = 0;
+                    double absent = 0;
+                    double totalDays = 0;
                     double percentage = 0.0;
                     for (int i = 0; i < attListRet.size(); i++) {
                         ParseObject u = attListRet.get(i);
@@ -100,7 +100,7 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 
     }
 
-    public void information(int absent, int totalDays, double percentage){
+    public void information(double absent, double totalDays, double percentage){
         this.absentDays = (TextView) findViewById(R.id.exam);
         this.totalDays = (TextView) findViewById(R.id.totalMarks);
         this.percentage = (TextView) findViewById(R.id.percentage);

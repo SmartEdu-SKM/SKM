@@ -195,7 +195,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
     }
 
-    public void save(final View view){
+    public void save(final View view) {
 
         calendar = java.util.Calendar.getInstance();
         //System.out.println("Current time =&gt; " + calendar.getTime());
@@ -228,6 +228,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         }
         final long newmilliseconds = d.getTime();
 
+        try{
         ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
         attQuery.whereEqualTo("date", newmilliseconds);
         attQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -241,8 +242,6 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
                         for (int i = 0; i < adapter.getCount(); i++) {
                             final Model item = adapter.getItem(i);
-
-
 
 
                             String[] studentdetails = item.getName().split(". ");
@@ -312,13 +311,18 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
                         Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
                     }
-                } else
-            {
-                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                Log.d("user", "Error: " + e.getMessage());
+                } else {
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                    Log.d("user", "Error: " + e.getMessage());
+                }
             }
-        }
-    });
+        });
+    }catch(Exception ex)
+
+    {
+        Toast.makeText(getApplicationContext(), "error: " +ex.getMessage(), Toast.LENGTH_LONG).show();
+        Log.d("user", "Error: " + ex.getMessage());
+    }
 
         Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
         task_intent.putExtra("role", role);
