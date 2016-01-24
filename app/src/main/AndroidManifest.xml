@@ -90,6 +90,10 @@
         <activity
             android:name=".Schedule"
             android:label="@string/title_activity_schedule" >
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.MainActivity" />
         </activity>
         <activity
             android:name=".AddAttendance"

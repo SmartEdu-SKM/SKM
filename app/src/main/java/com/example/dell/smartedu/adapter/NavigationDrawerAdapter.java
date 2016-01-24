@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.example.dell.smartedu.R;
 import com.example.dell.smartedu.model.NavDrawerItem;
 
@@ -18,20 +17,22 @@ import java.util.List;
 
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.MyViewHolder> {
     List<NavDrawerItem> data = Collections.emptyList();
+    private int[] icons;
     private LayoutInflater inflater;
     private Context context;
-    private String NAME;
-    private String EMAIL;
-    private ImageView PROFILE;
 
-    public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data) {
+
+    public NavigationDrawerAdapter(Context context, List<NavDrawerItem> data, int icons[]) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.icons= new int[data.size()];
+        this.icons=icons;
     }
 
     public void delete(int position) {
         data.remove(position);
+
         notifyItemRemoved(position);
     }
 
@@ -46,6 +47,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle());
+        holder.imageView.setImageResource(icons[position]);
     }
 
     @Override
@@ -55,10 +57,12 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
+            imageView= (ImageView) itemView.findViewById(R.id.rowIcon);
         }
     }
 }

@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -59,7 +62,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     Date date1;
     CalendarView calendarView;
     Calendar calendar;
-    ImageView cal;
+    ImageButton cal;
     ImageView imageUpload;
     int Year;
     int Month;
@@ -376,7 +379,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         myDate = (TextView) dialog_upload.findViewById(R.id.date);
         myDueDate= (TextView) dialog_upload.findViewById(R.id.deadline);
         subject=(EditText) dialog_upload.findViewById(R.id.subject);
-        cal=(ImageView) dialog_upload.findViewById(R.id.calButton);
+        cal=(ImageButton) dialog_upload.findViewById(R.id.calButton);
         removeDueDate=(Button) dialog_upload.findViewById(R.id.removeDueDate);
         topic=(EditText) dialog_upload.findViewById(R.id.topic);
 
@@ -564,6 +567,15 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         final Dialog dialogcal = new Dialog(UploadMaterial.this);
         dialogcal.setContentView(R.layout.activity_calendar2);
         dialogcal.setTitle("Select Date");
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogcal.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+
+        dialogcal.getWindow().setAttributes(lp);
+
         calendarView= (CalendarView)dialogcal.findViewById(R.id.calendar);
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
