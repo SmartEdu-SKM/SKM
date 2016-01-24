@@ -29,6 +29,8 @@ public class ChooseRole extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try{
         setContentView(R.layout.activity_choose_role);
 
         if(ParseUser.getCurrentUser()==null)
@@ -53,6 +55,13 @@ public class ChooseRole extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Choose Role");
+
+        }catch(Exception create_error){
+            Log.d("user", "error in create choose role: " + create_error.getMessage());
+            Toast.makeText(ChooseRole.this,"error " + create_error, Toast.LENGTH_LONG).show();
+        }
+
+
         student=(Button)findViewById(R.id.button_student);
         parent=(Button)findViewById(R.id.button_parent);
         teacher=(Button)findViewById(R.id.button_teacher);

@@ -24,7 +24,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +54,7 @@ public class UploadImage extends ListActivity {
     protected ListView lv;
     String uploadId;
     String classId;
+    String role;
     ImageLoaderAdapter adapter;
     File mediaStorageDir;
 
@@ -114,6 +114,7 @@ public class UploadImage extends ListActivity {
 
         classId=from_upload_material.getStringExtra("classId");
         uploadId=from_upload_material.getStringExtra("uploadId");
+        role= from_upload_material.getStringExtra("role");
 
 
 
@@ -234,7 +235,7 @@ public class UploadImage extends ListActivity {
                                     });
                                     }catch (Exception file_error){
                                         Toast.makeText(getApplicationContext(), file_error.getMessage(), Toast.LENGTH_LONG).show();
-                                        onPostResume();
+                                       // onPostResume();
                                     }
                                 }else {
                                         Log.d("Post retrieval", "Error: " + e.getMessage());
@@ -247,7 +248,7 @@ public class UploadImage extends ListActivity {
 
                 }catch (Exception e1){
                     Toast.makeText(getApplicationContext(), e1.getMessage(), Toast.LENGTH_LONG).show();
-                    onPostResume();
+                   // onPostResume();
                 }
             }
         });
@@ -415,16 +416,6 @@ public class UploadImage extends ListActivity {
         }
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if(ParseUser.getCurrentUser()==null)
-        {
-            Intent nouser=new Intent(getApplicationContext(),login.class);
-            startActivity(nouser);
-        }
-
-    }
 
 
 

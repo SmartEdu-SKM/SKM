@@ -39,27 +39,34 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_classes);
 
-        Intent from_home=getIntent();
-        _for=from_home.getStringExtra("for");
-        role=from_home.getStringExtra("role");
+        try {
+            setContentView(R.layout.activity_teacher_classes);
 
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Classes");
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+            Intent from_home = getIntent();
+            _for = from_home.getStringExtra("for");
+            role = from_home.getStringExtra("role");
 
 
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        classList = (ListView) findViewById(R.id.classesList);
-        drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
-        drawerFragment.setDrawerListener(this);
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Classes");
+            noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
+            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+
+
+            dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+            classList = (ListView) findViewById(R.id.classesList);
+            drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, "Teacher");
+            drawerFragment.setDrawerListener(this);
+
+        }catch(Exception create_error){
+            Log.d("user", "error in create teacher_classes: " + create_error.getMessage());
+            Toast.makeText(teacher_classes.this,"error " + create_error, Toast.LENGTH_LONG).show();
+        }
 
         //  myList = dbHandler.getAllTasks();
 

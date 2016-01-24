@@ -96,7 +96,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         uploadList = (ListView) findViewById(R.id.uploadList);
@@ -108,7 +108,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
             }
         });
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
 
 
@@ -292,6 +292,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                                 Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
                                                                 to_upload_image.putExtra("classId", classId);
                                                                 to_upload_image.putExtra("uploadId", uploadid);
+                                                                //to_upload_image.putExtra("role", role);
                                                                 startActivity(to_upload_image);
 
 
@@ -598,14 +599,6 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
     }
 
-    @Override
-    protected void onPostResume () {
-        super.onPostResume();
-        if (ParseUser.getCurrentUser() == null) {
-            Intent nouser = new Intent(UploadMaterial.this, login.class);
-            startActivity(nouser);
-        }
-    }
 
 
 }
