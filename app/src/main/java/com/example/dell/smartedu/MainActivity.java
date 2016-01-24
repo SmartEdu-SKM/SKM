@@ -45,7 +45,11 @@ public class MainActivity extends BaseActivity{
         drawerFragment.setDrawerListener(this);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this,role));
+      //  SharedPreferences mySettings;
+        //mySettings = getSharedPreferences(SyncStateContract.Constants.PREFERENCES, Context.MODE_PRIVATE);
+       // int gridSize = 50 * Integer.parseInt(mySettings.getString("gridSize", "3"));
+        //gridview.setColumnWidth(gridSize + 10);
+        gridview.setAdapter(new ImageAdapter(this,densityX,role));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {

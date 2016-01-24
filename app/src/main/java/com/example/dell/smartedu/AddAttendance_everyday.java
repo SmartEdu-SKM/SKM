@@ -179,7 +179,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
                                 } else {
                                     Toast.makeText(AddAttendance_everyday.this, "error", Toast.LENGTH_LONG).show();
-                                    Log.d("user", "Error: " + e.getMessage());
+                                    Log.d("user", "Error in student query: " + e.getMessage());
                                 }
                             }
                         });
@@ -187,7 +187,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                     }
                 } else {
                     Toast.makeText(AddAttendance_everyday.this, "error", Toast.LENGTH_LONG).show();
-                    Log.d("user", "Error: " + e.getMessage());
+                    Log.d("user", "Error in class query: " + e.getMessage());
                 }
 
             }
@@ -347,7 +347,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
         {
             Toast.makeText(getApplicationContext(), "error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-            Log.d("user", "Error: " + ex.getMessage());
+            Log.d("user", "Error catch: " + ex.getMessage());
         }
     }
 

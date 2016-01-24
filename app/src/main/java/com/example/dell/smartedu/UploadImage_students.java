@@ -3,6 +3,7 @@ package com.example.dell.smartedu;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +24,9 @@ import com.parse.ParseQuery;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,7 +142,12 @@ public class UploadImage_students extends ListActivity {
 
             public void onClick(View v) {
 
-                saveImage();
+
+                try {
+                    saveImage(v);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 dialog.dismiss();
 
             }
@@ -148,11 +157,29 @@ public class UploadImage_students extends ListActivity {
 
     }
 
-    public void saveImage(){
+    public void saveImage(View v)throws FileNotFoundException {
+        v.buildDrawingCache();
+        Bitmap bm=v.getDrawingCache();
+
+        OutputStream fOut = null;
+
         Uri imageUri= getOutputMediaFileUri(2);
+
+        try {
+            fOut = new FileOutputStream(imageUri.getPath());
+
+            bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error occured in Save. Please try again later.",
+                    Toast.LENGTH_SHORT).show();
+        }
         Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         scanIntent.setData(imageUri);
         getApplicationContext().sendBroadcast(scanIntent);
+        Toast.makeText(getApplicationContext(), "Image Saved", Toast.LENGTH_LONG).show();
 
     }
 

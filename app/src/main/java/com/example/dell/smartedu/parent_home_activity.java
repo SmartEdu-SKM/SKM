@@ -87,7 +87,7 @@ public class parent_home_activity extends BaseActivity{
                                                 }
 
                                     GridView gridview = (GridView) findViewById(R.id.gridview);
-                                    gridview.setAdapter(new ImageAdapter(getApplicationContext(), "Parent"));
+                                    gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, "Parent"));
                                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         public void onItemClick(AdapterView<?> parent, View v,
                                                                 int position, long id) {
