@@ -179,7 +179,7 @@ public class FragmentDrawer extends Fragment {
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar,String role) {
         containerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-        Log.d("user",role);
+//        Log.d("user",role);
         this.role=role;
 
 

@@ -69,20 +69,17 @@
             android:background="#ff1d3a">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="Choose Role ?"
         android:id="@+id/button_chooserole"
         android:layout_gravity="center_horizontal"
-        android:background="#24010101"
-        android:layout_marginRight="39dp"
-        android:layout_marginEnd="39dp"
+        android:background="#13010101"
         android:textColor="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="39dp"
-        android:textSize="20sp" />
+        android:textSize="40sp" />
 
         </RelativeLayout>
 
