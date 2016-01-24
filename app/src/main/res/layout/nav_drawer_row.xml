@@ -4,14 +4,23 @@
     android:layout_height="wrap_content"
     android:clickable="true">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rowIcon"
+        android:paddingStart="16dp"
+        android:src="@drawable/ic_action"
+        />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
+        android:paddingStart="50dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="15dp"
-        android:textStyle="bold" />
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/rowIcon"/>
 
 </RelativeLayout>

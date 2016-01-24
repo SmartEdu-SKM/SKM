@@ -2,57 +2,68 @@ package com.example.dell.smartedu;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDrawerListener, ActionBar.TabListener{
+public class Schedule extends AppCompatActivity implements ActionBar.TabListener{
     ViewPager Tab;
     ScheduleTabsAdapter TabAdapter;
     ActionBar actionBar;
-    private FragmentDrawer drawerFragment;
+    //private FragmentDrawer drawerFragment;
     private Toolbar mToolbar;
     TabLayout tabLayout;
     String role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_schedule);
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            //getSupportActionBar().setTitle("Schedule");
        /* drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);*/
-        Bundle fromrole= getIntent().getExtras();
-        role = fromrole.getString("role");
-        Tab = (ViewPager) findViewById(R.id.pager);
-        Tab.setAdapter(new ScheduleTabsAdapter(getSupportFragmentManager(), role));
+            Bundle fromrole = getIntent().getExtras();
+            role = fromrole.getString("role");
+            Tab = (ViewPager) findViewById(R.id.pager);
+            Tab.setAdapter(new ScheduleTabsAdapter(getSupportFragmentManager(), role));
 
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(Tab);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(Tab);
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Tab.setCurrentItem(tab.getPosition());
-            }
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    Tab.setCurrentItem(tab.getPosition());
+                }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                Tab.setCurrentItem(tab.getPosition());
-            }
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    Tab.setCurrentItem(tab.getPosition());
+                }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                Tab.setCurrentItem(tab.getPosition());
-            }
-        });
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    Tab.setCurrentItem(tab.getPosition());
+                }
+            });
 
         /*
         Tab = (ViewPager)findViewById(R.id.pager);
@@ -122,11 +133,15 @@ public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDra
                 // TODO Auto-generated method stub
 
             }}; */
-        //Add New Tab
-        // actionBar.addTab(actionBar.newTab().setText("Android").setTabListener(tabListener));
-        //actionBar.addTab(actionBar.newTab().setText("iOS").setTabListener(tabListener));
-        // actionBar.addTab(actionBar.newTab().setText("Windows").setTabListener(tabListener));
+            //Add New Tab
+            // actionBar.addTab(actionBar.newTab().setText("Android").setTabListener(tabListener));
+            //actionBar.addTab(actionBar.newTab().setText("iOS").setTabListener(tabListener));
+            // actionBar.addTab(actionBar.newTab().setText("Windows").setTabListener(tabListener));
 
+        }catch(Exception create_error){
+            Log.d("user", "error in create schedule activity: " + create_error.getMessage());
+            Toast.makeText(Schedule.this, "error " + create_error, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -140,6 +155,28 @@ public class Schedule extends BaseActivity implements FragmentDrawer.FragmentDra
     }
 
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
+
+            Log.d("Activity", "Touch event " + event.getRawX() + "," + event.getRawY() + " " + x + "," + y + " rect " + w.getLeft() + "," + w.getTop() + "," + w.getRight() + "," + w.getBottom() + " coords " + scrcoords[0] + "," + scrcoords[1]);
+            if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) {
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+        return ret;
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {

@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDrawerListener{
+public class Schedule_days extends Fragment {
 
     ListView scheduleList;
     Button scheduleAdd;
@@ -485,11 +485,4 @@ public class Schedule_days extends Fragment implements FragmentDrawer.FragmentDr
 
     }
 
-
-
-
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
-
-    }
 }

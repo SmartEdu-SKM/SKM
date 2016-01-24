@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -39,6 +41,7 @@ public class NewTask extends BaseActivity {
     Task task;
     EditText taskTitle;
     EditText taskDescription;
+    ImageButton imageButton;
     String role;
     Notification_bar noti_bar;
 
@@ -73,6 +76,14 @@ public class NewTask extends BaseActivity {
             }
         }); */
         addTaskButton = (Button) findViewById(R.id.addTaskButton);
+        imageButton= (ImageButton) findViewById(R.id.test);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                open();
+            }
+        });
 
         DATE= (TextView) findViewById(R.id.date);
         test=(ImageButton)findViewById(R.id.test);
@@ -147,12 +158,23 @@ public class NewTask extends BaseActivity {
 
     }
 
-    public void open(View view)
+    public void open()
     {
 
         final Dialog dialog = new Dialog(NewTask.this);
-        dialog.setContentView(R.layout.activity_calendar2);
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setTitle("Select Date");
+        dialog.setContentView(R.layout.activity_calendar2);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+
+        dialog.getWindow().setAttributes(lp);
+
+
         calendar= (CalendarView)dialog.findViewById(R.id.calendar);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {

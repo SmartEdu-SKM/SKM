@@ -7,7 +7,7 @@
     <string name="drawer_close">Close</string>
 
 
-    <string name="nav_item_dashboard1">Dashboard1</string>
+    <string name="nav_item_dashboard">Dashboard</string>
     <string name="nav_item_dashboard2">Dashboard2</string>
     <string name="nav_item_dashboard3">Dashboard3</string>
     <string name="nav_item_tasks">Tasks</string>
@@ -22,7 +22,7 @@
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels_teacher">
-        <item>@string/nav_item_dashboard1</item>
+        <item>@string/nav_item_dashboard</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
         <item>@string/nav_item_schedule</item>
@@ -35,7 +35,7 @@
 
 
     <string-array name="nav_drawer_labels_student">
-        <item>@string/nav_item_dashboard2</item>
+        <item>@string/nav_item_dashboard</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
         <item>@string/nav_item_schedule</item>
@@ -47,7 +47,7 @@
     </string-array>
 
     <string-array name="nav_drawer_labels_parent">
-        <item>@string/nav_item_dashboard3</item>
+        <item>@string/nav_item_dashboard</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
         <item>@string/nav_item_schedule</item>

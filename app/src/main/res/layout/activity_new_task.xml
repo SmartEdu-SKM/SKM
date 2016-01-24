@@ -90,7 +90,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/test"
         android:background="@drawable/ic_calender"
-        android:onClick="open"
         android:layout_alignBottom="@+id/date"
         android:layout_toLeftOf="@+id/date"
         android:layout_toStartOf="@+id/date"

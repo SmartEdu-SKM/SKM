@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -34,7 +34,8 @@
                     android:orientation="vertical"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/linearLayout">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -45,6 +46,7 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="5dp"
+
                         android:id="@+id/accountUsername"
                         android:textColor="#F3E5F5" />
 
@@ -61,24 +63,22 @@
                         android:textColor="#F3E5F5" />
                 </LinearLayout>
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/circleView"
+                    android:src="@drawable/ic_action"
+                    android:onClick="selectPicture"
+                    android:layout_above="@+id/linearLayout"
+                    android:layout_alignParentStart="true" />
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
 
         </LinearLayout>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="45dp"
-            android:id="@+id/circleView"
-            android:src="@drawable/ic_action"
-            android:onClick="selectPicture" />
-
-
 
 
     </RelativeLayout>

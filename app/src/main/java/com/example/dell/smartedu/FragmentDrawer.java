@@ -43,6 +43,7 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private static String[] titles = null;
+    private int[] icons;
     private FragmentDrawerListener drawerListener;
     private TextView accountUsername;
     private TextView accountEmail;
@@ -63,6 +64,7 @@ public class FragmentDrawer extends Fragment {
             for (int i = 0; i < titles.length; i++) {
                 NavDrawerItem navItem = new NavDrawerItem();
                 navItem.setTitle(titles[i]);
+
                 data.add(navItem);
             }
 
@@ -154,7 +156,7 @@ public class FragmentDrawer extends Fragment {
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         recyclerView.setHasFixedSize(true);
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        adapter = new NavigationDrawerAdapter(getActivity(), getData(),icons);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -184,20 +186,60 @@ public class FragmentDrawer extends Fragment {
 
 
         if(this.role.equals("Teacher")) {
-            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_teacher);//////////////////
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_teacher);
+            icons= new int[]{
+                    R.drawable.ic_home,
+                    R.drawable.task_icon,
+                    R.drawable.attendance_icon,
+                    R.drawable.ic_calender,
+                    R.drawable.upload_icon,
+                    R.drawable.grades_icon,
+                    R.drawable.settings_icon,
+                    R.drawable.role_icon,
+                    R.drawable.logout_icon
+
+            };
         }else if(this.role.equals("Student"))
         {
-            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_student);//////////////////
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_student);
+            icons= new int[]{
+                    R.drawable.ic_home,
+                    R.drawable.task_icon,
+                    R.drawable.attendance_icon,
+                    R.drawable.ic_calender,
+                    R.drawable.upload_icon,
+                    R.drawable.grades_icon,
+                    R.drawable.settings_icon,
+                    R.drawable.role_icon,
+                    R.drawable.logout_icon
+
+            };
         }else if(this.role.equals("Parent"))
         {
-            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_parent);//////////////////
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_parent);
+            icons= new int[]{
+                    R.drawable.ic_home,
+                    R.drawable.task_icon,
+                    R.drawable.attendance_icon,
+                    R.drawable.ic_calender,
+                    R.drawable.upload_icon,
+                    R.drawable.grades_icon,
+                    R.drawable.settings_icon,
+                    R.drawable.role_icon,
+                    R.drawable.logout_icon
+
+            };
             Log.d("user","Parent role selected");
         }else if(this.role.equals(""))
         {
-            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_none);//////////////////
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_none);
+            icons= new int[]{
+                    R.drawable.logout_icon
+
+            };
         }
 
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        adapter = new NavigationDrawerAdapter(getActivity(), getData(),icons);
         recyclerView.setAdapter(adapter);
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
