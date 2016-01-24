@@ -1,6 +1,8 @@
 package com.example.dell.smartedu;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,9 +15,11 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     String role;
-    public ImageAdapter(Context c,String role) {
+    int widthOfScreen;
+    public ImageAdapter(Context c,int Screensize,String role) {
         mContext = c;
         this.role=role;
+        widthOfScreen=Screensize;
     }
 
     public int getCount() {
@@ -45,12 +49,24 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            //int width = devicewidth/11 ;
+            //int height =deviceheight/11 ;
+            //using this parameter you have to pass in GridView's Adapter
+
+            //android.widget.AbsListView.LayoutParams parms = new android.widget.AbsListView.LayoutParams(width , height);
+
+            Resources r = Resources.getSystem();
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
+           // imageView.setLayoutParams(new GridView.LayoutParams((int)mContext.getResources().getDimension(R.dimen.width),(int)mContext.getResources().getDimension(R.dimen.height)));
+            imageView.setLayoutParams(new GridView.LayoutParams(widthOfScreen / 4,widthOfScreen / 4));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+           // imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) convertView;
         }
+
+
+
         if(role.equals("Teacher")) {
             imageView.setImageResource(mThumbIdsTeacher[position]);
         }
@@ -61,7 +77,8 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setImageResource(mThumbIdsStudent[position]);
         }
 
-        imageView.setLayoutParams(new GridView.LayoutParams(360, 360)); //dimension in px
+
+    //        imageView.setLayoutParams(new GridView.LayoutParams(360, 360)); //dimension in px
         return imageView;
     }
 

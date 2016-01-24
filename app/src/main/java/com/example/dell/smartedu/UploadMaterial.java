@@ -108,7 +108,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
             }
         });
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
 
@@ -183,7 +183,9 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         myDueDate = (TextView) dialog.findViewById(R.id.dueDate);
                                         imageUpload = (ImageView) dialog.findViewById(R.id.imageUpload);
                                         myTopic = (TextView) dialog.findViewById(R.id.topic);
-
+                                        okButton = (Button) dialog.findViewById(R.id.okButton);
+                                        delButton = (Button) dialog.findViewById(R.id.delButton);
+                                        viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
                                         myTopic.setText(details[0].trim());
                                         mySubject.setText(details[1]);
 
@@ -217,6 +219,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                             myDueDate.setText("Not Set");
                                             milliseconds = 0;
                                         }
+
+
 
                                         //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
@@ -279,9 +283,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                         uploadid = u.getObjectId();
                                                         Log.d("user", "upload id: " + uploadid);
 
-                                                        okButton = (Button) dialog.findViewById(R.id.okButton);
-                                                        delButton = (Button) dialog.findViewById(R.id.delButton);
-                                                        viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
+
 
                                                         viewAllButton.setOnClickListener(new View.OnClickListener() {
 
@@ -330,6 +332,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                 }
                                             }
                                         });
+
+                                        //dialog.show();
 
 
                                     }

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,10 +24,14 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +48,8 @@ public class UploadImage extends ListActivity {
     protected Button mAddImageBtn;
     protected Button mUploadImageBtn;
     Button doneButton;
-    protected ImageView mPreviewImageView[];
+    //protected ImageView mPreviewImageView[];
+    protected ImageView mPreviewImageView;
 
     ImageView viewImage;
     protected ListView lv;
@@ -130,11 +136,12 @@ public class UploadImage extends ListActivity {
         //initialize
         mAddImageBtn = (Button)findViewById(R.id.addImageButton);
         mUploadImageBtn = (Button)findViewById(R.id.uploadImageButton);
-        mPreviewImageView  = new ImageView[3];
+        //mPreviewImageView  = new ImageView[3];
 
-        mPreviewImageView[0] = (ImageView)findViewById(R.id.previewImageView1);
-        mPreviewImageView[1]= (ImageView) findViewById(R.id.previewImageView2);
-        mPreviewImageView[2]= (ImageView) findViewById(R.id.previewImageView3);
+        mPreviewImageView= (ImageView)findViewById(R.id.previewImageView1);
+       // mPreviewImageView[0] = (ImageView)findViewById(R.id.previewImageView1);
+        //mPreviewImageView[1]= (ImageView) findViewById(R.id.previewImageView2);
+        //mPreviewImageView[2]= (ImageView) findViewById(R.id.previewImageView3);
 
         //listen to add button click
         mAddImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -195,9 +202,11 @@ public class UploadImage extends ListActivity {
 
                                 if (e == null) {
 
-                                    fileBytes[0] = FileHelper.reduceImageForUpload(fileBytes[0]);
-                                    String fileName = FileHelper.getFileName(UploadImage.this, mMediaUri, "image");
-                                    final ParseFile file = new ParseFile(fileName, fileBytes[0]);
+                                    try {
+                                        fileBytes[0] = FileHelper.reduceImageForUpload(fileBytes[0]);
+                                        String fileName = FileHelper.getFileName(UploadImage.this, mMediaUri, "image");
+                                        final ParseFile file = new ParseFile(fileName, fileBytes[0]);
+
                                     objectRet.get(0).saveEventually(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -215,6 +224,7 @@ public class UploadImage extends ListActivity {
                                                         //finish();
                                                     }
                                                 });
+
                                             } else {
                                                 //there was an error
                                                 //there was an error
@@ -222,6 +232,10 @@ public class UploadImage extends ListActivity {
                                             }
                                         }
                                     });
+                                    }catch (Exception file_error){
+                                        Toast.makeText(getApplicationContext(), file_error.getMessage(), Toast.LENGTH_LONG).show();
+                                        onPostResume();
+                                    }
                                 }else {
                                         Log.d("Post retrieval", "Error: " + e.getMessage());
                                     }
@@ -233,6 +247,7 @@ public class UploadImage extends ListActivity {
 
                 }catch (Exception e1){
                     Toast.makeText(getApplicationContext(), e1.getMessage(), Toast.LENGTH_LONG).show();
+                    onPostResume();
                 }
             }
         });
@@ -255,9 +270,51 @@ public class UploadImage extends ListActivity {
 
 
 
+        viewImage.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+                try {
+                    saveImage(v);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 dialog.dismiss();
 
+            }
+        });
+
         dialog.show();
+    }
+
+    public void saveImage(View v) throws FileNotFoundException {
+        //File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "UPLOADIMAGES");
+       // Uri imageUri = Uri.fromFile(f);
+
+        v.buildDrawingCache();
+        Bitmap bm=v.getDrawingCache();
+
+        OutputStream fOut = null;
+
+        Uri imageUri= getOutputMediaFileUri(2);
+
+        try {
+        fOut = new FileOutputStream(imageUri.getPath());
+
+        bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+
+    } catch (Exception e) {
+            Toast.makeText(this, "Error occured in Save. Please try again later.",
+                    Toast.LENGTH_SHORT).show();
+    }
+
+        Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scanIntent.setData(imageUri);
+        getApplicationContext().sendBroadcast(scanIntent);
+        Toast.makeText(getApplicationContext(), "Image Saved", Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -317,7 +374,9 @@ public class UploadImage extends ListActivity {
                 }else{
                     mMediaUri = data.getData();
                     //set previews
-                    if(mPreviewImageView[0].getDrawable() == null){
+                    mPreviewImageView.setImageURI(mMediaUri);
+
+                   /* if(mPreviewImageView[0].getDrawable() == null){
                         mPreviewImageView[0].setImageURI(mMediaUri);
                         //String path= mediaStorageDir.getAbsolutePath();
                         //mPreviewImageView[0].setTag(path);
@@ -330,7 +389,7 @@ public class UploadImage extends ListActivity {
                         mPreviewImageView[2].setImageURI(mMediaUri);
                         //String path= mediaStorageDir.getPath();
                         //mPreviewImageView[2].setTag(path);
-                    }
+                    } */
                 }
             }else {
 
@@ -338,14 +397,16 @@ public class UploadImage extends ListActivity {
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
                 //set previews
-                if(mPreviewImageView[0].getDrawable() == null){
+                mPreviewImageView.setImageURI(mMediaUri);
+
+               /* if(mPreviewImageView[0].getDrawable() == null){
                     mPreviewImageView[0].setImageURI(mMediaUri);
                 }
                 else if(mPreviewImageView[1].getDrawable() == null){
                     mPreviewImageView[1].setImageURI(mMediaUri);
                 }else {
                     mPreviewImageView[2].setImageURI(mMediaUri);
-                }
+                } */
 
             }
 
@@ -354,6 +415,16 @@ public class UploadImage extends ListActivity {
         }
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(getApplicationContext(),login.class);
+            startActivity(nouser);
+        }
+
+    }
 
 
 
