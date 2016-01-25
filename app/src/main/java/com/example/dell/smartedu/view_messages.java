@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +51,9 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     TextView new_message;
     String classId;
     String studentId;
-
+    Button reply;
+    EditText reply_message;
+    Button reply_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,10 +217,23 @@ if(_for.equals("received")){
                             messagedate = (TextView) dialog.findViewById(R.id.date);
                             delete = (Button) dialog.findViewById(R.id.delButton);
                             ok = (Button) dialog.findViewById(R.id.okButton);
+                            reply=(Button) dialog.findViewById(R.id.replyButton);
+
+
 
                             title.setText("From:");
                             messageFrom.setText(details[0]);
                             messagedate.setText(details[1]);
+
+
+                            reply.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    sendReply(details[0]);
+                                    dialog.dismiss();
+                                }
+                            });
+
 
                             ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -444,7 +460,8 @@ if(_for.equals("received")){
                                     messagedate = (TextView) dialog.findViewById(R.id.date);
                                     delete = (Button) dialog.findViewById(R.id.delButton);
                                     ok = (Button) dialog.findViewById(R.id.okButton);
-
+                                    reply=(Button)dialog.findViewById(R.id.replyButton);
+                                    reply.setVisibility(View.INVISIBLE);
                                     title.setText("To:");
                                     messageFrom.setText(details[0]);
                                     messagedate.setText(details[1]);
@@ -575,11 +592,65 @@ if(_for.equals("received")){
                 }
             });
         }
-
-
-
-
     }
+
+
+    protected void sendReply(final String sender)
+    {
+        final Dialog send_reply=new Dialog(view_messages.this);
+        send_reply.setContentView(R.layout.sending_message_to_teacher);
+        reply_message=(EditText)send_reply.findViewById(R.id.message);
+        reply_button=(Button)send_reply.findViewById(R.id.send_message);
+        send_reply.show();
+
+
+        reply_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(reply_message.getText().equals(""))
+                {
+                    Toast.makeText(view_messages.this, "Empty message", Toast.LENGTH_LONG).show();
+                }else
+                {
+                    ParseQuery<ParseUser> reply_to_query=ParseUser.getQuery();
+                    reply_to_query.whereEqualTo("username",sender);
+                    reply_to_query.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if(e==null)
+                            {
+                                ParseObject new_message=new ParseObject("Message");
+                                new_message.put("from",ParseUser.getCurrentUser());
+                                new_message.put("to",objects.get(0));
+                                new_message.put("message",reply_message.getText().toString());
+                                new_message.put("delBySender",false);
+                                new_message.put("delByReceiver",false);
+
+                                java.util.Calendar calendar= Calendar.getInstance();
+                                SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                String date= format.format(new Date(calendar.getTimeInMillis()));
+                                Date d=null;
+                                try {
+                                    d=format.parse(date);
+                                } catch (java.text.ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                new_message.put("sentAt",d.getTime());
+                                new_message.saveEventually();
+                                Toast.makeText(view_messages.this, "Reply Sent", Toast.LENGTH_LONG).show();
+                                send_reply.dismiss();
+                            }else
+                            {
+                                Log.d("user","sender not found");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
 
     protected void sleep(int time)
     {
@@ -606,6 +677,9 @@ if(_for.equals("received")){
             startActivity(nouser);
         }
     }
+
+
+
 
 
 }
