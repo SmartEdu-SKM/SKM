@@ -8,17 +8,17 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scheduleList" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/addSchedule"
         android:layout_gravity="right" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scheduleList" />
 
 
 </LinearLayout>

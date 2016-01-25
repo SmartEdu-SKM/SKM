@@ -67,12 +67,9 @@ public class Schedule_days extends Fragment {
         scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
                 if (e == null) {
-                    //Log.d("user", "Retrieved " + userList.size() + " users");
-
-                    if (scheduleListRet.size() == 0) {
-                        Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
-                    } else {
-                        Log.d("user", "Retrieved " + scheduleListRet.size() + " schedules");
+                    int size=scheduleListRet.size();
+                    Log.d("user", "Retrieved " + size + " schedules" + day);
+                    if (size>0) {
                         //Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
@@ -95,6 +92,7 @@ public class Schedule_days extends Fragment {
                         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, scheduleLt);
                         scheduleList.setAdapter(adapter);
                     }
+
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
