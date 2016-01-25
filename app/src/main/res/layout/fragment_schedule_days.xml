@@ -7,14 +7,27 @@
         android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/addSchedule"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:layout_alignParentRight="true"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/noSchedule"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#010101"
+        android:layout_alignParentLeft="true"/>
+
+</RelativeLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

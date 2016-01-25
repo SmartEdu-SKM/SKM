@@ -1,6 +1,7 @@
 package com.example.dell.smartedu;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class Schedule_days extends Fragment {
     EditText Desc;
     Button EditButton;
     int flag=1;
+    TextView noschedule;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class Schedule_days extends Fragment {
         role=getArguments().getString("role");
         scheduleList=(ListView)schedule.findViewById(R.id.scheduleList);
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
+        noschedule=(TextView)schedule.findViewById(R.id.noSchedule);
         ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
         scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
         scheduleQuery.whereEqualTo("day", day);
@@ -69,7 +72,12 @@ public class Schedule_days extends Fragment {
                 if (e == null) {
                     int size=scheduleListRet.size();
                     Log.d("user", "Retrieved " + size + " schedules" + day);
+                    if(size==0)
+                    {
+                        noschedule.setText("No Schedule Added");
+                    }
                     if (size>0) {
+                        noschedule.setVisibility(View.INVISIBLE);
                         //Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
@@ -379,6 +387,10 @@ public class Schedule_days extends Fragment {
             schedule.saveEventually();
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
             dialog.dismiss();
+            Intent reload=new Intent(getActivity(),Schedule.class);
+            reload.putExtra("day", day);
+            reload.putExtra("role", role);
+            startActivity(reload);
         }
     }
 
