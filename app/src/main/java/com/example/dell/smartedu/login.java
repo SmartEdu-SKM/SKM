@@ -28,7 +28,7 @@ public class login extends AppCompatActivity {
     TextView noUser;
 
 Button login;
-    TextView notAUser;
+
 
 
 
@@ -51,7 +51,7 @@ Button login;
         });
 
 
-        notAUser.setOnClickListener(new View.OnClickListener() {
+        noUser.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

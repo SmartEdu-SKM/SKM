@@ -19,7 +19,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class student_info extends Fragment implements FragmentDrawer.FragmentDrawerListener{
+public class student_info extends Fragment{
 
     TextView studentName;
     TextView studentAge;
@@ -294,8 +294,8 @@ public class student_info extends Fragment implements FragmentDrawer.FragmentDra
         ParseObject.createWithoutData("Student",studentId).deleteEventually();
     }
 
-    @Override
+  /*  @Override
     public void onDrawerItemSelected(View view, int position) {
 
-    }
+    }*/
 }

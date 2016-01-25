@@ -65,6 +65,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         addStudentButton = (Button)findViewById(R.id.addButton);
         studentList = (ListView) findViewById(R.id.studentList);
         createIDs=(Button)findViewById(R.id.shareCode);
+        createIDs.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
@@ -119,6 +120,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
                                 studentList.setAdapter(adapter);
+                                createIDs.setVisibility(View.VISIBLE);
                                 createIDs.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -158,7 +160,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                                     if(studentListRet.size()!=0) {
                                                         ParseObject u = (ParseObject) studentListRet.get(0);
                                                         String id = u.getObjectId();
-                                                        //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
                                                         Intent to_student_info = new Intent(Students.this, StudentInfo.class);
                                                         to_student_info.putExtra("id", id);
                                                         to_student_info.putExtra("classId", classId);

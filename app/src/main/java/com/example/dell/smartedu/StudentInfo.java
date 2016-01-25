@@ -13,11 +13,11 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
-public class StudentInfo extends FragmentActivity implements FragmentDrawer.FragmentDrawerListener{
+public class StudentInfo extends FragmentActivity{
     ViewPager Tab;
     TabPagerAdapter TabAdapter;
     ActionBar actionBar;
-    private FragmentDrawer drawerFragment;
+
     private Toolbar mToolbar;
     TabLayout tabLayout;
     String classId;
@@ -144,55 +144,5 @@ public class StudentInfo extends FragmentActivity implements FragmentDrawer.Frag
         }
     }
 
-    @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
-    }
-
-    private void displayView(int position) {
-
-        if(position==0)
-        {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/
-        }
-
-        if(position==2)
-        {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(StudentInfo.this,ChooseRole.class);
-            startActivity(i);
-        }
-
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(StudentInfo.this, login.class);
-            startActivity(i);
-        }
-    }
-
-    /*
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-        Tab.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }*/
 
 }

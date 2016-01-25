@@ -3,6 +3,7 @@ package com.example.dell.smartedu;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ public class Schedule_days extends Fragment {
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
         noschedule=(TextView)schedule.findViewById(R.id.noSchedule);
         noScheduleImage= (ImageView)schedule.findViewById(R.id.noScheduleImage);
+
         ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
         scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
         scheduleQuery.whereEqualTo("day", day);
@@ -499,5 +501,7 @@ public class Schedule_days extends Fragment {
             return false;*/
 
     }
+
+
 
 }

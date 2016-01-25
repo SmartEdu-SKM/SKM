@@ -47,6 +47,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     int densityX;
     int densityY;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
