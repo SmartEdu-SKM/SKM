@@ -86,7 +86,7 @@ public class NewTask extends BaseActivity {
         });
 
         DATE= (TextView) findViewById(R.id.date);
-        test=(ImageButton)findViewById(R.id.test);
+        //test=(ImageButton)findViewById(R.id.test);
 
         Log.i("abcd", "tasktitle is......" + taskTitle);
         Bundle fromrole = getIntent().getExtras();

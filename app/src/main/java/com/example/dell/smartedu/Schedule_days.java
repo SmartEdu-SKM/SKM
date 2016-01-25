@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class Schedule_days extends Fragment {
     Button EditButton;
     int flag=1;
     TextView noschedule;
+    ImageView noScheduleImage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class Schedule_days extends Fragment {
         scheduleList=(ListView)schedule.findViewById(R.id.scheduleList);
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
         noschedule=(TextView)schedule.findViewById(R.id.noSchedule);
+        noScheduleImage= (ImageView)schedule.findViewById(R.id.noScheduleImage);
         ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
         scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
         scheduleQuery.whereEqualTo("day", day);
@@ -74,10 +77,12 @@ public class Schedule_days extends Fragment {
                     Log.d("user", "Retrieved " + size + " schedules" + day);
                     if(size==0)
                     {
+                        scheduleList.setVisibility(View.INVISIBLE);
                         noschedule.setText("No Schedule Added");
                     }
                     if (size>0) {
                         noschedule.setVisibility(View.INVISIBLE);
+                        noScheduleImage.setVisibility(View.INVISIBLE);
                         //Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
