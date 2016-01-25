@@ -1,21 +1,18 @@
 package com.example.dell.smartedu;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
 import android.widget.Button;
-
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
-import android.view.View;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -44,9 +41,6 @@ Button login;
 
         noUser=(TextView) findViewById(R.id.noUser);
 
-
-
-       notAUser=(TextView)findViewById(R.id.noUser);
         login=(Button)findViewById(R.id.login);
 
         login.setOnClickListener(new View.OnClickListener() {

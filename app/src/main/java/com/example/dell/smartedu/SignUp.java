@@ -19,7 +19,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-public class SignUp extends AppCompatActivity  {
+public class SignUp extends AppCompatActivity {
 
     EditText UserNameSignup;
     EditText EmailSignup;

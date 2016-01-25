@@ -51,6 +51,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        //Parse.enableLocalDatastore(getApplicationContext());
+        //Parse.initialize(getApplicationContext(), "5pPTGNabAK5TyJDfxKMuhzATUnMXS3GvjOS98IGD", "TRPqa2TRC5JmF2NUJLKvcdlH7j9c4saF4TODVwlG");
 
 
         //found width of Screen for Gridview

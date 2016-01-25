@@ -7,7 +7,10 @@
         android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1">
-<RelativeLayout
+
+
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <Button
@@ -18,16 +21,24 @@
         android:layout_gravity="right"
         android:layout_alignParentRight="true"/>
 
+</RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/noScheduleImage"
+        android:src="@drawable/grades_icon"
+        android:layout_alignBottom="@+id/noSchedule"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/noSchedule"
-        android:layout_gravity="center_horizontal"
         android:textColor="#010101"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+         />
 
-</RelativeLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
