@@ -135,9 +135,9 @@ if(_for.equals("received")){
         }
     });
 
-        ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery("Message");
-        messageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
-    messageQuery.whereEqualTo("delByReceiver", false);
+        ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+        messageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
+    messageQuery.whereEqualTo(MessageTable.DELETED_BY_RECEIVER, false);
     messageQuery.findInBackground(new FindCallback<ParseObject>() {
         public void done(List<ParseObject> messageListRet, ParseException e) {
             if (e == null) {
@@ -168,7 +168,7 @@ if(_for.equals("received")){
                     for (int i = 0; i < messageListRet.size(); i++) {
                         ParseObject u = messageListRet.get(i);
                         //  if(u.getString("class").equals(id)) {
-                        ParseUser senderuser = (ParseUser) u.get("from");
+                        ParseUser senderuser = (ParseUser) u.get(MessageTable.FROM_USER_REF);
 
                         String from = null;
                         try {
@@ -179,9 +179,8 @@ if(_for.equals("received")){
                         //name += "\n";
                         // name += u.getInt("age");
                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                        Log.d("user", String.valueOf(u.getLong("sentAt")));
-                        Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
-                        final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+
+                        final String dateString = formatter.format(new Date(u.getLong(MessageTable.SENT_AT)));
                         Log.d("user", dateString);
                         String name = from + "\nat " + dateString;
                         adapter.add(name);
@@ -265,22 +264,22 @@ if(_for.equals("received")){
                                         public void done(List<ParseUser> objects, ParseException e) {
                                             if (e == null) {
                                                 if (objects.size() != 0) {
-                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                                    getMessageQuery.whereEqualTo("from", objects.get(0));
-                                                    getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+                                                    getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, objects.get(0));
+                                                    getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
 
                                                     final long milliseconds = calendar.getTimeInMillis();
                                                     Log.d("user", String.valueOf(milliseconds));
-                                                    getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                    getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
                                                     getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
                                                         @Override
                                                         public void done(List<ParseObject> objects, ParseException e) {
                                                             if (e == null) {
                                                                 if (objects.size() != 0) {
-                                                                    objects.get(0).put("delByReceiver", true);
+                                                                    objects.get(0).put(MessageTable.DELETED_BY_RECEIVER, true);
                                                                     objects.get(0).saveInBackground();
                                                                     sleep(1000);
-                                                                    if (objects.get(0).getBoolean("delBySender")) {
+                                                                    if (objects.get(0).getBoolean(MessageTable.DELETED_BY_SENDER)) {
                                                                         objects.get(0).deleteEventually();
                                                                     }
                                                                     dialog.dismiss();
@@ -314,19 +313,19 @@ if(_for.equals("received")){
                                 public void done(List<ParseUser> objects, ParseException e) {
                                     if (e == null) {
                                         if (objects.size() != 0) {
-                                            ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                            getMessageQuery.whereEqualTo("from", objects.get(0));
-                                            getMessageQuery.whereEqualTo("to", ParseUser.getCurrentUser());
+                                            ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+                                            getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, objects.get(0));
+                                            getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
                                             final long milliseconds = calendar.getTimeInMillis();
                                             Log.d("user", String.valueOf(milliseconds));
-                                            getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                            getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
                                             getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
                                                 @Override
                                                 public void done(List<ParseObject> objects, ParseException e) {
                                                     if (e == null) {
                                                         if (objects.size() != 0) {
 
-                                                            message.setText(objects.get(0).getString("message"));
+                                                            message.setText(objects.get(0).getString(MessageTable.MESSAGE_CONTENT));
                                                         } else {
                                                             Log.d("user", "query logic in getting messages");
                                                         }
@@ -378,9 +377,9 @@ if(_for.equals("received")){
                 }
             });
 
-            ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery("Message");
-            messageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
-            messageQuery.whereEqualTo("delBySender", false);
+            ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+            messageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+            messageQuery.whereEqualTo(MessageTable.DELETED_BY_SENDER, false);
             messageQuery.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> messageListRet, ParseException e) {
                     if (e == null) {
@@ -411,7 +410,7 @@ if(_for.equals("received")){
                             for (int i = 0; i < messageListRet.size(); i++) {
                                 ParseObject u = messageListRet.get(i);
                                 //  if(u.getString("class").equals(id)) {
-                                ParseUser receiveruser = (ParseUser) u.get("to");
+                                ParseUser receiveruser = (ParseUser) u.get(MessageTable.TO_USER_REF);
 
                                 String to = null;
                                 try {
@@ -422,9 +421,8 @@ if(_for.equals("received")){
                                 //name += "\n";
                                 // name += u.getInt("age");
                                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                Log.d("user", String.valueOf(u.getLong("sentAt")));
-                                Log.d("user", String.valueOf(new Date(u.getLong("sentAt"))));
-                                final String dateString = formatter.format(new Date(u.getLong("sentAt")));
+
+                                final String dateString = formatter.format(new Date(u.getLong(MessageTable.SENT_AT)));
                                 Log.d("user", dateString);
                                 String name = to + "\nat " + dateString;
                                 adapter.add(name);
@@ -496,22 +494,22 @@ if(_for.equals("received")){
                                                 public void done(List<ParseUser> objects, ParseException e) {
                                                     if (e == null) {
                                                         if (objects.size() != 0) {
-                                                            ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                                            getMessageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
-                                                            getMessageQuery.whereEqualTo("to", objects.get(0));
+                                                            ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+                                                            getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                                            getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, objects.get(0));
 
                                                             final long milliseconds = calendar.getTimeInMillis();
                                                             Log.d("user", String.valueOf(milliseconds));
-                                                            getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                            getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
                                                             getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
                                                                 @Override
                                                                 public void done(List<ParseObject> objects, ParseException e) {
                                                                     if (e == null) {
                                                                         if (objects.size() != 0) {
-                                                                            objects.get(0).put("delBySender", true);
+                                                                            objects.get(0).put(MessageTable.DELETED_BY_SENDER, true);
                                                                             objects.get(0).saveInBackground();
                                                                             sleep(1000);
-                                                                            if (objects.get(0).getBoolean("delByReceiver")) {
+                                                                            if (objects.get(0).getBoolean(MessageTable.DELETED_BY_RECEIVER)) {
                                                                                 objects.get(0).deleteEventually();
                                                                             }
                                                                             dialog.dismiss();
@@ -545,19 +543,19 @@ if(_for.equals("received")){
                                         public void done(List<ParseUser> objects, ParseException e) {
                                             if (e == null) {
                                                 if (objects.size() != 0) {
-                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery("Message");
-                                                    getMessageQuery.whereEqualTo("from", ParseUser.getCurrentUser());
-                                                    getMessageQuery.whereEqualTo("to", objects.get(0));
+                                                    ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
+                                                    getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                                    getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, objects.get(0));
                                                     final long milliseconds = calendar.getTimeInMillis();
                                                     Log.d("user", String.valueOf(milliseconds));
-                                                    getMessageQuery.whereEqualTo("sentAt", milliseconds);
+                                                    getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
                                                     getMessageQuery.findInBackground(new FindCallback<ParseObject>() {
                                                         @Override
                                                         public void done(List<ParseObject> objects, ParseException e) {
                                                             if (e == null) {
                                                                 if (objects.size() != 0) {
 
-                                                                    message.setText(objects.get(0).getString("message"));
+                                                                    message.setText(objects.get(0).getString(MessageTable.MESSAGE_CONTENT));
                                                                 } else {
                                                                     Log.d("user", "query logic in getting messages");
                                                                 }
@@ -619,12 +617,12 @@ if(_for.equals("received")){
                         public void done(List<ParseUser> objects, ParseException e) {
                             if(e==null)
                             {
-                                ParseObject new_message=new ParseObject("Message");
-                                new_message.put("from",ParseUser.getCurrentUser());
-                                new_message.put("to",objects.get(0));
-                                new_message.put("message",reply_message.getText().toString());
-                                new_message.put("delBySender",false);
-                                new_message.put("delByReceiver",false);
+                                ParseObject new_message=new ParseObject(MessageTable.TABLE_NAME);
+                                new_message.put(MessageTable.FROM_USER_REF,ParseUser.getCurrentUser());
+                                new_message.put(MessageTable.TO_USER_REF,objects.get(0));
+                                new_message.put(MessageTable.MESSAGE_CONTENT,reply_message.getText().toString());
+                                new_message.put(MessageTable.DELETED_BY_SENDER,false);
+                                new_message.put(MessageTable.DELETED_BY_RECEIVER,false);
 
                                 java.util.Calendar calendar= Calendar.getInstance();
                                 SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -636,7 +634,7 @@ if(_for.equals("received")){
                                     e1.printStackTrace();
                                 }
 
-                                new_message.put("sentAt",d.getTime());
+                                new_message.put(MessageTable.SENT_AT,d.getTime());
                                 new_message.saveEventually();
                                 Toast.makeText(view_messages.this, "Reply Sent", Toast.LENGTH_LONG).show();
                                 send_reply.dismiss();

@@ -81,8 +81,8 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId",classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -91,9 +91,9 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
 
                     classRef[0] = studentListRet.get(0);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.addAscendingOrder("rollNumber");
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -107,9 +107,9 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                 for (int i = 0; i < studentListRet.size(); i++) {
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    int rollnumber=u.getInt("rollNumber");
+                                    int rollnumber=u.getInt(StudentTable.ROLL_NUMBER);
                                     String name = u.getString("name");
-                                    name= String.valueOf(rollnumber) + ". " + u.getString("name").trim();
+                                    name= String.valueOf(rollnumber) + ". " + u.getString(StudentTable.STUDENT_NAME).trim();
                                     //name += "\n";
                                     // name += u.getInt("age");
 
@@ -138,10 +138,10 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
 
                                         Log.d("user", "rno: " + details[0].trim()+"name "+details[1]);  //extracts Chit as Chi and query fails???
 
-                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0].trim()));
-                                        studentQuery.whereEqualTo("name", details[1].trim());
-                                        studentQuery.whereEqualTo("class", classRef[0]);
+                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                        studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
+                                        studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
+                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
@@ -201,29 +201,24 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         examname=(TextView)marks_add.findViewById(R.id.exam);
         marksobt = (EditText)marks_add.findViewById(R.id.marksDesc);
         addmarks=(Button)marks_add.findViewById(R.id.addMarks);
-        ParseQuery<ParseObject> examQuery = ParseQuery.getQuery("Exam");
-        examQuery.whereEqualTo("objectId",examId);
+        ParseQuery<ParseObject> examQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+        examQuery.whereEqualTo(ExamTable.OBJECT_ID,examId);
         examQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> examListRet, ParseException e) {
                 if (e == null) {
-                    final ParseObject examobject =examListRet.get(0);
-                    examname.setText((CharSequence) examobject.get("examName"));
+                    final ParseObject examobject = examListRet.get(0);
+                    examname.setText((CharSequence) examobject.get(ExamTable.EXAM_NAME));
 
 
-
-
-
-
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Marks");
-                    studentQuery.whereEqualTo("exam",examobject);
-                    studentQuery.whereEqualTo("student",studentobject);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(MarksTable.EXAM_REF, examobject);
+                    studentQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, studentobject);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> marksListRet, ParseException e) {
                             if (e == null) {
-                                if(marksListRet.size()!=0)
-                                {
-                                    final ParseObject marksobject=marksListRet.get(0);
-                                    marksobt.setText(marksobject.getNumber("marksObtained").toString().trim());
+                                if (marksListRet.size() != 0) {
+                                    final ParseObject marksobject = marksListRet.get(0);
+                                    marksobt.setText(marksobject.getNumber(MarksTable.MARKS_OBTAINED).toString().trim());
 
 
                                     addmarks.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +230,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                                         .show();
                                             } else {
 
-                                                marksobject.put("marksObtained", Float.parseFloat(obtmarks));
+                                                marksobject.put(MarksTable.MARKS_OBTAINED, Float.parseFloat(obtmarks));
                                                 marksobject.saveEventually();
                                                 Toast.makeText(getApplicationContext(), "Marks Edited", Toast.LENGTH_LONG)
                                                         .show();
@@ -244,29 +239,28 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                         }
                                     });
                                     marks_add.show();
-                                }else
-                                    {
-                                        addmarks.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                String obtmarks = String.valueOf(marksobt.getText());
-                                                if (obtmarks.equals("")) {
-                                                    Toast.makeText(getApplicationContext(), "no marks obtained entered", Toast.LENGTH_LONG)
-                                                            .show();
-                                                } else {
-                                                    ParseObject marksobj = new ParseObject("Marks");
-                                                    marksobj.put("exam", examobject);
-                                                    marksobj.put("student", studentobject);
-                                                    marksobj.put("marksObtained", Integer.parseInt(obtmarks));
-                                                    marksobj.saveEventually();
-                                                    Toast.makeText(getApplicationContext(), "Marks Added", Toast.LENGTH_LONG)
-                                                            .show();
-                                                }
-                                                marks_add.dismiss();
+                                } else {
+                                    addmarks.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            String obtmarks = String.valueOf(marksobt.getText());
+                                            if (obtmarks.equals("")) {
+                                                Toast.makeText(getApplicationContext(), "no marks obtained entered", Toast.LENGTH_LONG)
+                                                        .show();
+                                            } else {
+                                                ParseObject marksobj = new ParseObject(MarksTable.TABLE_NAME);
+                                                marksobj.put(MarksTable.EXAM_REF, examobject);
+                                                marksobj.put(MarksTable.STUDENT_USER_REF, studentobject);
+                                                marksobj.put(MarksTable.MARKS_OBTAINED, Integer.parseInt(obtmarks));
+                                                marksobj.saveEventually();
+                                                Toast.makeText(getApplicationContext(), "Marks Added", Toast.LENGTH_LONG)
+                                                        .show();
                                             }
-                                        });
-                                        marks_add.show();
-                                    }
+                                            marks_add.dismiss();
+                                        }
+                                    });
+                                    marks_add.show();
+                                }
                             } else {
                                 Log.d("user", "Error: " + e.getMessage());
                             }

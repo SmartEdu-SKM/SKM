@@ -81,8 +81,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId",classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -91,9 +91,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                     classRef[0] = studentListRet.get(0);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.addAscendingOrder("rollNumber");
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -107,8 +107,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 for (int i = 0; i < studentListRet.size(); i++) {
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    int rollnumber=u.getInt("rollNumber");
-                                    String name = u.getString("name");
+                                    int rollnumber=u.getInt(StudentTable.ROLL_NUMBER);
+                                    String name = u.getString(StudentTable.STUDENT_NAME);
                                     name= String.valueOf(rollnumber) + ". " + name;
                                     //name += "\n";
                                     // name += u.getInt("age");
@@ -150,10 +150,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                                         Log.d("user", "rno: " + details[0].trim()+"name "+details[1]);  //extracts Chit as Chi and query fails???
 
-                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0].trim()));
-                                        studentQuery.whereEqualTo("name", details[1].trim());
-                                        studentQuery.whereEqualTo("class", classRef[0]);
+                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                        studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
+                                        studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
+                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
@@ -215,10 +215,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     public void shareCode(){
 
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", ParseObject.createWithoutData("Class",classId));
-                    studentQuery.whereEqualTo("addedBy", null);
-                    studentQuery.whereEqualTo("userId", null);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId));
+                    studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
+                    studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -226,9 +226,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                                     for(int i=0; i<studentListRet.size(); i++) {
                                         ParseObject u = studentListRet.get(i);
-                                        name = u.getString("name");
-                                        age = u.getInt("age");
-                                        rollno = u.getInt("rollNumber");
+                                        name = u.getString(StudentTable.STUDENT_NAME);
+                                        age = u.getInt(StudentTable.STUDENT_AGE);
+                                        rollno = u.getInt(StudentTable.ROLL_NUMBER);
 
                                         final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
                                         addStudentUser(name, age, rollno, sessionToken, u);
@@ -281,13 +281,13 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     userRef[0] = user_student;
                    // Toast.makeText(Students.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Student role of " + user_student.getObjectId());
-                    ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy", user_student);
-                    roleobject.put("roleName", "Student");
+                    ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
+                    roleobject.put(RoleTable.OF_USER_REF, user_student);
+                    roleobject.put(RoleTable.ROLE, "Student");
                     roleobject.saveInBackground();
 
-                    ParseObject parent=new ParseObject("Parent");
-                    parent.put("child", user_student);
+                    ParseObject parent=new ParseObject(ParentTable.TABLE_NAME);
+                    parent.put(ParentTable.CHILD_USER_REF, user_student);
                     parent.saveEventually();
 
                     u.put("userId", user_student);
@@ -298,7 +298,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                         ParseUser.become(presession);
                        // Log.d("student", "adding userId");
                        // u.put("userId", user_student);
-                        u.put("addedBy",ParseUser.getCurrentUser());
+                        u.put(StudentTable.ADDED_BY_USER_REF,ParseUser.getCurrentUser());
 
                     } catch (ParseException e1) {
                         Toast.makeText(Students.this, "cant add student",
@@ -339,9 +339,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     userRef[0] = user_parent;
                    // Toast.makeText(Students.this, "Parent User made "+ " "+user_parent.getObjectId(),Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
-                    ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy", user_parent);
-                    roleobject.put("roleName", "Parent");
+                    ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
+                    roleobject.put(RoleTable.OF_USER_REF, user_parent);
+                    roleobject.put(RoleTable.ROLE, "Parent");
                     roleobject.saveInBackground();
 
 
@@ -357,14 +357,14 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 if (objects.size() != 0) {
                                     Log.d("user", "student user found");
                                     ParseUser student_user = objects.get(0);
-                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
-                                    parent_relation.whereEqualTo("child", student_user);
+                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                                    parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF, student_user);
                                     parent_relation.findInBackground(new FindCallback<ParseObject>() {
                                         @Override
                                         public void done(List<ParseObject> objects, ParseException e) {
                                             if (e == null) {
                                                 if (objects.size() != 0) {
-                                                    objects.get(0).put("userId", user_parent);
+                                                    objects.get(0).put(ParentTable.PARENT_USER_REF, user_parent);
                                                     objects.get(0).saveEventually();
                                                 } else {
 
@@ -404,7 +404,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     }
 
 
-
+/*
     protected void addStudent(final ParseUser userRef, final Integer rollno){
         Log.d("in", "add student");
         final ParseObject[] classRef = new ParseObject[1];
@@ -450,7 +450,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                 }
             }
         });
-    }
+    }*/
 
 
 

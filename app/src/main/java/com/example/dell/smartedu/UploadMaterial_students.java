@@ -101,8 +101,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
@@ -111,8 +111,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                     classRef[0] = classListRet.get(0);
 
 
-                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
-                    uploadQuery.whereEqualTo("class", classRef[0]);
+                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, classRef[0]);
 
                     uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> uploadListRet, ParseException e) {
@@ -128,15 +128,15 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                     ParseObject u = (ParseObject) uploadListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
 
-                                    String name = u.getString("topic");
+                                    String name = u.getString(ImageUploadsTable.TOPIC);
                                     name += "\n";
-                                    name += u.getString("subject");
+                                    name += u.getString(ImageUploadsTable.SUBJECT);
 
-                                    if (u.getLong("dueDate") != 0) {
+                                    if (u.getLong(ImageUploadsTable.DUE_DATE) != 0) {
                                         name += "\n";
 
                                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                        final String dateString = formatter.format(new Date(u.getLong("dueDate")));
+                                        final String dateString = formatter.format(new Date(u.getLong(ImageUploadsTable.DUE_DATE)));
                                         name += dateString;
                                     }
 
@@ -208,25 +208,25 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
                                         //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
-                                        ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
-                                        uploadQuery.whereEqualTo("topic", details[0].trim());
-                                        uploadQuery.whereEqualTo("subject", details[1].trim());
-                                        uploadQuery.whereEqualTo("dueDate", milliseconds);
+                                        ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
                                         uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
                                                 if (e == null) {
                                                     ParseObject u = (ParseObject) uploadListRet.get(0);
 
                                                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                                    final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
+                                                    final String dateString = formatter.format(new Date(u.getLong(ImageUploadsTable.DATE_UPLOADED)));
                                                     myDate.setText(dateString.trim());
 
-                                                    myType.setText(u.get("type").toString().trim());
+                                                    myType.setText(u.get(ImageUploadsTable.UPLOAD_TYPE).toString().trim());
 
                                                     // if (u.get("imageContent") != null) {
                                                     //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
-                                                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
-                                                    if (u.get("imageContent") != null) {
+                                                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
+                                                    if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                                                         if (!pFileList.isEmpty()) {
                                                             ParseFile pFile = pFileList.get(0);
                                                             byte[] bitmapdata = new byte[0];  // here it throws error
@@ -269,7 +269,6 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                                 }
                                             }
                                         });
-
 
 
                                     }

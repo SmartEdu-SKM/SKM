@@ -102,10 +102,10 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
 
-        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-        taskQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
-        taskQuery.whereEqualTo("addedByRole", role);
-        taskQuery.addAscendingOrder("dueDate");
+        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
+        taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+        taskQuery.whereEqualTo(TaskTable.BY_USER_ROLE, role);
+        taskQuery.addAscendingOrder(TaskTable.DUE_DATE);
         taskQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> taskListRet, ParseException e) {
                 if (e == null) {
@@ -117,15 +117,15 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                     items = new String[taskListRet.size()];
                     for (int i = 0; i < taskListRet.size(); i++) {
                         ParseObject u = (ParseObject) taskListRet.get(i);
-                        String name = u.getString("TaskName");
+                        String name = u.getString(TaskTable.TABLE_NAME);
                         name += "\n";
-                        name += u.getString("TaskDescription");
+                        name += u.getString(TaskTable.TASK_DESCRIPTION);
 
                         name += "\n";
                         Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG);
 
                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                        final String dateString = formatter.format(new Date(u.getLong("dueDate")));
+                        final String dateString = formatter.format(new Date(u.getLong(TaskTable.DUE_DATE)));
                         name += dateString;
                         items[i] = name;
 
@@ -196,11 +196,11 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
                 //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
-                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-                taskQuery.whereEqualTo("TaskName", details[0].trim());
-                taskQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
-                taskQuery.whereEqualTo("addedByRole", role);
-                taskQuery.whereEqualTo("dueDate", milliseconds);
+                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
+                taskQuery.whereEqualTo(TaskTable.TABLE_NAME, details[0].trim());
+                taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+                taskQuery.whereEqualTo(TaskTable.BY_USER_ROLE, role);
+                taskQuery.whereEqualTo(TaskTable.DUE_DATE, milliseconds);
                 taskQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> taskListRet, com.parse.ParseException e) {
                         if (e == null) {
@@ -230,7 +230,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                 delButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
 
-                        ParseObject.createWithoutData("Task", taskid).deleteEventually();
+                        ParseObject.createWithoutData(TaskTable.TABLE_NAME, taskid).deleteEventually();
 
                         onRestart();
 
@@ -274,14 +274,14 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                                 if (Title.equals("") || Desc.equals("") ) {
                                     Toast.makeText(getApplicationContext(), "Event details cannot be empty!", Toast.LENGTH_LONG).show();
                                 } else {
-                                    ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-                                    taskQuery.whereEqualTo("objectId", taskid);
+                                    ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
+                                    taskQuery.whereEqualTo(TaskTable.OBJECT_ID, taskid);
                                     taskQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> objectRet, ParseException e) {
 
                                             if (e == null) {
-                                                objectRet.get(0).put("TaskName", ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
-                                                objectRet.get(0).put("TaskDescription", ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
+                                                objectRet.get(0).put(TaskTable.TASK_NAME, ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
+                                                objectRet.get(0).put(TaskTable.TASK_DESCRIPTION, ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
                                                 if (flag[0] == 1) {
                                                     Day = Daycal;
                                                     Month = Monthcal;
@@ -312,7 +312,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                                                     e.printStackTrace();
                                                 }
                                                 long newmilliseconds = d.getTime();
-                                                objectRet.get(0).put("dueDate", newmilliseconds);
+                                                objectRet.get(0).put(TaskTable.DUE_DATE, newmilliseconds);
                                                 objectRet.get(0).saveEventually();
 
                                             } else {

@@ -73,8 +73,8 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
@@ -86,7 +86,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                     for (int i = 0; i < classListRet.size(); i++) {
                         ParseObject u = (ParseObject) classListRet.get(i);
-                        String name = u.getString("class").toString();
+                        String name = u.getString(ClassTable.CLASS_NAME).toString();
                         //name += "\n";
                         // name += u.getInt("age");
 
@@ -143,9 +143,9 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String item = ((TextView) view).getText().toString();
 
-                ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-                studentQuery.whereEqualTo("class", item);
-                studentQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
+                ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                studentQuery.whereEqualTo(ClassTable.CLASS_NAME, item);
+                studentQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
                 studentQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> classObjRet, ParseException e) {
                         if (e == null) {

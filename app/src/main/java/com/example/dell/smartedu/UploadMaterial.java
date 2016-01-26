@@ -116,8 +116,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
@@ -126,8 +126,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                     classRef[0] = classListRet.get(0);
 
 
-                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
-                    uploadQuery.whereEqualTo("class", classRef[0]);
+                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, classRef[0]);
 
                     uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> uploadListRet, ParseException e) {
@@ -143,15 +143,15 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                     ParseObject u = (ParseObject) uploadListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
 
-                                    String name = u.getString("topic");
+                                    String name = u.getString(ImageUploadsTable.TOPIC);
                                     name += "\n";
-                                    name += u.getString("subject");
+                                    name += u.getString(ImageUploadsTable.SUBJECT);
 
-                                    if (u.getLong("dueDate") != 0) {
+                                    if (u.getLong(ImageUploadsTable.DUE_DATE) != 0) {
                                         name += "\n";
 
                                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                        final String dateString = formatter.format(new Date(u.getLong("dueDate")));
+                                        final String dateString = formatter.format(new Date(u.getLong(ImageUploadsTable.DUE_DATE)));
                                         name += dateString;
                                     }
 
@@ -227,12 +227,12 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
                                         //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
-                                        ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
-                                        uploadQuery.whereEqualTo("topic", details[0].trim());
-                                        uploadQuery.whereEqualTo("subject", details[1].trim());
-                                        uploadQuery.whereEqualTo("class", ParseObject.createWithoutData("Class", classId));
-                                        uploadQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
-                                        uploadQuery.whereEqualTo("dueDate", milliseconds);
+                                        ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
+                                                uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
                                         uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
                                                 if (e == null) {
@@ -240,7 +240,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                         ParseObject u = (ParseObject) uploadListRet.get(0);
 
                                                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                                        final String dateString = formatter.format(new Date(u.getLong("uploadDate")));
+                                                        final String dateString = formatter.format(new Date(u.getLong(ImageUploadsTable.DATE_UPLOADED)));
                                                         myDate.setText(dateString.trim());
 
                                                         myType.setText(u.get("type").toString().trim());
@@ -248,9 +248,9 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                         // if (u.get("imageContent") != null) {
                                                         //ArrayList<ParseFile> pFileList = new ArrayList<ParseFile>();
 
-                                                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
+                                                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
 
-                                                        if (u.get("imageContent") != null) {
+                                                        if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                                                             if (!pFileList.isEmpty()) {
                                                                 ParseFile pFile = pFileList.get(0);
                                                                 byte[] bitmapdata = new byte[0];  // here it throws error
@@ -317,7 +317,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                         delButton.setOnClickListener(new View.OnClickListener() {
                                                             public void onClick(View v) {
 
-                                                                ParseObject.createWithoutData("ImageUploads", uploadid).deleteEventually();
+                                                                ParseObject.createWithoutData(ImageUploadsTable.TABLE_NAME, uploadid).deleteEventually();
 
 
                                                                 onRestart();
@@ -473,10 +473,10 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                     Toast.makeText(getApplicationContext(), "Type or Subject details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
 
-                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery("ImageUploads");
-                    uploadQuery.whereEqualTo("type", typeSelected);
-                    uploadQuery.whereEqualTo("subject", subjectDesc);
-                    uploadQuery.whereEqualTo("topic", topicDesc);
+                    ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.UPLOAD_TYPE, typeSelected);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, subjectDesc);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, topicDesc);
 
                     uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                                      public void done(List<ParseObject> uploadListRet, ParseException e) {
@@ -486,14 +486,14 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                                  Toast.makeText(getApplicationContext(), "Similar details exist. Add under same entry of Type, Subject and Topic!", Toast.LENGTH_LONG).show();
                                                              } else {
 
-                                                                 final ParseObject upload = new ParseObject("ImageUploads");
+                                                                 final ParseObject upload = new ParseObject(ImageUploadsTable.TABLE_NAME);
 
-                                                                 upload.put("createdBy", ParseUser.getCurrentUser());
-                                                                 upload.put("class", ParseObject.createWithoutData("Class", classId));
-                                                                 upload.put("type", typeSelected);
-                                                                 upload.put("topic", topicDesc);
-                                                                 upload.put("subject", subjectDesc);
-                                                                 upload.put("uploadDate", upload_date_milliseconds);
+                                                                 upload.put(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+                                                                 upload.put(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData("Class", classId));
+                                                                 upload.put(ImageUploadsTable.UPLOAD_TYPE, typeSelected);
+                                                                 upload.put(ImageUploadsTable.TOPIC, topicDesc);
+                                                                 upload.put(ImageUploadsTable.SUBJECT, subjectDesc);
+                                                                 upload.put(ImageUploadsTable.DATE_UPLOADED, upload_date_milliseconds);
 
 
                                                                  if (Daycal == 0 && Monthcal == 0 && Yearcal == 0)
@@ -512,7 +512,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                                          e1.printStackTrace();
                                                                      }
                                                                      long due_date_milliseconds = d.getTime();
-                                                                     upload.put("dueDate", due_date_milliseconds);
+                                                                     upload.put(ImageUploadsTable.DUE_DATE, due_date_milliseconds);
                                                                  }
 
 

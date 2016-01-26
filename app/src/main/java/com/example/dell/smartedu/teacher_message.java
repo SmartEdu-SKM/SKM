@@ -97,8 +97,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId",classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -107,9 +107,9 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                     classRef[0] = studentListRet.get(0);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.addAscendingOrder("rollNumber");
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -119,20 +119,20 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                 //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 */
                                 Log.d("user", "Retrieved " + studentListRet.size() + " students");
-                                modelItems= new Model[studentListRet.size()];
+                                modelItems = new Model[studentListRet.size()];
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                                 for (int i = 0; i < studentListRet.size(); i++) {
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    int rollnumber=u.getInt("rollNumber");
+                                    int rollnumber = u.getInt(StudentTable.ROLL_NUMBER);
                                     String name = u.getString("name");
-                                    name= String.valueOf(rollnumber) + ". " + u.getString("name").trim();
+                                    name = String.valueOf(rollnumber) + ". " + u.getString(StudentTable.STUDENT_NAME).trim();
                                     //name += "\n";
                                     // name += u.getInt("age");
 
-                                  //  adapter.add(name);
+                                    //  adapter.add(name);
                                     // }
-                                    modelItems[i]=new Model(name,0);
+                                    modelItems[i] = new Model(name, 0);
 
                                 }
 
@@ -236,32 +236,32 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     {
 
                         final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                        classQuery.whereEqualTo("objectId", classId);
+                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                         classQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
                                     classRef[0] = studentListRet.get(0);
-                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                    studentQuery.whereEqualTo("class", classRef[0]);
-                                    studentQuery.addAscendingOrder("rollNumber");
+                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                                    studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
                                             if (e == null) {
 
                                                 for (int i = 0; i < studentListRet.size(); i++) {
-                                                    ParseUser client_user = (ParseUser) studentListRet.get(i).get("userId");
+                                                    ParseUser client_user = (ParseUser) studentListRet.get(i).get(StudentTable.STUDENT_USER_REF);
                                                     ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
 
-                                                    java.util.Calendar calendar= Calendar.getInstance();
-                                                    SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                                    String date= format.format(new Date(calendar.getTimeInMillis()));
-                                                    Date d=null;
+                                                    java.util.Calendar calendar = Calendar.getInstance();
+                                                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                                    String date = format.format(new Date(calendar.getTimeInMillis()));
+                                                    Date d = null;
                                                     try {
-                                                        d=format.parse(date);
+                                                        d = format.parse(date);
                                                     } catch (java.text.ParseException e1) {
                                                         e1.printStackTrace();
                                                     }
@@ -294,15 +294,15 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     {
 
                         final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                        classQuery.whereEqualTo("objectId", classId);
+                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                         classQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
                                     classRef[0] = studentListRet.get(0);
-                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                    studentQuery.whereEqualTo("class", classRef[0]);
-                                    studentQuery.addAscendingOrder("rollNumber");
+                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                                    studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
                                             if (e == null) {
@@ -310,16 +310,16 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                 for (int i = 0; i < studentListRet.size(); i++) {
 
 
-                                                    ParseUser student_ofclient=(ParseUser)studentListRet.get(i).get("userId");
-                                                    ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery("Parent");
-                                                    parent_relation.whereEqualTo("child",student_ofclient);
+                                                    ParseUser student_ofclient=(ParseUser)studentListRet.get(i).get(StudentTable.STUDENT_USER_REF);
+                                                    ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                                                    parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF,student_ofclient);
                                                     parent_relation.findInBackground(new FindCallback<ParseObject>() {
                                                         @Override
                                                         public void done(List<ParseObject> objects, ParseException e) {
                                                             if (e == null) {
                                                                 if (objects.size() != 0) {
 
-                                                                    ParseUser client_user = (ParseUser) objects.get(0).get("userId");
+                                                                    ParseUser client_user = (ParseUser) objects.get(0).get(ParentTable.PARENT_USER_REF);
                                                                     ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
                                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
@@ -432,10 +432,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         }
                         Log.d("user", "rno: " + details[0].trim() + "name " + details[1]);  //extracts Chit as Chi and query fails???
 
-                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0].trim()));
-                        studentQuery.whereEqualTo("name", details[1].trim());
-                        studentQuery.whereEqualTo("class", classobject);
+                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                        studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
+                        studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
+                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classobject);
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
@@ -466,7 +466,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     protected void giveMessage(final ParseObject studentobject,String to_role)
     {
         if(to_role.equals("Student")) {
-                        ParseUser client_user=(ParseUser)studentobject.get("userId");
+                        ParseUser client_user=(ParseUser)studentobject.get(StudentTable.STUDENT_USER_REF);
                         ParseObject newmessage=new ParseObject(MessageTable.TABLE_NAME);
                         newmessage.put(MessageTable.FROM_USER_REF,ParseUser.getCurrentUser());
                         newmessage.put(MessageTable.TO_USER_REF,client_user);
@@ -489,16 +489,16 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                     }else       //if parent selected
                     {
-                        ParseUser student_ofclient=(ParseUser)studentobject.get("userId");
-                        ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery("Parent");
-                        parent_relation.whereEqualTo("child",student_ofclient);
+                        ParseUser student_ofclient=(ParseUser)studentobject.get(StudentTable.STUDENT_USER_REF);
+                        ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                        parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF,student_ofclient);
                         parent_relation.findInBackground(new FindCallback<ParseObject>() {
                             @Override
                             public void done(List<ParseObject> objects, ParseException e) {
                                 if(e==null)
                                 {
                                     if(objects.size()!=0) {
-                                        ParseUser client_user = (ParseUser) objects.get(0).get("userId");
+                                        ParseUser client_user = (ParseUser) objects.get(0).get(ParentTable.PARENT_USER_REF);
                                         ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
                                         newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                         newmessage.put(MessageTable.TO_USER_REF, client_user);

@@ -52,8 +52,8 @@ public class UploadImage_students extends ListActivity {
     private Uri mMediaUri;
 
     public void queryImagesFromParse(){
-        ParseQuery<ParseObject> imagesQuery = new ParseQuery<>("ImageUploads");
-        imagesQuery.whereEqualTo("objectId",uploadId);
+        ParseQuery<ParseObject> imagesQuery = new ParseQuery<>(ImageUploadsTable.TABLE_NAME);
+        imagesQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID,uploadId);
         imagesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> images, ParseException e) {
@@ -62,13 +62,13 @@ public class UploadImage_students extends ListActivity {
                     if(images.size()!=0) {
                         ParseObject u = (ParseObject) images.get(0);
 
-                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
+                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
 
 
                         // if(images.size()!=0) {
                         //   for (int i = 0; i < images.size(); i++) {
                         //     if (images.get(i).get("imageContent") != null) {
-                        if (u.get("imageContent") != null) {
+                        if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                             adapter = new ImageLoaderAdapter(UploadImage_students.this, pFileList);
                             //lv.setAdapter(adapter);
                             setListAdapter(adapter);

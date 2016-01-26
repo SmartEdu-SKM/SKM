@@ -62,8 +62,8 @@ public class UploadImage extends ListActivity {
 
     public void queryImagesFromParse(){
         Log.d("user", "Object Id: uploadImage: " + uploadId);
-        ParseQuery<ParseObject> imagesQuery = new ParseQuery<>("ImageUploads");
-        imagesQuery.whereEqualTo("objectId",uploadId.trim());
+        ParseQuery<ParseObject> imagesQuery = new ParseQuery<>(ImageUploadsTable.TABLE_NAME);
+        imagesQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID,uploadId.trim());
         imagesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> images, ParseException e) {
@@ -72,13 +72,13 @@ public class UploadImage extends ListActivity {
                     if(images.size()!=0) {
                     ParseObject u = (ParseObject) images.get(0);
 
-                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get("imageContent");
+                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
 
 
                    // if(images.size()!=0) {
                      //   for (int i = 0; i < images.size(); i++) {
                        //     if (images.get(i).get("imageContent") != null) {
-                        if (u.get("imageContent") != null) {
+                        if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                             adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
                             //lv.setAdapter(adapter);
                             setListAdapter(adapter);
@@ -196,8 +196,8 @@ public class UploadImage extends ListActivity {
                         Toast.makeText(getApplicationContext(), "There was an error. Try again!", Toast.LENGTH_LONG).show();
                     }else{
 
-                        ParseQuery<ParseObject> imageQuery = ParseQuery.getQuery("ImageUploads");
-                        imageQuery.whereEqualTo("objectId", uploadId);
+                        ParseQuery<ParseObject> imageQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+                        imageQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadId);
                         imageQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(final List<ParseObject> objectRet, ParseException e) {
 
@@ -213,7 +213,7 @@ public class UploadImage extends ListActivity {
                                         public void done(ParseException e) {
                                             if (e == null) {
 
-                                                objectRet.get(0).add("imageContent", file);
+                                                objectRet.get(0).add(ImageUploadsTable.UPLOAD_CONTENT, file);
                                                 objectRet.get(0).saveInBackground(new SaveCallback() {
                                                     @Override
                                                     public void done(ParseException e) {

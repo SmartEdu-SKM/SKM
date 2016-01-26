@@ -66,8 +66,8 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
         drawerFragment.setDrawerListener(this); */
 
 
-            ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
-        attQuery.whereEqualTo("student", ParseObject.createWithoutData("Student", id));
+            ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+        attQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, id));
         attQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> attListRet, ParseException e) {
                 if (e == null) {
@@ -82,7 +82,7 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
                     double percentage = 0.0;
                     for (int i = 0; i < attListRet.size(); i++) {
                         ParseObject u = attListRet.get(i);
-                        if (u.get("p_a").equals("A")) {
+                        if (u.get(AttendanceDailyTable.STATUS).equals("A")) {
                             absent++;
                         }
                         totalDays++;

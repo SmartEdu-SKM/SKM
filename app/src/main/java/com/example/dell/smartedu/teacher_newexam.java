@@ -64,18 +64,18 @@ public class teacher_newexam extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "Exam details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
                     final ParseObject[] classRef = new ParseObject[1];
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-                    studentQuery.whereEqualTo("objectId", classId);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, com.parse.ParseException e) {
                             if (e == null) {
                                 classRef[0] = studentListRet.get(0);
 
 
-                                ParseObject exam = new ParseObject("Exam");
-                                exam.put("examName", ExamName);
-                                exam.put("totalMarks",Integer.parseInt(marks));
-                                exam.put("class",classRef[0]);
+                                ParseObject exam = new ParseObject(ExamTable.TABLE_NAME);
+                                exam.put(ExamTable.EXAM_NAME, ExamName);
+                                exam.put(ExamTable.MAX_MARKS,Integer.parseInt(marks));
+                                exam.put(ExamTable.FOR_CLASS,classRef[0]);
                                 //String id = task.getObjectId();
                                 exam.saveInBackground();
                                 Toast.makeText(getApplicationContext(), "Event details successfully stored", Toast.LENGTH_LONG).show();
