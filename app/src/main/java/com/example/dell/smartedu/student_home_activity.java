@@ -56,8 +56,8 @@ public class student_home_activity extends BaseActivity{
         gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, role));
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-        studentQuery.whereEqualTo("userId", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, ParseUser.getCurrentUser());
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studListRet, ParseException e) {
                 if (e == null) {
@@ -66,9 +66,9 @@ public class student_home_activity extends BaseActivity{
 
                     ParseObject u = (ParseObject) studListRet.get(0);
                     studentId = u.getObjectId();
-                    classRef[0] = (ParseObject) u.get("class");
+                    classRef[0] = (ParseObject) u.get(StudentTable.CLASS_REF);
 
-                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                     classQuery.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> objects, ParseException e) {

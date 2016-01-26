@@ -89,8 +89,8 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -99,8 +99,8 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
 
                     classRef[0] = studentListRet.get(0);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Exam");
-                    studentQuery.whereEqualTo("class", classRef[0]);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> examListRet, ParseException e) {
                             if (e == null) {
@@ -131,7 +131,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                 for (int i = 0; i < examListRet.size(); i++) {
                                     ParseObject u = (ParseObject) examListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    String name = u.getString("examName");
+                                    String name = u.getString(ExamTable.FOR_CLASS);
                                     //name += "\n";
                                     // name += u.getInt("age");
 
@@ -149,9 +149,9 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                     public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                                         String item = ((TextView) view).getText().toString().trim();
 
-                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Exam");
-                                        studentQuery.whereEqualTo("examName", item);
-                                        studentQuery.whereEqualTo("class", classRef[0]);
+                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+                                        studentQuery.whereEqualTo(ExamTable.EXAM_NAME, item);
+                                        studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> examListRet, ParseException e) {
                                                 if (e == null) {
@@ -162,15 +162,15 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                                     examName = u.get("examName").toString().trim();
                                                     totalMarks = u.getNumber("totalMarks");
 
-                                                    ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery("Marks");
-                                                    marksQuery.whereEqualTo("student", ParseObject.createWithoutData("Student", studentId));
-                                                    marksQuery.whereEqualTo("exam", ParseObject.createWithoutData("Exam", examid));
+                                                    ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+                                                    marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
+                                                    marksQuery.whereEqualTo(MarksTable.EXAM_REF, ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid));
                                                     marksQuery.findInBackground(new FindCallback<ParseObject>() {
                                                         public void done(List<ParseObject> marksListRet, ParseException e) {
                                                             if (e == null) {
 
                                                                 if(marksListRet.size()!=0) {
-                                                                    marksObtained = marksListRet.get(0).getNumber("marksObtained");
+                                                                    marksObtained = marksListRet.get(0).getNumber(MarksTable.MARKS_OBTAINED);
                                                                     callDialog(view);
                                                                 }
                                                                 else{

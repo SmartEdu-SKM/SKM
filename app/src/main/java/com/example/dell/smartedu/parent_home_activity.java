@@ -54,8 +54,8 @@ public class parent_home_activity extends BaseActivity{
 
         final ParseObject[] childRef = new ParseObject[1];
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Parent");
-        studentQuery.whereEqualTo("userId", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+        studentQuery.whereEqualTo(ParentTable.PARENT_USER_REF, ParseUser.getCurrentUser());
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studListRet, ParseException e) {
                 if (e == null) {
@@ -63,17 +63,17 @@ public class parent_home_activity extends BaseActivity{
                     if (studListRet.size() != 0) {
 
                         ParseObject u = (ParseObject) studListRet.get(0);
-                        childRef[0] = (ParseObject) u.get("child");
+                        childRef[0] = (ParseObject) u.get(ParentTable.CHILD_USER_REF);
 
-                        ParseQuery<ParseObject> studQuery = ParseQuery.getQuery("Student");
-                        studQuery.whereEqualTo("userId",childRef[0]);
+                        ParseQuery<ParseObject> studQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                        studQuery.whereEqualTo(StudentTable.STUDENT_USER_REF,childRef[0]);
                         studQuery.findInBackground(new FindCallback<ParseObject>() {
                             @Override
                             public void done(List<ParseObject> objects, ParseException e) {
                                 if (e == null) {
                                     studentId= objects.get(0).getObjectId().trim();
-                                    classRef[0]= (ParseObject) objects.get(0).get("class");
-                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
+                                    classRef[0]= (ParseObject) objects.get(0).get(StudentTable.STUDENT_USER_REF);
+                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                                     classQuery.findInBackground(new FindCallback<ParseObject>() {
                                         @Override
                                         public void done(List<ParseObject> objects, ParseException e) {

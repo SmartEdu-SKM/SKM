@@ -105,11 +105,11 @@ public class NewTask extends BaseActivity {
                 if (myTitle.equals("") || myDesc.equals("") || ((DATE.getText().equals("Select Due Date")))) {
                     Toast.makeText(getApplicationContext(), "Task details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
-                    ParseObject task = new ParseObject("Task");
-                    task.put("createdBy", ParseUser.getCurrentUser());
-                    task.put("addedByRole", role);
-                    task.put("TaskName", myTitle);
-                    task.put("TaskDescription", myDesc);
+                    ParseObject task = new ParseObject(TaskTable.TABLE_NAME);
+                    task.put(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+                    task.put(TaskTable.BY_USER_ROLE, role);
+                    task.put(TaskTable.TABLE_NAME, myTitle);
+                    task.put(TaskTable.TASK_DESCRIPTION, myDesc);
                     //String id = task.getObjectId();
                     String string_date = String.valueOf(Day) + "-" + String.valueOf(Month+1) + "-" + String.valueOf(Year);
 
@@ -121,7 +121,7 @@ public class NewTask extends BaseActivity {
                         e.printStackTrace();
                     }
                     long milliseconds = d.getTime();
-                    task.put("dueDate", milliseconds);
+                    task.put(TaskTable.DUE_DATE, milliseconds);
                     task.saveInBackground();
                     Toast.makeText(getApplicationContext(), "Event details successfully stored", Toast.LENGTH_LONG).show();
 

@@ -37,14 +37,14 @@ public class student_info extends Fragment{
         studentName=(TextView)android.findViewById(R.id.student_name);
         studentAge=(TextView)android.findViewById(R.id.student_age);
         deleteStudent=(Button)android.findViewById(R.id.delete_student);
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-        studentQuery.whereEqualTo("objectId",studentId);
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        studentQuery.whereEqualTo(StudentTable.OBJECT_ID,studentId);
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
                     ParseObject u = (ParseObject) studentListRet.get(0);
-                    studentName.setText(u.getString("name").toString());
-                    studentAge.setText(u.getNumber("age").toString());
+                    studentName.setText(u.getString(StudentTable.STUDENT_NAME).toString());
+                    studentAge.setText(u.getNumber(StudentTable.STUDENT_AGE).toString());
                     //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
 
                 } else {
@@ -76,22 +76,22 @@ public class student_info extends Fragment{
         final ParseObject[] studentRef = new ParseObject[1];
         final ParseUser[] parent_user= new ParseUser[1];
         final ParseUser[] user_student = {new ParseUser()};
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-        studentQuery.whereEqualTo("objectId", studentId);
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                           public void done(List<ParseObject> studentListRet, ParseException e) {
                                               if (e == null) {
                                                   if (studentListRet.size() != 0) {
-                                                      user_student[0] = (ParseUser) studentListRet.get(0).get("userId");
+                                                      user_student[0] = (ParseUser) studentListRet.get(0).get(StudentTable.STUDENT_USER_REF);
                                                       //userid = String.valueOf(studentListRet.get(0).get("userId"));
 
-                                                      ParseQuery<ParseObject> parentQuery = ParseQuery.getQuery("Parent");
-                                                      parentQuery.whereEqualTo("child", user_student[0]);
+                                                      ParseQuery<ParseObject> parentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                                                      parentQuery.whereEqualTo(ParentTable.CHILD_USER_REF, user_student[0]);
                                                       parentQuery.findInBackground(new FindCallback<ParseObject>() {
                                                           public void done(List<ParseObject> parentListRet, ParseException e) {
                                                               if (e == null) {
                                                                   if (parentListRet.size() != 0) {
-                                                                      parent_user[0] = (ParseUser) parentListRet.get(0).get("userId");
+                                                                      parent_user[0] = (ParseUser) parentListRet.get(0).get(ParentTable.PARENT_USER_REF);
                                                                       parentListRet.get(0).deleteEventually();
                                                                       Log.d("user", "Deleted: Parent child relation");
                                                                   } else {
@@ -118,10 +118,10 @@ public class student_info extends Fragment{
                                                                       }
                                                                   }
 
-                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-                                                                  roleQuery.whereEqualTo("createdBy", parent_user[0]);
+                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+                                                                  roleQuery.whereEqualTo(RoleTable.OF_USER_REF, parent_user[0]);
                                                                   //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
-                                                                  roleQuery.whereEqualTo("roleName", "Parent");
+                                                                  roleQuery.whereEqualTo(RoleTable.ROLE, "Parent");
                                                                   roleQuery.findInBackground(new FindCallback<ParseObject>() {
                                                                       public void done(List<ParseObject> roleListRet, ParseException e) {
                                                                           if (e == null) {
@@ -174,18 +174,18 @@ public class student_info extends Fragment{
     {
         final ParseObject[] studentRef = new ParseObject[1];
         final ParseUser[] userRef= new ParseUser[1];
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-        studentQuery.whereEqualTo("objectId", studentId);
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                           public void done(List<ParseObject> studentListRet, ParseException e) {
                                               if (e == null) {
                                                   if (studentListRet.size() != 0) {
                                                       studentRef[0] = studentListRet.get(0);
-                                                      userRef[0] = (ParseUser) studentListRet.get(0).get("userId");
+                                                      userRef[0] = (ParseUser) studentListRet.get(0).get(StudentTable.OBJECT_ID);
                                                       //userid = String.valueOf(studentListRet.get(0).get("userId"));
 
-                                                      ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery("Attendance");
-                                                      attendanceQuery.whereEqualTo("student", ParseObject.createWithoutData("Student", studentId));
+                                                      ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+                                                      attendanceQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
                                                       attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
                                                           public void done(List<ParseObject> attendanceListRet, ParseException e) {
                                                               if (e == null) {
@@ -216,10 +216,10 @@ public class student_info extends Fragment{
                                                                       }
                                                                   }
 
-                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-                                                                  roleQuery.whereEqualTo("createdBy", userRef[0]);
+                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+                                                                  roleQuery.whereEqualTo(RoleTable.OF_USER_REF, userRef[0]);
                                                                   //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
-                                                                  roleQuery.whereEqualTo("roleName", "Student");
+                                                                  roleQuery.whereEqualTo(RoleTable.ROLE, "Student");
                                                                   roleQuery.findInBackground(new FindCallback<ParseObject>() {
                                                                       public void done(List<ParseObject> roleListRet, ParseException e) {
                                                                           if (e == null) {
@@ -251,8 +251,8 @@ public class student_info extends Fragment{
                                                       //String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
 
 
-                                                      ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery("Marks");
-                                                      marksQuery.whereEqualTo("student", ParseObject.createWithoutData("Student", studentId));
+                                                      ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+                                                      marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
                                                       marksQuery.findInBackground(new FindCallback<ParseObject>()
 
                                                                                   {
@@ -291,7 +291,7 @@ public class student_info extends Fragment{
 
         Toast.makeText(getActivity(), "student deleted",Toast.LENGTH_LONG).show();
 
-        ParseObject.createWithoutData("Student",studentId).deleteEventually();
+        ParseObject.createWithoutData(StudentTable.TABLE_NAME,studentId).deleteEventually();
     }
 
   /*  @Override

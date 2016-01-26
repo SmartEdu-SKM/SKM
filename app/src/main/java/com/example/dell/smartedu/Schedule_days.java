@@ -67,11 +67,11 @@ public class Schedule_days extends Fragment {
         noschedule=(TextView)schedule.findViewById(R.id.noSchedule);
         noScheduleImage= (ImageView)schedule.findViewById(R.id.noScheduleImage);
 
-        ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
-        scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
-        scheduleQuery.whereEqualTo("day", day);
-        scheduleQuery.whereEqualTo("addedByRole", role);
-        scheduleQuery.addAscendingOrder("startTime");
+        ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery(ScheduleTable.TABLE_NAME);
+        scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
+        scheduleQuery.whereEqualTo(ScheduleTable.DAY, day);
+        scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_ROLE, role);
+        scheduleQuery.addAscendingOrder(ScheduleTable.START_TIME);
         scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
                 if (e == null) {
@@ -89,13 +89,13 @@ public class Schedule_days extends Fragment {
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
                             ParseObject u = (ParseObject) scheduleListRet.get(i);
-                            long start = TimeUnit.MILLISECONDS.toMinutes(u.getInt("startTime"));
-                            long end = TimeUnit.MILLISECONDS.toMinutes(u.getInt("endTime"));
+                            long start = TimeUnit.MILLISECONDS.toMinutes(u.getInt(ScheduleTable.START_TIME));
+                            long end = TimeUnit.MILLISECONDS.toMinutes(u.getInt(ScheduleTable.END_TIME));
                             String st = String.valueOf(start / 60) + ":" + String.valueOf(start % 60);
                             String et = String.valueOf(end / 60) + ":" + String.valueOf(end % 60);
                             Toast.makeText(getActivity(), "done", Toast.LENGTH_LONG);
 
-                            String info = u.getString("info");
+                            String info = u.getString(ScheduleTable.SCHEDULE_INFO);
                             String schedule = st + "\n" + et + "\n" + info;
                             items[i] = schedule;
 
@@ -150,11 +150,11 @@ public class Schedule_days extends Fragment {
                 long time = TimeUnit.MINUTES.toMillis(Integer.parseInt(sttimes[0]) * 60 + Integer.parseInt(sttimes[1]));
 
                 final String[] scheduleId = new String[1];
-                ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery("Schedule");
-                scheduleQuery.whereEqualTo("startTime", time);
-                scheduleQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
-                scheduleQuery.whereEqualTo("addedByRole", role);
-                scheduleQuery.whereEqualTo("day", day);
+                ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery(ScheduleTable.TABLE_NAME);
+                scheduleQuery.whereEqualTo(ScheduleTable.START_TIME, time);
+                scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
+                scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_ROLE, role);
+                scheduleQuery.whereEqualTo(ScheduleTable.DAY, day);
                 scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> scheduleListRet, com.parse.ParseException e) {
                         if (e == null) {
@@ -184,7 +184,7 @@ public class Schedule_days extends Fragment {
                 delButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
 
-                        ParseObject.createWithoutData("Schedule", scheduleId[0]).deleteEventually();
+                        ParseObject.createWithoutData(ScheduleTable.TABLE_NAME, scheduleId[0]).deleteEventually();
                         show_dialog.dismiss();
 
                     }
@@ -210,13 +210,13 @@ public class Schedule_days extends Fragment {
                         EditButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
 
-                                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
-                                taskQuery.whereEqualTo("objectId", scheduleId[0]);
+                                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(ScheduleTable.TABLE_NAME);
+                                taskQuery.whereEqualTo(ScheduleTable.OBJECT_ID, scheduleId[0]);
                                 taskQuery.findInBackground(new FindCallback<ParseObject>() {
                                     public void done(List<ParseObject> objectRet, ParseException e) {
 
                                         if (e == null) {
-                                            objectRet.get(0).put("info", ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
+                                            objectRet.get(0).put(ScheduleTable.SCHEDULE_INFO, ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
                                             objectRet.get(0).saveEventually();
 
                                         } else {
@@ -384,13 +384,13 @@ public class Schedule_days extends Fragment {
             Toast.makeText(getActivity(), "selected time overlaps with other schedule ", Toast.LENGTH_LONG).show();
         }else
         {
-            ParseObject schedule = new ParseObject("Schedule");
-            schedule.put("addedBy", ParseUser.getCurrentUser());
-            schedule.put("addedByRole", role);
-            schedule.put("day", day);
-            schedule.put("info", info.getText().toString());
-          schedule.put("startTime", startmilli);
-           schedule.put("endTime", endmilli);
+            ParseObject schedule = new ParseObject(ScheduleTable.TABLE_NAME);
+            schedule.put(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
+            schedule.put(ScheduleTable.BY_USER_ROLE, role);
+            schedule.put(ScheduleTable.DAY, day);
+            schedule.put(ScheduleTable.SCHEDULE_INFO, info.getText().toString());
+          schedule.put(ScheduleTable.START_TIME, startmilli);
+           schedule.put(ScheduleTable.END_TIME, endmilli);
             schedule.saveEventually();
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
             dialog.dismiss();
@@ -406,10 +406,10 @@ public class Schedule_days extends Fragment {
     {   // Log.d("user", "checking and flag = " + String.valueOf(flag));
         final int[] check = new int[1];
 
-        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Schedule");
-        taskQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
-        taskQuery.whereEqualTo("day", day);
-        taskQuery.whereEqualTo("addedByRole", role);
+        ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(ScheduleTable.TABLE_NAME);
+        taskQuery.whereEqualTo(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
+        taskQuery.whereEqualTo(ScheduleTable.DAY, day);
+        taskQuery.whereEqualTo(ScheduleTable.BY_USER_ROLE, role);
 
         try {
             List<ParseObject> scheduleListRet = taskQuery.find();
@@ -422,8 +422,8 @@ public class Schedule_days extends Fragment {
                 for (int i = 0; i < scheduleListRet.size(); i++) {
 
                     ParseObject u = (ParseObject) scheduleListRet.get(i);
-                    long ret_start = u.getLong("startTime");
-                    long ret_end = u.getLong("endTime");
+                    long ret_start = u.getLong(ScheduleTable.START_TIME);
+                    long ret_end = u.getLong(ScheduleTable.END_TIME);
                     if (start >= ret_start && start < ret_end) {
                         Log.d("user", "here");
                         // Schedule_days.this.flag = 1;
