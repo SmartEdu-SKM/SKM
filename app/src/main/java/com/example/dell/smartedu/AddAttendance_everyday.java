@@ -251,6 +251,8 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
                 ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
                 attQuery.whereEqualTo(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
+                attQuery.whereEqualTo(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                attQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
                 attQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> attListRet, ParseException e) {
                         if (e == null) {
@@ -272,6 +274,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                     ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                                     classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
                                     classQuery.whereEqualTo(ClassTable.IF_CLASS_TEACHER, true);
+                                    classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
                                     classQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(final List<ParseObject> classListRet, ParseException e) {
                                             if (e == null) {
@@ -307,6 +310,8 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                                                         Log.d("user", item.getName() + " is Checked!!");
                                                                     } else
                                                                         attendance.put(AttendanceDailyTable.STATUS, "P");
+                                                                    attendance.put(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                                                                    attendance.put(AttendanceDailyTable.FOR_CLASS, classRef[0]);
 
                                                                     attendance.saveEventually();
                                                                     // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
@@ -367,10 +372,11 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
                         newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                         newmessage.put(MessageTable.TO_USER_REF, client_user);
+                        Log.d("user", "to parent " + client_user.getObjectId());
                         newmessage.put(MessageTable.MESSAGE_CONTENT, studentRef.get("name") + " was absent today on " + string_date);
 
                         newmessage.put(MessageTable.DELETED_BY_SENDER,false);
-                        newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+                        newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
 
                         java.util.Calendar calendar = Calendar.getInstance();
                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -387,9 +393,11 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         //Toast.makeText(AddAttendance_everyday.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
 
 
+                    }else{
+                        Log.d("user ", "error in query");
                     }
                 } else {
-                    Log.d("user", "Error in query");
+                    Log.d("user ", e.getMessage());
                 }
             }
         });
