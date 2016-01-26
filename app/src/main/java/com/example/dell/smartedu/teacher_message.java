@@ -251,10 +251,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                                                 for (int i = 0; i < studentListRet.size(); i++) {
                                                     ParseUser client_user = (ParseUser) studentListRet.get(i).get("userId");
-                                                    ParseObject newmessage = new ParseObject("Message");
-                                                    newmessage.put("from", ParseUser.getCurrentUser());
-                                                    newmessage.put("to", client_user);
-                                                    newmessage.put("message", message.getText().toString());
+                                                    ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
+                                                    newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                                    newmessage.put(MessageTable.TO_USER_REF, client_user);
+                                                    newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
 
                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -266,7 +266,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                         e1.printStackTrace();
                                                     }
 
-                                                    newmessage.put("sentAt", d.getTime());
+                                                    newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
@@ -320,10 +320,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                 if (objects.size() != 0) {
 
                                                                     ParseUser client_user = (ParseUser) objects.get(0).get("userId");
-                                                                    ParseObject newmessage = new ParseObject("Message");
-                                                                    newmessage.put("from", ParseUser.getCurrentUser());
-                                                                    newmessage.put("to", client_user);
-                                                                    newmessage.put("message", message.getText().toString());
+                                                                    ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
+                                                                    newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                                                    newmessage.put(MessageTable.TO_USER_REF, client_user);
+                                                                    newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                                                                     String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -334,7 +334,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                         e1.printStackTrace();
                                                                     }
 
-                                                                    newmessage.put("sentAt", d.getTime());
+                                                                    newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
                                                                     Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
@@ -467,12 +467,12 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     {
         if(to_role.equals("Student")) {
                         ParseUser client_user=(ParseUser)studentobject.get("userId");
-                        ParseObject newmessage=new ParseObject("Message");
-                        newmessage.put("from",ParseUser.getCurrentUser());
-                        newmessage.put("to",client_user);
-                        newmessage.put("message", message.getText().toString());
-                        newmessage.put("delBySender",false);
-                        newmessage.put("delByReceiver",false);
+                        ParseObject newmessage=new ParseObject(MessageTable.TABLE_NAME);
+                        newmessage.put(MessageTable.FROM_USER_REF,ParseUser.getCurrentUser());
+                        newmessage.put(MessageTable.TO_USER_REF,client_user);
+                        newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+                        newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+                        newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
                         java.util.Calendar calendar= Calendar.getInstance();
                         SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                         String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -483,7 +483,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                             e1.printStackTrace();
                         }
 
-                        newmessage.put("sentAt", d.getTime());
+                        newmessage.put(MessageTable.SENT_AT, d.getTime());
                         newmessage.saveEventually();
             Toast.makeText(teacher_message.this, "Message Successfully Sent to Student", Toast.LENGTH_LONG).show();
 
@@ -499,12 +499,12 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                 {
                                     if(objects.size()!=0) {
                                         ParseUser client_user = (ParseUser) objects.get(0).get("userId");
-                                        ParseObject newmessage = new ParseObject("Message");
-                                        newmessage.put("from", ParseUser.getCurrentUser());
-                                        newmessage.put("to", client_user);
-                                        newmessage.put("message", message.getText().toString());
-                                        newmessage.put("delBySender",false);
-                                        newmessage.put("delByReceiver",false);
+                                        ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
+                                        newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                        newmessage.put(MessageTable.TO_USER_REF, client_user);
+                                        newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+                                        newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+                                        newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
 
                                         java.util.Calendar calendar = Calendar.getInstance();
                                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -516,7 +516,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                             e1.printStackTrace();
                                         }
 
-                                        newmessage.put("sentAt", d.getTime());
+                                        newmessage.put(MessageTable.SENT_AT, d.getTime());
                                         newmessage.saveEventually();
 
                                         Toast.makeText(teacher_message.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
