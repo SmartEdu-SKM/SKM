@@ -90,10 +90,10 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
-        classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
-        classQuery.whereEqualTo("classTeacher", true);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
+        classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+        classQuery.whereEqualTo(ClassTable.IF_CLASS_TEACHER, true);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -106,9 +106,9 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         classRef[0] = studentListRet.get(0);
 
 
-                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                        studentQuery.whereEqualTo("class", classRef[0]);
-                        studentQuery.addAscendingOrder("rollNumber");
+                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                        studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
@@ -123,8 +123,8 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                         ParseObject u = (ParseObject) studentListRet.get(i);
                                         //  if(u.getString("class").equals(id)) {
 
-                                        String rollnumber = u.getNumber("rollNumber").toString().trim();
-                                        String name = u.getString("name");
+                                        String rollnumber = u.getNumber(StudentTable.ROLL_NUMBER).toString().trim();
+                                        String name = u.getString(StudentTable.STUDENT_NAME);
                                         //name += "\n";
                                         // name += u.getInt("age");
                                         String student = rollnumber + ". " + name;
@@ -249,8 +249,8 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
         else{
 
-                ParseQuery<ParseObject> attQuery = ParseQuery.getQuery("AttendanceDaily");
-                attQuery.whereEqualTo("date", newmilliseconds);
+                ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+                attQuery.whereEqualTo(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
                 attQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> attListRet, ParseException e) {
                         if (e == null) {
@@ -269,9 +269,9 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
 
                                     final ParseObject[] classRef = new ParseObject[1];
-                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                                    classQuery.whereEqualTo("teacher", ParseUser.getCurrentUser());
-                                    classQuery.whereEqualTo("classTeacher", true);
+                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                    classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                                    classQuery.whereEqualTo(ClassTable.IF_CLASS_TEACHER, true);
                                     classQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(final List<ParseObject> classListRet, ParseException e) {
                                             if (e == null) {
@@ -283,9 +283,9 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                                 } else {
                                                     classRef[0] = classListRet.get(0);
                                                     final ParseObject[] studentRef = new ParseObject[1];
-                                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                                    studentQuery.whereEqualTo("rollNumber", itemvalue);
-                                                    studentQuery.whereEqualTo("class", classRef[0]);
+                                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                                    studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, itemvalue);
+                                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
                                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                                         public void done(final List<ParseObject> studentListRet, ParseException e) {
                                                             if (e == null) {
@@ -297,16 +297,16 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                                                     studentRef[0] = studentListRet.get(0);
 
 
-                                                                    ParseObject attendance = new ParseObject("AttendanceDaily");
-                                                                    attendance.put("student", studentRef[0]);
-                                                                    attendance.put("date", newmilliseconds);
+                                                                    ParseObject attendance = new ParseObject(AttendanceDailyTable.TABLE_NAME);
+                                                                    attendance.put(AttendanceDailyTable.STUDENT_USER_REF, studentRef[0]);
+                                                                    attendance.put(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
                                                                     if (item.isChecked()) {
-                                                                        attendance.put("p_a", "A");
+                                                                        attendance.put(AttendanceDailyTable.STATUS, "A");
                                                                         giveMessageParent(studentRef[0], string_date);
                                                                         //sleep(1000);
                                                                         Log.d("user", item.getName() + " is Checked!!");
                                                                     } else
-                                                                        attendance.put("p_a", "P");
+                                                                        attendance.put(AttendanceDailyTable.STATUS, "P");
 
                                                                     attendance.saveEventually();
                                                                     // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
@@ -354,23 +354,23 @@ saveButton=(Button)findViewById(R.id.saveButton);
     public void giveMessageParent(final ParseObject studentRef, final String string_date) {
 
         Log.d("user", "in give message");
-        ParseUser student_ofclient = (ParseUser) studentRef.get("userId");
-        ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
-        parent_relation.whereEqualTo("child", student_ofclient);
+        ParseUser student_ofclient = (ParseUser) studentRef.get(StudentTable.STUDENT_USER_REF);
+        ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+        parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF, student_ofclient);
         parent_relation.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
                     if (objects.size() != 0) {
                         Log.d("user", "in query");
-                        ParseUser client_user = (ParseUser) objects.get(0).get("userId");
-                        ParseObject newmessage = new ParseObject("Message");
-                        newmessage.put("from", ParseUser.getCurrentUser());
-                        newmessage.put("to", client_user);
-                        newmessage.put("message", studentRef.get("name") + " was absent today on " + string_date);
+                        ParseUser client_user = (ParseUser) objects.get(0).get(ParentTable.PARENT_USER_REF);
+                        ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
+                        newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                        newmessage.put(MessageTable.TO_USER_REF, client_user);
+                        newmessage.put(MessageTable.MESSAGE_CONTENT, studentRef.get("name") + " was absent today on " + string_date);
 
-                        newmessage.put("delBySender",false);
-                        newmessage.put("delByReceiver",false);
+                        newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+                        newmessage.put(MessageTable.DELETED_BY_SENDER,false);
 
                         java.util.Calendar calendar = Calendar.getInstance();
                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -382,7 +382,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                             e1.printStackTrace();
                         }
 
-                        newmessage.put("sentAt", d.getTime());
+                        newmessage.put(MessageTable.SENT_AT, d.getTime());
                         newmessage.saveEventually();
                         //Toast.makeText(AddAttendance_everyday.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
 

@@ -85,8 +85,8 @@ public class AddRole extends BaseActivity {
     public void addStudent() {
 
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -96,7 +96,7 @@ public class AddRole extends BaseActivity {
 
                     for (int i = 0; i < roleListRet.size(); i++) {
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString().trim();
+                        String name = u.getString(RoleTable.ROLE).toString().trim();
                         if (name.equals("Student")) {
                             Toast.makeText(getApplicationContext(), "Role already added. Go to Choose Role", Toast.LENGTH_LONG)
                                     .show();
@@ -107,9 +107,9 @@ public class AddRole extends BaseActivity {
 
 
                     if (k==0) {
-                        ParseObject role = new ParseObject("Role");
-                        role.put("createdBy", ParseUser.getCurrentUser());
-                        role.put("roleName", "Student");
+                        ParseObject role = new ParseObject(RoleTable.TABLE_NAME);
+                        role.put(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
+                        role.put(RoleTable.ROLE, "Student");
                         role.saveInBackground();
 
                     /*
@@ -133,8 +133,8 @@ public class AddRole extends BaseActivity {
 
     public void addTeacher() {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -144,7 +144,7 @@ public class AddRole extends BaseActivity {
 
                     for (int i = 0; i < roleListRet.size(); i++) {
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString();
+                        String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Teacher")) {
                             Toast.makeText(getApplicationContext(), "Role already added. Go to Choose Role", Toast.LENGTH_LONG)
                                     .show();
@@ -155,9 +155,9 @@ public class AddRole extends BaseActivity {
 
 
                     if (k == 0) {
-                        ParseObject role = new ParseObject("Role");
-                        role.put("createdBy", ParseUser.getCurrentUser());
-                        role.put("roleName", "Teacher");
+                        ParseObject role = new ParseObject(RoleTable.TABLE_NAME);
+                        role.put(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
+                        role.put(RoleTable.ROLE, "Teacher");
                         role.saveInBackground();
 
                     /*
@@ -181,8 +181,8 @@ public class AddRole extends BaseActivity {
 
     public void addParent() {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -192,7 +192,7 @@ public class AddRole extends BaseActivity {
 
                     for (int i = 0; i < roleListRet.size(); i++) {
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString();
+                        String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Parent")) {
                             Toast.makeText(getApplicationContext(), "Role already added. Go to Choose Role", Toast.LENGTH_LONG)
                                     .show();
@@ -203,9 +203,9 @@ public class AddRole extends BaseActivity {
 
 
                     if (k==0) {
-                        ParseObject role = new ParseObject("Role");
-                        role.put("createdBy", ParseUser.getCurrentUser());
-                        role.put("roleName", "Parent");
+                        ParseObject role = new ParseObject(RoleTable.TABLE_NAME);
+                        role.put(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
+                        role.put(RoleTable.ROLE, "Parent");
                         role.saveInBackground();
 
                     /*

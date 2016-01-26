@@ -42,19 +42,19 @@ public class AddMarks extends AppCompatActivity {
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
                     classRef[0] = classListRet.get(0);
-                    sub = classRef[0].getString("subject");
+                    sub = classRef[0].getString(ClassTable.SUBJECT);
                     subject.setText(sub);
 
                     final ParseObject[] studentRef = new ParseObject[1];
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.whereEqualTo("objectId", studentId);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -66,17 +66,17 @@ public class AddMarks extends AppCompatActivity {
                                         if (examDesc.equals("") || marksObtained.equals("") || outOf.equals("")) {
                                             Toast.makeText(getApplicationContext(), "Marks details cannot be empty!", Toast.LENGTH_LONG).show();
                                         } else {
-                                            ParseObject exam=new ParseObject("Exam");
-                                            exam.put("class",classRef[0]);
-                                            exam.put("examName", examDesc.getText().toString());
-                                            exam.put("totalMarks",Float.parseFloat(outOf.getText().toString()));
+                                            ParseObject exam=new ParseObject(ExamTable.TABLE_NAME);
+                                            exam.put(ExamTable.FOR_CLASS,classRef[0]);
+                                            exam.put(ExamTable.EXAM_NAME, examDesc.getText().toString());
+                                            exam.put(ExamTable.MAX_MARKS,Float.parseFloat(outOf.getText().toString()));
                                             exam.saveEventually();
 
 
-                                            ParseObject marks = new ParseObject("Marks");
-                                            marks.put("student", studentRef[0]);
-                                            marks.put("exam", exam);
-                                            marks.put("marksObtained", Float.parseFloat(marksObtained.getText().toString()));
+                                            ParseObject marks = new ParseObject(MarksTable.TABLE_NAME);
+                                            marks.put(MarksTable.STUDENT_USER_REF, studentRef[0]);
+                                            marks.put(MarksTable.EXAM_REF, exam);
+                                            marks.put(MarksTable.MARKS_OBTAINED, Float.parseFloat(marksObtained.getText().toString()));
                                             marks.saveEventually();
 
                                             Toast.makeText(getApplicationContext(), "Marks details added!", Toast.LENGTH_LONG).show();
