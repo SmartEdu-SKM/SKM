@@ -96,19 +96,19 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
 
         final ParseObject[] classRef = new ParseObject[1];
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId",classId);
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                     classRef[0] = classListRet.get(0);
-                    String classname=classRef[0].getString("class");
+                    String classname=classRef[0].getString(ClassTable.CLASS_NAME);
 
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-                    studentQuery.whereEqualTo("class", classname);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(ClassTable.CLASS_NAME, classname);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -121,10 +121,10 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
 
-                                    String subject = u.getString("subject");
+                                    String subject = u.getString(ClassTable.SUBJECT);
                                     String teacher_name= null;
                                     try {
-                                        teacher_name = ((ParseUser)u.get("teacher")).fetchIfNeeded().getUsername();
+                                        teacher_name = ((ParseUser)u.get(ClassTable.TEACHER_USER_REF)).fetchIfNeeded().getUsername();
                                     } catch (ParseException e1) {
                                         e1.printStackTrace();
                                     }
@@ -191,26 +191,26 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
 
                         final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-                        classQuery.whereEqualTo("objectId", classId);
+                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                         classQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
                                     classRef[0] = studentListRet.get(0);
-                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-                                    studentQuery.whereEqualTo("class", classRef[0].get("class"));
+                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                    studentQuery.whereEqualTo(ClassTable.CLASS_NAME, classRef[0].get(ClassTable.CLASS_NAME));
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
                                             if (e == null) {
 
                                                 for (int i = 0; i < studentListRet.size(); i++) {
-                                                    ParseUser client_user = (ParseUser) studentListRet.get(i).get("teacher");
-                                                    ParseObject newmessage = new ParseObject("Message");
-                                                    newmessage.put("from", ParseUser.getCurrentUser());
-                                                    newmessage.put("to", client_user);
-                                                    newmessage.put("message", message.getText().toString());
-                                                    newmessage.put("delBySender",false);
-                                                    newmessage.put("delByReceiver",false);
+                                                    ParseUser client_user = (ParseUser) studentListRet.get(i).get(ClassTable.TEACHER_USER_REF);
+                                                    ParseObject newmessage = new ParseObject(MessageTable.TABLE_NAME);
+                                                    newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+                                                    newmessage.put(MessageTable.TO_USER_REF, client_user);
+                                                    newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+                                                    newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+                                                    newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
 
                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -222,7 +222,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                                         e1.printStackTrace();
                                                     }
 
-                                                    newmessage.put("sentAt", d.getTime());
+                                                    newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
                                                     Toast.makeText(message_to_teacher.this, "Message Successfully Broadcasted to teachers", Toast.LENGTH_LONG).show();
@@ -336,12 +336,12 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     {
 
             ParseUser client_user=teacher;
-            ParseObject newmessage=new ParseObject("Message");
-            newmessage.put("from",ParseUser.getCurrentUser());
-            newmessage.put("to",client_user);
-            newmessage.put("message", message.getText().toString());
-            newmessage.put("delBySender",false);
-            newmessage.put("delByReceiver",false);
+            ParseObject newmessage=new ParseObject(MessageTable.TABLE_NAME);
+            newmessage.put(MessageTable.FROM_USER_REF,ParseUser.getCurrentUser());
+            newmessage.put(MessageTable.TO_USER_REF,client_user);
+            newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+            newmessage.put(MessageTable.DELETED_BY_SENDER,false);
+            newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
             java.util.Calendar calendar= Calendar.getInstance();
             SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
             String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -352,7 +352,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                 e1.printStackTrace();
             }
 
-            newmessage.put("sentAt", d.getTime());
+            newmessage.put(MessageTable.SENT_AT, d.getTime());
             newmessage.saveEventually();
             Toast.makeText(message_to_teacher.this, "Message Successfully Sent to Teacher", Toast.LENGTH_LONG).show();
 

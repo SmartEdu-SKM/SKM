@@ -112,8 +112,8 @@ public class ChooseRole extends AppCompatActivity {
 
     public void chooseTeacher() {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -123,7 +123,7 @@ public class ChooseRole extends AppCompatActivity {
                     for (int i = 0; i < roleListRet.size(); i++) {
                         flag=0;
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString();
+                        String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Teacher")) {
                             flag =1;
                             Intent j = new Intent(ChooseRole.this, MainActivity.class);
@@ -152,8 +152,8 @@ public class ChooseRole extends AppCompatActivity {
 
     public void chooseStudent() {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -163,7 +163,7 @@ public class ChooseRole extends AppCompatActivity {
                     for (int i = 0; i < roleListRet.size(); i++) {
                         flag=0;
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString();
+                        String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Student")) {
                             flag =1;
                             Intent j = new Intent(ChooseRole.this, student_home_activity.class);
@@ -191,8 +191,8 @@ public class ChooseRole extends AppCompatActivity {
 
     public void chooseParent() {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery("Role");
-        roleQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -202,7 +202,7 @@ public class ChooseRole extends AppCompatActivity {
                     for (int i = 0; i < roleListRet.size(); i++) {
                         flag=0;
                         ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString("roleName").toString();
+                        String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Parent")) {
                             flag =1;
                             Intent j = new Intent(ChooseRole.this, parent_home_activity.class);

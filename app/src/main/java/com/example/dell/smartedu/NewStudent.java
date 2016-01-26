@@ -113,13 +113,13 @@ public class NewStudent extends BaseActivity {
                     userRef[0] = user_student;
                   //  Toast.makeText(NewStudent.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Student role of " + user_student.getObjectId());
-                    ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy", user_student);
-                    roleobject.put("roleName", "Student");
+                    ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
+                    roleobject.put(RoleTable.OF_USER_REF, user_student);
+                    roleobject.put(RoleTable.ROLE, "Student");
                     roleobject.saveInBackground();
 
-                    ParseObject parent=new ParseObject("Parent");
-                    parent.put("child",user_student);
+                    ParseObject parent=new ParseObject(ParentTable.TABLE_NAME);
+                    parent.put(ParentTable.CHILD_USER_REF,user_student);
                     parent.saveEventually();
 
                     try {
@@ -163,9 +163,9 @@ public class NewStudent extends BaseActivity {
                     userRef[0] = user_parent;
                    // Toast.makeText(NewStudent.this, "Parent User made "+ " "+user_parent.getObjectId(), Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
-                    ParseObject roleobject = new ParseObject("Role");
-                    roleobject.put("createdBy", user_parent);
-                    roleobject.put("roleName", "Parent");
+                    ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
+                    roleobject.put(RoleTable.OF_USER_REF, user_parent);
+                    roleobject.put(RoleTable.ROLE, "Parent");
                     roleobject.saveInBackground();
 
 
@@ -180,14 +180,14 @@ public class NewStudent extends BaseActivity {
                                 if (objects.size() != 0) {
                                     Log.d("user", "student user found");
                                     ParseUser student_user = objects.get(0);
-                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery("Parent");
-                                    parent_relation.whereEqualTo("child", student_user);
+                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                                    parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF, student_user);
                                     parent_relation.findInBackground(new FindCallback<ParseObject>() {
                                         @Override
                                         public void done(List<ParseObject> objects, ParseException e) {
                                             if (e == null) {
                                                 if (objects.size() != 0) {
-                                                    objects.get(0).put("userId", user_parent);
+                                                    objects.get(0).put(ParentTable.PARENT_USER_REF, user_parent);
                                                     objects.get(0).saveEventually();
                                                 } else {
 
@@ -231,8 +231,8 @@ public class NewStudent extends BaseActivity {
     protected void addStudent(final ParseUser userRef){
        // Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
         final ParseObject[] classRef = new ParseObject[1];
-        final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
+        final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -241,21 +241,21 @@ public class NewStudent extends BaseActivity {
 
                     classRef[0] = studentListRet.get(0);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.whereEqualTo("rollNumber", rollno);
+                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, rollno);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
 
                                 if (studentListRet.size() == 0) {
-                                    ParseObject student = new ParseObject("Student");
-                                    student.put("addedBy", ParseUser.getCurrentUser());
-                                    student.put("name", name);
-                                    student.put("age", age);
-                                    student.put("rollNumber", rollno);
-                                    student.put("class", classRef[0]);
-                                    student.put("userId", userRef);
+                                    ParseObject student = new ParseObject(StudentTable.TABLE_NAME);
+                                    student.put(StudentTable.ADDED_BY_USER_REF, ParseUser.getCurrentUser());
+                                    student.put(StudentTable.STUDENT_NAME, name);
+                                    student.put(StudentTable.STUDENT_AGE, age);
+                                    student.put(StudentTable.ROLL_NUMBER, rollno);
+                                    student.put(StudentTable.CLASS_REF, classRef[0]);
+                                    student.put(StudentTable.STUDENT_USER_REF, userRef);
                                     student.saveInBackground();
 
                                     Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
@@ -284,7 +284,7 @@ public class NewStudent extends BaseActivity {
     }
 
 
-
+/*
     protected void addParent(final String Name, final int Rollno)
     {
         Log.d("user", "parent child realtion");
@@ -331,7 +331,7 @@ public class NewStudent extends BaseActivity {
             }
         });
     }
-
+*/
     @Override
     protected void onPostResume() {
         super.onPostResume();
