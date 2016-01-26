@@ -5,6 +5,7 @@ package com.example.dell.smartedu;
  */
 public class RoleTable {
     public static final String TABLE_NAME="Role";
+    public static final String OBJECT_ID="objectId";
     public static final String ROLE="roleName";
     public static final String OF_USER_REF="createdBy";
 

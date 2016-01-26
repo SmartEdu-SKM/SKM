@@ -5,6 +5,7 @@ package com.example.dell.smartedu;
  */
 public class ScheduleTable {
     public static final String TABLE_NAME="Schedule";
+    public static final String OBJECT_ID="objectId";
     public static final String START_TIME="startTime";
     public static final String END_TIME="endTime";
     public static final String DAY="day";

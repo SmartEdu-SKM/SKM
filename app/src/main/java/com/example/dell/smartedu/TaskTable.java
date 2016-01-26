@@ -5,6 +5,7 @@ package com.example.dell.smartedu;
  */
 public class TaskTable {
     public static final String TABLE_NAME="Task";
+    public static final String OBJECT_ID="objectId";
     public static final String TASK_NAME="TaskName";
     public static final String TASK_DESCRIPTION="TaskDescription";
     public static final String CREATED_BY_USER_REF="createdBy";

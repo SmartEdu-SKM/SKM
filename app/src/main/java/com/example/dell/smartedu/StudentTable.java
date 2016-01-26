@@ -5,6 +5,7 @@ package com.example.dell.smartedu;
  */
 public class StudentTable {
     public static final String TABLE_NAME="Student";
+    public static final String OBJECT_ID="objectId";
     public static final String ROLL_NUMBER="rollNumber";
     public static final String STUDENT_NAME="name";
     public static final String STUDENT_AGE="age";
