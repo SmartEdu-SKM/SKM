@@ -5,6 +5,7 @@ package com.example.dell.smartedu;
  */
 public class ImageUploadsTable {
     public static final String TABLE_NAME="ImageUploads";
+    public static final String OBJECT_ID="objectId";
     public static final String UPLOAD_TYPE="type";
     public static final String SUBJECT="subject";
     public static final String DATE_U0PLOADED="uploadDate";
