@@ -214,8 +214,8 @@ if(_for.equals("received")){
                             message = (TextView) dialog.findViewById(R.id.message);
                             messageFrom = (TextView) dialog.findViewById(R.id.message_from);
                             messagedate = (TextView) dialog.findViewById(R.id.date);
-                            delete = (Button) dialog.findViewById(R.id.delButton);
-                            ok = (Button) dialog.findViewById(R.id.okButton);
+                            delete = (Button) dialog.findViewById(R.id.doneButton);
+                            ok = (Button) dialog.findViewById(R.id.doneButton);
                             reply=(Button) dialog.findViewById(R.id.replyButton);
 
 
@@ -456,8 +456,8 @@ if(_for.equals("received")){
                                     message = (TextView) dialog.findViewById(R.id.message);
                                     messageFrom = (TextView) dialog.findViewById(R.id.message_from);
                                     messagedate = (TextView) dialog.findViewById(R.id.date);
-                                    delete = (Button) dialog.findViewById(R.id.delButton);
-                                    ok = (Button) dialog.findViewById(R.id.okButton);
+                                    delete = (Button) dialog.findViewById(R.id.doneButton);
+                                    ok = (Button) dialog.findViewById(R.id.doneButton);
                                     reply=(Button)dialog.findViewById(R.id.replyButton);
                                     reply.setVisibility(View.INVISIBLE);
                                     title.setText("To:");

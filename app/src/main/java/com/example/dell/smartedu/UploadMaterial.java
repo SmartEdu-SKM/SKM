@@ -186,8 +186,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         myDueDate = (TextView) dialog.findViewById(R.id.dueDate);
                                         imageUpload = (ImageView) dialog.findViewById(R.id.imageUpload);
                                         myTopic = (TextView) dialog.findViewById(R.id.topic);
-                                        okButton = (Button) dialog.findViewById(R.id.okButton);
-                                        delButton = (Button) dialog.findViewById(R.id.delButton);
+                                        okButton = (Button) dialog.findViewById(R.id.doneButton);
+                                        delButton = (Button) dialog.findViewById(R.id.doneButton);
                                         viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
                                         myTopic.setText(details[0].trim());
                                         mySubject.setText(details[1]);
