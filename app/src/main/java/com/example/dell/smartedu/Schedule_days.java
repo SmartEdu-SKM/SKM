@@ -3,7 +3,6 @@ package com.example.dell.smartedu;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -167,8 +166,8 @@ public class Schedule_days extends Fragment {
                     }
                 });
 
-                okButton = (Button) show_dialog.findViewById(R.id.okButton);
-                delButton = (Button) show_dialog.findViewById(R.id.delButton);
+                okButton = (Button) show_dialog.findViewById(R.id.doneButton);
+                delButton = (Button) show_dialog.findViewById(R.id.doneButton);
                 editButton = (Button) show_dialog.findViewById(R.id.editButton);
 
 

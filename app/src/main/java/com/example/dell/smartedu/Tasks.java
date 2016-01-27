@@ -213,8 +213,8 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                     }
                 });
 
-                okButton = (Button) dialog.findViewById(R.id.okButton);
-                delButton = (Button) dialog.findViewById(R.id.delButton);
+                okButton = (Button) dialog.findViewById(R.id.doneButton);
+                delButton = (Button) dialog.findViewById(R.id.doneButton);
                 editButton = (Button) dialog.findViewById(R.id.editButton);
 
 
