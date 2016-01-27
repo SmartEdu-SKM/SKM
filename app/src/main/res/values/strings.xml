@@ -113,5 +113,6 @@
     <string name="title_activity_message_to_teacher">message_to_teacher</string>
     <string name="title_activity_application">Application</string>
     <string name="title_activity_my_application">MyApplication</string>
+    <string name="title_activity_select_institution">select_institution</string>
 
 </resources>

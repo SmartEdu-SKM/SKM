@@ -8,5 +8,6 @@ public class RoleTable {
     public static final String OBJECT_ID="objectId";
     public static final String ROLE="roleName";
     public static final String OF_USER_REF="createdBy";
+    public static final String ENROLLED_WITH="enrolledWith";
 
 }

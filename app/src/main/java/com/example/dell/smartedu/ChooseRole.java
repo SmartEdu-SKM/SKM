@@ -126,7 +126,8 @@ public class ChooseRole extends AppCompatActivity {
                         String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Teacher")) {
                             flag =1;
-                            Intent j = new Intent(ChooseRole.this, MainActivity.class);
+                            Intent j = new Intent(ChooseRole.this, select_institution.class);
+                            j.putExtra("role","Teacher");
                             startActivity(j);
                             Toast.makeText(getApplicationContext(), "Teacher Module", Toast.LENGTH_LONG)
                                     .show();
@@ -166,7 +167,8 @@ public class ChooseRole extends AppCompatActivity {
                         String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Student")) {
                             flag =1;
-                            Intent j = new Intent(ChooseRole.this, student_home_activity.class);
+                            Intent j = new Intent(ChooseRole.this, select_institution.class);
+                            j.putExtra("role","Student");
                             startActivity(j);
                             Toast.makeText(getApplicationContext(), "Student Module", Toast.LENGTH_LONG)
                                     .show();
@@ -205,7 +207,8 @@ public class ChooseRole extends AppCompatActivity {
                         String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals("Parent")) {
                             flag =1;
-                            Intent j = new Intent(ChooseRole.this, parent_home_activity.class);
+                            Intent j = new Intent(ChooseRole.this, select_institution.class);
+                            j.putExtra("role","Parent");
                             startActivity(j);
                             Toast.makeText(getApplicationContext(), "Parent Module", Toast.LENGTH_LONG)
                                     .show();
