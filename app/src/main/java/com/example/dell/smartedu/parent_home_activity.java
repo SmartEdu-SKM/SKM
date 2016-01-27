@@ -54,6 +54,8 @@ public class parent_home_activity extends BaseActivity{
 
         final ParseObject[] childRef = new ParseObject[1];
         final ParseObject[] classRef = new ParseObject[1];
+        final GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, "Parent"));
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
         studentQuery.whereEqualTo(ParentTable.PARENT_USER_REF, ParseUser.getCurrentUser());
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -86,8 +88,7 @@ public class parent_home_activity extends BaseActivity{
                                                     }
                                                 }
 
-                                    GridView gridview = (GridView) findViewById(R.id.gridview);
-                                    gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, "Parent"));
+
                                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         public void onItemClick(AdapterView<?> parent, View v,
                                                                 int position, long id) {

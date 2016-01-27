@@ -337,7 +337,7 @@ public class AddRole extends BaseActivity {
     }
     */
 
-    public void addRole(final String role, final ParseObject institutionobject) {
+    public void addRole(final String rolestring, final ParseObject institutionobject) {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
         roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
@@ -352,7 +352,7 @@ public class AddRole extends BaseActivity {
                         ParseObject u = (ParseObject) roleListRet.get(i);
                         String name = u.getString(RoleTable.ROLE).toString();
                         String codeofinstitution= ( (ParseObject)u.get(RoleTable.ENROLLED_WITH)).getObjectId();
-                        if (name.equals(role) && codeofinstitution.equals(institutionobject.getObjectId()) ) {
+                        if (name.equals(rolestring) && codeofinstitution.equals(institutionobject.getObjectId()) ) {
                             Toast.makeText(getApplicationContext(), "Role already added along with this institution. Go to Choose Role", Toast.LENGTH_LONG)
                                     .show();
                             k=1;
@@ -364,7 +364,7 @@ public class AddRole extends BaseActivity {
                     if (k==0) {
                         ParseObject role = new ParseObject(RoleTable.TABLE_NAME);
                         role.put(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
-                        role.put(RoleTable.ROLE, role);
+                        role.put(RoleTable.ROLE, rolestring);
                         role.put(RoleTable.ENROLLED_WITH,institutionobject);
                         role.saveInBackground();
 
