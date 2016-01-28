@@ -182,6 +182,14 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         dialog.setContentView(R.layout.show_upload_details);
                                         dialog.setTitle("Upload Details");
 
+                                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                        lp.copyFrom(dialog.getWindow().getAttributes());
+                                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                        lp.gravity = Gravity.CENTER;
+
+                                        dialog.getWindow().setAttributes(lp);
+
                                         myType = (TextView) dialog.findViewById(R.id.typeDesc);
                                         mySubject = (TextView) dialog.findViewById(R.id.subject);
                                         myDate = (TextView) dialog.findViewById(R.id.uploadDate);
@@ -376,6 +384,14 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         final Dialog dialog_upload = new Dialog(UploadMaterial.this);
         dialog_upload.setContentView(R.layout.upload_material);
         dialog_upload.setTitle("Upload Material");
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog_upload.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+
+        dialog_upload.getWindow().setAttributes(lp);
 
         DeadlineHead= (TextView) dialog_upload.findViewById(R.id.deadlineHead);
         DeadlineHead.setSelected(true);
