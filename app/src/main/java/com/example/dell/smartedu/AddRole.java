@@ -62,7 +62,7 @@ public class AddRole extends BaseActivity {
 
                                 if (e == null) {
                                     if (institutions.size() == 0) {
-                                        Toast.makeText(getApplicationContext(), "Wrong code/Institution not enrolled with software", Toast.LENGTH_LONG)
+                                        Toast.makeText(getApplicationContext(),insticode.getText() + " is a wrong code/Institution not enrolled with software", Toast.LENGTH_LONG)
                                                 .show();
                                     } else {
                                         getInstiCode.dismiss();
@@ -94,7 +94,7 @@ public class AddRole extends BaseActivity {
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ParseQuery checkcode = ParseQuery.getQuery(InstitutionTable.INSTITUTION_NAME);
+                        ParseQuery checkcode = ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
                         checkcode.whereEqualTo(InstitutionTable.OBJECT_ID, insticode.getText().toString());
                         checkcode.findInBackground(new FindCallback<ParseObject>() {
                             @Override
@@ -135,7 +135,7 @@ public class AddRole extends BaseActivity {
                 doneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ParseQuery checkcode = ParseQuery.getQuery(InstitutionTable.INSTITUTION_NAME);
+                        ParseQuery checkcode = ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
                         checkcode.whereEqualTo(InstitutionTable.OBJECT_ID, insticode.getText().toString());
                         checkcode.findInBackground(new FindCallback<ParseObject>() {
                             @Override

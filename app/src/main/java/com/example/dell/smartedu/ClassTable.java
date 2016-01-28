@@ -10,5 +10,6 @@ public class ClassTable {
     public static final String SUBJECT="subject";
     public static final String TEACHER_USER_REF="teacher";
     public static final String IF_CLASS_TEACHER="classTeacher";
+    public static final String INSTITUTION="institution";
 
 }

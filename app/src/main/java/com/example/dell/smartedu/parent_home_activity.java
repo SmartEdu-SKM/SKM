@@ -29,13 +29,18 @@ public class parent_home_activity extends BaseActivity{
     String studentId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
+    String institution_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home_activity);
 
-        role="Parent";
+        Intent home=getIntent();
+
+        role=home.getStringExtra("role");
+        institution_name=home.getStringExtra("institution");
+
         Log.d("user",role);
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -56,6 +61,8 @@ public class parent_home_activity extends BaseActivity{
         final ParseObject[] classRef = new ParseObject[1];
         final GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, "Parent"));
+
+
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
         studentQuery.whereEqualTo(ParentTable.PARENT_USER_REF, ParseUser.getCurrentUser());
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -73,20 +80,33 @@ public class parent_home_activity extends BaseActivity{
                             @Override
                             public void done(List<ParseObject> objects, ParseException e) {
                                 if (e == null) {
-                                    studentId= objects.get(0).getObjectId().trim();
-                                    classRef[0]= (ParseObject) objects.get(0).get(StudentTable.STUDENT_USER_REF);
-                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                                    classQuery.findInBackground(new FindCallback<ParseObject>() {
-                                        @Override
-                                        public void done(List<ParseObject> objects, ParseException e) {
-                                            if (e == null) {
-                                                for (int i = 0; i < objects.size(); i++) {
-                                                    if (objects.get(i) == classRef[0]) {
-                                                        classId = objects.get(i).getObjectId().trim();
-                                                        //Log.d("classQuery", "ClassId: " + classId);
-                                                        break;
-                                                    }
-                                                }
+
+                                    for(int x=0;x<objects.size();x++)
+                                    {
+                                        ParseObject u = (ParseObject) objects.get(x);
+
+                                        ParseObject for_class_check= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
+                                        try {
+                                            ParseObject test_insti=(ParseObject)for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
+                                            if( test_insti.fetchIfNeeded().getString("name").equals(institution_name))
+                                            {
+                                                studentId = u.getObjectId();
+                                                classRef[0] = for_class_check;
+                                                break;
+                                            }
+                                        } catch (ParseException e1) {
+                                            e1.printStackTrace();
+                                        }
+
+                                    }
+
+                                    try {
+                                        Log.d("insti", ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.INSTITUTION)).getString("name"));
+                                    } catch (ParseException e1) {
+                                        e1.printStackTrace();
+                                    }
+
+                                    classId=classRef[0].getObjectId();
 
 
                                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -129,13 +149,7 @@ public class parent_home_activity extends BaseActivity{
                                         }
                                     });
 
-                                            } else {
 
-                                                Log.d("user", "Error: in classQuery" + e.getMessage());
-                                            }
-
-                                        }
-                                    });
                                 } else {
 
                                     Log.d("user", "Error: in studQuery" + e.getMessage());
