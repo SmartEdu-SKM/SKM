@@ -40,6 +40,7 @@ public class parent_home_activity extends BaseActivity{
 
         role=home.getStringExtra("role");
         institution_name=home.getStringExtra("institution");
+        institution_code=home.getStringExtra("institution_code");
 
         Log.d("user",role);
 
@@ -75,21 +76,19 @@ public class parent_home_activity extends BaseActivity{
                         childRef[0] = (ParseObject) u.get(ParentTable.CHILD_USER_REF);
 
                         ParseQuery<ParseObject> studQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                        studQuery.whereEqualTo(StudentTable.STUDENT_USER_REF,childRef[0]);
+                        studQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, childRef[0]);
                         studQuery.findInBackground(new FindCallback<ParseObject>() {
                             @Override
                             public void done(List<ParseObject> objects, ParseException e) {
                                 if (e == null) {
 
-                                    for(int x=0;x<objects.size();x++)
-                                    {
+                                    for (int x = 0; x < objects.size(); x++) {
                                         ParseObject u = (ParseObject) objects.get(x);
 
-                                        ParseObject for_class_check= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
+                                        ParseObject for_class_check = ((ParseObject) u.get(StudentTable.CLASS_REF));
                                         try {
-                                            ParseObject test_insti=(ParseObject)for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
-                                            if( test_insti.fetchIfNeeded().getString("name").equals(institution_name))
-                                            {
+                                            ParseObject test_insti = (ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
+                                            if (test_insti.fetchIfNeeded().getString("name").equals(institution_name)) {
                                                 studentId = u.getObjectId();
                                                 classRef[0] = for_class_check;
                                                 break;
@@ -106,7 +105,7 @@ public class parent_home_activity extends BaseActivity{
                                         e1.printStackTrace();
                                     }
 
-                                    classId=classRef[0].getObjectId();
+                                    classId = classRef[0].getObjectId();
 
 
                                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,7 +114,7 @@ public class parent_home_activity extends BaseActivity{
                                             if (position == 0) {
                                                 Intent atten_intent = new Intent(parent_home_activity.this, view_attendance.class);
                                                 atten_intent.putExtra("role", "Parent");
-                                                atten_intent.putExtra("id",studentId);
+                                                atten_intent.putExtra("id", studentId);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
@@ -127,7 +126,7 @@ public class parent_home_activity extends BaseActivity{
                                                 message_intent.putExtra("role", "Parent");
                                                 message_intent.putExtra("classId", classId);
                                                 message_intent.putExtra("studentId", studentId);
-                                                message_intent.putExtra("_for","received");
+                                                message_intent.putExtra("_for", "received");
                                                 startActivity(message_intent);
 
                                             } else if (position == 3) {
@@ -142,7 +141,6 @@ public class parent_home_activity extends BaseActivity{
 
 
                                             } else if (position == 5) {
-
 
 
                                             }

@@ -39,6 +39,7 @@ public class student_home_activity extends BaseActivity{
         Intent home=getIntent();
         role=home.getStringExtra("role");
         institution_name=home.getStringExtra("institution");
+        institution_code=home.getStringExtra("institution_code");
         Log.d("user",role);
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);

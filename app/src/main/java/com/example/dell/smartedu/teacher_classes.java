@@ -46,7 +46,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             Intent from_home = getIntent();
             _for = from_home.getStringExtra("for");
             role = from_home.getStringExtra("role");
-
+            institution_code=from_home.getStringExtra("institution_code");
 
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(mToolbar);
@@ -73,8 +73,10 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
+        Log.d("institution",institution_code);
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+       classQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
@@ -146,6 +148,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                 ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                 studentQuery.whereEqualTo(ClassTable.CLASS_NAME, item);
                 studentQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                studentQuery.whereEqualTo(ClassTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                 studentQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> classObjRet, ParseException e) {
                         if (e == null) {

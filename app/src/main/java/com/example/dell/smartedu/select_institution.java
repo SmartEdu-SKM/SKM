@@ -161,18 +161,21 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                                               {
                                                   Intent teacher_home_page=new Intent(select_institution.this,MainActivity.class);
                                                   teacher_home_page.putExtra("role",role);
+                                                  teacher_home_page.putExtra("institution_code",institution_code);
                                                   teacher_home_page.putExtra("institution",details[0]);
                                                   startActivity(teacher_home_page);
                                               }else if(role.equals("Student"))
                                               {
                                                   Intent student_home_page=new Intent(select_institution.this,student_home_activity.class);
                                                   student_home_page.putExtra("role",role);
+                                                  student_home_page.putExtra("institution_code",institution_code);
                                                   student_home_page.putExtra("institution",details[0]);
                                                   startActivity(student_home_page);
                                               }else if(role.equals("Parent"))
                                               {
                                                   Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
                                                   parent_home_page.putExtra("role", role);
+                                                  parent_home_page.putExtra("institution_code",institution_code);
                                                   parent_home_page.putExtra("institution",details[0]);
                                                   startActivity(parent_home_page);
                                               }
