@@ -248,6 +248,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if(this.role.equals("Teacher")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                i.putExtra("role", role);
                 startActivity(i);
             }
 
@@ -304,6 +305,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else if(this.role.equals("Student")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),student_home_activity.class);
+                i.putExtra("role", role);
                 startActivity(i);
             }
 
@@ -359,6 +361,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else if(role.equals("Parent")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),parent_home_activity.class);
+                i.putExtra("role", role);
                 startActivity(i);
             }
 
