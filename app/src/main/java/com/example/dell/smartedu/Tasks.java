@@ -85,7 +85,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
         addTaskButton = (Button)findViewById(R.id.addButton);
         taskList = (ListView) findViewById(R.id.taskList);
-        taskListnew =(ListView) findViewById(R.id.taskList);
+
 
         myList = dbHandler.getAllTasks();
         Bundle fromrole= getIntent().getExtras();

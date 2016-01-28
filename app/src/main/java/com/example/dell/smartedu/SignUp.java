@@ -26,6 +26,11 @@ public class SignUp extends AppCompatActivity {
     EditText PasswordSignup;
     EditText ConfirmPasswordSignup;
 
+    TextView Name;
+    TextView Email;
+    TextView Password;
+    TextView ConfirmPassword;
+
     TextView already;
 
     Button signUp;
@@ -41,6 +46,17 @@ public class SignUp extends AppCompatActivity {
         EmailSignup= (EditText)findViewById(R.id.emailSignup);
         PasswordSignup= (EditText)findViewById(R.id.passwordSignup);
         ConfirmPasswordSignup= (EditText)findViewById(R.id.confirmPasswordSignup);
+
+        Name=(TextView)findViewById(R.id.nameText);
+        Email= (TextView)findViewById(R.id.emailText);
+        Password= (TextView)findViewById(R.id.passwordText);
+        ConfirmPassword= (TextView)findViewById(R.id.confirmPasswordText);
+
+        Name.setSelected(true);
+        Email.setSelected(true);
+        Password.setSelected(true);
+        ConfirmPassword.setSelected(true);
+
 
 
         signUp=(Button)findViewById(R.id.signUpButton);

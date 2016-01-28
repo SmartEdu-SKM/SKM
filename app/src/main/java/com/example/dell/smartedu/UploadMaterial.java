@@ -51,6 +51,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     Button viewAllButton;
     Button upload;
 
+    TextView DeadlineHead;
+
     TextView myDate;
     TextView editmyDate;
     TextView myDueDate;
@@ -187,7 +189,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         imageUpload = (ImageView) dialog.findViewById(R.id.imageUpload);
                                         myTopic = (TextView) dialog.findViewById(R.id.topic);
                                         okButton = (Button) dialog.findViewById(R.id.doneButton);
-                                        delButton = (Button) dialog.findViewById(R.id.doneButton);
+                                        delButton = (Button) dialog.findViewById(R.id.delButton);
                                         viewAllButton = (Button) dialog.findViewById(R.id.viewAll);
                                         myTopic.setText(details[0].trim());
                                         mySubject.setText(details[1]);
@@ -375,6 +377,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dialog_upload.setContentView(R.layout.upload_material);
         dialog_upload.setTitle("Upload Material");
 
+        DeadlineHead= (TextView) dialog_upload.findViewById(R.id.deadlineHead);
+        DeadlineHead.setSelected(true);
 
         myDate = (TextView) dialog_upload.findViewById(R.id.date);
         myDueDate= (TextView) dialog_upload.findViewById(R.id.deadline);
