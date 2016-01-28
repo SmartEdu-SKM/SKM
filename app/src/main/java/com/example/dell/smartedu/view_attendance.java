@@ -25,7 +25,8 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     String role;
-    String id;
+    String studentId;
+    String classId;
     MyDBHandler dbHandler;
     TextView absentDays;
     TextView totalDays;
@@ -45,7 +46,8 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 
         Intent from_home = getIntent();
         role = from_home.getStringExtra("role");
-        id = from_home.getStringExtra("id");
+        studentId = from_home.getStringExtra("studentId");
+        classId = from_home.getStringExtra("classId");
 
         /*
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,7 +69,8 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 
 
             ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
-        attQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, id));
+        attQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
+        attQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(StudentTable.TABLE_NAME, classId));
         attQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> attListRet, ParseException e) {
                 if (e == null) {

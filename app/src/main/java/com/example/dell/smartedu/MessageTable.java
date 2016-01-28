@@ -12,4 +12,5 @@ public class MessageTable {
     public static final String SENT_AT="sentAt";
     public static final String DELETED_BY_SENDER="delBySender";
     public static final String DELETED_BY_RECEIVER="delByReceiver";
+    public static final String INSTITUTION="institution";
 }

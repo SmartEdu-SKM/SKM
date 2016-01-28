@@ -68,6 +68,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         final Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
         _for = from_student.getStringExtra("_for");
+        institution_name= from_student.getStringExtra("institution");
+        institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
@@ -87,6 +89,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                 public void onClick(View v) {
                     Intent message_intent = new Intent(view_messages.this, teacher_classes.class);
                     message_intent.putExtra("role", role);
+                    message_intent.putExtra("institution",institution_name);
                     message_intent.putExtra("for", "message");
                     startActivity(message_intent);
                 }
@@ -106,6 +109,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                     Log.d("test",studentId);
                     Intent message_intent = new Intent(view_messages.this, message_to_teacher.class);
                     message_intent.putExtra("role", role);
+                    message_intent.putExtra("institution",institution_name);
+                    message_intent.putExtra("institution_code",institution_code);
                     message_intent.putExtra("classId", classId);
                     message_intent.putExtra("studentId", studentId);
                     startActivity(message_intent);
@@ -123,10 +128,9 @@ if(_for.equals("received")){
         public void onClick(View v) {
             Intent read_message_intent = new Intent(view_messages.this, view_messages.class);
             read_message_intent.putExtra("role", role);
-            if(role.equals("Parent") || role.equals("Student"))
-            {
-                classId=from_student.getStringExtra("classId");
-                studentId=from_student.getStringExtra("studentId");
+            if (role.equals("Parent") || role.equals("Student")) {
+                classId = from_student.getStringExtra("classId");
+                studentId = from_student.getStringExtra("studentId");
                 read_message_intent.putExtra("classId", classId);
                 read_message_intent.putExtra("studentId", studentId);
             }
@@ -137,6 +141,7 @@ if(_for.equals("received")){
 
         ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
         messageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
+    messageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
     messageQuery.whereEqualTo(MessageTable.DELETED_BY_RECEIVER, false);
     messageQuery.findInBackground(new FindCallback<ParseObject>() {
         public void done(List<ParseObject> messageListRet, ParseException e) {
@@ -214,7 +219,7 @@ if(_for.equals("received")){
                             message = (TextView) dialog.findViewById(R.id.message);
                             messageFrom = (TextView) dialog.findViewById(R.id.message_from);
                             messagedate = (TextView) dialog.findViewById(R.id.date);
-                            delete = (Button) dialog.findViewById(R.id.doneButton);
+                            delete = (Button) dialog.findViewById(R.id.delButton);
                             ok = (Button) dialog.findViewById(R.id.doneButton);
                             reply=(Button) dialog.findViewById(R.id.replyButton);
 
@@ -267,6 +272,7 @@ if(_for.equals("received")){
                                                     ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
                                                     getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, objects.get(0));
                                                     getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
+                                                    getMessageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
 
                                                     final long milliseconds = calendar.getTimeInMillis();
                                                     Log.d("user", String.valueOf(milliseconds));
@@ -316,6 +322,7 @@ if(_for.equals("received")){
                                             ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
                                             getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, objects.get(0));
                                             getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
+                                            getMessageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
                                             final long milliseconds = calendar.getTimeInMillis();
                                             Log.d("user", String.valueOf(milliseconds));
                                             getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
@@ -379,6 +386,7 @@ if(_for.equals("received")){
 
             ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
             messageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
+            messageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
             messageQuery.whereEqualTo(MessageTable.DELETED_BY_SENDER, false);
             messageQuery.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> messageListRet, ParseException e) {
@@ -497,6 +505,7 @@ if(_for.equals("received")){
                                                             ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
                                                             getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                             getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, objects.get(0));
+                                                            getMessageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
 
                                                             final long milliseconds = calendar.getTimeInMillis();
                                                             Log.d("user", String.valueOf(milliseconds));
@@ -546,6 +555,7 @@ if(_for.equals("received")){
                                                     ParseQuery<ParseObject> getMessageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
                                                     getMessageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                     getMessageQuery.whereEqualTo(MessageTable.TO_USER_REF, objects.get(0));
+                                                    getMessageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
                                                     final long milliseconds = calendar.getTimeInMillis();
                                                     Log.d("user", String.valueOf(milliseconds));
                                                     getMessageQuery.whereEqualTo(MessageTable.SENT_AT, milliseconds);
@@ -623,6 +633,7 @@ if(_for.equals("received")){
                                 new_message.put(MessageTable.MESSAGE_CONTENT,reply_message.getText().toString());
                                 new_message.put(MessageTable.DELETED_BY_SENDER,false);
                                 new_message.put(MessageTable.DELETED_BY_RECEIVER,false);
+                                new_message.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
 
                                 java.util.Calendar calendar= Calendar.getInstance();
                                 SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
