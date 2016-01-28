@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -71,7 +73,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         institution_name= from_student.getStringExtra("institution");
         institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,super.institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -133,6 +135,8 @@ if(_for.equals("received")){
                 studentId = from_student.getStringExtra("studentId");
                 read_message_intent.putExtra("classId", classId);
                 read_message_intent.putExtra("studentId", studentId);
+                read_message_intent.putExtra("institution_code",institution_code);
+                read_message_intent.putExtra("institution",institution_name);
             }
             read_message_intent.putExtra("_for", "sent");
             startActivity(read_message_intent);
@@ -380,6 +384,8 @@ if(_for.equals("received")){
                     Intent read_message_intent = new Intent(view_messages.this,view_messages.class);
                     read_message_intent.putExtra("role", role);
                     read_message_intent.putExtra("_for", "received");
+                    read_message_intent.putExtra("institution_code",institution_code);
+                    read_message_intent.putExtra("institution",institution_name);
                     startActivity(read_message_intent);
                 }
             });
@@ -460,6 +466,15 @@ if(_for.equals("received")){
                                     final Dialog dialog = new Dialog(view_messages.this);
                                     dialog.setContentView(R.layout.messsage_info);
                                     dialog.setTitle("Message");
+
+                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                    lp.copyFrom(dialog.getWindow().getAttributes());
+                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.gravity = Gravity.CENTER;
+
+                                    dialog.getWindow().setAttributes(lp);
+
                                     title = (TextView) dialog.findViewById(R.id.title);
                                     message = (TextView) dialog.findViewById(R.id.message);
                                     messageFrom = (TextView) dialog.findViewById(R.id.message_from);
