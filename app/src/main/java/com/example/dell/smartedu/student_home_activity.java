@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,13 +29,16 @@ public class student_home_activity extends BaseActivity{
     String classId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
+    String institution_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home_activity);
 
-        role="Student";
+        Intent home=getIntent();
+        role=home.getStringExtra("role");
+        institution_name=home.getStringExtra("institution");
         Log.d("user",role);
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -64,76 +68,91 @@ public class student_home_activity extends BaseActivity{
 
                     if(studListRet.size()!=0){
 
-                    ParseObject u = (ParseObject) studListRet.get(0);
+/*                    ParseObject u = (ParseObject) studListRet.get(0);
                     studentId = u.getObjectId();
-                    classRef[0] = (ParseObject) u.get(StudentTable.CLASS_REF);
+                    classRef[0] = (ParseObject) u.get(StudentTable.CLASS_REF);*/
 
-                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                    classQuery.findInBackground(new FindCallback<ParseObject>() {
-                        @Override
-                        public void done(List<ParseObject> objects, ParseException e) {
-                            if (e == null) {
-                                for (int i = 0; i < objects.size(); i++) {
-                                    if (objects.get(i) == classRef[0]) {
-                                        classId = objects.get(i).getObjectId().trim();
-                                        //Log.d("classQuery", "ClassId: " + classId);
-                                        break;
-                                    }
+
+                        for(int x=0;x<studListRet.size();x++)
+                        {
+                            ParseObject u = (ParseObject) studListRet.get(x);
+
+                            ParseObject for_class_check= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
+                            try {
+                                ParseObject test_insti=(ParseObject)for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
+                                if( test_insti.fetchIfNeeded().getString("name").equals(institution_name))
+                                {
+                                    studentId = u.getObjectId();
+                                    classRef[0] = for_class_check;
+                                    break;
                                 }
-
-
-                                gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    public void onItemClick(AdapterView<?> parent, View v,
-                                                            int position, long id) {
-                                        if (position == 0) {
-                                            Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
-                                            atten_intent.putExtra("role", role);
-                                            atten_intent.putExtra("id",studentId);
-                                            startActivity(atten_intent);
-
-                                        } else if (position == 1) {
-                                            Intent task_intent = new Intent(student_home_activity.this, Tasks.class);
-                                            task_intent.putExtra("role", role);
-                                            startActivity(task_intent);
-                                        } else if (position == 2) {
-                                            Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
-                                            message_intent.putExtra("role", role);
-                                            message_intent.putExtra("_for","received");
-                                            message_intent.putExtra("classId", classId);
-                                            message_intent.putExtra("studentId", studentId);
-                                            startActivity(message_intent);
-
-                                        } else if (position == 3) {
-                                            Intent schedule_intent = new Intent(student_home_activity.this, Schedule.class);
-                                            schedule_intent.putExtra("role",role);
-                                            startActivity(schedule_intent);
-
-                                        } else if (position == 4) {
-                                            Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
-                                            exam_intent.putExtra("role", role);
-                                            exam_intent.putExtra("classId", classId);
-                                            exam_intent.putExtra("studentId", studentId);
-                                            startActivity(exam_intent);
-
-                                        } else if (position == 5) {
-                                            Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
-                                            exam_intent.putExtra("id", classId);
-                                            startActivity(exam_intent);
-                                        }else if (position == 6) {
-
-
-                                        }else if (position == 7) {
-
-                                        }
-                                    }
-                                });
-                            } else {
-
-                                Log.d("user", "Error: in userQuery" + e.getMessage());
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
                             }
 
                         }
-                    });
+
+                        try {
+                            Log.d("insti", ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.INSTITUTION)).getString("name"));
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+                        classId=classRef[0].getObjectId();
+
+                        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        public void onItemClick(AdapterView<?> parent, View v,
+                                                                int position, long id) {
+                                            if (position == 0) {
+                                                Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
+
+                                                atten_intent.putExtra("role", role);
+                                                atten_intent.putExtra("id",studentId);
+                                                startActivity(atten_intent);
+
+                                            } else if (position == 1) {
+                                                Intent task_intent = new Intent(student_home_activity.this, Tasks.class);
+                                                task_intent.putExtra("role", role);
+                                                startActivity(task_intent);
+                                            } else if (position == 2) {
+                                                Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
+                                                message_intent.putExtra("role", role);
+                                                message_intent.putExtra("_for","received");
+                                                message_intent.putExtra("classId", classId);
+                                                message_intent.putExtra("studentId", studentId);
+                                                startActivity(message_intent);
+
+                                            } else if (position == 3) {
+                                                Intent schedule_intent = new Intent(student_home_activity.this, Schedule.class);
+
+                                                schedule_intent.putExtra("role",role);
+                                                startActivity(schedule_intent);
+
+                                            } else if (position == 4) {
+                                                Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
+                                                exam_intent.putExtra("role", role);
+                                                exam_intent.putExtra("classId", classId);
+                                                exam_intent.putExtra("studentId", studentId);
+                                                startActivity(exam_intent);
+
+                                            } else if (position == 5) {
+                                                Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
+                                                exam_intent.putExtra("id", classId);
+                                                startActivity(exam_intent);
+                                            }else if (position == 6) {
+
+
+                                            }else if (position == 7) {
+
+                                            }
+                                        }
+                                    });
+
+
+
+
+
+
                 }
 
 
