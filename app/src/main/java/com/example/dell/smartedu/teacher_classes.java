@@ -48,13 +48,14 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             role = from_home.getStringExtra("role");
             institution_code=from_home.getStringExtra("institution_code");
 
+
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Classes");
             noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
+            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,super.institution_name);
 
 
             dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);

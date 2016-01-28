@@ -57,7 +57,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
-        super.role=from_student.getStringExtra("role");
+        //super.role=from_student.getStringExtra("role");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -255,6 +255,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+                                                    newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
 
                                                     java.util.Calendar calendar = Calendar.getInstance();
                                                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -324,6 +325,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
+                                                                    newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
                                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                                                                     String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -473,6 +475,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                         newmessage.put(MessageTable.DELETED_BY_SENDER,false);
                         newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+                        newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                         java.util.Calendar calendar= Calendar.getInstance();
                         SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                         String date= format.format(new Date(calendar.getTimeInMillis()));
@@ -505,6 +508,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                                         newmessage.put(MessageTable.DELETED_BY_SENDER,false);
                                         newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+                                        newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
 
                                         java.util.Calendar calendar = Calendar.getInstance();
                                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");

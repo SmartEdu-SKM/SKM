@@ -251,6 +251,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
                 i.putExtra("role", role);
+                i.putExtra("institution_code", institution_code);
                 startActivity(i);
             }
 
@@ -308,6 +309,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),student_home_activity.class);
                 i.putExtra("role", role);
+                i.putExtra("institution_code", institution_code);
                 startActivity(i);
             }
 
@@ -364,6 +366,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),parent_home_activity.class);
                 i.putExtra("role", role);
+                i.putExtra("institution_code", institution_code);
                 startActivity(i);
             }
 

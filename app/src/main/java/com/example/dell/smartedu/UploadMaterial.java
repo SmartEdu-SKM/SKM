@@ -101,7 +101,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",super.institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         uploadList = (ListView) findViewById(R.id.uploadList);

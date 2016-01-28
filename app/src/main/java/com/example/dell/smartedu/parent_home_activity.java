@@ -114,7 +114,8 @@ public class parent_home_activity extends BaseActivity{
                                             if (position == 0) {
                                                 Intent atten_intent = new Intent(parent_home_activity.this, view_attendance.class);
                                                 atten_intent.putExtra("role", "Parent");
-                                                atten_intent.putExtra("id", studentId);
+                                                atten_intent.putExtra("studentId", studentId);
+                                                atten_intent.putExtra("classId", classId);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
@@ -126,6 +127,8 @@ public class parent_home_activity extends BaseActivity{
                                                 message_intent.putExtra("role", "Parent");
                                                 message_intent.putExtra("classId", classId);
                                                 message_intent.putExtra("studentId", studentId);
+                                                message_intent.putExtra("institution", institution_name);
+                                                message_intent.putExtra("institution_code", institution_code);
                                                 message_intent.putExtra("_for", "received");
                                                 startActivity(message_intent);
 

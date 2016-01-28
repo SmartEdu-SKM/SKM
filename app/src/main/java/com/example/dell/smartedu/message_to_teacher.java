@@ -61,6 +61,8 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         getSupportActionBar().setTitle("Teachers");
         Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
+        institution_name= from_student.getStringExtra("institution");
+        institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -109,6 +111,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                     studentQuery.whereEqualTo(ClassTable.CLASS_NAME, classname);
+                    studentQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
@@ -199,6 +202,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                     classRef[0] = studentListRet.get(0);
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                                     studentQuery.whereEqualTo(ClassTable.CLASS_NAME, classRef[0].get(ClassTable.CLASS_NAME));
+                                    studentQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
                                             if (e == null) {
@@ -211,6 +215,8 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                                                     newmessage.put(MessageTable.DELETED_BY_SENDER,false);
                                                     newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+                                                    newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+
 
                                                     java.util.Calendar calendar= Calendar.getInstance();
                                                     SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -342,6 +348,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
             newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
             newmessage.put(MessageTable.DELETED_BY_SENDER,false);
             newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+            newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
             java.util.Calendar calendar= Calendar.getInstance();
             SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
             String date= format.format(new Date(calendar.getTimeInMillis()));

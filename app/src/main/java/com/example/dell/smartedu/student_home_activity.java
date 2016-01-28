@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -108,7 +107,8 @@ public class student_home_activity extends BaseActivity{
                                                 Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
 
                                                 atten_intent.putExtra("role", role);
-                                                atten_intent.putExtra("id",studentId);
+                                                atten_intent.putExtra("studentId", studentId);
+                                                atten_intent.putExtra("classId", classId);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
@@ -118,9 +118,11 @@ public class student_home_activity extends BaseActivity{
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
                                                 message_intent.putExtra("role", role);
-                                                message_intent.putExtra("_for","received");
                                                 message_intent.putExtra("classId", classId);
                                                 message_intent.putExtra("studentId", studentId);
+                                                message_intent.putExtra("institution", institution_name);
+                                                message_intent.putExtra("institution_code", institution_code);
+                                                message_intent.putExtra("_for","received");
                                                 startActivity(message_intent);
 
                                             } else if (position == 3) {
