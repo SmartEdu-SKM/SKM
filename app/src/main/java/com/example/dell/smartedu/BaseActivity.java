@@ -44,6 +44,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     String confirmPassword;
     String userName;
     String role="";
+    String institution_name;
+    String institution_code;
     int densityX;
     int densityY;
 

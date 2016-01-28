@@ -126,7 +126,7 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                         institutionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String institution = ((TextView) view).getText().toString();
+                                final String institution = ((TextView) view).getText().toString();
                                 Log.d("institution", institution);
 
                                 //item  = item.replaceAll("[\n\r\\s]", "");
@@ -144,25 +144,56 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
 
                                 Log.d("institution", "name: " + details[0].trim() + " type: " + details[1]);
 
-                                if(role.equals("Teacher"))
-                                {
-                                    Intent teacher_home_page=new Intent(select_institution.this,MainActivity.class);
-                                    teacher_home_page.putExtra("role",role);
-                                    teacher_home_page.putExtra("institution",details[0]);
-                                    startActivity(teacher_home_page);
-                                }else if(role.equals("Student"))
-                                {
-                                    Intent student_home_page=new Intent(select_institution.this,student_home_activity.class);
-                                    student_home_page.putExtra("role",role);
-                                    student_home_page.putExtra("institution",details[0]);
-                                    startActivity(student_home_page);
-                                }else if(role.equals("Parent"))
-                                {
-                                    Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
-                                    parent_home_page.putExtra("role", role);
-                                    parent_home_page.putExtra("institution",details[0]);
-                                    startActivity(parent_home_page);
-                                }
+                                ParseQuery instiQuery=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+                                instiQuery.whereEqualTo(InstitutionTable.INSTITUTION_NAME,details[0]);
+                                instiQuery.whereEqualTo(InstitutionTable.INSTITUTION_TYPE,details[1]);
+                                instiQuery.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> institutions, ParseException e) {
+                                      if(e==null){
+                                          if(institutions.size()!=0)
+                                          {
+
+                                              try {
+                                                  institution_code=institutions.get(0).fetchIfNeeded().getObjectId();
+
+                                              if(role.equals("Teacher"))
+                                              {
+                                                  Intent teacher_home_page=new Intent(select_institution.this,MainActivity.class);
+                                                  teacher_home_page.putExtra("role",role);
+                                                  teacher_home_page.putExtra("institution",details[0]);
+                                                  startActivity(teacher_home_page);
+                                              }else if(role.equals("Student"))
+                                              {
+                                                  Intent student_home_page=new Intent(select_institution.this,student_home_activity.class);
+                                                  student_home_page.putExtra("role",role);
+                                                  student_home_page.putExtra("institution",details[0]);
+                                                  startActivity(student_home_page);
+                                              }else if(role.equals("Parent"))
+                                              {
+                                                  Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
+                                                  parent_home_page.putExtra("role", role);
+                                                  parent_home_page.putExtra("institution",details[0]);
+                                                  startActivity(parent_home_page);
+                                              }
+                                              } catch (ParseException e1) {
+                                                  e1.printStackTrace();
+                                              }
+
+
+                                          }else
+                                          {
+                                              Log.d("institution","error in query");
+                                          }
+                                      }else
+                                      {
+                                          Log.d("institution","error");
+                                      }
+                                    }
+
+                                });
+
+
                             }
                         });
 

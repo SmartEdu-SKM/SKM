@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity{
 
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
-    String institution_name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -29,7 +29,7 @@ public class parent_home_activity extends BaseActivity{
     String studentId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
-    String institution_name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
