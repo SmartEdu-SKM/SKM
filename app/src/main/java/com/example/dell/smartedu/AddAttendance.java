@@ -44,7 +44,7 @@ public class AddAttendance extends BaseActivity implements FragmentDrawer.Fragme
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Attendance");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         classList = (ListView) findViewById(R.id.classesList);
         role=getIntent().getStringExtra("role");

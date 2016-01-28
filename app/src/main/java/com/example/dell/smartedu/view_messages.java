@@ -69,7 +69,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         role = from_student.getStringExtra("role");
         _for = from_student.getStringExtra("_for");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);

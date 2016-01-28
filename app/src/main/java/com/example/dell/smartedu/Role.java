@@ -26,7 +26,7 @@ public class Role extends BaseActivity implements FragmentDrawer.FragmentDrawerL
         Log.d("user role", role);
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "*no role*");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "*no role*","-");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

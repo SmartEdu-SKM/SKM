@@ -54,7 +54,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Classes");
             noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
 
 
             dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);

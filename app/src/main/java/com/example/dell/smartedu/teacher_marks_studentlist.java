@@ -60,7 +60,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Students");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
 

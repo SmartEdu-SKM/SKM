@@ -46,7 +46,7 @@ public class parent_home_activity extends BaseActivity{
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Parent");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Parent",institution_name);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

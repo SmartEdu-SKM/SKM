@@ -55,7 +55,7 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Select institution");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,"-");
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         institutionList = (ListView) findViewById(R.id.institutionList);

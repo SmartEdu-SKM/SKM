@@ -100,7 +100,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
 
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
 
         ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
         taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());

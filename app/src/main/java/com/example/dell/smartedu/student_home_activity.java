@@ -43,7 +43,7 @@ public class student_home_activity extends BaseActivity{
         Log.d("user",role);
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

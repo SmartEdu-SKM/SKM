@@ -62,7 +62,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         classId = from_student.getStringExtra("classId");

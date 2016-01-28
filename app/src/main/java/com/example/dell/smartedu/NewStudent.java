@@ -56,7 +56,7 @@ public class NewStudent extends BaseActivity {
         studentRno= (EditText) findViewById(R.id.rollno_desc);
         Button addStudentButton = (Button) findViewById(R.id.addStudentButton);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
         Log.i("abcd", "studentName is......" + studentName);
 
         addStudentButton.setOnClickListener(new View.OnClickListener() {

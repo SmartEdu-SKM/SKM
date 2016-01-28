@@ -23,9 +23,9 @@ public class Notification_bar extends Fragment {
         return layout;
     }
 
-    public void setTexts(String username,String userrole)
+    public void setTexts(String username,String userrole,String institution)
     {
         user.setText("Hi,"+username);
-        role.setText("(as "+ userrole+")");
+        role.setText("(as "+ userrole + " at " + institution +")");
     }
 }

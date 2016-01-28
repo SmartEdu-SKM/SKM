@@ -73,7 +73,7 @@ public class AddAttendance_Students extends BaseActivity implements FragmentDraw
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Attendance");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher");
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
        Intent from_student = getIntent();
         //final String id = from_student.getStringExtra("id");

@@ -92,7 +92,7 @@ public class NewTask extends BaseActivity {
         Bundle fromrole = getIntent().getExtras();
         role = fromrole.getString("role");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         final Date date2 = new Date(Year - 1900, Month, Day + 1);
 
         addTaskButton.setOnClickListener(new View.OnClickListener() {

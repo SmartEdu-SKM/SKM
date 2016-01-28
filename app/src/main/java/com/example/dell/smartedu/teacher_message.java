@@ -65,7 +65,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Students");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), super.role);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), super.role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         broadcast=(Button)findViewById(R.id.broadcast);;
