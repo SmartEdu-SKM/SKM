@@ -125,7 +125,9 @@
         android:layout_marginTop="78dp"
         android:layout_below="@+id/confirmPasswordText"
         android:layout_alignRight="@+id/passwordSignup"
-        android:layout_alignEnd="@+id/passwordSignup" />
+        android:layout_alignEnd="@+id/passwordSignup"
+        android:background="#20BF9F"
+        android:textColor="#ffffff" />
 
 
 

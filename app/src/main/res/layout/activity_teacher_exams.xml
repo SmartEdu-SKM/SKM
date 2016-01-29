@@ -45,7 +45,9 @@
                 android:layout_height="wrap_content"
                 android:text="Add Exam"
                 android:id="@+id/addExam"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:background="#20BF9F"
+                android:textColor="#ffffff" />
 
             <ListView
                 android:layout_width="match_parent"
