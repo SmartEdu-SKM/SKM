@@ -52,6 +52,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
         role=from_student.getStringExtra("role");
+        institution_code=from_student.getStringExtra("institution_code");
+        institution_name=from_student.getStringExtra("institution_name");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -202,6 +204,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Students.this, NewStudent.class);
+                i.putExtra("institution_name",institution_name);
+                i.putExtra("institution_code",institution_code);
                 i.putExtra("id",classId);
                 startActivity(i);
             }

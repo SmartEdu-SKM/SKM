@@ -158,6 +158,8 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                             Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
                             if(_for.equals("students")) {
                                 Intent to_student = new Intent(teacher_classes.this, Students.class);
+                                to_student.putExtra("institution_code",institution_code);
+                                to_student.putExtra("institution_name",institution_name);
                                 to_student.putExtra("role",role);
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);

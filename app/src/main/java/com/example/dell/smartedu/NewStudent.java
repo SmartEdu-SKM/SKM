@@ -50,6 +50,8 @@ public class NewStudent extends BaseActivity {
 
         Intent from_students = getIntent();
         classId = from_students.getStringExtra("id");
+        institution_code=from_students.getStringExtra("institution_code");
+        institution_name=from_students.getStringExtra("institution_name");
 
         studentName = (EditText) findViewById(R.id.studentName);
         studentAge = (EditText) findViewById(R.id.studentAge);
@@ -116,6 +118,7 @@ public class NewStudent extends BaseActivity {
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_student);
                     roleobject.put(RoleTable.ROLE, "Student");
+                    roleobject.put(RoleTable.ENROLLED_WITH,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                     roleobject.saveInBackground();
 
                     ParseObject parent=new ParseObject(ParentTable.TABLE_NAME);
@@ -166,6 +169,7 @@ public class NewStudent extends BaseActivity {
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_parent);
                     roleobject.put(RoleTable.ROLE, "Parent");
+                    roleobject.put(RoleTable.ENROLLED_WITH,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                     roleobject.saveInBackground();
 
 
