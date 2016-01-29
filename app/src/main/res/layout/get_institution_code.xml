@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Done"
         android:id="@+id/doneButton"
-        android:background="#ff8d94"
+        android:background="#20BF9F"
         android:textColor="#ffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

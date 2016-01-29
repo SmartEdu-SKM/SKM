@@ -71,7 +71,7 @@
         android:layout_marginTop="76dp"
         android:layout_below="@+id/scheduleinfo"
         android:layout_centerHorizontal="true"
-        android:background="#ff8d94"
+        android:background="#20BF9F"
         android:textColor="#ffff" />
 
     <TextView
@@ -93,7 +93,7 @@
         android:layout_alignBottom="@+id/date"
         android:layout_toLeftOf="@+id/date"
         android:layout_toStartOf="@+id/date"
-        android:backgroundTint="#ff8d94" />
+        android:backgroundTint="#20BF9F" />
 
 
 </RelativeLayout>

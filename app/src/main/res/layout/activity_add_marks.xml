@@ -52,7 +52,7 @@
         android:id="@+id/addMarks"
 
         android:textColor="#ffff"
-        android:background="#5856D6"
+        android:background="#20BF9F"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

@@ -10,7 +10,7 @@
         android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:src="@drawable/abc_ic_ab_back_mtrl_am_alpha"
-        android:background="#72231F"
+        android:background="#20BF9F"
         android:layout_alignParentRight="false"
         android:layout_alignParentEnd="false">
 
