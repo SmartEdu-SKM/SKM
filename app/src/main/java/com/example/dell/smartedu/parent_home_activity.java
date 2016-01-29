@@ -39,7 +39,7 @@ public class parent_home_activity extends BaseActivity{
         Intent home=getIntent();
 
         role=home.getStringExtra("role");
-        institution_name=home.getStringExtra("institution");
+        institution_name=home.getStringExtra("institution_name");
         institution_code=home.getStringExtra("institution_code");
 
         Log.d("user",role);

@@ -54,6 +54,8 @@ public class Schedule_days extends Fragment {
     int flag=1;
     TextView noschedule;
     ImageView noScheduleImage;
+    String institution_name;
+    String institution_code;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,15 +63,20 @@ public class Schedule_days extends Fragment {
         final View schedule = inflater.inflate(R.layout.fragment_schedule_days, container, false);
         day= getArguments().getString("day");
         role=getArguments().getString("role");
+        institution_name=getArguments().getString("institution_name");
+        institution_code=getArguments().getString("institution_code");
         scheduleList=(ListView)schedule.findViewById(R.id.scheduleList);
         scheduleAdd=(Button)schedule.findViewById(R.id.addSchedule);
         noschedule=(TextView)schedule.findViewById(R.id.noSchedule);
         noScheduleImage= (ImageView)schedule.findViewById(R.id.noScheduleImage);
 
+       Log.d("institution",institution_code + " " + institution_name);
+
         ParseQuery<ParseObject> scheduleQuery = ParseQuery.getQuery(ScheduleTable.TABLE_NAME);
         scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
         scheduleQuery.whereEqualTo(ScheduleTable.DAY, day);
         scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_ROLE, role);
+        scheduleQuery.whereEqualTo(ScheduleTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
         scheduleQuery.addAscendingOrder(ScheduleTable.START_TIME);
         scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> scheduleListRet, ParseException e) {
@@ -154,6 +161,7 @@ public class Schedule_days extends Fragment {
                 scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
                 scheduleQuery.whereEqualTo(ScheduleTable.BY_USER_ROLE, role);
                 scheduleQuery.whereEqualTo(ScheduleTable.DAY, day);
+                scheduleQuery.whereEqualTo(ScheduleTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                 scheduleQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> scheduleListRet, com.parse.ParseException e) {
                         if (e == null) {
@@ -380,7 +388,7 @@ public class Schedule_days extends Fragment {
             Toast.makeText(getActivity(), "add schedule info ", Toast.LENGTH_LONG).show();
         }else if(checkTime(startmilli,endmilli))
         {
-            Toast.makeText(getActivity(), "selected time overlaps with other schedule ", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "selected time overlaps with other schedule in this or some other institute", Toast.LENGTH_LONG).show();
         }else
         {
             ParseObject schedule = new ParseObject(ScheduleTable.TABLE_NAME);

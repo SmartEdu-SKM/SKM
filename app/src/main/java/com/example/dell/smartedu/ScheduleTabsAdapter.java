@@ -4,21 +4,31 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 
 public class ScheduleTabsAdapter extends FragmentStatePagerAdapter {
     String role;
+    String institution_name;
+    String institution_code;
     private String fragments[] ={"Mon","Tues","Wed","Thu","Fri","Sat","Sun"};
-    public ScheduleTabsAdapter(FragmentManager fm,String role) {
+    public ScheduleTabsAdapter(FragmentManager fm,String role,String institution_name,String institution_code) {
         super(fm);
         this.role=role;
+        this.institution_code=institution_code;
+        this.institution_name=institution_name;
         // TODO Auto-generated constructor stub
+
+
+        Log.d("const",this.institution_code + " " + this.institution_name);
     }
 
     @Override
     public Fragment getItem(int i) {
         Bundle bundle=new Bundle();
        bundle.putString("role", role);
+        bundle.putString("institution_name",institution_name);
+        bundle.putString("institution_code",institution_code);
        // Fragment day = new Schedule_days();
         switch (i) {
             case 0:

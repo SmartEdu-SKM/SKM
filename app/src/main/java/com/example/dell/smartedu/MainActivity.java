@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity{
         setContentView(R.layout.activity_main);
             Intent home=getIntent();
         role=home.getStringExtra("role");
-        institution_name=home.getStringExtra("institution");
+        institution_name=home.getStringExtra("institution_name");
             institution_code=home.getStringExtra("institution_code");
         Log.d("user", role);
 
@@ -72,33 +72,33 @@ public class MainActivity extends BaseActivity{
                 } else if (position == 1) {
                     Intent task_intent = new Intent(MainActivity.this, Tasks.class);
                     task_intent.putExtra("institution_code",institution_code);
-                    task_intent.putExtra("institution",institution_name);
+                    task_intent.putExtra("institution_name",institution_name);
                     task_intent.putExtra("role", role);
                     startActivity(task_intent);
                 } else if (position == 2) {
                     Intent student_intent = new Intent(MainActivity.this, teacher_classes.class);
                    student_intent.putExtra("institution_code",institution_code);
-                    student_intent.putExtra("institution",institution_name);
+                    student_intent.putExtra("institution_name",institution_name);
                     student_intent.putExtra("role", role);
                     student_intent.putExtra("for", "students");
                     startActivity(student_intent);
                 } else if (position == 3) {
                     Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
                    schedule_intent.putExtra("institution_code",institution_code);
-                    schedule_intent.putExtra("institution",institution_name);
+                    schedule_intent.putExtra("institution_name",institution_name);
                     schedule_intent.putExtra("role", role);
                     startActivity(schedule_intent);
                 } else if (position == 4) {
                     Intent addmarks_intent = new Intent(MainActivity.this, teacher_classes.class);
                     addmarks_intent.putExtra("institution_code",institution_code);
-                    addmarks_intent.putExtra("institution",institution_name);
+                    addmarks_intent.putExtra("institution_name",institution_name);
                     addmarks_intent.putExtra("role", role);
                     addmarks_intent.putExtra("for", "exam");
                     startActivity(addmarks_intent);
                 } else if (position == 5) {
                     Intent upload_intent = new Intent(MainActivity.this, teacher_classes.class);
                     upload_intent.putExtra("institution_code",institution_code);
-                    upload_intent.putExtra("institution",institution_name);
+                    upload_intent.putExtra("institution_name",institution_name);
                     upload_intent.putExtra("role", role);
                     upload_intent.putExtra("for", "upload");
                     startActivity(upload_intent);

@@ -12,4 +12,5 @@ public class ScheduleTable {
     public static final String SCHEDULE_INFO="info";
     public static final String BY_USER_REF="addedBy";
     public static final String BY_USER_ROLE="addedByRole";
+    public static final String INSTITUTION="institution";
 }

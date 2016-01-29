@@ -31,13 +31,13 @@ public class student_home_activity extends BaseActivity{
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home_activity);
 
         Intent home=getIntent();
         role=home.getStringExtra("role");
-        institution_name=home.getStringExtra("institution");
+        institution_name=home.getStringExtra("institution_name");
         institution_code=home.getStringExtra("institution_code");
         Log.d("user",role);
 
@@ -129,7 +129,8 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 3) {
                                                 Intent schedule_intent = new Intent(student_home_activity.this, Schedule.class);
-
+                                                schedule_intent.putExtra("institution_name",institution_name);
+                                                schedule_intent.putExtra("institution_code",institution_code);
                                                 schedule_intent.putExtra("role",role);
                                                 startActivity(schedule_intent);
 

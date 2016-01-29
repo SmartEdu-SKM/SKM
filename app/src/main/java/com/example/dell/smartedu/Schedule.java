@@ -26,6 +26,8 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
     private Toolbar mToolbar;
     TabLayout tabLayout;
     String role;
+    String institution_name;
+    String institution_code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -40,8 +42,13 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
         drawerFragment.setDrawerListener(this);*/
             Bundle fromrole = getIntent().getExtras();
             role = fromrole.getString("role");
+            institution_code=fromrole.getString("institution_code");
+            institution_name=fromrole.getString("institution_name");
+            Log.d("institution",institution_code + " " + institution_name);
+
+
             Tab = (ViewPager) findViewById(R.id.pager);
-            Tab.setAdapter(new ScheduleTabsAdapter(getSupportFragmentManager(), role));
+            Tab.setAdapter(new ScheduleTabsAdapter(getSupportFragmentManager(), role,institution_name,institution_code));
 
 
             tabLayout = (TabLayout) findViewById(R.id.tabs);
