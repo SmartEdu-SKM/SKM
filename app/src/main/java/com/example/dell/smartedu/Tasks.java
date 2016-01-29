@@ -121,7 +121,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                     items = new String[taskListRet.size()];
                     for (int i = 0; i < taskListRet.size(); i++) {
                         ParseObject u = (ParseObject) taskListRet.get(i);
-                        String name = u.getString(TaskTable.TABLE_NAME);
+                        String name = u.getString(TaskTable.TASK_NAME);
                         name += "\n";
                         name += u.getString(TaskTable.TASK_DESCRIPTION);
 
@@ -221,8 +221,11 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                                 taskid = u.getObjectId();
                                 Toast.makeText(Tasks.this, "id of task selected is = " + taskid, Toast.LENGTH_LONG).show();
                             } else {
-                                Log.d("user", "Error: " + e.getMessage());
+                                Log.d("user", "error in query");
                             }
+                        }
+                        else {
+                            Log.d("user", "Error: " + e.getMessage());
                         }
                     }
                 });
