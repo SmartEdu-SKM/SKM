@@ -57,9 +57,12 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
-        //super.role=from_student.getStringExtra("role");
+        super.role=from_student.getStringExtra("role");
+        institution_name=from_student.getStringExtra("institution_name");
+        institution_code=from_student.getStringExtra("institution_code");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

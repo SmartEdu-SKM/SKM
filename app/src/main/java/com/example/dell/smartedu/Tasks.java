@@ -92,6 +92,8 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         myList = dbHandler.getAllTasks();
         Bundle fromrole= getIntent().getExtras();
         role = fromrole.getString("role");
+        institution_name=fromrole.getString("institution_name");
+        institution_code=fromrole.getString("institution_code");
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);

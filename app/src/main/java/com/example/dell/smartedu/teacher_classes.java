@@ -166,24 +166,32 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                             }else if(_for.equals("exam"))
                             {
                                 Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
+                                to_exams.putExtra("institution_code", institution_code);
+                               to_exams.putExtra("institution_name",institution_name);
                                 to_exams.putExtra("role",role);
                                 to_exams.putExtra("id", id);
                                 startActivity(to_exams);
                             }else if(_for.equals("upload"))
                             {
                                 Intent to_uploads = new Intent(teacher_classes.this, UploadMaterial.class);
+                                to_uploads.putExtra("institution_code",institution_code);
+                                to_uploads.putExtra("institution_name",institution_name);
                                 to_uploads.putExtra("role",role);
                                 to_uploads.putExtra("id", id);
                                 startActivity(to_uploads);
                             }else if(_for.equals("message"))
                             {
                                 Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
+                                to_message.putExtra("institution_code",institution_code);
+                                to_message.putExtra("institution_name",institution_name);
                                 to_message.putExtra("role",role);
                                 to_message.putExtra("id", id);
                                 startActivity(to_message);
                             }else if(_for.equals("attendance"))
                             {
                                 Intent to_att = new Intent(teacher_classes.this, AddAttendance_everyday.class);
+                                to_att.putExtra("institution_code",institution_code);
+                                to_att.putExtra("institution_name",institution_name);
                                 to_att.putExtra("role", role);
                                 to_att.putExtra("id",id);
                                 startActivity(to_att);

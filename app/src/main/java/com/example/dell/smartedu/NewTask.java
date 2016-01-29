@@ -50,31 +50,11 @@ public class NewTask extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-       /* mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("New Task");*/
 
         taskTitle = (EditText) findViewById(R.id.taskTitle);
-      /*  taskTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(taskTitle.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                return false;
-            }
-        }); */
+
         taskDescription = (EditText) findViewById(R.id.scheduleinfo);
-      /*  taskDescription.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(taskDescription.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                return false;
-            }
-        }); */
+
         addTaskButton = (Button) findViewById(R.id.addTaskButton);
         imageButton= (ImageButton) findViewById(R.id.test);
 
@@ -91,6 +71,8 @@ public class NewTask extends BaseActivity {
         Log.i("abcd", "tasktitle is......" + taskTitle);
         Bundle fromrole = getIntent().getExtras();
         role = fromrole.getString("role");
+        institution_code=fromrole.getString("institution_code");
+        institution_name=fromrole.getString("institution_name");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         final Date date2 = new Date(Year - 1900, Month, Day + 1);

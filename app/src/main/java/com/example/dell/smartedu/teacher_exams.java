@@ -46,7 +46,8 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
         role=from_student.getStringExtra("role");
-
+        institution_name = from_student.getStringExtra("institution_name");
+        institution_code=from_student.getStringExtra("institution_code");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -60,7 +61,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         examsList = (ListView) findViewById(R.id.examList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
         //  myList = dbHandler.getAllTasks();
@@ -128,6 +129,8 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                                     String examid = u.getObjectId();
                                                     //Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
                                                     Intent to_marksstudent = new Intent(teacher_exams.this, teacher_marks_studentlist.class);
+                                                    to_marksstudent.putExtra("institution_code",institution_code);
+                                                   to_marksstudent.putExtra("institution_name",institution_name);
                                                     to_marksstudent.putExtra("examid", examid);
                                                     to_marksstudent.putExtra("classId", classId);
                                                     to_marksstudent.putExtra("role",role);

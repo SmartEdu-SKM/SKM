@@ -88,11 +88,14 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
+        Intent from_main = getIntent();
+        classId=from_main.getStringExtra("id");
+        institution_code=from_main.getStringExtra("institution_code");
+        institution_name=from_main.getStringExtra("institution_name");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Student",super.institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-        Intent from_main = getIntent();
-        classId=from_main.getStringExtra("id");
+
         uploadList = (ListView) findViewById(R.id.uploadList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
