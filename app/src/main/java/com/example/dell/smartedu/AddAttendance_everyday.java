@@ -81,6 +81,10 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         //final String id = from_student.getStringExtra("id");
         role=from_student.getStringExtra("role");
         classId=from_student.getStringExtra("id");
+        institution_name=from_student.getStringExtra("institution_name");
+        institution_code=from_student.getStringExtra("institution_code");
+
+
         studentList = (ListView) findViewById(R.id.studentList);
 saveButton=(Button)findViewById(R.id.saveButton);
         saveButton.setVisibility(View.INVISIBLE);

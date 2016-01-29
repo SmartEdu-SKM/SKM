@@ -94,6 +94,10 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         Intent from_main = getIntent();
         classId=from_main.getStringExtra("id");
         role=from_main.getStringExtra("role");
+        institution_name = from_main.getStringExtra("institution_name");
+        institution_code=from_main.getStringExtra("institution_code");
+
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -101,7 +105,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",super.institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,super.institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         uploadList = (ListView) findViewById(R.id.uploadList);
@@ -113,7 +117,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
             }
         });
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
 

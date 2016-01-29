@@ -46,7 +46,7 @@ public class parent_home_activity extends BaseActivity{
 
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Parent",institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -120,6 +120,8 @@ public class parent_home_activity extends BaseActivity{
 
                                             } else if (position == 1) {
                                                 Intent task_intent = new Intent(parent_home_activity.this, Tasks.class);
+                                                task_intent.putExtra("institution_name",institution_name);
+                                                task_intent.putExtra("institution_code",institution_code);
                                                 task_intent.putExtra("role", "Parent");
                                                 startActivity(task_intent);
                                             } else if (position == 2) {

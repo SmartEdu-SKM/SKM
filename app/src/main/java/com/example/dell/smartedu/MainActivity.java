@@ -71,6 +71,8 @@ public class MainActivity extends BaseActivity{
                     startActivity(attendance_intent);
                 } else if (position == 1) {
                     Intent task_intent = new Intent(MainActivity.this, Tasks.class);
+                    task_intent.putExtra("institution_code",institution_code);
+                    task_intent.putExtra("institution",institution_name);
                     task_intent.putExtra("role", role);
                     startActivity(task_intent);
                 } else if (position == 2) {

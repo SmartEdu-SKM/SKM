@@ -53,6 +53,8 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         examId=from_student.getStringExtra("examid");
         classId = from_student.getStringExtra("classId");
         role= from_student.getStringExtra("role");
+        institution_name = from_student.getStringExtra("institution_name");
+        institution_code=from_student.getStringExtra("institution_code");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);

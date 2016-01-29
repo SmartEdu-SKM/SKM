@@ -113,6 +113,8 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 1) {
                                                 Intent task_intent = new Intent(student_home_activity.this, Tasks.class);
+                                                task_intent.putExtra("institution_code",institution_code);
+                                                task_intent.putExtra("institution_name",institution_name);
                                                 task_intent.putExtra("role", role);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
@@ -133,6 +135,8 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 4) {
                                                 Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
+                                                exam_intent.putExtra("institution", institution_name);
+                                                exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("role", role);
                                                 exam_intent.putExtra("classId", classId);
                                                 exam_intent.putExtra("studentId", studentId);
@@ -140,6 +144,8 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 5) {
                                                 Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
+                                                exam_intent.putExtra("institution", institution_name);
+                                                exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("id", classId);
                                                 startActivity(exam_intent);
                                             }else if (position == 6) {
