@@ -84,8 +84,45 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                 if (e == null) {
                     if(institutionListRet.size()==0) {
                         noinsti.setVisibility(View.VISIBLE);
-                    }else
-                    {
+                    }else if(institutionListRet.size()==1){
+
+                        Log.d("institution", "Single institution");
+
+                        try {
+                            ParseObject insti=(ParseObject)institutionListRet.get(0).fetchIfNeeded().get(RoleTable.ENROLLED_WITH);
+                            institution_code=insti.fetchIfNeeded().getObjectId();
+                            institution_name=insti.getString(InstitutionTable.INSTITUTION_NAME);
+
+                            if(role.equals("Teacher"))
+                            {
+                                Intent teacher_home_page=new Intent(select_institution.this,MainActivity.class);
+                                teacher_home_page.putExtra("role",role);
+                                teacher_home_page.putExtra("institution_code",institution_code);
+                                teacher_home_page.putExtra("institution_name",institution_name);
+                                startActivity(teacher_home_page);
+                            }else if(role.equals("Student"))
+                            {
+                                Intent student_home_page=new Intent(select_institution.this,student_home_activity.class);
+                                student_home_page.putExtra("role",role);
+                                student_home_page.putExtra("institution_code",institution_code);
+                                student_home_page.putExtra("institution_name",institution_name);
+                                startActivity(student_home_page);
+                            }else if(role.equals("Parent"))
+                            {
+                                Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
+                                parent_home_page.putExtra("role", role);
+                                parent_home_page.putExtra("institution_code",institution_code);
+                                parent_home_page.putExtra("institution_name",institution_name);
+                                startActivity(parent_home_page);
+                            }
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+
+
+                    }else {
                         Log.d("institution", "Retrieved the institutions");
 
                         ArrayList<String> studentLt = new ArrayList<String>();
