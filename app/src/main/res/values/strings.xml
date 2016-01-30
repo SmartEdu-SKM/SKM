@@ -114,5 +114,6 @@
     <string name="title_activity_application">Application</string>
     <string name="title_activity_my_application">MyApplication</string>
     <string name="title_activity_select_institution">select_institution</string>
+    <string name="title_activity_parent_choose_child">parent_choose_child</string>
 
 </resources>

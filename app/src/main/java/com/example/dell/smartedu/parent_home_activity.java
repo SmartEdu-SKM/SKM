@@ -29,8 +29,8 @@ public class parent_home_activity extends BaseActivity{
     String studentId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
-
-
+//String child_code;
+String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,7 @@ public class parent_home_activity extends BaseActivity{
         role=home.getStringExtra("role");
         institution_name=home.getStringExtra("institution_name");
         institution_code=home.getStringExtra("institution_code");
+        child_username=home.getStringExtra("child_username");
 
         Log.d("user",role);
 
@@ -61,19 +62,19 @@ public class parent_home_activity extends BaseActivity{
         final ParseObject[] childRef = new ParseObject[1];
         final ParseObject[] classRef = new ParseObject[1];
         final GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, "Parent"));
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(), densityX, "Parent"));
 
 
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
-        studentQuery.whereEqualTo(ParentTable.PARENT_USER_REF, ParseUser.getCurrentUser());
-        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> studListRet, ParseException e) {
+        ParseQuery<ParseUser> studentQuery = ParseUser.getQuery();
+        studentQuery.whereEqualTo("username", child_username);
+        studentQuery.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> studListRet, ParseException e) {
                 if (e == null) {
 
                     if (studListRet.size() != 0) {
 
-                        ParseObject u = (ParseObject) studListRet.get(0);
-                        childRef[0] = (ParseObject) u.get(ParentTable.CHILD_USER_REF);
+                        ParseUser u = studListRet.get(0);
+                        childRef[0] = u;
 
                         ParseQuery<ParseObject> studQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                         studQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, childRef[0]);
@@ -88,7 +89,7 @@ public class parent_home_activity extends BaseActivity{
                                         ParseObject for_class_check = ((ParseObject) u.get(StudentTable.CLASS_REF));
                                         try {
                                             ParseObject test_insti = (ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
-                                            if (test_insti.fetchIfNeeded().getString("name").equals(institution_name)) {
+                                            if (test_insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME).equals(institution_name)) {
                                                 studentId = u.getObjectId();
                                                 classRef[0] = for_class_check;
                                                 break;

@@ -31,8 +31,6 @@ public class SignUp extends AppCompatActivity {
     TextView Password;
     TextView ConfirmPassword;
 
-    TextView already;
-
     Button signUp;
     TextView alreadyUser;
 

@@ -39,7 +39,8 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
     ListView institutionList;
     Notification_bar noti_bar;
     ImageView noinsti;
-
+//String child_code;
+    String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,12 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
         Intent from_student = getIntent();
 
         role=from_student.getStringExtra("role");
+
+        if(role.equals("Parent"))
+        {
+            //child_code=from_student.getStringExtra("child_code");
+            child_username=from_student.getStringExtra("child_username");
+        }
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -66,16 +73,10 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"");
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
 
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
         Toast.makeText(select_institution.this, "role selected = " +role, Toast.LENGTH_LONG).show();
 
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
+
         ParseQuery<ParseObject> institutionQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
         institutionQuery.whereEqualTo(RoleTable.ROLE,role);
         institutionQuery.whereEqualTo(RoleTable.OF_USER_REF,ParseUser.getCurrentUser());
@@ -111,6 +112,8 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                             {
                                 Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
                                 parent_home_page.putExtra("role", role);
+                              //  parent_home_page.putExtra("child_code",child_code);
+                                parent_home_page.putExtra("child_username",child_username);
                                 parent_home_page.putExtra("institution_code",institution_code);
                                 parent_home_page.putExtra("institution_name",institution_name);
                                 startActivity(parent_home_page);
@@ -258,6 +261,9 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
             startActivity(nouser);
         }
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

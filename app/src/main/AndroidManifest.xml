@@ -196,6 +196,10 @@
             android:name=".select_institution"
             android:label="@string/title_activity_select_institution" >
         </activity>
+        <activity
+            android:name=".parent_choose_child"
+            android:label="@string/title_activity_parent_choose_child" >
+        </activity>
     </application>
 
 </manifest>

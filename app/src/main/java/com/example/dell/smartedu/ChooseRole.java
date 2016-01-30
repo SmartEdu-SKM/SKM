@@ -70,7 +70,7 @@ public class ChooseRole extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 roleChosen("Teacher");
-         //       chooseTeacher();
+
             }
         });
 
@@ -78,7 +78,7 @@ public class ChooseRole extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                roleChosen("Parent");
-               // chooseParent();
+
             }
         });
 
@@ -86,7 +86,7 @@ public class ChooseRole extends AppCompatActivity {
             @Override
             public void onClick(View v) {
               roleChosen("Student");
-               // chooseStudent();
+
             }
         });
     }
@@ -115,130 +115,6 @@ public class ChooseRole extends AppCompatActivity {
 
 
 
-    /*
-
-    public void chooseTeacher() {
-
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
-        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
-        roleQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> roleListRet, ParseException e) {
-                if (e == null) {
-                        int flag = 0;
-                    Log.d("role", "Retrieved " + roleListRet.size() + " roles");
-
-                    for (int i = 0; i < roleListRet.size(); i++) {
-                        flag=0;
-                        ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString(RoleTable.ROLE).toString();
-                        if (name.equals("Teacher")) {
-                            flag =1;
-                            Intent j = new Intent(ChooseRole.this, select_institution.class);
-                            j.putExtra("role","Teacher");
-                            startActivity(j);
-                            Toast.makeText(getApplicationContext(), "Teacher Module", Toast.LENGTH_LONG)
-                                    .show();
-                            break;
-                        }
-
-
-                    }
-                    if(flag==0) {
-                        Toast.makeText(getApplicationContext(), "Role not added", Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-
-
-                } else {
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-    }
-
-    public void chooseStudent() {
-
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
-        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
-        roleQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> roleListRet, ParseException e) {
-                if (e == null) {
-                    int flag = 0;
-                    Log.d("role", "Retrieved " + roleListRet.size() + " roles");
-
-                    for (int i = 0; i < roleListRet.size(); i++) {
-                        flag=0;
-                        ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString(RoleTable.ROLE).toString();
-                        if (name.equals("Student")) {
-                            flag =1;
-                            Intent j = new Intent(ChooseRole.this, select_institution.class);
-                            j.putExtra("role","Student");
-                            startActivity(j);
-                            Toast.makeText(getApplicationContext(), "Student Module", Toast.LENGTH_LONG)
-                                    .show();
-                            break;
-                        }
-
-
-                    }
-                    if(flag==0)
-                        Toast.makeText(getApplicationContext(), "Role not added", Toast.LENGTH_LONG)
-                                .show();
-
-
-
-                } else {
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-    }
-
-    public void chooseParent() {
-
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
-        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
-        roleQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> roleListRet, ParseException e) {
-                if (e == null) {
-                    int flag = 0;
-                    Log.d("role", "Retrieved " + roleListRet.size() + " roles");
-
-                    for (int i = 0; i < roleListRet.size(); i++) {
-                        flag=0;
-                        ParseObject u = (ParseObject) roleListRet.get(i);
-                        String name = u.getString(RoleTable.ROLE).toString();
-                        if (name.equals("Parent")) {
-                            flag =1;
-                            Intent j = new Intent(ChooseRole.this, select_institution.class);
-                            j.putExtra("role","Parent");
-                            startActivity(j);
-                            Toast.makeText(getApplicationContext(), "Parent Module", Toast.LENGTH_LONG)
-                                    .show();
-                            break;
-                        }
-
-
-                    }
-                    if(flag==0)
-                        Toast.makeText(getApplicationContext(), "Role not added", Toast.LENGTH_LONG)
-                                .show();
-
-
-
-                } else {
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-    }
-*/
-
     public void roleChosen(final String role) {
 
         ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
@@ -251,13 +127,21 @@ public class ChooseRole extends AppCompatActivity {
 
                     for (int i = 0; i < roleListRet.size(); i++) {
                         flag=0;
-                        ParseObject u = (ParseObject) roleListRet.get(i);
+                        ParseObject u = roleListRet.get(i);
                         String name = u.getString(RoleTable.ROLE).toString();
                         if (name.equals(role)) {
                             flag =1;
-                            Intent j = new Intent(ChooseRole.this, select_institution.class);
-                            j.putExtra("role",role);
-                            startActivity(j);
+                            if(role.equals("Parent")) {
+                                Intent j = new Intent(ChooseRole.this, parent_choose_child.class);
+                                j.putExtra("role", role);
+                                startActivity(j);
+                            }else
+                            {
+                                Intent j = new Intent(ChooseRole.this, select_institution.class);
+                                j.putExtra("role", role);
+                                startActivity(j);
+                            }
+
                             Toast.makeText(getApplicationContext(), role + " Module", Toast.LENGTH_LONG)
                                     .show();
                             break;
