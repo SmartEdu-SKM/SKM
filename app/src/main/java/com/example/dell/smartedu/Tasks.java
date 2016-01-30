@@ -364,6 +364,8 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Tasks.this, NewTask.class);
+               i.putExtra("institution_name",institution_name);
+                i.putExtra("institution_code",institution_code);
                 i.putExtra("role", role);
                 startActivity(i);
             }
@@ -375,6 +377,8 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     protected void onRestart() {
         super.onRestart();
         Intent to_tasks = new Intent(Tasks.this, Tasks.class);
+        to_tasks.putExtra("institution_name",institution_name);
+        to_tasks.putExtra("institution_code",institution_code);
         to_tasks.putExtra("role", role);
         startActivity(to_tasks);
         finish();

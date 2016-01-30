@@ -252,17 +252,22 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
                 i.putExtra("role", role);
                 i.putExtra("institution_code", institution_code);
+                i.putExtra("institution_name",institution_name);
                 startActivity(i);
             }
 
             if (position == 1) { //tasks
                 Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("institution_code", institution_code);
+                task_intent.putExtra("institution_name", institution_name);
                 task_intent.putExtra("role", role);
                 startActivity(task_intent);
             }
 
             if (position == 2) { //attendance
                 Intent attendance_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                attendance_intent.putExtra("institution_code",institution_code);
+                attendance_intent.putExtra("institution_name",institution_name);
                 attendance_intent.putExtra("for","attendance");
                 attendance_intent.putExtra("role", role);
                 startActivity(attendance_intent);
@@ -270,12 +275,16 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 3) { //schedule
                 Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("institution_code",institution_code);
+                schedule_intent.putExtra("institution_name",institution_name);
                 schedule_intent.putExtra("role", role);
                 startActivity(schedule_intent);
             }
 
             if (position == 4) { //assignments
                 Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                upload_intent.putExtra("institution_code",institution_code);
+                upload_intent.putExtra("institution_name", institution_name);
                 upload_intent.putExtra("role", role);
                 upload_intent.putExtra("for", "upload");
                 startActivity(upload_intent);
@@ -284,6 +293,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 5) { //grades
                 Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
+                addmarks_intent.putExtra("institution_code",institution_code);
+                addmarks_intent.putExtra("institution_name", institution_name);
                 addmarks_intent.putExtra("role", role);
                 addmarks_intent.putExtra("for", "exam");
                 startActivity(addmarks_intent);
@@ -308,6 +319,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else if(this.role.equals("Student")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),student_home_activity.class);
+                i.putExtra("institution_code",institution_code);
+                i.putExtra("institution_name",institution_name);
                 i.putExtra("role", role);
                 i.putExtra("institution_code", institution_code);
                 startActivity(i);
@@ -315,6 +328,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 1) { //tasks
                 Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("institution_code",institution_code);
+                task_intent.putExtra("institution_name",institution_name);
                 task_intent.putExtra("role", role);
                 startActivity(task_intent);
             }
@@ -327,6 +342,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 3) { //schedule
                 Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("institution_code",institution_code);
+                schedule_intent.putExtra("institution_name",institution_name);
                 schedule_intent.putExtra("role", role);
                 startActivity(schedule_intent);
             }
@@ -365,6 +382,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else if(role.equals("Parent")){
             if (position == 0) { //dashboard
                 Intent i = new Intent(getApplicationContext(),parent_home_activity.class);
+                i.putExtra("institution_code",institution_code);
+                i.putExtra("institution_name",institution_name);
                 i.putExtra("role", role);
                 i.putExtra("institution_code", institution_code);
                 startActivity(i);
@@ -372,6 +391,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 1) { //tasks
                 Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                task_intent.putExtra("institution_code",institution_code);
+                task_intent.putExtra("institution_name",institution_name);
                 task_intent.putExtra("role", role);
                 startActivity(task_intent);
             }
@@ -384,6 +405,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 3) { //schedule
                 Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
+                schedule_intent.putExtra("institution_code",institution_code);
+                schedule_intent.putExtra("institution_name",institution_name);
                 schedule_intent.putExtra("role", role);
                 startActivity(schedule_intent);
             }

@@ -349,6 +349,8 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
 
         Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
+            task_intent.putExtra("institution_code",institution_code);
+            task_intent.putExtra("institution_name",institution_name);
         task_intent.putExtra("role", role);
         task_intent.putExtra("id", classId);
         startActivity(task_intent);

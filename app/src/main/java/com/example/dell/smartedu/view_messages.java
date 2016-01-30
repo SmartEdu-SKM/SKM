@@ -90,6 +90,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                 @Override
                 public void onClick(View v) {
                     Intent message_intent = new Intent(view_messages.this, teacher_classes.class);
+                    message_intent.putExtra("institution_name", institution_name);
+                    message_intent.putExtra("institution_code", institution_code);
                     message_intent.putExtra("role", role);
                     message_intent.putExtra("institution",institution_name);
                     message_intent.putExtra("for", "message");
@@ -686,6 +688,8 @@ if(_for.equals("received")){
     protected void onRestart() {
         super.onRestart();
         Intent to_view_messages = new Intent(view_messages.this, view_messages.class);
+        to_view_messages.putExtra("institution_name",institution_name);
+        to_view_messages.putExtra("institution_code",institution_code);
         to_view_messages.putExtra("role", role);
         to_view_messages.putExtra("_for",_for);
         startActivity(to_view_messages);

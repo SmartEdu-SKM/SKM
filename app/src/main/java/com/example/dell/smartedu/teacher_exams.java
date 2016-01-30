@@ -172,6 +172,8 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(teacher_exams.this, teacher_newexam.class);
+                i.putExtra("institution_name",institution_name);
+                i.putExtra("institution_code",institution_code);
                 i.putExtra("id",classId);
                 startActivity(i);
             }

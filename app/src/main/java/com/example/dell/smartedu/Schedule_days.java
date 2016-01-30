@@ -402,6 +402,8 @@ public class Schedule_days extends Fragment {
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
             dialog.dismiss();
             Intent reload=new Intent(getActivity(),Schedule.class);
+            reload.putExtra("institution_code",institution_code);
+            reload.putExtra("institution_name",institution_name);
             reload.putExtra("day", day);
             reload.putExtra("role", role);
             startActivity(reload);

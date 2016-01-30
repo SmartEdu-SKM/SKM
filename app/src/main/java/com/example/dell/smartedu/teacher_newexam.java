@@ -81,6 +81,8 @@ public class teacher_newexam extends BaseActivity {
                                 Toast.makeText(getApplicationContext(), "Event details successfully stored", Toast.LENGTH_LONG).show();
 
                                 Intent to_exams = new Intent(teacher_newexam.this, teacher_exams.class);
+                                to_exams.putExtra("institution_name",institution_name);
+                                to_exams.putExtra("institution_code",institution_code);
                                 to_exams.putExtra("id", classId);
                                 startActivity(to_exams);
                                 finish();

@@ -22,6 +22,8 @@ public class StudentInfo extends FragmentActivity{
     TabLayout tabLayout;
     String classId;
     String id;
+    String institution_name;
+    String institution_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,13 @@ public class StudentInfo extends FragmentActivity{
                Intent from_student = getIntent();
         id = from_student.getStringExtra("id");
         classId = from_student.getStringExtra("classId");
+        institution_code=from_student.getStringExtra("institution_code");
+        institution_name= from_student.getStringExtra("institution_name");
         Toast.makeText(StudentInfo.this, "id of student selected is = " + id, Toast.LENGTH_LONG).show();
         //TabAdapter = new TabPagerAdapter(getSupportFragmentManager(),id);
 
         Tab = (ViewPager) findViewById(R.id.pager);
-        Tab.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), id,classId));
+        Tab.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), id,classId,institution_name,institution_code));
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);

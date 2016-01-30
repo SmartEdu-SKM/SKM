@@ -14,17 +14,23 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     String id;
     String classId;
+    String institution_code;
+    String  institution_name;
     private String fragments[] ={"Info","Attendance","Result"};
-    public TabPagerAdapter(FragmentManager fm, String id, String classId) {
+    public TabPagerAdapter(FragmentManager fm, String id, String classId,String institution_name,String institution_code) {
         super(fm);
         this.id=id;
         this.classId=classId;
+        this.institution_name=institution_name;
+        this.institution_code=institution_code;
         // TODO Auto-generated constructor stub
     }
 
     @Override
     public Fragment getItem(int i) {
         Bundle bundle=new Bundle();
+        bundle.putString("institution_name",institution_name);
+        bundle.putString("institution_code",institution_code);
         bundle.putString("id",id);
         bundle.putString("classId",classId);
         switch (i) {

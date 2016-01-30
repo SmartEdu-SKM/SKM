@@ -264,6 +264,8 @@ public class NewStudent extends BaseActivity {
 
                                     Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
                                     Intent i = new Intent(NewStudent.this, Students.class);
+                                    i.putExtra("institution_code",institution_code);
+                                    i.putExtra("institution_name",institution_name);
                                     i.putExtra("id", classId);
                                     startActivity(i);
                                     finish();

@@ -308,6 +308,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
     protected void onRestart() {
         super.onRestart();
         Intent to_uploads = new Intent(UploadMaterial_students.this, UploadMaterial.class);
+        to_uploads.putExtra("institution_name",institution_name);
+        to_uploads.putExtra("institution_code",institution_code);
         to_uploads.putExtra("id", classId);
         startActivity(to_uploads);
         finish();

@@ -108,6 +108,8 @@ public class NewTask extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "Event details successfully stored", Toast.LENGTH_LONG).show();
 
                     Intent to_tasks = new Intent(NewTask.this, Tasks.class);
+                    to_tasks.putExtra("institution_code",institution_code);
+                    to_tasks.putExtra("institution_name",institution_name);
                     to_tasks.putExtra("role", role);
                     startActivity(to_tasks);
                     finish();

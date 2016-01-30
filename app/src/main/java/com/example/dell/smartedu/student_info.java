@@ -27,6 +27,8 @@ public class student_info extends Fragment{
     String studentId;
     String classId;
     String userid;
+    String institution_code;
+    String institution_name;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class student_info extends Fragment{
         final View android = inflater.inflate(R.layout.fragment_student_info, container, false);
         studentId= getArguments().getString("id");
         classId= getArguments().getString("classId");
+        institution_code=getArguments().getString("institution_name");
+        institution_name=getArguments().getString("institution_code");
         studentName=(TextView)android.findViewById(R.id.student_name);
         studentAge=(TextView)android.findViewById(R.id.student_age);
         deleteStudent=(Button)android.findViewById(R.id.delete_student);
@@ -62,6 +66,8 @@ public class student_info extends Fragment{
 
 
             Intent to_student = new Intent(getActivity(), Students.class);
+            to_student.putExtra("institution_code", institution_code);
+            to_student.putExtra("institution_name", institution_name);
             to_student.putExtra("id", classId);
 
             startActivity(to_student);
