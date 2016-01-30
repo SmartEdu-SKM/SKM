@@ -69,21 +69,24 @@ public class ChooseRole extends AppCompatActivity {
         teacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseTeacher();
+                roleChosen("Teacher");
+         //       chooseTeacher();
             }
         });
 
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseParent();
+               roleChosen("Parent");
+               // chooseParent();
             }
         });
 
         student.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseStudent();
+              roleChosen("Student");
+               // chooseStudent();
             }
         });
     }
@@ -109,6 +112,10 @@ public class ChooseRole extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    /*
 
     public void chooseTeacher() {
 
@@ -220,6 +227,48 @@ public class ChooseRole extends AppCompatActivity {
                     if(flag==0)
                         Toast.makeText(getApplicationContext(), "Role not added", Toast.LENGTH_LONG)
                                 .show();
+
+
+
+                } else {
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+    }
+*/
+
+    public void roleChosen(final String role) {
+
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
+        roleQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> roleListRet, ParseException e) {
+                if (e == null) {
+                    int flag = 0;
+                    Log.d("role", "Retrieved " + roleListRet.size() + " roles");
+
+                    for (int i = 0; i < roleListRet.size(); i++) {
+                        flag=0;
+                        ParseObject u = (ParseObject) roleListRet.get(i);
+                        String name = u.getString(RoleTable.ROLE).toString();
+                        if (name.equals(role)) {
+                            flag =1;
+                            Intent j = new Intent(ChooseRole.this, select_institution.class);
+                            j.putExtra("role",role);
+                            startActivity(j);
+                            Toast.makeText(getApplicationContext(), role + " Module", Toast.LENGTH_LONG)
+                                    .show();
+                            break;
+                        }
+
+
+                    }
+                    if(flag==0) {
+                        Toast.makeText(getApplicationContext(), "Role not added", Toast.LENGTH_LONG)
+                                .show();
+                    }
 
 
 
