@@ -110,7 +110,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                 ArrayList<String> studentLt = new ArrayList<String>();
                                 //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
                                 //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-                                ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, studentLt);/* {
+                                ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, studentLt) {
 
                                     @Override
                                     public View getView(int position, View convertView,
@@ -119,13 +119,13 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
 
                                         TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
-            /*YOUR CHOICE OF COLOR
+            /*YOUR CHOICE OF COLOR*/
                                         textView.setTextColor(Color.WHITE);
 
                                         return view;
                                     }
                                 };
-*/
+
 
                                 Log.d("user", "Retrieved " + examListRet.size() + " students");
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
