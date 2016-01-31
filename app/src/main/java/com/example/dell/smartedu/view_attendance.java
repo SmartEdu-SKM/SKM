@@ -79,20 +79,24 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 
                     //studentRef[0] = studentListRet.get(0);
                     //information(studentRef[0], v);
-                    double present = 0;
-                    double absent = 0;
-                    double totalDays = 0;
-                    double percentage = 0.0;
-                    for (int i = 0; i < attListRet.size(); i++) {
-                        ParseObject u = attListRet.get(i);
-                        if (u.get(AttendanceDailyTable.STATUS).equals("A")) {
-                            absent++;
+                    if(attListRet.size()!=0) {
+                        double present = 0;
+                        double absent = 0;
+                        double totalDays = 0;
+                        double percentage = 0.0;
+                        for (int i = 0; i < attListRet.size(); i++) {
+                            ParseObject u = attListRet.get(i);
+                            if (u.get(AttendanceDailyTable.STATUS).equals("A")) {
+                                absent++;
+                            }
+                            totalDays++;
                         }
-                        totalDays++;
+                        present = totalDays - absent;
+                        percentage = (present / totalDays) * 100;
+                        information(absent, totalDays, percentage);
+                    } else{
+                        Toast.makeText(getApplicationContext(), "Attendance Not Added", Toast.LENGTH_LONG).show();
                     }
-                    present = totalDays - absent;
-                    percentage = (present / totalDays) * 100;
-                    information( absent, totalDays, percentage);
 
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();

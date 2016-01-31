@@ -50,8 +50,6 @@
         <item>@string/nav_item_dashboard</item>
         <item>@string/nav_item_tasks</item>
         <item>@string/nav_item_attendance</item>
-        <item>@string/nav_item_schedule</item>
-        <item>@string/nav_item_assignments</item>
         <item>@string/nav_item_grades</item>
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_anotherrole</item>

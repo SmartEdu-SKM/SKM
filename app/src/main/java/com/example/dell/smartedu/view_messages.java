@@ -73,7 +73,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         institution_name= from_student.getStringExtra("institution");
         institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,super.institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -137,8 +137,8 @@ if(_for.equals("received")){
                 studentId = from_student.getStringExtra("studentId");
                 read_message_intent.putExtra("classId", classId);
                 read_message_intent.putExtra("studentId", studentId);
-                read_message_intent.putExtra("institution_code",institution_code);
-                read_message_intent.putExtra("institution",institution_name);
+                read_message_intent.putExtra("institution_code", institution_code);
+                read_message_intent.putExtra("institution", institution_name);
             }
             read_message_intent.putExtra("_for", "sent");
             startActivity(read_message_intent);
@@ -147,7 +147,6 @@ if(_for.equals("received")){
 
         ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
         messageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
-    messageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
     messageQuery.whereEqualTo(MessageTable.DELETED_BY_RECEIVER, false);
     messageQuery.findInBackground(new FindCallback<ParseObject>() {
         public void done(List<ParseObject> messageListRet, ParseException e) {
@@ -193,7 +192,18 @@ if(_for.equals("received")){
 
                         final String dateString = formatter.format(new Date(u.getLong(MessageTable.SENT_AT)));
                         Log.d("user", dateString);
-                        String name = from + "\nat " + dateString;
+
+                        ParseObject institute = (ParseObject) u.get(MessageTable.INSTITUTION);
+                        String insti= null;
+                        if (institute != null) {
+                            try {
+                                insti = institute.fetchIfNeeded().get(InstitutionTable.INSTITUTION_NAME).toString();
+                                Log.d("institute: ", insti);
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                        String name = from + "\nat " + dateString + "\n" + insti;
                         adapter.add(name);
                         // }
 
@@ -207,28 +217,43 @@ if(_for.equals("received")){
                         @Override
                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                             String item = ((TextView) view).getText().toString();
-
-                            String[] itemValues = item.split("\nat ");
+                            String[] itemVal= item.split("\n");
+                            Log.d("user", "1 " + itemVal[0].trim() + " 2 " + itemVal[1]);
 
                             final String[] details = new String[2];
+                            details[0]= itemVal[0];
+
+                            String[] itemValues = itemVal[1].split("at ");
+                            details[1]=itemValues[1];
+
+                            /*
                             int j = 0;
 
                             for (String x : itemValues) {
                                 details[j++] = x;
-                            }
+                            } */
 
                             Log.d("user", "from " + details[0].trim() + " at " + details[1]);  //extracts Chit as Chi and query fails???
                             final Dialog dialog = new Dialog(view_messages.this);
                             dialog.setContentView(R.layout.messsage_info);
                             dialog.setTitle("Message");
+
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(dialog.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.gravity = Gravity.CENTER;
+
+                            dialog.getWindow().setAttributes(lp);
+
+
                             title = (TextView) dialog.findViewById(R.id.title);
                             message = (TextView) dialog.findViewById(R.id.message);
                             messageFrom = (TextView) dialog.findViewById(R.id.message_from);
                             messagedate = (TextView) dialog.findViewById(R.id.date);
                             delete = (Button) dialog.findViewById(R.id.delButton);
                             ok = (Button) dialog.findViewById(R.id.doneButton);
-                            reply=(Button) dialog.findViewById(R.id.replyButton);
-
+                            reply = (Button) dialog.findViewById(R.id.replyButton);
 
 
                             title.setText("From:");
@@ -368,10 +393,10 @@ if(_for.equals("received")){
 
             } else {
                 Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
-                    Log.d("user", "Error: " + e.getMessage());
-                }
+                Log.d("user", "Error: " + e.getMessage());
             }
-        });
+        }
+    });
     }
 
 
@@ -383,11 +408,11 @@ if(_for.equals("received")){
             change_mode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent read_message_intent = new Intent(view_messages.this,view_messages.class);
+                    Intent read_message_intent = new Intent(view_messages.this, view_messages.class);
                     read_message_intent.putExtra("role", role);
                     read_message_intent.putExtra("_for", "received");
-                    read_message_intent.putExtra("institution_code",institution_code);
-                    read_message_intent.putExtra("institution",institution_name);
+                    read_message_intent.putExtra("institution_code", institution_code);
+                    read_message_intent.putExtra("institution", institution_name);
                     startActivity(read_message_intent);
                 }
             });
@@ -469,13 +494,7 @@ if(_for.equals("received")){
                                     dialog.setContentView(R.layout.messsage_info);
                                     dialog.setTitle("Message");
 
-                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                    lp.copyFrom(dialog.getWindow().getAttributes());
-                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                    lp.gravity = Gravity.CENTER;
-
-                                    dialog.getWindow().setAttributes(lp);
+                                    setDialogSize(dialog);
 
                                     title = (TextView) dialog.findViewById(R.id.title);
                                     message = (TextView) dialog.findViewById(R.id.message);

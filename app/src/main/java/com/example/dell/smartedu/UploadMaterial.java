@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -186,13 +184,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         dialog.setContentView(R.layout.show_upload_details);
                                         dialog.setTitle("Upload Details");
 
-                                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                        lp.copyFrom(dialog.getWindow().getAttributes());
-                                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                        lp.gravity = Gravity.CENTER;
-
-                                        dialog.getWindow().setAttributes(lp);
+                                        setDialogSize(dialog);
 
                                         myType = (TextView) dialog.findViewById(R.id.typeDesc);
                                         mySubject = (TextView) dialog.findViewById(R.id.subject);
@@ -389,13 +381,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dialog_upload.setContentView(R.layout.upload_material);
         dialog_upload.setTitle("Upload Material");
 
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog_upload.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.gravity = Gravity.CENTER;
-
-        dialog_upload.getWindow().setAttributes(lp);
+        setDialogSize(dialog_upload);
 
         DeadlineHead= (TextView) dialog_upload.findViewById(R.id.deadlineHead);
         DeadlineHead.setSelected(true);
@@ -592,13 +578,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         dialogcal.setContentView(R.layout.activity_calendar2);
         dialogcal.setTitle("Select Date");
 
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialogcal.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.gravity = Gravity.CENTER;
-
-        dialogcal.getWindow().setAttributes(lp);
+        setDialogSize(dialogcal);
 
         calendarView= (CalendarView)dialogcal.findViewById(R.id.calendar);
 
@@ -610,11 +590,22 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                 Yearcal = year;
                 Monthcal = month+1;
                 Daycal = dayOfMonth;
-                date1 = new Date(Yearcal - 1900, Monthcal-1, Daycal);
-                DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                myDueDate.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
-                Toast.makeText(getApplicationContext(), Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
-                dialogcal.dismiss();
+
+                long[] milliseconds = new long[2];
+
+
+                checkDate(Daycal, Monthcal, Yearcal, milliseconds);
+                Log.d("date test ", milliseconds[0] + " selected:" + milliseconds[1]);
+                if(milliseconds[1] <= milliseconds[0]){
+                    Toast.makeText(getApplicationContext(), "Choose Future Date!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    date1 = new Date(Yearcal - 1900, Monthcal - 1, Daycal);
+                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+                    myDueDate.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
+                    Toast.makeText(getApplicationContext(), Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
+                    dialogcal.dismiss();
+                }
 
             }
         });
