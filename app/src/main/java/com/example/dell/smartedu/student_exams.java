@@ -43,7 +43,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
     String studentId;
     String examid;
     String examName;
-    String role;
+
 
     Number totalMarks;
     Number marksObtained;
@@ -78,7 +78,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         examsList = (ListView) findViewById(R.id.examList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
         //  myList = dbHandler.getAllTasks();
@@ -110,8 +110,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                 ArrayList<String> studentLt = new ArrayList<String>();
                                 //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
                                 //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                        student_exams.this, android.R.layout.simple_list_item_1, studentLt);/* {
+                                ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, studentLt);/* {
 
                                     @Override
                                     public View getView(int position, View convertView,
@@ -133,7 +132,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                 for (int i = 0; i < examListRet.size(); i++) {
                                     ParseObject u = (ParseObject) examListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    String name = u.getString(ExamTable.FOR_CLASS);
+                                    String name = u.getString(ExamTable.EXAM_NAME);
                                     //name += "\n";
                                     // name += u.getInt("age");
 
