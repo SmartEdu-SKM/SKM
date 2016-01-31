@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -114,26 +112,7 @@ public class NewTask extends BaseActivity {
                     startActivity(to_tasks);
                     finish();
 
-                   /* ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery("Task");
-                    taskQuery.whereEqualTo("TaskName", myTitle);
-                    taskQuery.whereEqualTo("createdBy", ParseUser.getCurrentUser());
-                    taskQuery.whereEqualTo("addedByRole", role);
-                    taskQuery.whereEqualTo("dueDate", milliseconds);
-                    taskQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> taskListRet, com.parse.ParseException e) {
-                            if (e == null) {
-                                ParseObject u = (ParseObject) taskListRet.get(0);
-                                String id = u.getObjectId();
-                                Toast.makeText(NewTask.this, "id of task selected is = " + id, Toast.LENGTH_LONG).show();
-                                Intent to_tasks = new Intent(NewTask.this, Tasks.class);
-                                to_tasks.putExtra("id", id);
-                                startActivity(to_tasks);
-                                finish();
-                            } else {
-                                Log.d("user", "Error: " + e.getMessage());
-                            }
-                        }
-                    }); */
+
 
                 }
             }
@@ -150,14 +129,7 @@ public class NewTask extends BaseActivity {
         dialog.setTitle("Select Date");
         dialog.setContentView(R.layout.activity_calendar2);
 
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.gravity = Gravity.CENTER;
-
-        dialog.getWindow().setAttributes(lp);
-
+        setDialogSize(dialog);
 
         calendar= (CalendarView)dialog.findViewById(R.id.calendar);
 
@@ -168,11 +140,20 @@ public class NewTask extends BaseActivity {
                 Year = year;
                 Month = month;
                 Day = dayOfMonth;
-                date1 = new Date(Year - 1900, Month, Day);
-                DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                DATE.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
-                Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
-                dialog.dismiss();
+                long[] milliseconds = new long[2];
+
+                checkDate(Day, Month+1, Year, milliseconds);
+                Log.d("date test ", milliseconds[0] + " selected:" + milliseconds[1]);
+                if(milliseconds[1] <= milliseconds[0]){
+                    Toast.makeText(getApplicationContext(), "Choose Future Date!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    date1 = new Date(Year - 1900, Month, Day);
+                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
+                    DATE.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
+                    Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                }
 
             }
         });

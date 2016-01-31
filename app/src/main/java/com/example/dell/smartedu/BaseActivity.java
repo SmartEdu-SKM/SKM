@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,6 +49,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     String role="";
     String institution_name;
     String institution_code;
+    String studentId;
+    String classId;
     int densityX;
     int densityY;
 
@@ -335,9 +340,12 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-               // Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
-                //attendance_intent.putExtra("role", role);
-                //startActivity(attendance_intent);
+                Intent atten_intent = new Intent(BaseActivity.this, view_attendance.class);
+
+                atten_intent.putExtra("role", role);
+                atten_intent.putExtra("studentId", studentId);
+                atten_intent.putExtra("classId", classId);
+                startActivity(atten_intent);
             }
 
             if (position == 3) { //schedule
@@ -385,7 +393,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 i.putExtra("institution_code",institution_code);
                 i.putExtra("institution_name",institution_name);
                 i.putExtra("role", role);
-                i.putExtra("institution_code", institution_code);
                 startActivity(i);
             }
 
@@ -398,41 +405,46 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-                // Intent attendance_intent = new Intent(BaseActivity.this, AddAttendance_everyday.class);
-                //attendance_intent.putExtra("role", role);
-                //startActivity(attendance_intent);
+                Intent atten_intent = new Intent(BaseActivity.this, view_attendance.class);
+                atten_intent.putExtra("role", "Parent");
+                atten_intent.putExtra("studentId", studentId);
+                atten_intent.putExtra("classId", classId);
+                startActivity(atten_intent);
             }
 
-            if (position == 3) { //schedule
-                Intent schedule_intent = new Intent(BaseActivity.this, Schedule.class);
-                schedule_intent.putExtra("institution_code",institution_code);
-                schedule_intent.putExtra("institution_name",institution_name);
-                schedule_intent.putExtra("role", role);
-                startActivity(schedule_intent);
-            }
+            if (position == 3) { //grades
 
-            if (position == 4) { //assignments
-               /* Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
-                upload_intent.putExtra("role", role);
-                upload_intent.putExtra("for", "upload");
-                startActivity(upload_intent); */
+                Intent exam_intent = new Intent(BaseActivity.this, student_exams.class);
+                exam_intent.putExtra("role", "Parent");
+                exam_intent.putExtra("classId", classId);
+                exam_intent.putExtra("studentId", studentId);
+                startActivity(exam_intent);
 
             }
 
-            if (position == 5) { //grades
-               /* Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
-                addmarks_intent.putExtra("role", role);
-                addmarks_intent.putExtra("for", "exam");
-                startActivity(addmarks_intent); */
+            if (position == 4) { //messages
+
+                Intent message_intent = new Intent(BaseActivity.this, view_messages.class);
+                message_intent.putExtra("role", "Parent");
+                message_intent.putExtra("classId", classId);
+                message_intent.putExtra("studentId", studentId);
+                message_intent.putExtra("institution", institution_name);
+                message_intent.putExtra("institution_code", institution_code);
+                message_intent.putExtra("_for", "received");
+                startActivity(message_intent);
             }
 
-            if(position==7) //choose another role
+            if (position == 5) { //settings
+
+            }
+
+            if(position==6) //choose another role
             {
                 Intent i = new Intent(BaseActivity.this,ChooseRole.class);
                 startActivity(i);
             }
 
-            if(position==8) //logout
+            if(position==7) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
@@ -451,31 +463,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
-
-        /*
-        if (position == 0) {
-            /*Intent i = new Intent(MainActivity.this,CurrentOrder.class);
-            startActivity(i);*/ /*
-        }
-
-        if (position == 2) {
-            //  Intent i = new Intent(MainActivity.this,HomeSlider.class);
-            //startActivity(i);
-        }
-
-        if(position==8)
-        {
-            Intent i = new Intent(BaseActivity.this,ChooseRole.class);
-            startActivity(i);
-        }
-
-        if(position==9)
-        {
-            ParseUser.logOut();
-            ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
-            Intent i = new Intent(BaseActivity.this, login.class);
-            startActivity(i);
-        }*/
 
     }
 
@@ -511,5 +498,46 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
         return ret;
+    }
+
+    void checkDate(int Day, int Month, int Year, long milliseconds[]){
+
+        Date d;
+        java.util.Calendar calendar= java.util.Calendar.getInstance();
+        SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
+        String date= format.format(new Date(calendar.getTimeInMillis()));
+        d=null;
+        try {
+            d=format.parse(date);
+        } catch (java.text.ParseException e1) {
+            e1.printStackTrace();
+        }
+        milliseconds[0]= d.getTime();
+
+        String string_date = String.valueOf(Day) + "-" + String.valueOf(Month) + "-" + String.valueOf(Year);
+
+        SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+        d = null;
+        try {
+            d = f.parse(string_date);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        milliseconds[1] = d.getTime();
+
+        Log.d("date test base", milliseconds[0] + " selected:" + milliseconds[1]);
+
+
+    }
+
+    void setDialogSize(Dialog dialogcal){
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogcal.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.gravity = Gravity.CENTER;
+
+        dialogcal.getWindow().setAttributes(lp);
+
     }
 }
