@@ -74,15 +74,16 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Attendance");
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
         Intent from_student = getIntent();
         //final String id = from_student.getStringExtra("id");
         role=from_student.getStringExtra("role");
         classId=from_student.getStringExtra("id");
         institution_name=from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
+        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
+        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
+
 
 
         studentList = (ListView) findViewById(R.id.studentList);
