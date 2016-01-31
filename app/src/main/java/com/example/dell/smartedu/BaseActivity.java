@@ -357,18 +357,21 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 4) { //assignments
-               /* Intent upload_intent = new Intent(BaseActivity.this, teacher_classes.class);
-                upload_intent.putExtra("role", role);
-                upload_intent.putExtra("for", "upload");
-                startActivity(upload_intent); */
-
+                Intent exam_intent = new Intent(BaseActivity.this, UploadMaterial_students.class);
+                exam_intent.putExtra("institution", institution_name);
+                exam_intent.putExtra("institution_code", institution_code);
+                exam_intent.putExtra("id", classId);
+                startActivity(exam_intent);
             }
 
             if (position == 5) { //grades
-               /* Intent addmarks_intent = new Intent(BaseActivity.this, teacher_classes.class);
-                addmarks_intent.putExtra("role", role);
-                addmarks_intent.putExtra("for", "exam");
-                startActivity(addmarks_intent); */
+                Intent exam_intent = new Intent(BaseActivity.this, student_exams.class);
+                exam_intent.putExtra("institution", institution_name);
+                exam_intent.putExtra("institution_code", institution_code);
+                exam_intent.putExtra("role", role);
+                exam_intent.putExtra("classId", classId);
+                exam_intent.putExtra("studentId", studentId);
+                startActivity(exam_intent);
             }
 
             if(position==7) //choose another role
@@ -397,7 +400,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 1) { //tasks
-                Intent task_intent = new Intent(BaseActivity.this, Tasks.class);
+                Intent task_intent = new Intent(getApplicationContext(), Tasks.class);
                 task_intent.putExtra("institution_code",institution_code);
                 task_intent.putExtra("institution_name",institution_name);
                 task_intent.putExtra("role", role);
@@ -405,7 +408,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-                Intent atten_intent = new Intent(BaseActivity.this, view_attendance.class);
+                Intent atten_intent = new Intent(getApplicationContext(), view_attendance.class);
                 atten_intent.putExtra("role", "Parent");
                 atten_intent.putExtra("studentId", studentId);
                 atten_intent.putExtra("classId", classId);
@@ -414,7 +417,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 3) { //grades
 
-                Intent exam_intent = new Intent(BaseActivity.this, student_exams.class);
+                Intent exam_intent = new Intent(getApplicationContext(), student_exams.class);
                 exam_intent.putExtra("role", "Parent");
                 exam_intent.putExtra("classId", classId);
                 exam_intent.putExtra("studentId", studentId);
@@ -424,7 +427,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 4) { //messages
 
-                Intent message_intent = new Intent(BaseActivity.this, view_messages.class);
+                Intent message_intent = new Intent(getApplicationContext(), view_messages.class);
                 message_intent.putExtra("role", "Parent");
                 message_intent.putExtra("classId", classId);
                 message_intent.putExtra("studentId", studentId);
@@ -440,7 +443,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if(position==6) //choose another role
             {
-                Intent i = new Intent(BaseActivity.this,ChooseRole.class);
+                Intent i = new Intent(getApplicationContext(),ChooseRole.class);
                 startActivity(i);
             }
 

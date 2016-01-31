@@ -221,9 +221,8 @@ public class FragmentDrawer extends Fragment {
                     R.drawable.ic_home,
                     R.drawable.task_icon,
                     R.drawable.attendance_icon,
-                    R.drawable.ic_calender,
-                    R.drawable.upload_icon,
                     R.drawable.grades_icon,
+                    R.drawable.message_icon,
                     R.drawable.settings_icon,
                     R.drawable.role_icon,
                     R.drawable.logout_icon
