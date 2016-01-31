@@ -98,8 +98,8 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                 if (e == null) {
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                    classRef[0] = studentListRet.get(0);
+                    if (studentListRet.size() != 0){
+                        classRef[0] = studentListRet.get(0);
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
                     studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
@@ -147,64 +147,65 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
 
 
                                 examsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                        String item = ((TextView) view).getText().toString().trim();
+                                                                     @Override
+                                                                     public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                                                                         String item = ((TextView) view).getText().toString().trim();
 
-                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
-                                        studentQuery.whereEqualTo(ExamTable.EXAM_NAME, item);
-                                        studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
-                                        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                            public void done(List<ParseObject> examListRet, ParseException e) {
-                                                if (e == null) {
-                                                    ParseObject u = examListRet.get(0);
-                                                    examid = u.getObjectId();
-                                                    Log.d("user", "examId: " + examid);
-                                                    Log.d("user", "examId: " + studentId);
-                                                    examName = u.get("examName").toString().trim();
-                                                    totalMarks = u.getNumber("totalMarks");
+                                                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+                                                                         studentQuery.whereEqualTo(ExamTable.EXAM_NAME, item);
+                                                                         studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
+                                                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                             public void done(List<ParseObject> examListRet, ParseException e) {
+                                                                                 if (e == null) {
+                                                                                     ParseObject u = examListRet.get(0);
+                                                                                     examid = u.getObjectId();
+                                                                                     Log.d("user", "examId: " + examid);
+                                                                                     Log.d("user", "examId: " + studentId);
+                                                                                     examName = u.get("examName").toString().trim();
+                                                                                     totalMarks = u.getNumber("totalMarks");
 
-                                                    ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
-                                                    marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
-                                                    marksQuery.whereEqualTo(MarksTable.EXAM_REF, ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid));
-                                                    marksQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                        public void done(List<ParseObject> marksListRet, ParseException e) {
-                                                            if (e == null) {
+                                                                                     ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+                                                                                     marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
+                                                                                     marksQuery.whereEqualTo(MarksTable.EXAM_REF, ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid));
+                                                                                     marksQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                                         public void done(List<ParseObject> marksListRet, ParseException e) {
+                                                                                             if (e == null) {
 
-                                                                if(marksListRet.size()!=0) {
-                                                                    marksObtained = marksListRet.get(0).getNumber(MarksTable.MARKS_OBTAINED);
-                                                                    callDialog(view);
-                                                                }
-                                                                else{
-                                                                    Toast.makeText(student_exams.this, "Not Yet Added", Toast.LENGTH_LONG).show();
-                                                                }
+                                                                                                 if (marksListRet.size() != 0) {
+                                                                                                     marksObtained = marksListRet.get(0).getNumber(MarksTable.MARKS_OBTAINED);
+                                                                                                     callDialog(view);
+                                                                                                 } else {
+                                                                                                     Toast.makeText(student_exams.this, "Not Yet Added", Toast.LENGTH_LONG).show();
+                                                                                                 }
 
-                                                            } else {
-                                                                Log.d("user", "ErrorIn: " + e.getMessage());
-                                                            }
-                                                        }
-                                                    });
+                                                                                             } else {
+                                                                                                 Log.d("user", "ErrorIn: " + e.getMessage());
+                                                                                             }
+                                                                                         }
+                                                                                     });
 
-                                                            } else {
-                                                                Log.d("user", "ErrorOut: " + e.getMessage());
-                                                            }
-                                                        }
-                                                    });
-
-
-                                                }
-                                            }
-
-                                            );
+                                                                                 } else {
+                                                                                     Log.d("user", "ErrorOut: " + e.getMessage());
+                                                                                 }
+                                                                             }
+                                                                         });
 
 
-                                        }else{
-                                            Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
-                                            Log.d("user", "Error: " + e.getMessage());
-                                        }
-                                    }
-                                });
+                                                                     }
+                                                                 }
 
+                                );
+
+
+                            } else {
+                                Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
+                                Log.d("user", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+                }else{
+                        Toast.makeText(student_exams.this, "No Exam added yet", Toast.LENGTH_LONG).show();
+                    }
 
                             } else {
                                 Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
