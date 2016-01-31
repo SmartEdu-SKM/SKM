@@ -139,6 +139,8 @@ String child_username;
 
                                                 Intent exam_intent = new Intent(parent_home_activity.this, student_exams.class);
                                                 exam_intent.putExtra("role", "Parent");
+                                                exam_intent.putExtra("institution_name", institution_name);
+                                                exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("classId", classId);
                                                 exam_intent.putExtra("studentId", studentId);
                                                 startActivity(exam_intent);

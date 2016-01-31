@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity{
                 if (position == 0) {
                     Intent attendance_intent = new Intent(MainActivity.this, teacher_classes.class);
                     attendance_intent.putExtra("institution_code",institution_code);
-                    attendance_intent.putExtra("institution",institution_name);
+                    attendance_intent.putExtra("institution_name",institution_name);
                     attendance_intent.putExtra("for", "attendance");
                     attendance_intent.putExtra("role", role);
                     startActivity(attendance_intent);
