@@ -62,13 +62,12 @@ public class admin_home extends BaseActivity{
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
-                    if (position == 0) {
-                        Intent attendance_intent = new Intent(admin_home.this, teacher_classes.class);
-                        attendance_intent.putExtra("institution_code",institution_code);
-                        attendance_intent.putExtra("institution_name",institution_name);
-                        attendance_intent.putExtra("for", "attendance");
-                        attendance_intent.putExtra("role", role);
-                        startActivity(attendance_intent);
+                    if (position == 0) { //teachers
+                        Intent student_intent = new Intent(admin_home.this, Teachers.class);
+                        student_intent.putExtra("institution_code",institution_code);
+                        student_intent.putExtra("institution_name",institution_name);
+                        student_intent.putExtra("role", role);
+                        startActivity(student_intent);
                     } else if (position == 1) {
                         Intent task_intent = new Intent(admin_home.this, Tasks.class);
                         task_intent.putExtra("institution_code",institution_code);
@@ -80,7 +79,6 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("institution_code",institution_code);
                         student_intent.putExtra("institution_name",institution_name);
                         student_intent.putExtra("role", role);
-                        student_intent.putExtra("for", "students");
                         startActivity(student_intent);
                     }
                     else if (position == 3) {
