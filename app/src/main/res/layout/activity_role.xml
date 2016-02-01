@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="#ff1d3a">
+            android:background="#20BF9F">
 
     <Button
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
         android:textColor="#FFFF"
         android:textSize="40sp"
         android:layout_gravity="center_horizontal"
-        android:background="#38010101" />
+        android:background="#36051e19" />
 
         </RelativeLayout>
 
@@ -78,7 +78,7 @@
         android:scrollHorizontally="true"
         android:id="@+id/button_chooserole"
         android:layout_gravity="center_horizontal"
-        android:background="#13010101"
+        android:background="#20BF9F"
         android:textColor="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

@@ -33,7 +33,7 @@ public class admin_home extends BaseActivity{
             Intent home=getIntent();
             role=home.getStringExtra("role");
             institution_name=home.getStringExtra("institution_name");
-            //institution_code=home.getStringExtra("institution_code");
+            institution_code=home.getStringExtra("institution_code");
             Log.d("user", role);
 
             dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -76,6 +76,14 @@ public class admin_home extends BaseActivity{
                         task_intent.putExtra("role", role);
                         startActivity(task_intent);
                     } else if (position == 2) {
+                        Intent student_intent = new Intent(admin_home.this, teacher_classes.class);
+                        student_intent.putExtra("institution_code",institution_code);
+                        student_intent.putExtra("institution_name",institution_name);
+                        student_intent.putExtra("role", role);
+                        student_intent.putExtra("for", "students");
+                        startActivity(student_intent);
+                    }
+                    else if (position == 3) {
                         Intent student_intent = new Intent(admin_home.this, teacher_classes.class);
                         student_intent.putExtra("institution_code",institution_code);
                         student_intent.putExtra("institution_name",institution_name);

@@ -87,7 +87,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="20sp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:popupBackground="#20BF9F" />
 
     <ImageButton
         android:layout_width="wrap_content"

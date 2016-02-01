@@ -456,7 +456,41 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
         } else if(role.equals("Admin")){
-            if(position==0) //logout
+            if (position == 0) { //dashboard
+                Intent i = new Intent(getApplicationContext(),admin_home.class);
+                i.putExtra("institution_code",institution_code);
+                i.putExtra("institution_name",institution_name);
+                i.putExtra("role", role);
+                startActivity(i);
+            }
+
+            if (position == 1) { //tasks
+                Intent task_intent = new Intent(getApplicationContext(), Tasks.class);
+                task_intent.putExtra("institution_code",institution_code);
+                task_intent.putExtra("institution_name",institution_name);
+                task_intent.putExtra("role", role);
+                startActivity(task_intent);
+            }
+
+            if (position == 2) { //teachers
+
+            }
+
+            if (position == 3) { //classes
+
+
+            }
+
+            if (position == 4) { //allotments
+
+            }
+
+            if (position == 5) { //settings
+
+            }
+
+
+            if(position==6) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
