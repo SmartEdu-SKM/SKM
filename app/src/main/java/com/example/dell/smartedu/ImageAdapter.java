@@ -109,7 +109,7 @@ public class ImageAdapter extends BaseAdapter {
     };
 
     private Integer[] mThumbIdsAdmin = {
-            R.drawable.teachers, R.drawable.classes,
+            R.drawable.teachers,R.drawable.task_image, R.drawable.classes,
             R.drawable.allotments
 
     };

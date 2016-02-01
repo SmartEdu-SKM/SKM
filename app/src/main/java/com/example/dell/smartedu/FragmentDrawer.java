@@ -233,6 +233,12 @@ public class FragmentDrawer extends Fragment {
         {
             titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_admin);
             icons= new int[]{
+                    R.drawable.ic_home,
+                    R.drawable.task_icon,
+                    R.drawable.role_icon,
+                    R.drawable.classes_icon,
+                    R.drawable.allotment_icon,
+                    R.drawable.settings_icon,
                     R.drawable.logout_icon
 
             };

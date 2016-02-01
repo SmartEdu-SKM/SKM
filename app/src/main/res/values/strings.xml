@@ -21,6 +21,10 @@
     <string name="nav_item_logout">Logout</string>
     <string name="nav_item_messages">Messages</string>
 
+    <string name="nav_item_teachers">Teachers</string>
+    <string name="nav_item_classes">Classes</string>
+    <string name="nav_item_allotments">Allotments</string>
+
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels_teacher">
         <item>@string/nav_item_dashboard</item>
@@ -60,6 +64,12 @@
 
 
     <string-array name="nav_drawer_labels_admin">
+        <item>@string/nav_item_dashboard</item>
+        <item>@string/nav_item_tasks</item>
+        <item>@string/nav_item_teachers</item>
+        <item>@string/nav_item_classes</item>
+        <item>@string/nav_item_allotments</item>
+        <item>@string/nav_item_settings</item>
         <item>@string/nav_item_logout</item>
     </string-array>
 

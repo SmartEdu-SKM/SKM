@@ -19,7 +19,10 @@
         android:id="@+id/add"
         android:layout_below="@+id/info"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#20BF9F"
+        android:allowUndo="false"
+        android:textColor="#ffffff" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -27,7 +30,8 @@
         android:id="@+id/start_hours"
         android:layout_below="@+id/textView11"
         android:layout_toRightOf="@+id/textView13"
-        android:layout_toEndOf="@+id/textView13" />
+        android:layout_toEndOf="@+id/textView13"
+        android:popupBackground="#20BF9F" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -35,7 +39,8 @@
         android:id="@+id/start_mins"
         android:layout_below="@+id/start_hours"
         android:layout_alignLeft="@+id/start_hours"
-        android:layout_alignStart="@+id/start_hours" />
+        android:layout_alignStart="@+id/start_hours"
+        android:popupBackground="#20BF9F" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -43,7 +48,8 @@
         android:id="@+id/end_hours"
         android:layout_below="@+id/textView13"
         android:layout_alignLeft="@+id/start_mins"
-        android:layout_alignStart="@+id/start_mins" />
+        android:layout_alignStart="@+id/start_mins"
+        android:popupBackground="#20BF9F" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -51,7 +57,8 @@
         android:id="@+id/end_mins"
         android:layout_below="@+id/end_hours"
         android:layout_alignLeft="@+id/end_hours"
-        android:layout_alignStart="@+id/end_hours" />
+        android:layout_alignStart="@+id/end_hours"
+        android:popupBackground="#20BF9F" />
 
     <TextView
         android:layout_width="wrap_content"

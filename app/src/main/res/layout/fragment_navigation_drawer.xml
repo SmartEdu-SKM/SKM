@@ -25,7 +25,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="false"
                 android:layout_alignParentEnd="false"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:background="@drawable/nav_two">
 
 
                 <LinearLayout

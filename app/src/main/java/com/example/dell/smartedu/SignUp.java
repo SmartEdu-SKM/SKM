@@ -94,7 +94,10 @@ public class SignUp extends AppCompatActivity {
                            startActivity(i);
                        }else
                        {
-                           Intent i=new Intent(SignUp.this,MainActivity.class);
+                           Intent i=new Intent(SignUp.this,admin_home.class);
+                           i.putExtra("institution_code",InstitutionTable.OBJECT_ID);
+                           i.putExtra("institution_name",InstitutionTable.INSTITUTION_NAME);
+                           i.putExtra("role", "Admin");
                            startActivity(i);
                        }
                    } else {
