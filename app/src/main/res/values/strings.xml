@@ -58,6 +58,11 @@
         <item>@string/nav_item_logout</item>
     </string-array>
 
+
+    <string-array name="nav_drawer_labels_admin">
+        <item>@string/nav_item_logout</item>
+    </string-array>
+
     <string-array name="nav_drawer_labels_none">
 
         <item>@string/nav_item_logout</item>
@@ -115,5 +120,6 @@
     <string name="title_activity_my_application">MyApplication</string>
     <string name="title_activity_select_institution">select_institution</string>
     <string name="title_activity_parent_choose_child">parent_choose_child</string>
+    <string name="title_activity_admin_home">admin_home</string>
 
 </resources>

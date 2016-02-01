@@ -229,6 +229,13 @@ public class FragmentDrawer extends Fragment {
 
             };
             Log.d("user","Parent role selected");
+        }else if(this.role.equals("Admin"))
+        {
+            titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_admin);
+            icons= new int[]{
+                    R.drawable.logout_icon
+
+            };
         }else if(this.role.equals(""))
         {
             titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_none);

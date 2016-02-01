@@ -200,6 +200,10 @@
             android:name=".parent_choose_child"
             android:label="@string/title_activity_parent_choose_child" >
         </activity>
+        <activity
+            android:name=".admin_home"
+            android:label="@string/title_activity_admin_home" >
+        </activity>
     </application>
 
 </manifest>

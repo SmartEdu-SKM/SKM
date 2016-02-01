@@ -31,6 +31,9 @@ public class ImageAdapter extends BaseAdapter {
         }
         else if(role.equals("Student")) {
             return mThumbIdsStudent.length;
+        }else if(role.equals("Admin"))
+        {
+            return mThumbIdsAdmin.length;
         }
         return mThumbIdsTeacher.length;
     }
@@ -75,6 +78,8 @@ public class ImageAdapter extends BaseAdapter {
         }
         else if(role.equals("Student")) {
             imageView.setImageResource(mThumbIdsStudent[position]);
+        }else if(role.equals("Admin")){
+            imageView.setImageResource(mThumbIdsAdmin[position]);
         }
 
 
@@ -100,6 +105,12 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.attendance, R.drawable.task_image,
             R.drawable.messages, R.drawable.timetable_image,
             R.drawable.marks, R.drawable.uploads,
+
+    };
+
+    private Integer[] mThumbIdsAdmin = {
+            R.drawable.teachers, R.drawable.classes,
+            R.drawable.allotments
 
     };
 }
