@@ -204,6 +204,22 @@
             android:name=".admin_home"
             android:label="@string/title_activity_admin_home" >
         </activity>
+        <activity
+            android:name=".Teachers"
+            android:label="@string/title_activity_teachers"
+            android:parentActivityName=".teacher_classes" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.teacher_classes" />
+        </activity>
+        <activity
+            android:name=".NewTeacher"
+            android:label="@string/title_activity_new_teacher"
+            android:parentActivityName=".Teachers" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.dell.smartedu.Teachers" />
+        </activity>
     </application>
 
 </manifest>

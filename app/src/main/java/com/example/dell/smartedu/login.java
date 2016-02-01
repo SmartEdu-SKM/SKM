@@ -15,9 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 
 public class login extends AppCompatActivity {
@@ -85,8 +90,30 @@ Button login;
                             Toast.makeText(getApplicationContext(),
                                     "Successfully Logged in",
                                     Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(login.this, Role.class);
-                            startActivity(i);
+                            ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+                            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
+                            institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> institutionListRet, ParseException e) {
+                                    if (e == null) {
+
+                                        if (institutionListRet.size() == 0) {
+                                            Intent i = new Intent(login.this, Role.class);
+                                            startActivity(i);
+                                        } else {
+                                            Intent i = new Intent(login.this, admin_home.class);
+                                            i.putExtra("institution_code", InstitutionTable.OBJECT_ID);
+                                            i.putExtra("institution_name", InstitutionTable.INSTITUTION_NAME);
+                                            i.putExtra("role", "Admin");
+                                            startActivity(i);
+                                        }
+                                    } else {
+                                        Log.d("institution", "error");
+                                    }
+
+
+                                }
+
+                            });
 
                         } else {
                            /* Toast.makeText(
