@@ -133,5 +133,6 @@
     <string name="title_activity_admin_home">admin_home</string>
     <string name="title_activity_teachers">Teachers</string>
     <string name="title_activity_new_teacher">NewTeacher</string>
+    <string name="title_activity_admin_classes">Admin_classes</string>
 
 </resources>

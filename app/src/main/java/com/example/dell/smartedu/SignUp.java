@@ -223,9 +223,11 @@ public class SignUp extends AppCompatActivity {
                             Intent i = new Intent(SignUp.this, Role.class);
                             startActivity(i);
                         } else {
+                            ParseObject insti = institutionListRet.get(0);
                             Intent i = new Intent(SignUp.this, admin_home.class);
                             i.putExtra("role","Admin");
-                            i.putExtra("institution_name",institutionListRet.get(0).getString(InstitutionTable.INSTITUTION_NAME));
+                            i.putExtra("institution_name",insti.getString(InstitutionTable.INSTITUTION_NAME));
+                            i.putExtra("institution_code", insti.getObjectId());
                             startActivity(i);
                         }
                     } else {

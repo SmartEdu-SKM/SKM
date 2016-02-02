@@ -220,6 +220,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dell.smartedu.Teachers" />
         </activity>
+        <activity
+            android:name=".Admin_classes"
+            android:label="@string/title_activity_admin_classes" >
+        </activity>
     </application>
 
 </manifest>

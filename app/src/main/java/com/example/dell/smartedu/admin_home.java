@@ -35,6 +35,7 @@ public class admin_home extends BaseActivity{
             institution_name=home.getStringExtra("institution_name");
             institution_code=home.getStringExtra("institution_code");
             Log.d("user", role);
+            Log.d("insti code",institution_code);
 
             dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
             noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -58,7 +59,7 @@ public class admin_home extends BaseActivity{
             //mySettings = getSharedPreferences(SyncStateContract.Constants.PREFERENCES, Context.MODE_PRIVATE);
             // int gridSize = 50 * Integer.parseInt(mySettings.getString("gridSize", "3"));
             //gridview.setColumnWidth(gridSize + 10);
-            gridview.setAdapter(new ImageAdapter(this, densityX, "Admin"));
+            gridview.setAdapter(new ImageAdapter(this, densityX, role));
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
@@ -69,7 +70,7 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("role", role);
                         startActivity(student_intent);
                     } else if (position == 1) {
-                        Intent task_intent = new Intent(admin_home.this, Tasks.class);
+                        Intent task_intent = new Intent(admin_home.this, Admin_classes.class);
                         task_intent.putExtra("institution_code",institution_code);
                         task_intent.putExtra("institution_name",institution_name);
                         task_intent.putExtra("role", role);
