@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +20,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,12 +127,9 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 final Dialog class_info=new Dialog(Admin_classes.this);
                                 class_info.setContentView(R.layout.class_details);
                                 class_info.setTitle(item);
-                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                lp.copyFrom(class_info.getWindow().getAttributes());
-                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                lp.gravity = Gravity.CENTER;
-                                class_info.getWindow().setAttributes(lp);
+
+                                setDialogSize(class_info);
+
                                 classSubjectList=(ListView)class_info.findViewById(R.id.subjectList);
                                 ok=(Button)class_info.findViewById(R.id.doneButton);
                                 deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);

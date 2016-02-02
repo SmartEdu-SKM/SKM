@@ -12,5 +12,6 @@ public class TeacherTable {
     public static final String BY_USER_REF="addedBy";
     public static final String INSTITUTION_NAME="institutionName";
     public static final String INSTITUTION="institution";
+    public static final String TEACHER_USER_REF="userId";
 
 }
