@@ -70,13 +70,13 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("role", role);
                         startActivity(student_intent);
                     } else if (position == 1) {
-                        Intent task_intent = new Intent(admin_home.this, Admin_classes.class);
+                        Intent task_intent = new Intent(admin_home.this, Tasks.class);
                         task_intent.putExtra("institution_code",institution_code);
                         task_intent.putExtra("institution_name",institution_name);
                         task_intent.putExtra("role", role);
                         startActivity(task_intent);
                     } else if (position == 2) {
-                        Intent student_intent = new Intent(admin_home.this, teacher_classes.class);
+                        Intent student_intent = new Intent(admin_home.this, Admin_classes.class);
                         student_intent.putExtra("institution_code",institution_code);
                         student_intent.putExtra("institution_name",institution_name);
                         student_intent.putExtra("role", role);

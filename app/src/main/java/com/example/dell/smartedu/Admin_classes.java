@@ -141,7 +141,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
                                                 ArrayList<String> subjectLt = new ArrayList<String>();
-                                                ArrayAdapter adapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_list_item_1, subjectLt);
+                                                ArrayAdapter subjectadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, subjectLt);
                                                 //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                                                 Log.d("user", "Retrieved " + subjectListRet.size() + " subjects");
@@ -155,13 +155,13 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                     //name += "\n";
                                                     // name += u.getInt("age");
 
-                                                    adapter.add(name);
+                                                    subjectadapter.add(name);
                                                     // }
 
                                                 }
 
 
-                                                classSubjectList.setAdapter(adapter);
+                                                classSubjectList.setAdapter(subjectadapter);
                                                 class_info.show();
 
 

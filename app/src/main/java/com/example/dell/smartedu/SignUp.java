@@ -213,7 +213,7 @@ public class SignUp extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         if( ParseUser.getCurrentUser()!=null)
-        {  ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+        {  final ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
             institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
             institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> institutionListRet, ParseException e) {
@@ -223,12 +223,17 @@ public class SignUp extends AppCompatActivity {
                             Intent i = new Intent(SignUp.this, Role.class);
                             startActivity(i);
                         } else {
-                            ParseObject insti = institutionListRet.get(0);
-                            Intent i = new Intent(SignUp.this, admin_home.class);
-                            i.putExtra("role","Admin");
-                            i.putExtra("institution_name",insti.getString(InstitutionTable.INSTITUTION_NAME));
-                            i.putExtra("institution_code", insti.getObjectId());
-                            startActivity(i);
+                            try {
+                                ParseObject insti = institutionListRet.get(0);
+                                Intent i = new Intent(SignUp.this, admin_home.class);
+                                i.putExtra("role", "Admin");
+                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
+                                startActivity(i);
+                            }catch (Exception admin_excep)
+                            {
+                                Toast.makeText(SignUp.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
+                            }
                         }
                     } else {
                         Log.d("institution", "error");
