@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -123,9 +125,17 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 String item = ((TextView) view).getText().toString();
                                 Log.d("class", item);
 
+
+
                                 final Dialog class_info=new Dialog(Admin_classes.this);
                                 class_info.setContentView(R.layout.class_details);
                                 class_info.setTitle(item);
+                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                lp.copyFrom(class_info.getWindow().getAttributes());
+                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp.gravity = Gravity.CENTER;
+                                class_info.getWindow().setAttributes(lp);
                                 classSubjectList=(ListView)class_info.findViewById(R.id.subjectList);
                                 ok=(Button)class_info.findViewById(R.id.doneButton);
                                 deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);
@@ -165,7 +175,12 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                 class_info.show();
 
 
-
+                                                ok.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        class_info.dismiss();
+                                                    }
+                                                });
 
 
 
