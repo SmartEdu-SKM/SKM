@@ -1,37 +1,221 @@
 package com.example.dell.smartedu;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class NewTeacher extends AppCompatActivity {
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
+/**
+ * Created by Dell on 10/7/2015.
+ */
+public class NewTeacher extends BaseActivity {
+
+    private Toolbar mToolbar;
+    String name;
+
+    int age=0;
+    Button addTeacherButton;
+
+    MyDBHandler dbHandler;
+    Task task;
+    EditText teacherName;
+    EditText teacherAge;
+
+    Notification_bar noti_bar;
+    String classId;
+    String parentId;
+    String studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_teacher);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("New Student");
+
+        Intent from_students = getIntent();
+        role = from_students.getStringExtra("role");
+        institution_code=from_students.getStringExtra("institution_code");
+        institution_name=from_students.getStringExtra("institution_name");
+
+        teacherName = (EditText) findViewById(R.id.teacherName);
+        teacherAge = (EditText) findViewById(R.id.teacherAge);
+
+        addTeacherButton = (Button) findViewById(R.id.addTeacherButton);
+        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
+
+
+        addTeacherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                name = teacherName.getText().toString().trim();
+                age = Integer.parseInt(teacherAge.getText().toString().trim());
+
+
+                if (name.equals(null) || (age == 0) ) {
+                    Toast.makeText(getApplicationContext(), "Teacher details cannot be empty!", Toast.LENGTH_LONG).show();
+                } else {
+
+                    final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
+                    addTeacherUser(name, age, sessionToken);
+                    sleep(3000);
+
+                    // addParent(name, rollno);
+
+                }
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_teacher, menu);
-        return true;
+
+
+
+    protected void sleep(int time)
+    {
+        for(int x=0;x<time;x++)
+        {
+
+        }
+    }
+    protected void addTeacherUser(final String Name,int Age, final String presession)
+    {
+        final ParseUser[] userRef = {new ParseUser()};
+        // Set up a new Parse user
+        final ParseUser user_teacher = new ParseUser();
+        user_teacher.setUsername(Name + institution_name);
+        user_teacher.setPassword(institution_name + Name + institution_name);
+
+
+        user_teacher.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {// Handle the response
+
+                if (e != null) {
+                    // Show the error message
+                    Toast.makeText(NewTeacher.this, e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    userRef[0] = user_teacher;
+                    //  Toast.makeText(NewStudent.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
+                    Log.d("role", "added Student role of " + user_teacher.getObjectId());
+                    ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
+                    roleobject.put(RoleTable.OF_USER_REF, user_teacher);
+                    roleobject.put(RoleTable.ROLE, "Teacher");
+                    roleobject.put(RoleTable.ENROLLED_WITH,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                    roleobject.saveInBackground();
+
+
+                    try {
+
+                        ParseUser.become(presession);
+                        addTeacher(userRef[0]);
+                    } catch (ParseException e1) {
+                        Toast.makeText(NewTeacher.this, "cant add teacher",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+        });
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+
+    protected void addTeacher(final ParseUser userRef){
+
+
+                        ParseObject teacher = new ParseObject(TeacherTable.TABLE_NAME);
+                        teacher.put(TeacherTable.BY_USER_REF, ParseUser.getCurrentUser());
+                        teacher.put(TeacherTable.TEACHER_NAME, name);
+                        teacher.put(TeacherTable.TEACHER_AGE, age);
+                        teacher.put(TeacherTable.INSTITUTION_NAME, institution_name);
+                        teacher.put(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                        teacher.put(TeacherTable.TEACHER_USER_REF, userRef);
+                        teacher.saveInBackground();
+
+                        Toast.makeText(getApplicationContext(), "Teacher details successfully stored", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(NewTeacher.this, Teachers.class);
+                        i.putExtra("institution_code", institution_code);
+                        i.putExtra("institution_name", institution_name);
+                        i.putExtra("role", role);
+                        startActivity(i);
+                        finish();
+
         }
 
-        return super.onOptionsItemSelected(item);
+
+    /*
+        protected void addParent(final String Name, final int Rollno)
+        {
+            Log.d("user", "parent child realtion");
+            ParseQuery<ParseUser> user=ParseUser.getQuery();
+            user.whereEqualTo("username", "parent_" + Name + Rollno);
+            user.findInBackground(new FindCallback<ParseUser>() {
+                @Override
+                public void done(List<ParseUser> parentobjects, ParseException e) {
+                    if(e==null) {
+                        if(parentobjects.size()!=0) {
+                            Log.d("user", "parent found");
+                            final ParseUser user_parent =parentobjects.get(0);
+                            ParseQuery<ParseUser> user=ParseUser.getQuery();
+                            user.whereEqualTo("username",Name+Rollno);
+                            user.findInBackground(new FindCallback<ParseUser>() {
+                                @Override
+                                public void done(List<ParseUser> objects, ParseException e) {
+                                    if(e==null) {
+                                        if(objects.size()!=0) {
+                                            Log.d("user", "student found");
+                                            ParseUser user_student =objects.get(0);
+                                            ParseObject parent=new ParseObject("Parent");
+                                            parent.put("userId",user_parent);
+                                            parent.put("child",user_student);
+                                            parent.saveEventually();
+                                        }else
+                                        {
+                                            Log.d("user", "query logic error in student");
+                                        }
+                                    }else
+                                    {
+                                        Log.d("user", "no student");
+                                    }
+                                }
+                            });
+                        }else
+                        {
+                            Log.d("user", "query logic error in parent");
+                        }
+                    }else
+                    {
+                        Log.d("user", "no parent");
+                    }
+                }
+            });
+        }
+    */
+        @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(ParseUser.getCurrentUser()==null)
+        {
+            Intent nouser=new Intent(NewTeacher.this,login.class);
+            startActivity(nouser);
+        }
     }
+
 }

@@ -37,18 +37,19 @@
                 </LinearLayout>
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Id&apos;s"
                 android:id="@+id/shareCode"
-                android:layout_below="@+id/container_toolbar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="89dp"
+
+                android:layout_marginBottom="54dp"
                 android:background="#000000"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff"
+                android:layout_above="@+id/addTeacher"
+                android:layout_alignParentStart="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Add Teacher Here"
                 android:id="@+id/addTeacher"
@@ -58,15 +59,15 @@
                 android:layout_centerHorizontal="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="View Teachers"
                 android:id="@+id/viewTeachers"
-                android:layout_marginTop="59dp"
+                android:layout_marginTop="54dp"
                 android:background="#000000"
                 android:textColor="#ffffff"
                 android:layout_below="@+id/addTeacher"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignParentStart="true" />
 
 
         </RelativeLayout>
