@@ -195,6 +195,31 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                     });
 
 
+                                                    deleteClassButton.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            ParseQuery<ParseObject> deleteClassQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                                                            deleteClassQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
+                                                            deleteClassQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                                                            deleteClassQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(List<ParseObject> classobjects, ParseException e) {
+                                                                    if (e == null) {
+                                                                        if (classobjects.size() != 0) {
+                                                                            for (int x = 0; x < classobjects.size(); x++) {
+                                                                                classobjects.get(x).deleteEventually();
+                                                                            }
+                                                                        } else {
+                                                                            Log.d("classGrade", "error in query");
+                                                                        }
+                                                                    } else {
+                                                                        Log.d("classGrade", "error");
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+
                                                     addSectionButton.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
