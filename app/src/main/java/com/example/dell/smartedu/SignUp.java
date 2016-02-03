@@ -229,6 +229,7 @@ public class SignUp extends AppCompatActivity {
                                 i.putExtra("role", "Admin");
                                 i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
                                 i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
+                                sleep(1000);
                                 startActivity(i);
                             }catch (Exception admin_excep)
                             {
@@ -243,6 +244,13 @@ public class SignUp extends AppCompatActivity {
                 }
 
             });
+        }
+    }
+
+    protected void sleep(int x)
+    {
+        for(int i=0;i<=x;i++){
+
         }
     }
 

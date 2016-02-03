@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,12 +38,14 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     // Students students = new Students();
     //ArrayList<Task> myList;
     ListView classList;
-    ListView classSubjectList;
+    ListView classSectionList;
     Notification_bar noti_bar;
     Button ok;
     Button deleteClassButton;
-    Button addSubjectButton;
-
+    Button addSectionButton;
+    EditText getNewSection;
+    TextView singleInputField;
+    Button doneNewSection;
 
 
     @Override
@@ -80,134 +83,238 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> classListRet, ParseException e) {
+
+        ParseQuery<ParseObject> classGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+        classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> classGradeListRet, ParseException e) {
                 if (e == null) {
 
-
-                    Log.d("class", "Retrieved the classes with insti code "+ institution_code);
-
-
-                    if(classListRet.size()!=0)
-                    {
-                        ArrayList<String> studentLt = new ArrayList<String>();
-                        ArrayAdapter adapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_list_item_1, studentLt);
-                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-
-                        Log.d("user", "Retrieved " + classListRet.size() + " classes");
-                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                        for (int i = 0; i < classListRet.size(); i++) {
-                            ParseObject u = (ParseObject) classListRet.get(i);
-                            //  if(u.getString("class").equals(id)) {
-                            String name = u.getString(ClassTable.CLASS_NAME);
-                           // String subject= u.getString(ClassTable.SUBJECT);
-                           // String item= name + ". " + subject;
-                            //name += "\n";
-                            // name += u.getInt("age");
-
-                            adapter.add(name);
-                            // }
-
-                        }
-
-
-                        classList.setAdapter(adapter);
-
-
-                        classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String item = ((TextView) view).getText().toString();
-                                Log.d("class", item);
+                    if (e == null) {
 
 
 
-                                final Dialog class_info=new Dialog(Admin_classes.this);
-                                class_info.setContentView(R.layout.class_details);
-                                class_info.setTitle(item);
 
-                                setDialogSize(class_info);
-
-                                classSubjectList=(ListView)class_info.findViewById(R.id.subjectList);
-                                ok=(Button)class_info.findViewById(R.id.doneButton);
-                                deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);
-                                addSubjectButton=(Button)class_info.findViewById(R.id.addSubjectButton);
-                                ParseQuery<ParseObject> classSubjectQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                                classSubjectQuery.whereEqualTo(ClassTable.CLASS_NAME, item);
-                                classSubjectQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-                                classSubjectQuery.findInBackground(new FindCallback<ParseObject>() {
-                                    public void done(List<ParseObject> subjectListRet, ParseException e) {
-                                        if (e == null) {
-                                            if (subjectListRet.size() != 0) {
+                        Log.d("class", "Retrieved the classes with insti code " + institution_code);
 
 
+                        if(classGradeListRet.size()!=0)
+                        {
+                            ArrayList<String> classGradeLt = new ArrayList<String>();
+                            ArrayAdapter adapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_list_item_1,classGradeLt);
+                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
-                                                ArrayList<String> subjectLt = new ArrayList<String>();
-                                                ArrayAdapter subjectadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, subjectLt);
-                                                //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                            Log.d("user", "Retrieved " + classGradeListRet.size() + " classes");
+                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                            for (int i = 0; i < classGradeListRet.size(); i++) {
+                                ParseObject u = (ParseObject) classGradeListRet.get(i);
+                                //  if(u.getString("class").equals(id)) {
+                                String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                                // String subject= u.getString(ClassTable.SUBJECT);
+                                // String item= name + ". " + subject;
+                                //name += "\n";
+                                // name += u.getInt("age");
 
-                                                Log.d("user", "Retrieved " + subjectListRet.size() + " subjects");
-                                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                                for (int i = 0; i < subjectListRet.size(); i++) {
-                                                    ParseObject u = (ParseObject) subjectListRet.get(i);
-                                                    //  if(u.getString("class").equals(id)) {
-                                                    String name = u.getString(ClassTable.SUBJECT);
-                                                    // String subject= u.getString(ClassTable.SUBJECT);
-                                                    // String item= name + ". " + subject;
-                                                    //name += "\n";
-                                                    // name += u.getInt("age");
-
-                                                    subjectadapter.add(name);
-                                                    // }
-
-                                                }
-
-
-                                                classSubjectList.setAdapter(subjectadapter);
-                                                class_info.show();
-
-
-                                                ok.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        class_info.dismiss();
-                                                    }
-                                                });
-
-
-
-                                            }else
-                                            {
-                                                Log.d("class","Error in subject query");
-                                            }
-                                        } else {
-                                            Log.d("user", "Error: " + e.getMessage());
-                                        }
-                                    }
-                                });
-
+                                adapter.add(name);
+                                // }
 
                             }
-                        });
+
+
+                            classList.setAdapter(adapter);
+
+
+                            classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    final String item = ((TextView) view).getText().toString();
+                                    Log.d("class", item);
+
+
+
+                                    final Dialog class_info=new Dialog(Admin_classes.this);
+                                    class_info.setContentView(R.layout.class_details);
+                                    class_info.setTitle(item);
+
+                                    setDialogSize(class_info);
+
+                                    classSectionList=(ListView)class_info.findViewById(R.id.subjectList);
+                                    ok=(Button)class_info.findViewById(R.id.doneButton);
+                                    deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);
+                                    addSectionButton=(Button)class_info.findViewById(R.id.addSubjectButton);
+                                    addSectionButton.setText("Add Section");
+                                    ParseQuery<ParseObject> classSectionQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                                    classSectionQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE, item);
+                                    classSectionQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                                    classSectionQuery.findInBackground(new FindCallback<ParseObject>() {
+                                        public void done(List<ParseObject> sectionListRet, ParseException e) {
+                                            if (e == null) {
+                                                if (sectionListRet.size() != 0) {
+
+
+
+                                                    ArrayList<String> sectionLt = new ArrayList<String>();
+                                                    ArrayAdapter sectionadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, sectionLt);
+                                                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                                                    Log.d("user", "Retrieved " + sectionListRet.size() + " sections");
+                                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                                    for (int i = 0; i < sectionListRet.size(); i++) {
+                                                        ParseObject u = (ParseObject) sectionListRet.get(i);
+                                                        //  if(u.getString("class").equals(id)) {
+                                                        String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                                                        String section= u.getString(ClassGradeTable.SECTION);
+                                                        if(section!=null)
+                                                        {
+                                                            String item= name + " " + section;
+                                                            sectionadapter.add(item);
+                                                        }
+                                                        else
+                                                        {
+                                                            String item=name;
+                                                            sectionadapter.add(item);
+                                                        }
+                                                        //name += "\n";
+                                                        // name += u.getInt("age");
+
+
+                                                        // }
+
+                                                    }
+
+
+                                                    classSectionList.setAdapter(sectionadapter);
+                                                    class_info.show();
+
+
+                                                    ok.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            class_info.dismiss();
+                                                        }
+                                                    });
+
+
+                                                    addSectionButton.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            final Dialog newSection=new Dialog(Admin_classes.this);
+                                                            newSection.setContentView(R.layout.get_single_detail);
+                                                            singleInputField=(TextView)newSection.findViewById(R.id.single_entity);
+                                                            doneNewSection=(Button)newSection.findViewById(R.id.okButton);
+                                                            getNewSection=(EditText)newSection.findViewById(R.id.inputdata);
+                                                            singleInputField.setText("Section Name:");
+                                                            newSection.show();
+
+
+                                                            doneNewSection.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    if(getNewSection.getText().toString().equals(""))
+                                                                    {
+                                                                        Toast.makeText(Admin_classes.this,"Section field left empty",Toast.LENGTH_LONG).show();
+                                                                    }else
+                                                                    {
+
+
+                                                                        ParseQuery<ParseObject> newSectionQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                                                                        newSectionQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
+                                                                        newSectionQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                                                                        newSectionQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                            @Override
+                                                                            public void done(List<ParseObject> sectionsList, ParseException e) {
+                                                                                if(e==null)
+                                                                                {
+                                                                                    Log.d("classSection",sectionsList.size() + " Sections");
+                                                                                    int flag=0;
+                                                                                    if(sectionsList.size()!=0)
+                                                                                    {
+                                                                                        for(int x=0;x<sectionsList.size();x++)
+                                                                                        {
+                                                                                            if((sectionsList.get(x).getString(ClassGradeTable.SECTION)).equalsIgnoreCase(getNewSection.getText().toString())){
+                                                                                                Toast.makeText(Admin_classes.this,"Section already added. Type Another section name",Toast.LENGTH_LONG).show();
+                                                                                                flag=1;
+                                                                                            break;
+                                                                                            }
+                                                                                        }
+                                                                                        if(flag==0)
+                                                                                        {
+                                                                                            ParseObject newSectionObject=new ParseObject(ClassGradeTable.TABLE_NAME);
+                                                                                            newSectionObject.put(ClassGradeTable.CLASS_GRADE,item);
+                                                                                            newSectionObject.put(ClassGradeTable.SECTION,getNewSection.getText().toString());
+                                                                                            newSectionObject.put(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                                                                            newSectionObject.saveInBackground();
+                                                                                        newSection.dismiss();
+                                                                                        }
+                                                                                    }else
+                                                                                    {
+                                                                                        Log.d("classSection","error in query logic");
+                                                                                    }
+                                                                                }else
+                                                                                {
+                                                                                    Log.d("classSection","error");
+                                                                                }
+                                                                            }
+                                                                        });
+
+
+
+                                                                    }
+                                                                }
+                                                            });             //end os on click of done button while adding new section
+
+
+                                                        }
+                                                    });
+
+
+
+                                                }else
+                                                {
+                                                    Log.d("class","Error in subject query");
+                                                }
+                                            } else {
+                                                Log.d("user", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    });
+
+
+                                }
+                            });
 
 
 
 
 
-                    }else
-                    {
-                        Log.d("class","error in query");
+                        }else
+                        {
+                            Log.d("class","error in query");
+                        }
+
+                    } else {
+                        Toast.makeText(Admin_classes.this, "error", Toast.LENGTH_LONG).show();
+                        Log.d("class", "Error: " + e.getMessage());
                     }
 
-                } else {
-                    Toast.makeText(Admin_classes.this, "error", Toast.LENGTH_LONG).show();
-                    Log.d("class", "Error: " + e.getMessage());
+
                 }
             }
         });
 
+
+
+
+
+/*
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> classListRet, ParseException e) {
+
+            }
+        });
+*/
 
 
         // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
