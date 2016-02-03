@@ -45,7 +45,10 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button addSectionButton;
     EditText getNewSection;
     TextView singleInputField;
-    Button doneNewSection;
+    Button done;
+    Button deleteSectionButton;
+    Button addSubjectButton;
+    ListView classSubjectList;
 
 
     @Override
@@ -184,6 +187,90 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
                                                     classSectionList.setAdapter(sectionadapter);
+
+                                                    classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                        @Override
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            final String item = ((TextView) view).getText().toString();
+
+                                                            String[] classSection=item.split(" ");
+
+                                                            Dialog classSection_details=new Dialog(Admin_classes.this);
+                                                            classSection_details.setContentView(R.layout.class_details);
+                                                            deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
+                                                            addSubjectButton=(Button)classSection_details.findViewById(R.id.addClassButton);
+                                                            done=(Button)classSection_details.findViewById(R.id.okButton);
+                                                            classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
+                                                            ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                                                            subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
+                                                            subjectQuery.whereEqualTo(ClassGradeTable.SECTION,classSection[1]);
+                                                            subjectQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                                    if(e==null){
+                                                                        if(objects.size()!=0){
+
+
+                                                                            ParseQuery<ParseObject> subjects=ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                                                            subjects.whereEqualTo(ClassTable.CLASS_NAME,objects.get(0));
+                                                                            subjects.findInBackground(new FindCallback<ParseObject>() {
+                                                                                @Override
+                                                                                public void done(List<ParseObject> subjectobjects, ParseException e) {
+                                                                                    if(e==null){
+                                                                                        if(subjectobjects.size()!=0){
+
+
+
+
+
+                                                                                            ArrayList<String> subjectLt = new ArrayList<String>();
+                                                                                            ArrayAdapter subjectadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, subjectLt);
+                                                                                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                                                                                            Log.d("user", "Retrieved " + subjectobjects.size() + " sections");
+                                                                                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                                                                            for (int i = 0; i < subjectobjects.size(); i++) {
+                                                                                                ParseObject u = (ParseObject) subjectobjects.get(i);
+                                                                                                //  if(u.getString("class").equals(id)) {
+                                                                                                String name = u.getString(ClassTable.SUBJECT);
+
+                                                                                                subjectadapter.add(name);
+                                                                                                //name += "\n";
+                                                                                                // name += u.getInt("age");
+
+
+                                                                                                // }
+
+                                                                                            }
+                                                                                            classSubjectList.setAdapter(subjectadapter);
+
+                                                                                        }else
+                                                                                        {
+                                                                                            Log.d("subjects","error in query");
+                                                                                        }
+                                                                                    }else{
+                                                                                        Log.d("subjects","error");
+                                                                                    }
+                                                                                }
+                                                                            });
+
+
+                                                                        }else{
+                                                                            Log.d("claddGrade","error in query");
+                                                                        }
+
+                                                                    }else {
+                                                                        Log.d("classGrade","error");
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        }
+                                                    });
+
+
+
+
                                                     class_info.show();
 
 
@@ -226,13 +313,13 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                             final Dialog newSection=new Dialog(Admin_classes.this);
                                                             newSection.setContentView(R.layout.get_single_detail);
                                                             singleInputField=(TextView)newSection.findViewById(R.id.single_entity);
-                                                            doneNewSection=(Button)newSection.findViewById(R.id.okButton);
+                                                            done=(Button)newSection.findViewById(R.id.okButton);
                                                             getNewSection=(EditText)newSection.findViewById(R.id.inputdata);
                                                             singleInputField.setText("Section Name:");
                                                             newSection.show();
 
 
-                                                            doneNewSection.setOnClickListener(new View.OnClickListener() {
+                                                            done.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
                                                                     if(getNewSection.getText().toString().equals(""))
