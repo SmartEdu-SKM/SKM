@@ -278,7 +278,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         dialog_heading.setText("Subjects");
         addSubjectButton.setText("Add Subject");
         deleteSectionButton.setText("Delete Section");
-        done=(Button)classSection_details.findViewById(R.id.okButton);
+        done=(Button)classSection_details.findViewById(R.id.doneButton);
         classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
 
         ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
@@ -321,7 +321,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                 e1.printStackTrace();
                                             }
 
-                                            
+
 
                                             if(u.getBoolean(ClassTable.IF_CLASS_TEACHER)){
                                                 dialog_heading.setText("Class Teacher : " + teacher_name + "\n" + "Subjects:");
@@ -333,6 +333,14 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
                                         classSubjectList.setAdapter(subjectadapter);
                                         classSection_details.show();
+
+
+                                        done.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                classSection_details.dismiss();
+                                            }
+                                        });
 
                                     }else
                                     {
