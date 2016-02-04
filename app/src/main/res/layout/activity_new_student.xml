@@ -101,6 +101,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#ffff"
-        android:textSize="15sp" />
+        android:background="#20BF9F"
+        android:textSize="15sp"
+        android:textColor="#ffffff" />
 </RelativeLayout>

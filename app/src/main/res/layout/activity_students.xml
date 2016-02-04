@@ -44,16 +44,16 @@
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="37dp"
             android:text="Create Id&apos;s"
             android:id="@+id/shareCode"
 
-            android:background="#010101"
+            android:background="#20BF9F"
             android:textColor="#ffff" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Student"
             android:id="@+id/addButton"

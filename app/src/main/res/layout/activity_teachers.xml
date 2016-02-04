@@ -8,14 +8,21 @@
     android:layout_height="match_parent"
     >
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="572dp"
             >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
 
+                android:id="@+id/student">
 
                 <LinearLayout
                     android:id="@+id/container_toolbar"
@@ -36,41 +43,37 @@
                         tools:layout="@layout/fragment_notification_bar" />
                 </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create Id&apos;s"
-                android:id="@+id/shareCode"
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:text="Create Id&apos;s"
+                    android:id="@+id/shareCode"
 
-                android:layout_marginBottom="54dp"
-                android:background="#000000"
-                android:textColor="#ffffff"
-                android:layout_above="@+id/addTeacher"
-                android:layout_alignParentStart="true" />
+                    android:background="#20BF9F"
+                    android:textColor="#ffff" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add Teacher Here"
-                android:id="@+id/addTeacher"
-                android:textColor="#ffffff"
-                android:background="#000000"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add Teacher"
+                    android:id="@+id/addTeacher"
+                    android:layout_alignParentTop="true"
+                    android:textColor="#ffff"
+                    android:background="#080808"
+                    android:layout_gravity="center_horizontal" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="View Teachers"
-                android:id="@+id/viewTeachers"
-                android:layout_marginTop="54dp"
-                android:background="#000000"
-                android:textColor="#ffffff"
-                android:layout_below="@+id/addTeacher"
-                android:layout_alignParentStart="true" />
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/teacherList"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
 
 
         </RelativeLayout>
+    </LinearLayout>
 
 
     <fragment

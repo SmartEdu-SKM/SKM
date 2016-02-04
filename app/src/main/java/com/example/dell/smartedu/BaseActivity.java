@@ -208,7 +208,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 @Override
                 public void done(ParseException e) {
                     if(e== null) {
-                       // Toast.makeText(BaseActivity.this, "Image Uploaded to Parse",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BaseActivity.this, "Image Uploaded to Parse",Toast.LENGTH_SHORT).show();
                         currentUser.put("imageFile", file);
                     }
 
