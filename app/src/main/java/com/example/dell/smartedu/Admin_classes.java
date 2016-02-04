@@ -76,16 +76,6 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
-
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
 
         ParseQuery<ParseObject> classGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
         classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
@@ -93,13 +83,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
             public void done(List<ParseObject> classGradeListRet, ParseException e) {
                 if (e == null) {
 
-                    if (e == null) {
-
-
-
-
-                        Log.d("class", "Retrieved the classes with insti code " + institution_code);
-
+                    Log.d("class", "Retrieved the classes with insti code " + institution_code);
 
                         if(classGradeListRet.size()!=0)
                         {
@@ -192,78 +176,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                         @Override
                                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                             final String item = ((TextView) view).getText().toString();
-
-                                                            String[] classSection=item.split(" ");
-
-                                                            Dialog classSection_details=new Dialog(Admin_classes.this);
-                                                            classSection_details.setContentView(R.layout.class_details);
-                                                            deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
-                                                            addSubjectButton=(Button)classSection_details.findViewById(R.id.addClassButton);
-                                                            done=(Button)classSection_details.findViewById(R.id.okButton);
-                                                            classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
-                                                            ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-                                                            subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
-                                                            subjectQuery.whereEqualTo(ClassGradeTable.SECTION,classSection[1]);
-                                                            subjectQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                @Override
-                                                                public void done(List<ParseObject> objects, ParseException e) {
-                                                                    if(e==null){
-                                                                        if(objects.size()!=0){
-
-
-                                                                            ParseQuery<ParseObject> subjects=ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                                                                            subjects.whereEqualTo(ClassTable.CLASS_NAME,objects.get(0));
-                                                                            subjects.findInBackground(new FindCallback<ParseObject>() {
-                                                                                @Override
-                                                                                public void done(List<ParseObject> subjectobjects, ParseException e) {
-                                                                                    if(e==null){
-                                                                                        if(subjectobjects.size()!=0){
-
-
-
-
-
-                                                                                            ArrayList<String> subjectLt = new ArrayList<String>();
-                                                                                            ArrayAdapter subjectadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, subjectLt);
-                                                                                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-
-                                                                                            Log.d("user", "Retrieved " + subjectobjects.size() + " sections");
-                                                                                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                                                                            for (int i = 0; i < subjectobjects.size(); i++) {
-                                                                                                ParseObject u = (ParseObject) subjectobjects.get(i);
-                                                                                                //  if(u.getString("class").equals(id)) {
-                                                                                                String name = u.getString(ClassTable.SUBJECT);
-
-                                                                                                subjectadapter.add(name);
-                                                                                                //name += "\n";
-                                                                                                // name += u.getInt("age");
-
-
-                                                                                                // }
-
-                                                                                            }
-                                                                                            classSubjectList.setAdapter(subjectadapter);
-
-                                                                                        }else
-                                                                                        {
-                                                                                            Log.d("subjects","error in query");
-                                                                                        }
-                                                                                    }else{
-                                                                                        Log.d("subjects","error");
-                                                                                    }
-                                                                                }
-                                                                            });
-
-
-                                                                        }else{
-                                                                            Log.d("claddGrade","error in query");
-                                                                        }
-
-                                                                    }else {
-                                                                        Log.d("classGrade","error");
-                                                                    }
-                                                                }
-                                                            });
+                                                            sectionSelected(item);
 
                                                         }
                                                     });
@@ -285,96 +198,14 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                                     deleteClassButton.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
-                                                            ParseQuery<ParseObject> deleteClassQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-                                                            deleteClassQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
-                                                            deleteClassQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-                                                            deleteClassQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                @Override
-                                                                public void done(List<ParseObject> classobjects, ParseException e) {
-                                                                    if (e == null) {
-                                                                        if (classobjects.size() != 0) {
-                                                                            for (int x = 0; x < classobjects.size(); x++) {
-                                                                                classobjects.get(x).deleteEventually();
-                                                                            }
-                                                                        } else {
-                                                                            Log.d("classGrade", "error in query");
-                                                                        }
-                                                                    } else {
-                                                                        Log.d("classGrade", "error");
-                                                                    }
-                                                                }
-                                                            });
+                                                                deleteClass(item);
                                                         }
                                                     });
 
                                                     addSectionButton.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
-                                                            final Dialog newSection=new Dialog(Admin_classes.this);
-                                                            newSection.setContentView(R.layout.get_single_detail);
-                                                            singleInputField=(TextView)newSection.findViewById(R.id.single_entity);
-                                                            done=(Button)newSection.findViewById(R.id.okButton);
-                                                            getNewSection=(EditText)newSection.findViewById(R.id.inputdata);
-                                                            singleInputField.setText("Section Name:");
-                                                            newSection.show();
-
-
-                                                            done.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    if(getNewSection.getText().toString().equals(""))
-                                                                    {
-                                                                        Toast.makeText(Admin_classes.this,"Section field left empty",Toast.LENGTH_LONG).show();
-                                                                    }else
-                                                                    {
-
-
-                                                                        ParseQuery<ParseObject> newSectionQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-                                                                        newSectionQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
-                                                                        newSectionQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-                                                                        newSectionQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                            @Override
-                                                                            public void done(List<ParseObject> sectionsList, ParseException e) {
-                                                                                if(e==null)
-                                                                                {
-                                                                                    Log.d("classSection",sectionsList.size() + " Sections");
-                                                                                    int flag=0;
-                                                                                    if(sectionsList.size()!=0)
-                                                                                    {
-                                                                                        for(int x=0;x<sectionsList.size();x++)
-                                                                                        {
-                                                                                            if((sectionsList.get(x).getString(ClassGradeTable.SECTION)).equalsIgnoreCase(getNewSection.getText().toString())){
-                                                                                                Toast.makeText(Admin_classes.this,"Section already added. Type Another section name",Toast.LENGTH_LONG).show();
-                                                                                                flag=1;
-                                                                                            break;
-                                                                                            }
-                                                                                        }
-                                                                                        if(flag==0)
-                                                                                        {
-                                                                                            ParseObject newSectionObject=new ParseObject(ClassGradeTable.TABLE_NAME);
-                                                                                            newSectionObject.put(ClassGradeTable.CLASS_GRADE,item);
-                                                                                            newSectionObject.put(ClassGradeTable.SECTION,getNewSection.getText().toString());
-                                                                                            newSectionObject.put(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-                                                                                            newSectionObject.saveInBackground();
-                                                                                        newSection.dismiss();
-                                                                                        }
-                                                                                    }else
-                                                                                    {
-                                                                                        Log.d("classSection","error in query logic");
-                                                                                    }
-                                                                                }else
-                                                                                {
-                                                                                    Log.d("classSection","error");
-                                                                                }
-                                                                            }
-                                                                        });
-
-
-
-                                                                    }
-                                                                }
-                                                            });             //end os on click of done button while adding new section
-
+                                                           addSectionCall(item);
 
                                                         }
                                                     });
@@ -410,7 +241,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                     }
 
 
-                }
+
             }
         });
 
@@ -451,13 +282,182 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-    protected void sleep(int time)
-    {
-        for(int x=0;x<time;x++)
-        {
 
-        }
+    protected void sectionSelected(String item)
+    {
+
+
+        String[] classSection=item.split(" ");
+
+        final Dialog classSection_details=new Dialog(Admin_classes.this);
+        classSection_details.setContentView(R.layout.class_details);
+        deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
+        addSubjectButton=(Button)classSection_details.findViewById(R.id.addClassButton);
+        done=(Button)classSection_details.findViewById(R.id.okButton);
+        classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
+        ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+        subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
+        subjectQuery.whereEqualTo(ClassGradeTable.SECTION,classSection[1]);
+        subjectQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    if(objects.size()!=0){
+
+
+                        ParseQuery<ParseObject> subjects=ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                        subjects.whereEqualTo(ClassTable.CLASS_NAME,objects.get(0));
+                        subjects.findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> subjectobjects, ParseException e) {
+                                if(e==null){
+                                    if(subjectobjects.size()!=0){
+
+
+
+
+
+                                        ArrayList<String> subjectLt = new ArrayList<String>();
+                                        ArrayAdapter subjectadapter = new ArrayAdapter(classSection_details.getContext(), android.R.layout.simple_list_item_1, subjectLt);
+                                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                                        Log.d("user", "Retrieved " + subjectobjects.size() + " sections");
+                                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                        for (int i = 0; i < subjectobjects.size(); i++) {
+                                            ParseObject u = (ParseObject) subjectobjects.get(i);
+                                            //  if(u.getString("class").equals(id)) {
+                                            String name = u.getString(ClassTable.SUBJECT);
+
+                                            subjectadapter.add(name);
+                                            //name += "\n";
+                                            // name += u.getInt("age");
+
+
+                                            // }
+
+                                        }
+                                        classSubjectList.setAdapter(subjectadapter);
+
+                                    }else
+                                    {
+                                        Log.d("subjects","error in query");
+                                    }
+                                }else{
+                                    Log.d("subjects","error");
+                                }
+                            }
+                        });
+
+
+                    }else{
+                        Log.d("claddGrade","error in query");
+                    }
+
+                }else {
+                    Log.d("classGrade","error");
+                }
+            }
+        });
+
+
     }
+
+
+
+
+   protected void deleteClass(String selectedClass)                 //incomplete code....class must be deleted from other tables too
+   {
+       ParseQuery<ParseObject> deleteClassQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+       deleteClassQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,selectedClass);
+       deleteClassQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+       deleteClassQuery.findInBackground(new FindCallback<ParseObject>() {
+           @Override
+           public void done(List<ParseObject> classobjects, ParseException e) {
+               if (e == null) {
+                   if (classobjects.size() != 0) {
+                       for (int x = 0; x < classobjects.size(); x++) {
+                           classobjects.get(x).deleteEventually();
+                       }
+                   } else {
+                       Log.d("classGrade", "error in query");
+                   }
+               } else {
+                   Log.d("classGrade", "error");
+               }
+           }
+       });
+   }
+
+
+
+    protected  void addSectionCall(final String selectedClass)
+    {
+        final Dialog newSection=new Dialog(Admin_classes.this);
+        newSection.setContentView(R.layout.get_single_detail);
+        singleInputField=(TextView)newSection.findViewById(R.id.single_entity);
+        done=(Button)newSection.findViewById(R.id.okButton);
+        getNewSection=(EditText)newSection.findViewById(R.id.inputdata);
+        singleInputField.setText("Section Name:");
+        newSection.show();
+
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getNewSection.getText().toString().equals(""))
+                {
+                    Toast.makeText(Admin_classes.this,"Section field left empty",Toast.LENGTH_LONG).show();
+                }else
+                {
+
+
+                    ParseQuery<ParseObject> newSectionQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                    newSectionQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,selectedClass);
+                    newSectionQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+                    newSectionQuery.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> sectionsList, ParseException e) {
+                            if(e==null)
+                            {
+                                Log.d("classSection",sectionsList.size() + " Sections");
+                                int flag=0;
+                                if(sectionsList.size()!=0)
+                                {
+                                    for(int x=0;x<sectionsList.size();x++)
+                                    {
+                                        if((sectionsList.get(x).getString(ClassGradeTable.SECTION)).equalsIgnoreCase(getNewSection.getText().toString())){
+                                            Toast.makeText(Admin_classes.this,"Section already added. Type Another section name",Toast.LENGTH_LONG).show();
+                                            flag=1;
+                                            break;
+                                        }
+                                    }
+                                    if(flag==0)
+                                    {
+                                        ParseObject newSectionObject=new ParseObject(ClassGradeTable.TABLE_NAME);
+                                        newSectionObject.put(ClassGradeTable.CLASS_GRADE,selectedClass);
+                                        newSectionObject.put(ClassGradeTable.SECTION,getNewSection.getText().toString());
+                                        newSectionObject.put(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                        newSectionObject.saveInBackground();
+                                        newSection.dismiss();
+                                    }
+                                }else
+                                {
+                                    Log.d("classSection","error in query logic");
+                                }
+                            }else
+                            {
+                                Log.d("classSection","error");
+                            }
+                        }
+                    });
+
+
+
+                }
+            }
+        });             //end os on click of done button while adding new section
+    }
+
 
     @Override
     protected void onPostResume() {
