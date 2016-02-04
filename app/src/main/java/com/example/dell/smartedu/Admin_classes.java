@@ -23,6 +23,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button deleteSectionButton;
     Button addSubjectButton;
     ListView classSubjectList;
-
+    TextView dialog_heading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         ParseQuery<ParseObject> classGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
         classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
         classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> classGradeListRet, ParseException e) {
+            public void done(final List<ParseObject> classGradeListRet, ParseException e) {
                 if (e == null) {
 
                     Log.d("class", "Retrieved the classes with insti code " + institution_code);
@@ -93,16 +94,22 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
                             Log.d("user", "Retrieved " + classGradeListRet.size() + " classes");
                             //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                            HashMap<String,String> unique_class_map=new HashMap<String, String>();
                             for (int i = 0; i < classGradeListRet.size(); i++) {
                                 ParseObject u = (ParseObject) classGradeListRet.get(i);
                                 //  if(u.getString("class").equals(id)) {
+
                                 String name = u.getString(ClassGradeTable.CLASS_GRADE);
                                 // String subject= u.getString(ClassTable.SUBJECT);
                                 // String item= name + ". " + subject;
                                 //name += "\n";
                                 // name += u.getInt("age");
+                                if(unique_class_map.get(name)==null)
+                                {
+                                    unique_class_map.put(name,"1");
+                                    adapter.add(name);
+                                }
 
-                                adapter.add(name);
                                 // }
 
                             }
@@ -124,101 +131,89 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                     class_info.setTitle(item);
 
                                     setDialogSize(class_info);
-
+                                    dialog_heading=(TextView)class_info.findViewById(R.id.description);
+                                    dialog_heading.setText("Sections");
                                     classSectionList=(ListView)class_info.findViewById(R.id.subjectList);
                                     ok=(Button)class_info.findViewById(R.id.doneButton);
                                     deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);
                                     addSectionButton=(Button)class_info.findViewById(R.id.addSubjectButton);
                                     addSectionButton.setText("Add Section");
-                                    ParseQuery<ParseObject> classSectionQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-                                    classSectionQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE, item);
-                                    classSectionQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-                                    classSectionQuery.findInBackground(new FindCallback<ParseObject>() {
-                                        public void done(List<ParseObject> sectionListRet, ParseException e) {
-                                            if (e == null) {
-                                                if (sectionListRet.size() != 0) {
-
-
-
-                                                    ArrayList<String> sectionLt = new ArrayList<String>();
-                                                    ArrayAdapter sectionadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, sectionLt);
-                                                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-
-                                                    Log.d("user", "Retrieved " + sectionListRet.size() + " sections");
-                                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                                    for (int i = 0; i < sectionListRet.size(); i++) {
-                                                        ParseObject u = (ParseObject) sectionListRet.get(i);
-                                                        //  if(u.getString("class").equals(id)) {
-                                                        String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                                                        String section= u.getString(ClassGradeTable.SECTION);
-                                                        if(section!=null)
-                                                        {
-                                                            String item= name + " " + section;
-                                                            sectionadapter.add(item);
-                                                        }
-                                                        else
-                                                        {
-                                                            String item=name;
-                                                            sectionadapter.add(item);
-                                                        }
-                                                        //name += "\n";
-                                                        // name += u.getInt("age");
-
-
-                                                        // }
-
-                                                    }
-
-
-                                                    classSectionList.setAdapter(sectionadapter);
-
-                                                    classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                        @Override
-                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                            final String item = ((TextView) view).getText().toString();
-                                                            sectionSelected(item);
-
-                                                        }
-                                                    });
 
 
 
 
-                                                    class_info.show();
 
 
-                                                    ok.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            class_info.dismiss();
-                                                        }
-                                                    });
+                                    ArrayList<String> sectionLt = new ArrayList<String>();
+                                    ArrayAdapter sectionadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, sectionLt);
+                                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
+                                    Log.d("user", "Retrieved " + classGradeListRet.size() + " sections");
+                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                    for (int i = 0; i < classGradeListRet.size(); i++) {
+                                        ParseObject u = (ParseObject) classGradeListRet.get(i);
 
-                                                    deleteClassButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                                deleteClass(item);
-                                                        }
-                                                    });
+                                        if(u.getString(ClassGradeTable.CLASS_GRADE).equals(item)){
+                                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                                            String section= u.getString(ClassGradeTable.SECTION);
 
-                                                    addSectionButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                           addSectionCall(item);
-
-                                                        }
-                                                    });
-
-
-
-                                                }else
-                                                {
-                                                    Log.d("class","Error in subject query");
-                                                }
-                                            } else {
-                                                Log.d("user", "Error: " + e.getMessage());
+                                            if(section!=null)
+                                            {
+                                                String object= name + " " + section;
+                                                sectionadapter.add(object);
                                             }
+                                            else
+                                            {
+                                                String object=name;
+                                                sectionadapter.add(object);
+                                            }
+                                        }
+                                        //name += "\n";
+                                        // name += u.getInt("age");
+
+
+                                        // }
+
+                                    }
+
+
+                                    classSectionList.setAdapter(sectionadapter);
+
+                                    classSectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            final String item = ((TextView) view).getText().toString();
+                                            sectionSelected(item);
+
+                                        }
+                                    });
+
+
+
+
+                                    class_info.show();
+
+
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            class_info.dismiss();
+                                        }
+                                    });
+
+
+                                    deleteClassButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            deleteClass(item);
+                                        }
+                                    });
+
+                                    addSectionButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            addSectionCall(item);
+
                                         }
                                     });
 
@@ -249,21 +244,6 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-/*
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> classListRet, ParseException e) {
-
-            }
-        });
-*/
-
-
-        // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
-
-
-
         addClassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,17 +266,23 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     protected void sectionSelected(String item)
     {
 
-
         String[] classSection=item.split(" ");
 
+        Log.d("class","class " + classSection[0] + " section " + classSection[1]);
         final Dialog classSection_details=new Dialog(Admin_classes.this);
         classSection_details.setContentView(R.layout.class_details);
+        setDialogSize(classSection_details);
         deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
-        addSubjectButton=(Button)classSection_details.findViewById(R.id.addClassButton);
+        addSubjectButton=(Button)classSection_details.findViewById(R.id.addSubjectButton);
+        dialog_heading=(TextView)classSection_details.findViewById(R.id.description);
+        dialog_heading.setText("Subjects");
+        addSubjectButton.setText("Add Subject");
+        deleteSectionButton.setText("Delete Section");
         done=(Button)classSection_details.findViewById(R.id.okButton);
         classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
+
         ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-        subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,item);
+        subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,classSection[0]);
         subjectQuery.whereEqualTo(ClassGradeTable.SECTION,classSection[1]);
         subjectQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -314,9 +300,6 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                     if(subjectobjects.size()!=0){
 
 
-
-
-
                                         ArrayList<String> subjectLt = new ArrayList<String>();
                                         ArrayAdapter subjectadapter = new ArrayAdapter(classSection_details.getContext(), android.R.layout.simple_list_item_1, subjectLt);
                                         //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
@@ -326,17 +309,30 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                         for (int i = 0; i < subjectobjects.size(); i++) {
                                             ParseObject u = (ParseObject) subjectobjects.get(i);
                                             //  if(u.getString("class").equals(id)) {
-                                            String name = u.getString(ClassTable.SUBJECT);
+                                            String subject_name = u.getString(ClassTable.SUBJECT);
+                                            ParseObject teacher_object=(ParseObject)u.get(ClassTable.TEACHER_USER_REF);
 
-                                            subjectadapter.add(name);
-                                            //name += "\n";
-                                            // name += u.getInt("age");
+                                            String teacher_name= null;
+                                            try {
+                                                teacher_name = teacher_object.fetchIfNeeded().getString("username");
+                                                String entry=subject_name+ " by " + teacher_name;
+                                                subjectadapter.add(entry);
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
+                                            }
 
+                                            
 
+                                            if(u.getBoolean(ClassTable.IF_CLASS_TEACHER)){
+                                                dialog_heading.setText("Class Teacher : " + teacher_name + "\n" + "Subjects:");
+                                            }
                                             // }
 
                                         }
+
+
                                         classSubjectList.setAdapter(subjectadapter);
+                                        classSection_details.show();
 
                                     }else
                                     {
