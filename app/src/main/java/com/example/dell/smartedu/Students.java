@@ -162,7 +162,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                                     if(studentListRet.size()!=0) {
                                                         ParseObject u = (ParseObject) studentListRet.get(0);
                                                         String id = u.getObjectId();
-                                                        Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
+                                                       // Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
                                                         Intent to_student_info = new Intent(Students.this, StudentInfo.class);
                                                         to_student_info.putExtra("id", id);
                                                         to_student_info.putExtra("classId", classId);
@@ -226,8 +226,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
                             if (e == null) {
-                                if (studentListRet.size() != 0) {
-
+                                if(studentListRet.size()==0){
+                                    Toast.makeText(Students.this, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
+                                }
+                                else{
                                     for(int i=0; i<studentListRet.size(); i++) {
                                         ParseObject u = studentListRet.get(i);
                                         name = u.getString(StudentTable.STUDENT_NAME);

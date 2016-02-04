@@ -9,10 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 /**
  * Created by Dell on 10/7/2015.
@@ -23,12 +27,14 @@ public class NewTeacher extends BaseActivity {
     String name;
 
     int age=0;
+    int serial=-1;
     Button addTeacherButton;
 
     MyDBHandler dbHandler;
     Task task;
     EditText teacherName;
     EditText teacherAge;
+    EditText teacherSerial;
 
     Notification_bar noti_bar;
     String classId;
@@ -52,6 +58,7 @@ public class NewTeacher extends BaseActivity {
 
         teacherName = (EditText) findViewById(R.id.teacherName);
         teacherAge = (EditText) findViewById(R.id.teacherAge);
+        teacherSerial=(EditText) findViewById(R.id.teacherSerial);
 
         addTeacherButton = (Button) findViewById(R.id.addTeacherButton);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -63,9 +70,10 @@ public class NewTeacher extends BaseActivity {
             public void onClick(View v) {
                 name = teacherName.getText().toString().trim();
                 age = Integer.parseInt(teacherAge.getText().toString().trim());
+                serial = Integer.parseInt(teacherSerial.getText().toString().trim());
 
 
-                if (name.equals(null) || (age == 0) ) {
+                if (name.equals(null) || (age == 0) || (serial == -1)) {
                     Toast.makeText(getApplicationContext(), "Teacher details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
 
@@ -140,6 +148,14 @@ public class NewTeacher extends BaseActivity {
     protected void addTeacher(final ParseUser userRef){
 
 
+        ParseQuery<ParseObject> teacherQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+        teacherQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        teacherQuery.whereEqualTo(TeacherTable.SERIAL_NUMBER, serial);
+        teacherQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> teacherListRet, ParseException e) {
+                if (e == null) {
+
+                    if (teacherListRet.size() == 0) {
                         ParseObject teacher = new ParseObject(TeacherTable.TABLE_NAME);
                         teacher.put(TeacherTable.BY_USER_REF, ParseUser.getCurrentUser());
                         teacher.put(TeacherTable.TEACHER_NAME, name);
@@ -156,6 +172,17 @@ public class NewTeacher extends BaseActivity {
                         i.putExtra("role", role);
                         startActivity(i);
                         finish();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Unique Serial Number Constraint Violated", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+                    Log.d("user", "ErrorInner: " + e.getMessage());
+                }
+            }
+        });
 
         }
 

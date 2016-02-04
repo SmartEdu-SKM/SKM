@@ -1,13 +1,17 @@
 package com.example.dell.smartedu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -17,6 +21,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +30,7 @@ import java.util.List;
 public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-    Button addTeacherButton;
+
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
@@ -35,7 +40,14 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
     String name;
     Integer age;
 
+    Button addTeacherButton;
     Button createIDs;
+    Button delButton;
+    ListView teacherList;
+
+    TextView Name;
+    TextView Age;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +71,10 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
 
         addTeacherButton = (Button)findViewById(R.id.addTeacher);
 
+
         createIDs=(Button)findViewById(R.id.shareCode);
+
+        teacherList = (ListView) findViewById(R.id.teacherList);
         //createIDs.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
@@ -75,6 +90,126 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
+
+
+        ParseQuery<ParseObject> teacherQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+        teacherQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+        teacherQuery.addAscendingOrder(TeacherTable.SERIAL_NUMBER);
+        teacherQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> teacherListRet, ParseException e) {
+                if (e == null) {
+
+                    ArrayList<String> teacherLt = new ArrayList<String>();
+                    ArrayAdapter adapter = new ArrayAdapter(Teachers.this, android.R.layout.simple_list_item_1, teacherLt);
+                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                    Log.d("user", "Retrieved " + teacherListRet.size() + " students");
+                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                    for (int i = 0; i < teacherListRet.size(); i++) {
+                        ParseObject u = (ParseObject) teacherListRet.get(i);
+                        //  if(u.getString("class").equals(id)) {
+                        int serialno = u.getInt(TeacherTable.SERIAL_NUMBER);
+                        String name = u.getString(TeacherTable.TEACHER_NAME);
+                        name = String.valueOf(serialno) + ". " + name;
+                        //name += "\n";
+                        // name += u.getInt("age");
+
+                        adapter.add(name);
+                        // }
+
+                    }
+
+
+                    teacherList.setAdapter(adapter);
+                    createIDs.setVisibility(View.VISIBLE);
+                    createIDs.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            shareCode();
+                        }
+                    });
+
+
+                    teacherList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String item = ((TextView) view).getText().toString();
+                            Log.d("user", item);
+
+                            //item  = item.replaceAll("[\n\r\\s]", "");
+                            String[] itemValues = item.split("\\. ");
+
+                            final String[] details = new String[2];
+                            int j = 0;
+                            for (int i = 0; i <= 1; i++) {
+                                Log.d("user", itemValues[i]);
+                            }
+
+                            for (String x : itemValues) {
+                                details[j++] = x;
+                            }
+
+                            Log.d("user", "rno: " + details[0].trim() + "name " + details[1]);
+
+                            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+                            studentQuery.whereEqualTo(TeacherTable.SERIAL_NUMBER, Integer.parseInt(details[0].trim()));
+                            studentQuery.whereEqualTo(TeacherTable.TEACHER_NAME, details[1].trim());
+                            studentQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                            studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                public void done(List<ParseObject> studentListRet, ParseException e) {
+                                    if (e == null) {
+                                        if (studentListRet.size() != 0) {
+                                            ParseObject u = (ParseObject) studentListRet.get(0);
+                                            final String id = u.getObjectId();
+                                           // Toast.makeText(Teachers.this, "id of student selected is = " + id, Toast.LENGTH_LONG).show();
+
+                                            final Dialog dialog = new Dialog(Teachers.this);
+                                            dialog.setContentView(R.layout.view_teacher_details);
+                                            dialog.setTitle("Teacher Details");
+
+                                            setDialogSize(dialog);
+
+                                            Name = (TextView) dialog.findViewById(R.id.name);
+                                            Age = (TextView) dialog.findViewById(R.id.age);
+                                            delButton = (Button) dialog.findViewById(R.id.delButton);
+
+                                            Name.setText(details[1]);
+                                            Age.setText(u.get(TeacherTable.TEACHER_AGE).toString());
+
+                                            delButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    ParseObject.createWithoutData(TeacherTable.TABLE_NAME, id).deleteEventually();
+
+                                                    onRestart();
+
+
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                        dialog.show();
+
+                                        }
+                                    } else {
+                                        Log.d("user", "Error: " + e.getMessage());
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
+
+
+                } else {
+                    Toast.makeText(Teachers.this, "error", Toast.LENGTH_LONG).show();
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
+
 
 
 
@@ -98,7 +233,6 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
         });
 
 
-
     }
 
     public void shareCode(){
@@ -109,7 +243,6 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
         institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> institutionListRet, ParseException e) {
                 if (e == null) {
-                    Log.d("shareCode", "insti size: "+institutionListRet.size());
 
                     if (institutionListRet.size() != 0) {
                         Log.d("shareCode", "insti size: "+institutionListRet.size());
@@ -124,8 +257,11 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                         teacherQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> teacheListRet, ParseException e) {
                                 if (e == null) {
-                                    Log.d("shareCode", "insti size: "+teacheListRet.size());
-                                    if (teacheListRet.size() != 0) {
+                                    if(teacheListRet.size()==0){
+                                        Toast.makeText(Teachers.this, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    else{
                                         Log.d("shareCode", "insti size: "+teacheListRet.size());
                                         for (int i = 0; i < teacheListRet.size(); i++) {
                                             ParseObject u = teacheListRet.get(i);
@@ -189,7 +325,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                 } else {
                     userRef[0] = user_teacher;
                     //  Toast.makeText(NewStudent.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
-                    Log.d("role", "added Student role of " + user_teacher.getObjectId());
+                    Log.d("role", "added Teacher role of " + user_teacher.getObjectId());
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_teacher);
                     roleobject.put(RoleTable.ROLE, "Teacher");
@@ -200,7 +336,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                     try {
 
                         ParseUser.become(presession);
-                        addTeacher(userRef[0],teacher,institute);
+                        addTeacher(userRef[0], teacher, institute);
                     } catch (ParseException e1) {
                         Toast.makeText(Teachers.this, "cant add teacher",
                                 Toast.LENGTH_LONG).show();
@@ -220,7 +356,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
         teacher.put(TeacherTable.INSTITUTION, institute);
-        teacher.put(TeacherTable.BY_USER_REF,ParseUser.getCurrentUser());
+        teacher.put(TeacherTable.BY_USER_REF, ParseUser.getCurrentUser());
         teacher.put(TeacherTable.TEACHER_USER_REF, userRef);
         teacher.saveEventually();
 
@@ -231,26 +367,24 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent to_teachers = new Intent(Teachers.this, Teachers.class);
+        to_teachers.putExtra("institution_name", institution_name);
+        to_teachers.putExtra("institution_code", institution_code);
+        to_teachers.putExtra("role", role);
+        startActivity(to_teachers);
+        finish();
+
+    }
+
             @Override
             protected void onPostResume () {
                     super.onPostResume();
                     if (ParseUser.getCurrentUser() == null) {
                         Intent nouser = new Intent(Teachers.this, login.class);
                         startActivity(nouser);
-                    }
-                }
-
-                @Override
-                public boolean onOptionsItemSelected (MenuItem item){
-                    switch (item.getItemId()) {
-                        case android.R.id.home:
-                            Intent i = new Intent(Teachers.this, MainActivity.class);
-                            startActivity(i);
-                            finish();
-                            //do your own thing here
-                            return true;
-                        default:
-                            return super.onOptionsItemSelected(item);
                     }
                 }
 

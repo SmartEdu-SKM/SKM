@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -166,13 +164,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                 dialog.setContentView(R.layout.activity_show_details);
                 dialog.setTitle("Task Details");
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.gravity = Gravity.CENTER;
-
-                dialog.getWindow().setAttributes(lp);
+                setDialogSize(dialog);
 
                 myTitle = (TextView) dialog.findViewById(R.id.start_time);
                 myDesc = (TextView) dialog.findViewById(R.id.end_time);

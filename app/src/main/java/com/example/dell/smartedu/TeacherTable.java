@@ -8,6 +8,7 @@ public class TeacherTable {
     public static final String TABLE_NAME="Teacher";
     public static final String OBJECT_ID="objectId";
     public static final String TEACHER_NAME="name";
+    public static final String SERIAL_NUMBER="serialNumber";
     public static final String TEACHER_AGE="age";
     public static final String BY_USER_REF="addedBy";
     public static final String INSTITUTION_NAME="institutionName";
