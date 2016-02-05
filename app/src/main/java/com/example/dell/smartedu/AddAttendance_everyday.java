@@ -95,6 +95,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
 
 
         final ParseObject[] classRef = new ParseObject[1];
+
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
@@ -109,7 +110,6 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
                     } else {
                         classRef[0] = studentListRet.get(0);
-
 
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                         studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);

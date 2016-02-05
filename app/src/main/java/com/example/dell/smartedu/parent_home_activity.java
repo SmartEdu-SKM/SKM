@@ -88,7 +88,8 @@ String child_username;
 
                                         ParseObject for_class_check = ((ParseObject) u.get(StudentTable.CLASS_REF));
                                         try {
-                                            ParseObject test_insti = (ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.INSTITUTION);
+                                            ParseObject classGradeobject=(ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.CLASS_NAME);
+                                            ParseObject test_insti = (ParseObject) classGradeobject.fetchIfNeeded().get(ClassGradeTable.INSTITUTION);
                                             if (test_insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME).equals(institution_name)) {
                                                 studentId = u.getObjectId();
                                                 classRef[0] = for_class_check;
@@ -101,7 +102,7 @@ String child_username;
                                     }
 
                                     try {
-                                        Log.d("insti", ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.INSTITUTION)).getString("name"));
+                                        Log.d("insti", ((ParseObject) ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.CLASS_NAME)).get(ClassGradeTable.INSTITUTION)).getString(InstitutionTable.INSTITUTION_NAME));
                                     } catch (ParseException e1) {
                                         e1.printStackTrace();
                                     }
