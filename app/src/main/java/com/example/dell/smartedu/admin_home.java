@@ -35,7 +35,12 @@ public class admin_home extends BaseActivity{
             institution_name=home.getStringExtra("institution_name");
             institution_code=home.getStringExtra("institution_code");
             Log.d("user", role);
-            Log.d("insti code",institution_code);
+            try {
+                Log.d("insti code", institution_code);
+                Log.d("insti name", institution_name);
+            }catch (Exception e){
+                Log.d("Error ", e.getMessage());
+            }
 
             dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
             noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
