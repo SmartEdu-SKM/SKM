@@ -62,7 +62,7 @@ String child_username;
         final ParseObject[] childRef = new ParseObject[1];
         final ParseObject[] classRef = new ParseObject[1];
         final GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(getApplicationContext(), densityX, "Parent"));
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(), densityX,densityY, "Parent"));
 
 
         ParseQuery<ParseUser> studentQuery = ParseUser.getQuery();

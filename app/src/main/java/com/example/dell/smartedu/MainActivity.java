@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity{
         //mySettings = getSharedPreferences(SyncStateContract.Constants.PREFERENCES, Context.MODE_PRIVATE);
        // int gridSize = 50 * Integer.parseInt(mySettings.getString("gridSize", "3"));
         //gridview.setColumnWidth(gridSize + 10);
-        gridview.setAdapter(new ImageAdapter(this, densityX, role));
+        gridview.setAdapter(new ImageAdapter(this, densityX, densityY, role));
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {

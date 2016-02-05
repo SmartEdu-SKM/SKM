@@ -209,8 +209,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             // bitmap[0]= decodeSampledBitmapFromFile(picturePath,imageView.getWidth(),imageView.getHeight());
 
-            imageView.setImageBitmap(bitmap[0]);
-
 
 
 
