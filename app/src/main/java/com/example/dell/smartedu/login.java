@@ -32,7 +32,7 @@ public class login extends AppCompatActivity {
 
     TextView noUser;
 
-Button login;
+    Button login;
 
 
 
@@ -74,6 +74,8 @@ Button login;
             Intent nouser=new Intent(login.this,Role.class);
             startActivity(nouser);
         }
+
+
     }
 
     public void onClickLogin() {
@@ -100,11 +102,16 @@ Button login;
                                             Intent i = new Intent(login.this, Role.class);
                                             startActivity(i);
                                         } else {
-                                            Intent i = new Intent(login.this, admin_home.class);
-                                            i.putExtra("institution_code", InstitutionTable.OBJECT_ID);
-                                            i.putExtra("institution_name", InstitutionTable.INSTITUTION_NAME);
-                                            i.putExtra("role", "Admin");
-                                            startActivity(i);
+                                            try{
+                                                ParseObject insti = institutionListRet.get(0);
+                                                Intent i=new Intent(login.this,admin_home.class);
+                                                i.putExtra("institution_code",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                                i.putExtra("institution_name",insti.fetchIfNeeded().getObjectId());
+                                                i.putExtra("role", "Admin");
+                                                startActivity(i);
+                                            } catch (Exception admin_excep) {
+                                                Toast.makeText(login.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
+                                            }
                                         }
                                     } else {
                                         Log.d("institution", "error");

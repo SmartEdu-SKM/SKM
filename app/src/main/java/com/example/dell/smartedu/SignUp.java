@@ -85,36 +85,35 @@ public class SignUp extends AppCompatActivity {
         {
             ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
             institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
-           institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
-               public void done(List<ParseObject> institutionListRet, ParseException e) {
-                   if (e == null) {
+            institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> institutionListRet, ParseException e) {
+                    if (e == null) {
 
-                       if(institutionListRet.size()==0)
-                       {
-                           Intent i = new Intent(SignUp.this, Role.class);
-                           startActivity(i);
-                       }else
-                       {
-                           final Intent i=new Intent(SignUp.this,admin_home.class);
-                           i.putExtra("institution_code",InstitutionTable.OBJECT_ID);
-                           i.putExtra("institution_name",InstitutionTable.INSTITUTION_NAME);
-                           i.putExtra("role", "Admin");
+                        if(institutionListRet.size()==0)
+                        {
+                            Intent i = new Intent(SignUp.this, Role.class);
+                            startActivity(i);
+                        }else
+                        {
+                            try{
+                                ParseObject insti = institutionListRet.get(0);
+                                Intent i=new Intent(SignUp.this,admin_home.class);
+                                i.putExtra("institution_code",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                i.putExtra("institution_name",insti.fetchIfNeeded().getObjectId());
+                                i.putExtra("role", "Admin");
+                                startActivity(i);
+                            } catch (Exception admin_excep) {
+                                Toast.makeText(SignUp.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Log.d("institution", "error");
+                    }
 
-                           new Handler().postDelayed(new Runnable() {
-                               @Override
-                               public void run() {
-                                   startActivity(i);
-                               }
-                           }, 1500);
-                       }
-                   } else {
-                       Log.d("institution", "error");
-                   }
 
+                }
 
-               }
-
-        });
+            });
         }
     }
 
