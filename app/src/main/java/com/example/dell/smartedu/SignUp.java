@@ -95,11 +95,17 @@ public class SignUp extends AppCompatActivity {
                            startActivity(i);
                        }else
                        {
-                           Intent i=new Intent(SignUp.this,admin_home.class);
+                           final Intent i=new Intent(SignUp.this,admin_home.class);
                            i.putExtra("institution_code",InstitutionTable.OBJECT_ID);
                            i.putExtra("institution_name",InstitutionTable.INSTITUTION_NAME);
                            i.putExtra("role", "Admin");
-                           startActivity(i);
+
+                           new Handler().postDelayed(new Runnable() {
+                               @Override
+                               public void run() {
+                                   startActivity(i);
+                               }
+                           }, 1500);
                        }
                    } else {
                        Log.d("institution", "error");

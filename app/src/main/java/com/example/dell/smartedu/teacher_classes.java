@@ -19,6 +19,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -75,11 +76,63 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Log.d("institution",institution_code);
-        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-       classQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classQuery.findInBackground(new FindCallback<ParseObject>() {
+        Log.d("institution", institution_code);
+
+
+
+
+
+
+/*        ParseQuery<ParseObject> classGradeQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+        classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> classgradeobjects, ParseException e) {
+                if (e == null) {
+                    if (classgradeobjects.size() != 0) {
+                        HashMap<String, String> classGradeMap = new HashMap<String, String>();
+                        for (int x = 0; x < classgradeobjects.size(); x++) {
+                            ParseObject u = classgradeobjects.get(x);
+                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                            if (classGradeMap.get(name) == null) {
+                                classGradeMap.put(name, "1");
+                            }
+                        }
+                    } else {
+                        Toast.makeText(teacher_classes.this, "no classes added for this institution", Toast.LENGTH_LONG).show();
+                        Log.d("classGrade", "error in query");
+                    }
+                } else {
+                    Log.d("classGrade", "error");
+                }
+            }
+        });
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        final HashMap<String,String> classMap=new HashMap<String,String>();
+
+
+
+
+
+
+        ParseQuery<ParseObject> classQueryz = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQueryz.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+       // classQueryz.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classQueryz.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
                     ArrayList<String> classLt = new ArrayList<String>();
@@ -90,11 +143,20 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                     for (int i = 0; i < classListRet.size(); i++) {
                         ParseObject u = (ParseObject) classListRet.get(i);
-                        String name = u.getString(ClassTable.CLASS_NAME).toString();
-                        //name += "\n";
-                        // name += u.getInt("age");
-
-                        adapter.add(name);
+                        ParseObject classGradeObject=((ParseObject)u.get(ClassTable.CLASS_NAME));
+                        try {
+                            if((((ParseObject)classGradeObject.fetchIfNeeded().get(ClassGradeTable.INSTITUTION)).fetchIfNeeded().getObjectId()).equals(institution_code)) {
+                                String name = classGradeObject.getString(ClassGradeTable.CLASS_GRADE);
+                                //name += "\n";
+                                // name += u.getInt("age");
+                                String section=classGradeObject.getString(ClassGradeTable.SECTION);
+                                String item=name+" "+section;
+                                adapter.add(item);
+                                classMap.put(item,classGradeObject.getObjectId());
+                            }
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
 
                     }
 
@@ -107,37 +169,6 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             }
         });
 
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-        studentQuery.whereEqualTo("addedBy", ParseUser.getCurrentUser());
-        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> studentListRet, ParseException e) {
-                if (e == null) {
-
-                    ArrayList<String> studentLt = new ArrayList<String>();
-                    ArrayAdapter adapter = new ArrayAdapter(Students.this, android.R.layout.simple_list_item_1, studentLt);
-
-
-                    Log.d("user", "Retrieved " + studentListRet.size() + " users");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                    for (int i = 0; i < studentListRet.size(); i++) {
-                        ParseObject u = (ParseObject) studentListRet.get(i);
-                        String name = u.getString("name").toString();
-                        //name += "\n";
-                        // name += u.getInt("age");
-
-                        adapter.add(name);
-
-                    }
-
-
-                    studentList.setAdapter(adapter);
-
-                } else {
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
-*/
 
 
 
@@ -146,55 +177,51 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String item = ((TextView) view).getText().toString();
-
+                //String[] classSpecs=item.split(" ");
                 ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                studentQuery.whereEqualTo(ClassTable.CLASS_NAME, item);
+                studentQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classMap.get(item)));
                 studentQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-                studentQuery.whereEqualTo(ClassTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+               // studentQuery.whereEqualTo(ClassTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                 studentQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> classObjRet, ParseException e) {
                         if (e == null) {
                             ParseObject u = (ParseObject) classObjRet.get(0);
                             String id = u.getObjectId();
                             Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
-                            if(_for.equals("students")) {
+                            if (_for.equals("students")) {
                                 Intent to_student = new Intent(teacher_classes.this, Students.class);
-                                to_student.putExtra("institution_code",institution_code);
-                                to_student.putExtra("institution_name",institution_name);
-                                to_student.putExtra("role",role);
+                                to_student.putExtra("institution_code", institution_code);
+                                to_student.putExtra("institution_name", institution_name);
+                                to_student.putExtra("role", role);
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);
-                            }else if(_for.equals("exam"))
-                            {
+                            } else if (_for.equals("exam")) {
                                 Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
                                 to_exams.putExtra("institution_code", institution_code);
-                               to_exams.putExtra("institution_name",institution_name);
-                                to_exams.putExtra("role",role);
+                                to_exams.putExtra("institution_name", institution_name);
+                                to_exams.putExtra("role", role);
                                 to_exams.putExtra("id", id);
                                 startActivity(to_exams);
-                            }else if(_for.equals("upload"))
-                            {
+                            } else if (_for.equals("upload")) {
                                 Intent to_uploads = new Intent(teacher_classes.this, UploadMaterial.class);
-                                to_uploads.putExtra("institution_code",institution_code);
-                                to_uploads.putExtra("institution_name",institution_name);
-                                to_uploads.putExtra("role",role);
+                                to_uploads.putExtra("institution_code", institution_code);
+                                to_uploads.putExtra("institution_name", institution_name);
+                                to_uploads.putExtra("role", role);
                                 to_uploads.putExtra("id", id);
                                 startActivity(to_uploads);
-                            }else if(_for.equals("message"))
-                            {
+                            } else if (_for.equals("message")) {
                                 Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
-                                to_message.putExtra("institution_code",institution_code);
-                                to_message.putExtra("institution_name",institution_name);
-                                to_message.putExtra("role",role);
+                                to_message.putExtra("institution_code", institution_code);
+                                to_message.putExtra("institution_name", institution_name);
+                                to_message.putExtra("role", role);
                                 to_message.putExtra("id", id);
                                 startActivity(to_message);
-                            }else if(_for.equals("attendance"))
-                            {
+                            } else if (_for.equals("attendance")) {
                                 Intent to_att = new Intent(teacher_classes.this, AddAttendance_everyday.class);
-                                to_att.putExtra("institution_code",institution_code);
-                                to_att.putExtra("institution_name",institution_name);
+                                to_att.putExtra("institution_code", institution_code);
+                                to_att.putExtra("institution_name", institution_name);
                                 to_att.putExtra("role", role);
-                                to_att.putExtra("id",id);
+                                to_att.putExtra("id", id);
                                 startActivity(to_att);
                             }
                         } else {
