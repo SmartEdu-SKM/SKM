@@ -98,8 +98,8 @@ public class SignUp extends AppCompatActivity {
                             try{
                                 ParseObject insti = institutionListRet.get(0);
                                 Intent i=new Intent(SignUp.this,admin_home.class);
-                                i.putExtra("institution_code",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
-                                i.putExtra("institution_name",insti.fetchIfNeeded().getObjectId());
+                                i.putExtra("institution_name",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                i.putExtra("institution_code",insti.fetchIfNeeded().getObjectId());
                                 i.putExtra("role", "Admin");
                                 startActivity(i);
                             } catch (Exception admin_excep) {

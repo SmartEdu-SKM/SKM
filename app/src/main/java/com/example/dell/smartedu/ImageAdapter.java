@@ -2,6 +2,8 @@ package com.example.dell.smartedu;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,12 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     String role;
     int widthOfScreen;
-    public ImageAdapter(Context c,int Screensize,String role) {
+    int heightOfScreen;
+    public ImageAdapter(Context c,int Screensize,int Screenheight,String role) {
         mContext = c;
         this.role=role;
         widthOfScreen=Screensize;
+        heightOfScreen=Screenheight;
     }
 
     public int getCount() {
@@ -47,8 +51,8 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ImageView imageView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -71,24 +75,57 @@ public class ImageAdapter extends BaseAdapter {
 
 
         if(role.equals("Teacher")) {
+            /*
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    Bitmap bitmap = decodeSampledBitmapFromResource(Resources.getSystem(), mThumbIdsTeacher[position],
+                            imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
+                    imageView.setImageBitmap(bitmap);
+
+                }
+            }); */
             imageView.setImageResource(mThumbIdsTeacher[position]);
-        }
-        else if(role.equals("Parent"))  {
-            imageView.setImageResource(mThumbIdsParent[position]);
-        }
-        else if(role.equals("Student")) {
-            imageView.setImageResource(mThumbIdsStudent[position]);
-        }else if(role.equals("Admin")){
-            imageView.setImageResource(mThumbIdsAdmin[position]);
-        }
+                }
+
+                else if(role.equals("Parent"))
+
+                {
+                    imageView.setImageResource(mThumbIdsParent[position]);
+                }
+
+                else if(role.equals("Student"))
+
+                {
+                    imageView.setImageResource(mThumbIdsStudent[position]);
+                }
+
+                else if(role.equals("Admin"))
+
+                {
+                    /*
+                    imageView.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Bitmap bitmap = decodeSampledBitmapFromResource(imageView.getResources(), mThumbIdsAdmin[position],
+                                    widthOfScreen/2, heightOfScreen/3);
+                            imageView.setImageBitmap(bitmap);
+
+                            //imageView.setImageResource(mThumbIdsTeacher[position]);
+                        }
+                    }); */
+                    imageView.setImageResource(mThumbIdsAdmin[position]);
+                }
 
 
-    //        imageView.setLayoutParams(new GridView.LayoutParams(360, 360)); //dimension in px
-        return imageView;
-    }
+                //        imageView.setLayoutParams(new GridView.LayoutParams(360, 360)); //dimension in px
+                return imageView;
+            }
 
-    // references to our images
-    private Integer[] mThumbIdsTeacher = {
+                    // references to our images
+            private Integer[] mThumbIdsTeacher = {
             R.drawable.attendance, R.drawable.task_image,
             R.drawable.students, R.drawable.timetable_image,
             R.drawable.marks, R.drawable.uploads,
@@ -113,4 +150,43 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.allotments
 
     };
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
 }

@@ -57,7 +57,7 @@ public class student_home_activity extends BaseActivity{
         drawerFragment.setDrawerListener(this);
 
         final GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX, role));
+        gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX,densityY, role));
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
