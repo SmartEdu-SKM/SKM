@@ -97,8 +97,8 @@ public class FragmentDrawer extends Fragment {
 
         if(ParseUser.getCurrentUser() != null) {
             ParseUser myParseUser = ParseUser.getCurrentUser();
-            if (ParseUser.getCurrentUser().get("imageFile") != null) {
-                ParseFile imageFile = (ParseFile) myParseUser.get("imageFile");
+            if (ParseUser.getCurrentUser().getParseFile("imageFile") != null) {
+                ParseFile imageFile = (ParseFile) myParseUser.getParseFile("imageFile");
                 imageFile.getDataInBackground(new GetDataCallback() {
                     @Override
                     public void done(byte[] data, ParseException e) {
