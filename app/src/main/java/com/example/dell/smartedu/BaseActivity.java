@@ -182,19 +182,43 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            final String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            CircleImageView imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.circleView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
+            /*
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+           // BitmapFactory.decodeFile(picturePath, options);
 
             // Locate the image in res > drawable-hdpi
-            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath,options);
+
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            String imageType = options.outMimeType;
+            */
+            final Bitmap[] bitmap = new Bitmap[1];
+            final CircleImageView imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.circleView);
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    bitmap[0] = decodeSampledBitmapFromFile(picturePath, imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
+                    imageView.setImageBitmap(bitmap[0]);
+
+            // bitmap[0]= decodeSampledBitmapFromFile(picturePath,imageView.getWidth(),imageView.getHeight());
+
+            imageView.setImageBitmap(bitmap[0]);
+
+
+
+
+
             // Convert it to byte
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             // Compress image to lower quality scale 1 - 100
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bitmap[0].compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] image = stream.toByteArray();
 
 
@@ -237,10 +261,53 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             // Show a simple toast message
             Toast.makeText(BaseActivity.this, "Image Uploaded",
                     Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
 
 
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String picturePath,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(picturePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize =2;
+        //options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(picturePath, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        Log.d("memory ",
+                "height "+height+ " reqd "+reqHeight+ " width "+width+" reqd "+reqWidth);
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     @Override

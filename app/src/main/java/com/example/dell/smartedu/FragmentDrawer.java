@@ -6,7 +6,6 @@ package com.example.dell.smartedu;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -47,6 +46,7 @@ public class FragmentDrawer extends Fragment {
     private FragmentDrawerListener drawerListener;
     private TextView accountUsername;
     private TextView accountEmail;
+    public static final int SHORT_SIDE_TARGET = 450;
      private de.hdodenhof.circleimageview.CircleImageView accountProfile;
 
     public FragmentDrawer() {
@@ -91,6 +91,9 @@ public class FragmentDrawer extends Fragment {
         accountUsername.setText(User.getUsername());
         accountEmail.setText(User.getEmail());
         accountProfile = (de.hdodenhof.circleimageview.CircleImageView) layout.findViewById(R.id.circleView);
+        accountProfile.post(new Runnable() {
+            @Override
+            public void run() {
 
         if(ParseUser.getCurrentUser() != null) {
             ParseUser myParseUser = ParseUser.getCurrentUser();
@@ -100,7 +103,9 @@ public class FragmentDrawer extends Fragment {
                     @Override
                     public void done(byte[] data, ParseException e) {
                         if (e == null) {
-                            Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            //Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            //Bitmap bmp = ImageResizer.resizeImageMaintainAspectRatio(data, SHORT_SIDE_TARGET);
+                            Bitmap bmp = ImageResizer.resizeImage(data, accountProfile.getMeasuredWidth(),accountProfile.getMeasuredHeight());
                             accountProfile.setImageBitmap(bmp);
                         } else {
                             Log.d("test",
@@ -111,6 +116,8 @@ public class FragmentDrawer extends Fragment {
                 });
             }
         }
+            }
+        });
 
 
         //do not delete this code. future use
