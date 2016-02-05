@@ -224,6 +224,10 @@
             android:name=".Admin_classes"
             android:label="@string/title_activity_admin_classes" >
         </activity>
+        <activity
+            android:name=".student_classes"
+            android:label="@string/title_activity_student_classes" >
+        </activity>
     </application>
 
 </manifest>

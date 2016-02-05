@@ -276,8 +276,8 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
         BitmapFactory.decodeFile(picturePath, options);
 
         // Calculate inSampleSize
-        options.inSampleSize =2;
-        //options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        //options.inSampleSize =2;
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;

@@ -3,7 +3,6 @@ package com.example.dell.smartedu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -236,12 +235,9 @@ public class SignUp extends AppCompatActivity {
                                 i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
                                 i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
 
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+
                                         startActivity(i);
-                                    }
-                                }, 1500);
+
 
                             } catch (Exception admin_excep) {
                                 Toast.makeText(SignUp.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();

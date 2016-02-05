@@ -77,14 +77,14 @@ public class student_home_activity extends BaseActivity{
                         {
                             ParseObject u = (ParseObject) studListRet.get(x);
 
-                            ParseObject for_class_check= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
+                            ParseObject classGradeobject= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
                             try {
-                                ParseObject classGradeobject=(ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.CLASS_NAME);
+                               // ParseObject classGradeobject=(ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.CLASS_NAME);
                                 ParseObject test_insti=(ParseObject)classGradeobject.fetchIfNeeded().get(ClassGradeTable.INSTITUTION);
                                 if(test_insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME).equals(institution_name))
                                 {
                                     studentId = u.getObjectId();
-                                    classRef[0] = for_class_check;
+                                    classRef[0] = classGradeobject;
                                     break;
                                 }
                             } catch (ParseException e1) {
@@ -105,11 +105,14 @@ public class student_home_activity extends BaseActivity{
                                         public void onItemClick(AdapterView<?> parent, View v,
                                                                 int position, long id) {
                                             if (position == 0) {
-                                                Intent atten_intent = new Intent(student_home_activity.this, view_attendance.class);
+
+                                                Intent atten_intent = new Intent(student_home_activity.this, student_classes.class);
 
                                                 atten_intent.putExtra("role", role);
                                                 atten_intent.putExtra("studentId", studentId);
                                                 atten_intent.putExtra("classId", classId);
+                                                atten_intent.putExtra("institution_code",institution_code);
+                                                atten_intent.putExtra("institution_name",institution_name);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {

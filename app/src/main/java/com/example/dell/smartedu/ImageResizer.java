@@ -2,6 +2,7 @@ package com.example.dell.smartedu;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.util.Pair;
 
 public class ImageResizer {
@@ -22,6 +23,7 @@ public class ImageResizer {
 
         // Decode bitmap with inSampleSize and target dimensions set
         options.inJustDecodeBounds = false;
+
 
         Bitmap reducedBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(reducedBitmap, targetWidth, targetHeight, false);
@@ -71,6 +73,9 @@ public class ImageResizer {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
+
+        Log.d("memory drawer",
+                "height " + height + " reqd " + reqHeight + " width " + width + " reqd " + reqWidth);
 
         if (height > reqHeight || width > reqWidth) {
 

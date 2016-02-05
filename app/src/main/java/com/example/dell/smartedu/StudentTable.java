@@ -10,6 +10,7 @@ public class StudentTable {
     public static final String STUDENT_NAME="name";
     public static final String STUDENT_AGE="age";
     public static final String ADDED_BY_USER_REF="addedBy";
-    public static final String CLASS_REF="class";
+   // public static final String CLASS_REF="class";
+   public static final String CLASS_REF="classGrade";
     public static final String STUDENT_USER_REF="userId";
 }
