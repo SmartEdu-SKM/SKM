@@ -149,6 +149,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 String name = classGradeObject.getString(ClassGradeTable.CLASS_GRADE);
                                 //name += "\n";
                                 // name += u.getInt("age");
+
                                 String section=classGradeObject.getString(ClassGradeTable.SECTION);
                                 String item=name+" "+section;
                                 adapter.add(item);

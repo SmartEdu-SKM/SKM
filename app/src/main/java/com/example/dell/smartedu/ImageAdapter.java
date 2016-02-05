@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ public class ImageAdapter extends BaseAdapter {
     String role;
     int widthOfScreen;
     int heightOfScreen;
+
+
     public ImageAdapter(Context c,int Screensize,int Screenheight,String role) {
         mContext = c;
         this.role=role;
@@ -52,7 +55,8 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final ImageView imageView;
+       final ImageView imageView;
+
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -86,7 +90,14 @@ public class ImageAdapter extends BaseAdapter {
 
                 }
             }); */
+
             imageView.setImageResource(mThumbIdsTeacher[position]);
+            /*
+            Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+                bitmap = null;
+            } */
                 }
 
                 else if(role.equals("Parent"))
@@ -104,19 +115,11 @@ public class ImageAdapter extends BaseAdapter {
                 else if(role.equals("Admin"))
 
                 {
-                    /*
-                    imageView.post(new Runnable() {
-                        @Override
-                        public void run() {
+                           /* Bitmap bitmap = decodeSampledBitmapFromResource(imageView.getResources(), mThumbIdsAdmin[position],
+                                    widthOfScreen/2, widthOfScreen/2);
+                            imageView.setImageBitmap(bitmap); */
 
-                            Bitmap bitmap = decodeSampledBitmapFromResource(imageView.getResources(), mThumbIdsAdmin[position],
-                                    widthOfScreen/2, heightOfScreen/3);
-                            imageView.setImageBitmap(bitmap);
-
-                            //imageView.setImageResource(mThumbIdsTeacher[position]);
-                        }
-                    }); */
-                    imageView.setImageResource(mThumbIdsAdmin[position]);
+                         imageView.setImageResource(mThumbIdsAdmin[position]);
                 }
 
 
@@ -151,6 +154,9 @@ public class ImageAdapter extends BaseAdapter {
 
     };
 
+
+
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 
@@ -160,6 +166,7 @@ public class ImageAdapter extends BaseAdapter {
         BitmapFactory.decodeResource(res, resId, options);
 
         // Calculate inSampleSize
+        //options.inSampleSize=1;
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // Decode bitmap with inSampleSize set
@@ -173,6 +180,9 @@ public class ImageAdapter extends BaseAdapter {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
+
+        Log.d("memory grid ",
+                "height " + height + " reqd " + reqHeight + " width " + width + " reqd " + reqWidth);
 
         if (height > reqHeight || width > reqWidth) {
 

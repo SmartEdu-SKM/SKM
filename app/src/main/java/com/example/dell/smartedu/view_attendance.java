@@ -68,6 +68,7 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
         drawerFragment.setDrawerListener(this); */
 
 
+        Log.d("view atten ", "stud id: " + studentId+" class id: " + classId);
             ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
         attQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
         attQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
