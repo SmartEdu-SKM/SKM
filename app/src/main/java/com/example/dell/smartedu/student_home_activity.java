@@ -25,7 +25,7 @@ public class student_home_activity extends BaseActivity{
     private FragmentDrawer drawerFragment;
     ArrayList<Task> myList;
     String studentId;
-    String classId;
+    String classGradeId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -59,7 +59,7 @@ public class student_home_activity extends BaseActivity{
         final GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(getApplicationContext(),densityX,densityY, role));
 
-        final ParseObject[] classRef = new ParseObject[1];
+        final ParseObject[] classGradeRef = new ParseObject[1];
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
         studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, ParseUser.getCurrentUser());
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -84,7 +84,7 @@ public class student_home_activity extends BaseActivity{
                                 if(test_insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME).equals(institution_name))
                                 {
                                     studentId = u.getObjectId();
-                                    classRef[0] = classGradeobject;
+                                    classGradeRef[0] = classGradeobject;
                                     break;
                                 }
                             } catch (ParseException e1) {
@@ -94,12 +94,13 @@ public class student_home_activity extends BaseActivity{
                         }
 
                         try {
-                            Log.d("insti", ((ParseObject) ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.CLASS_NAME)).get(ClassGradeTable.INSTITUTION)).getString(InstitutionTable.INSTITUTION_NAME));
+                            ParseObject i=(ParseObject) classGradeRef[0].fetchIfNeeded().get(ClassGradeTable.INSTITUTION);
+                            Log.d("insti", i.getString(InstitutionTable.INSTITUTION_NAME));
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
 
-                        classId=classRef[0].getObjectId();
+                        classGradeId=classGradeRef[0].getObjectId();
 
                         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         public void onItemClick(AdapterView<?> parent, View v,
@@ -110,7 +111,7 @@ public class student_home_activity extends BaseActivity{
 
                                                 atten_intent.putExtra("role", role);
                                                 atten_intent.putExtra("studentId", studentId);
-                                                atten_intent.putExtra("classId", classId);
+                                                atten_intent.putExtra("classGradeId", classGradeId);
                                                 atten_intent.putExtra("institution_code",institution_code);
                                                 atten_intent.putExtra("institution_name",institution_name);
                                                 startActivity(atten_intent);
@@ -124,7 +125,7 @@ public class student_home_activity extends BaseActivity{
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
                                                 message_intent.putExtra("role", role);
-                                                message_intent.putExtra("classId", classId);
+                                                message_intent.putExtra("classGradeId", classGradeId);
                                                 message_intent.putExtra("studentId", studentId);
                                                 message_intent.putExtra("institution", institution_name);
                                                 message_intent.putExtra("institution_code", institution_code);
@@ -143,7 +144,7 @@ public class student_home_activity extends BaseActivity{
                                                 exam_intent.putExtra("institution", institution_name);
                                                 exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("role", role);
-                                                exam_intent.putExtra("classId", classId);
+                                                exam_intent.putExtra("classGradeId", classGradeId);
                                                 exam_intent.putExtra("studentId", studentId);
                                                 startActivity(exam_intent);
 
@@ -151,7 +152,7 @@ public class student_home_activity extends BaseActivity{
                                                 Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
                                                 exam_intent.putExtra("institution", institution_name);
                                                 exam_intent.putExtra("institution_code", institution_code);
-                                                exam_intent.putExtra("id", classId);
+                                                exam_intent.putExtra("id", classGradeId);
                                                 startActivity(exam_intent);
                                             }else if (position == 6) {
 
