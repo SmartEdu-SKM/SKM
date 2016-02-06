@@ -249,7 +249,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                             final Dialog dialog = new Dialog(UploadMaterial_students.this);
                             dialog.setContentView(R.layout.show_upload_details_students);
                             dialog.setTitle("Upload Details");
-
+                            setDialogSize(dialog);
                             myType = (TextView) dialog.findViewById(R.id.typeDesc);
                             mySubject = (TextView) dialog.findViewById(R.id.subject);
                             myDate = (TextView) dialog.findViewById(R.id.uploadDate);
@@ -337,6 +337,9 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                             public void onClick(View v) {
 
                                                 Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
+                                                to_upload_image.putExtra("institution_name",institution_name);
+                                                to_upload_image.putExtra("institution_code",institution_code);
+                                                to_upload_image.putExtra("classGradeId",classGradeId);
                                                 to_upload_image.putExtra("classId", classId);
                                                 to_upload_image.putExtra("uploadId", uploadid);
                                                 startActivity(to_upload_image);

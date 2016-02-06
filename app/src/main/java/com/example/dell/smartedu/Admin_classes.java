@@ -78,6 +78,17 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         drawerFragment.setDrawerListener(this);
 
 
+        addClassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent to_new_class=new Intent(Admin_classes.this,NewClass.class);
+                to_new_class.putExtra("institution_name",institution_name);
+                to_new_class.putExtra("institution_code",institution_code);
+                to_new_class.putExtra("role",role);
+                startActivity(to_new_class);
+            }
+        });
+
         ParseQuery<ParseObject> classGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
         classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
         classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -239,22 +250,6 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
             }
         });
-
-
-
-
-
-        addClassButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Admin_classes.this, NewStudent.class);
-                i.putExtra("institution_name",institution_name);
-                i.putExtra("institution_code",institution_code);
-                i.putExtra("id",classId);
-                startActivity(i);
-            }
-        });
-
 
 
 

@@ -228,6 +228,10 @@
             android:name=".student_classes"
             android:label="@string/title_activity_student_classes" >
         </activity>
+        <activity
+            android:name=".NewClass"
+            android:label="@string/title_activity_new_class" >
+        </activity>
     </application>
 
 </manifest>
