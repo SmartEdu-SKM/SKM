@@ -74,184 +74,168 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         addClassButton = (Button)findViewById(R.id.addClassButton);
         classList = (ListView) findViewById(R.id.classList);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
 
 
-        addClassButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            Intent to_new_class=new Intent(Admin_classes.this,NewClass.class);
-                to_new_class.putExtra("institution_name",institution_name);
-                to_new_class.putExtra("institution_code",institution_code);
-                to_new_class.putExtra("role",role);
-                startActivity(to_new_class);
-            }
-        });
-
         ParseQuery<ParseObject> classGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
         classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classGradeQuery.orderByAscending(ClassGradeTable.CLASS_GRADE);
         classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(final List<ParseObject> classGradeListRet, ParseException e) {
                 if (e == null) {
 
                     Log.d("class", "Retrieved the classes with insti code " + institution_code);
 
-                        if(classGradeListRet.size()!=0)
-                        {
-                            ArrayList<String> classGradeLt = new ArrayList<String>();
-                            ArrayAdapter adapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_list_item_1,classGradeLt);
-                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                    if (classGradeListRet.size() != 0) {
+                        ArrayList<String> classGradeLt = new ArrayList<String>();
+                        ArrayAdapter adapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_list_item_1, classGradeLt);
+                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
-                            Log.d("user", "Retrieved " + classGradeListRet.size() + " classes");
-                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                            HashMap<String,String> unique_class_map=new HashMap<String, String>();
-                            for (int i = 0; i < classGradeListRet.size(); i++) {
-                                ParseObject u = (ParseObject) classGradeListRet.get(i);
-                                //  if(u.getString("class").equals(id)) {
+                        Log.d("user", "Retrieved " + classGradeListRet.size() + " classes");
+                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                        HashMap<String, String> unique_class_map = new HashMap<String, String>();
+                        for (int i = 0; i < classGradeListRet.size(); i++) {
+                            ParseObject u = (ParseObject) classGradeListRet.get(i);
+                            //  if(u.getString("class").equals(id)) {
 
-                                String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                                // String subject= u.getString(ClassTable.SUBJECT);
-                                // String item= name + ". " + subject;
-                                //name += "\n";
-                                // name += u.getInt("age");
-                                if(unique_class_map.get(name)==null)
-                                {
-                                    unique_class_map.put(name,"1");
-                                    adapter.add(name);
-                                }
-
-                                // }
-
+                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                            // String subject= u.getString(ClassTable.SUBJECT);
+                            // String item= name + ". " + subject;
+                            //name += "\n";
+                            // name += u.getInt("age");
+                            if (unique_class_map.get(name) == null) {
+                                unique_class_map.put(name, "1");
+                                adapter.add(name);
                             }
 
+                            // }
 
-                            classList.setAdapter(adapter);
-
-
-                            classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    final String item = ((TextView) view).getText().toString();
-                                    Log.d("class", item);
-
-
-
-                                    final Dialog class_info=new Dialog(Admin_classes.this);
-                                    class_info.setContentView(R.layout.class_details);
-                                    class_info.setTitle(item);
-
-                                    setDialogSize(class_info);
-                                    dialog_heading=(TextView)class_info.findViewById(R.id.description);
-                                    dialog_heading.setText("Sections");
-                                    classSectionList=(ListView)class_info.findViewById(R.id.subjectList);
-                                    ok=(Button)class_info.findViewById(R.id.doneButton);
-                                    deleteClassButton=(Button)class_info.findViewById(R.id.delClassButton);
-                                    addSectionButton=(Button)class_info.findViewById(R.id.addSubjectButton);
-                                    addSectionButton.setText("Add Section");
-
-
-
-
-
-
-                                    ArrayList<String> sectionLt = new ArrayList<String>();
-                                    ArrayAdapter sectionadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, sectionLt);
-                                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-
-                                    Log.d("user", "Retrieved " + classGradeListRet.size() + " sections");
-                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                    for (int i = 0; i < classGradeListRet.size(); i++) {
-                                        ParseObject u = (ParseObject) classGradeListRet.get(i);
-
-                                        if(u.getString(ClassGradeTable.CLASS_GRADE).equals(item)){
-                                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                                            String section= u.getString(ClassGradeTable.SECTION);
-
-                                            if(section!=null)
-                                            {
-                                                String object= name + " " + section;
-                                                sectionadapter.add(object);
-                                            }
-                                            else
-                                            {
-                                                String object=name;
-                                                sectionadapter.add(object);
-                                            }
-                                        }
-                                        //name += "\n";
-                                        // name += u.getInt("age");
-
-
-                                        // }
-
-                                    }
-
-
-                                    classSectionList.setAdapter(sectionadapter);
-
-                                    classSectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                            final String item = ((TextView) view).getText().toString();
-                                            sectionSelected(item);
-
-                                        }
-                                    });
-
-
-
-
-                                    class_info.show();
-
-
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            class_info.dismiss();
-                                        }
-                                    });
-
-
-                                    deleteClassButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            deleteClass(item);
-                                        }
-                                    });
-
-                                    addSectionButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            addSectionCall(item);
-
-                                        }
-                                    });
-
-
-                                }
-                            });
-
-
-
-
-
-                        }else
-                        {
-                            Log.d("class","error in query");
                         }
 
+
+                        classList.setAdapter(adapter);
+
+
+                        classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                final String item = ((TextView) view).getText().toString();
+                                Log.d("class", item);
+
+
+                                final Dialog class_info = new Dialog(Admin_classes.this);
+                                class_info.setContentView(R.layout.class_details);
+                                class_info.setTitle(item);
+
+                                setDialogSize(class_info);
+                                dialog_heading = (TextView) class_info.findViewById(R.id.description);
+                                dialog_heading.setText("Sections");
+                                classSectionList = (ListView) class_info.findViewById(R.id.subjectList);
+                                ok = (Button) class_info.findViewById(R.id.doneButton);
+                                deleteClassButton = (Button) class_info.findViewById(R.id.delClassButton);
+                                addSectionButton = (Button) class_info.findViewById(R.id.addSubjectButton);
+                                addSectionButton.setText("Add Section");
+
+
+                                ArrayList<String> sectionLt = new ArrayList<String>();
+                                ArrayAdapter sectionadapter = new ArrayAdapter(class_info.getContext(), android.R.layout.simple_list_item_1, sectionLt);
+                                //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                                Log.d("user", "Retrieved " + classGradeListRet.size() + " sections");
+                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                                for (int i = 0; i < classGradeListRet.size(); i++) {
+                                    ParseObject u = (ParseObject) classGradeListRet.get(i);
+
+                                    if (u.getString(ClassGradeTable.CLASS_GRADE).equals(item)) {
+                                        String name = u.getString(ClassGradeTable.CLASS_GRADE);
+                                        String section = u.getString(ClassGradeTable.SECTION);
+
+                                        if (section != null) {
+                                            String object = name + " " + section;
+                                            sectionadapter.add(object);
+                                        } else {
+                                            String object = name;
+                                            sectionadapter.add(object);
+                                        }
+                                    }
+                                    //name += "\n";
+                                    // name += u.getInt("age");
+
+
+                                    // }
+
+                                }
+
+
+                                classSectionList.setAdapter(sectionadapter);
+
+                                classSectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        final String item = ((TextView) view).getText().toString();
+                                        sectionSelected(item);
+
+                                    }
+                                });
+
+
+                                class_info.show();
+
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        class_info.dismiss();
+                                    }
+                                });
+
+
+                                deleteClassButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        deleteClass(item);
+                                    }
+                                });
+
+                                addSectionButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        addSectionCall(item);
+
+                                    }
+                                });
+
+
+                            }
+                        });
+
+
                     } else {
-                        Toast.makeText(Admin_classes.this, "error", Toast.LENGTH_LONG).show();
-                        Log.d("class", "Error: " + e.getMessage());
+                        Log.d("class", "error in query");
                     }
 
+                } else {
+                    Toast.makeText(Admin_classes.this, "error", Toast.LENGTH_LONG).show();
+                    Log.d("class", "Error: " + e.getMessage());
+                }
 
 
             }
         });
 
 
+
+        addClassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent to_new_class = new Intent(Admin_classes.this, NewClass.class);
+                to_new_class.putExtra("institution_name", institution_name);
+                to_new_class.putExtra("institution_code", institution_code);
+                to_new_class.putExtra("role", role);
+                startActivity(to_new_class);
+            }
+        });
 
     }
 

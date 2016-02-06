@@ -69,29 +69,41 @@ public class NewClass extends BaseActivity {
                 if (classname.equals("") || (classsection.equals(""))) {
                     Toast.makeText(getApplicationContext(), "New Class details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
-                    addClass(classname,classsection);
-                    Toast.makeText(NewClass.this, "New Class Added", Toast.LENGTH_LONG).show();
-                    Intent to_admin_classes=new Intent(NewClass.this,Admin_classes.class);
-                    to_admin_classes.putExtra("institution_code",institution_code);
-                    to_admin_classes.putExtra("institution_name",institution_name);
-                    to_admin_classes.putExtra("role",role);
-                    startActivity(to_admin_classes);
+                    ParseQuery checkClass=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+                    checkClass.whereEqualTo(ClassGradeTable.CLASS_GRADE, classname);
+                    checkClass.whereEqualTo(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                    checkClass.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> classGradeobjects, ParseException e) {
+                            if (e == null) {
+                                if (classGradeobjects.size() == 0) {
+                                    ParseObject newClass = new ParseObject(ClassGradeTable.TABLE_NAME);
+                                    newClass.put(ClassGradeTable.CLASS_GRADE, classname);
+                                    newClass.put(ClassGradeTable.SECTION, classsection);
+                                    newClass.put(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                    newClass.saveEventually();
+
+                                    Toast.makeText(NewClass.this, "New Class Added", Toast.LENGTH_LONG).show();
+                                    Intent to_admin_classes = new Intent(NewClass.this, Admin_classes.class);
+                                    to_admin_classes.putExtra("institution_code", institution_code);
+                                    to_admin_classes.putExtra("institution_name", institution_name);
+                                    to_admin_classes.putExtra("role", role);
+                                    startActivity(to_admin_classes);
+
+
+                                } else {
+                                    Toast.makeText(NewClass.this, "Class is Already added", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Log.d("ClassGrade", "error");
+                            }
+                        }
+                    });
+
                 }
             }
         });
     }
-
-
-
-    protected void addClass(String classname,String classsection){
-        ParseObject newClass=new ParseObject(ClassGradeTable.TABLE_NAME);
-        newClass.put(ClassGradeTable.CLASS_GRADE,classname);
-        newClass.put(ClassGradeTable.SECTION,classsection);
-        newClass.put(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-        newClass.saveEventually();
-
-    }
-
 
 
 
