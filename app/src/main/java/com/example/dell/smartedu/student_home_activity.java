@@ -127,7 +127,7 @@ public class student_home_activity extends BaseActivity{
                                                 message_intent.putExtra("role", role);
                                                 message_intent.putExtra("classGradeId", classGradeId);
                                                 message_intent.putExtra("studentId", studentId);
-                                                message_intent.putExtra("institution", institution_name);
+                                                message_intent.putExtra("institution_name", institution_name);
                                                 message_intent.putExtra("institution_code", institution_code);
                                                 message_intent.putExtra("_for","received");
                                                 startActivity(message_intent);
@@ -141,7 +141,7 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 4) {
                                                 Intent exam_intent = new Intent(student_home_activity.this, student_exams.class);
-                                                exam_intent.putExtra("institution", institution_name);
+                                                exam_intent.putExtra("institution_name", institution_name);
                                                 exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("role", role);
                                                 exam_intent.putExtra("classGradeId", classGradeId);
@@ -150,7 +150,7 @@ public class student_home_activity extends BaseActivity{
 
                                             } else if (position == 5) {
                                                 Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
-                                                exam_intent.putExtra("institution", institution_name);
+                                                exam_intent.putExtra("institution_name", institution_name);
                                                 exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("id", classGradeId);
                                                 startActivity(exam_intent);
