@@ -423,7 +423,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 4) { //assignments
                 Intent exam_intent = new Intent(BaseActivity.this, UploadMaterial_students.class);
-                exam_intent.putExtra("institution", institution_name);
+                exam_intent.putExtra("institution_name", institution_name);
                 exam_intent.putExtra("institution_code", institution_code);
                 exam_intent.putExtra("id", classId);
                 startActivity(exam_intent);
@@ -431,7 +431,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             if (position == 5) { //grades
                 Intent exam_intent = new Intent(BaseActivity.this, student_exams.class);
-                exam_intent.putExtra("institution", institution_name);
+                exam_intent.putExtra("institution_name", institution_name);
                 exam_intent.putExtra("institution_code", institution_code);
                 exam_intent.putExtra("role", role);
                 exam_intent.putExtra("classId", classId);
@@ -496,7 +496,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 message_intent.putExtra("role", "Parent");
                 message_intent.putExtra("classId", classId);
                 message_intent.putExtra("studentId", studentId);
-                message_intent.putExtra("institution", institution_name);
+                message_intent.putExtra("institution_name", institution_name);
                 message_intent.putExtra("institution_code", institution_code);
                 message_intent.putExtra("_for", "received");
                 startActivity(message_intent);

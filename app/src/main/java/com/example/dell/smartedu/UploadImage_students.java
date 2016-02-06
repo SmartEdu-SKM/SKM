@@ -48,7 +48,9 @@ public class UploadImage_students extends ListActivity {
     String uploadId;
     String classId;
     ImageLoaderAdapter adapter;
-
+    String classGradeId;
+    String institution_name;
+    String institution_code;
     private Uri mMediaUri;
 
     public void queryImagesFromParse(){
@@ -104,6 +106,9 @@ public class UploadImage_students extends ListActivity {
 
         classId=from_upload_material_students.getStringExtra("classId");
         uploadId=from_upload_material_students.getStringExtra("uploadId");
+        classGradeId=from_upload_material_students.getStringExtra("id");
+        institution_code=from_upload_material_students.getStringExtra("institution_code");
+        institution_name=from_upload_material_students.getStringExtra("institution_name");
 
         Log.d("user", "Object Id: uploadImage" + uploadId);
 
@@ -119,9 +124,6 @@ public class UploadImage_students extends ListActivity {
                 onListItemClick(v, pos, id);
             }
         });
-
-
-
 
 
 
@@ -228,6 +230,16 @@ public class UploadImage_students extends ListActivity {
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(UploadImage_students.this,UploadMaterial_students.class);
+        i.putExtra("institution_name",institution_name);
+        i.putExtra("institution_code",institution_code);
+        i.putExtra("id", classGradeId);
+        startActivity(i);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

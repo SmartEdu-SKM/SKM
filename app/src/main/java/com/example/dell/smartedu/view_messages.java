@@ -70,7 +70,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         final Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
         _for = from_student.getStringExtra("_for");
-        institution_name= from_student.getStringExtra("institution");
+        institution_name= from_student.getStringExtra("institution_name");
         institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
