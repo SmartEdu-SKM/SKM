@@ -35,7 +35,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
     //ArrayList<Task> myList;
     ListView classList;
     Notification_bar noti_bar;
-
+    String classGradeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             institution_code=from_home.getStringExtra("institution_code");
             institution_name=from_home.getStringExtra("institution_name");
             studentId=from_home.getStringExtra("studentId");
-            classId=from_home.getStringExtra("classId");
+            classGradeId=from_home.getStringExtra("classGradeId");
 
 
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,55 +85,20 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
 
-/*        ParseQuery<ParseObject> classGradeQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-        classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> classgradeobjects, ParseException e) {
-                if (e == null) {
-                    if (classgradeobjects.size() != 0) {
-                        HashMap<String, String> classGradeMap = new HashMap<String, String>();
-                        for (int x = 0; x < classgradeobjects.size(); x++) {
-                            ParseObject u = classgradeobjects.get(x);
-                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                            if (classGradeMap.get(name) == null) {
-                                classGradeMap.put(name, "1");
-                            }
-                        }
-                    } else {
-                        Toast.makeText(teacher_classes.this, "no classes added for this institution", Toast.LENGTH_LONG).show();
-                        Log.d("classGrade", "error in query");
-                    }
-                } else {
-                    Log.d("classGrade", "error");
-                }
-            }
-        });
-*/
 
-
-
-
-
-
-
-
-
-
-
-
-        Log.d("classGradeid ", classId);
+        Log.d("classGradeid ", classGradeId);
 
         final HashMap<String,String> classMap=new HashMap<String,String>();
 
-        ParseQuery<ParseObject> classQueryz = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQueryz.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classId));
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
         // classQueryz.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classQueryz.findInBackground(new FindCallback<ParseObject>() {
+        classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
 
                     if(classListRet.size()!=0){
+
                     ArrayList<String> classLt = new ArrayList<String>();
                     ArrayAdapter adapter = new ArrayAdapter(student_classes.this, android.R.layout.simple_list_item_1, classLt);
 
@@ -152,10 +117,10 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
                     }
-
-
                     classList.setAdapter(adapter);
-                }
+                }else{
+                        Log.d("class","error in query");
+                    }
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
@@ -174,12 +139,12 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
                 //String[] classSpecs=item.split(" ");
 
 
-                String class_main_id = classMap.get(item);
-                Log.d("student_classes ", "class id: " + class_main_id);
+               classId = classMap.get(item);          //object id corresponding to selected item will be retreived
+                Log.d("student_classes ", "class id: " + classId);
 
                 Intent to_view_atten = new Intent(student_classes.this, view_attendance.class);
                 to_view_atten.putExtra("studentId", studentId);
-                to_view_atten.putExtra("classId", class_main_id);
+                to_view_atten.putExtra("classId", classId);
                 to_view_atten.putExtra("role", role);
 
                 startActivity(to_view_atten);

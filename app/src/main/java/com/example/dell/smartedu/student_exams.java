@@ -17,12 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,11 +41,11 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
     //ArrayList<Task> myList;
     ListView examsList;
     Notification_bar noti_bar;
-    String classId;
+    String classGradeId;
     String studentId;
     String examid;
     String examName;
-
+    ListView subjectList;
 
     Number totalMarks;
     Number marksObtained;
@@ -64,21 +66,22 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         getSupportActionBar().setTitle("Exams");
 
         Intent from_student = getIntent();
-        classId = from_student.getStringExtra("classId");
-        studentId= from_student.getStringExtra("studentId");
-        role= from_student.getStringExtra("role");
-        institution_code=from_student.getStringExtra("institution_code");
-        institution_name=from_student.getStringExtra("institution_name");
+        classGradeId = from_student.getStringExtra("classGradeId");
+        studentId = from_student.getStringExtra("studentId");
+        role = from_student.getStringExtra("role");
+        institution_code = from_student.getStringExtra("institution_code");
+        institution_name = from_student.getStringExtra("institution_name");
 
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
+        noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
+        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
 
-        examsList = (ListView) findViewById(R.id.examList);
+       // examsList = (ListView) findViewById(R.id.examList);
+        subjectList = (ListView) findViewById(R.id.examList);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
 
         //  myList = dbHandler.getAllTasks();
@@ -90,139 +93,206 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
+
+
+        final HashMap<String, String> classMap = new HashMap<String, String>();
+    Log.d("classGradeId",classGradeId);
+
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
+        // classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
+        classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                    if (studentListRet.size() != 0){
-                        classRef[0] = studentListRet.get(0);
+                    if (studentListRet.size() != 0) {
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
-                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> examListRet, ParseException e) {
-                            if (e == null) {
+                        ArrayList<String> classLt = new ArrayList<String>();
+                        //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
+                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                        ArrayAdapter subjectadapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, classLt);
 
-                                ArrayList<String> studentLt = new ArrayList<String>();
-                                //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
-                                //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
-                                ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, studentLt) {
+                        for (int x = 0; x < studentListRet.size(); x++) {
+                            ParseObject u = (ParseObject) studentListRet.get(x);
+                            // ParseObject classGradeObject = ((ParseObject) u.get(ClassTable.CLASS_NAME));
 
-                                    @Override
-                                    public View getView(int position, View convertView,
-                                                        ViewGroup parent) {
-                                        View view = super.getView(position, convertView, parent);
+                            String name = u.getString(ClassTable.SUBJECT);
 
-                                        TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                            classMap.put(name, u.getObjectId());
+                            subjectadapter.add(name);
+                        }
+                        // classRef[0] = studentListRet.get(0);
+                        subjectList.setAdapter(subjectadapter);
+                    } else {
+                        Log.d("class", "error in query");
+                    }
+                } else {
+                    Log.d("class", "error");
+                }
+            }
+        });
+
+
+        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final String item = ((TextView) view).getText().toString();
+                displayExams(item, classMap.get(item));
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void displayExams(String subject,String subjectObjectId)
+        {
+            classId=subjectObjectId;
+            final Dialog examListDialog=new Dialog(student_exams.this);
+            examListDialog.setContentView(R.layout.singelistdisplay);
+            setDialogSize(examListDialog);
+           examsList=(ListView)examListDialog.findViewById(R.id.examList);
+
+            final HashMap<String,String> examMap=new HashMap<String,String>();
+            final HashMap<String,Number> examMaxMarksMap=new HashMap<String,Number>();
+
+            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+            studentQuery.whereEqualTo(ExamTable.FOR_CLASS,ParseObject.createWithoutData(ClassTable.TABLE_NAME,classId));
+            studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> examListRet, ParseException e) {
+                    if (e == null) {
+                        if (examListRet.size() != 0) {
+                            ArrayList<String> examLt = new ArrayList<String>();
+                            //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
+                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+
+                            ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, examLt) {
+
+                                @Override
+                                public View getView(int position, View convertView,
+                                                    ViewGroup parent) {
+                                    View view = super.getView(position, convertView, parent);
+
+                                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                                        textView.setTextColor(Color.WHITE);
+                                    textView.setTextColor(Color.WHITE);
 
-                                        return view;
-                                    }
-                                };
-
-
-                                Log.d("user", "Retrieved " + examListRet.size() + " students");
-                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                                for (int i = 0; i < examListRet.size(); i++) {
-                                    ParseObject u = (ParseObject) examListRet.get(i);
-                                    //  if(u.getString("class").equals(id)) {
-                                    String name = u.getString(ExamTable.EXAM_NAME);
-                                    //name += "\n";
-                                    // name += u.getInt("age");
-
-                                    adapter.add(name);
-                                    // }
-
+                                    return view;
                                 }
+                            };
 
 
-                                examsList.setAdapter(adapter);
+                            Log.d("user", "Retrieved " + examListRet.size() + " students");
+                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                            for (int i = 0; i < examListRet.size(); i++) {
+                                ParseObject u = (ParseObject) examListRet.get(i);
+                                //  if(u.getString("class").equals(id)) {
+                                String name = u.getString(ExamTable.EXAM_NAME);
+                                //name += "\n";
+                                // name += u.getInt("age");
+                                examMap.put(name, u.getObjectId());
+                                examMaxMarksMap.put(name, u.getNumber(ExamTable.MAX_MARKS));
+                                adapter.add(name);
+                                // }
+
+                            }
 
 
-                                examsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                                     @Override
-                                                                     public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                                                         String item = ((TextView) view).getText().toString().trim();
+                            examsList.setAdapter(adapter);
+                            examListDialog.show();
 
-                                                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
-                                                                         studentQuery.whereEqualTo(ExamTable.EXAM_NAME, item);
-                                                                         studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
-                                                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                             public void done(List<ParseObject> examListRet, ParseException e) {
-                                                                                 if (e == null) {
-                                                                                     ParseObject u = examListRet.get(0);
-                                                                                     examid = u.getObjectId();
-                                                                                     Log.d("user", "examId: " + examid);
-                                                                                     Log.d("user", "examId: " + studentId);
-                                                                                     examName = u.get("examName").toString().trim();
-                                                                                     totalMarks = u.getNumber("totalMarks");
+                            examsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                 @Override
+                                                                 public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
-                                                                                     ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
-                                                                                     marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
-                                                                                     marksQuery.whereEqualTo(MarksTable.EXAM_REF, ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid));
-                                                                                     marksQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                                         public void done(List<ParseObject> marksListRet, ParseException e) {
-                                                                                             if (e == null) {
+                                                                     String item = ((TextView) view).getText().toString().trim();
+                                                                     examSelected(item, examMap.get(item), examMaxMarksMap.get(item));
 
-                                                                                                 if (marksListRet.size() != 0) {
-                                                                                                     marksObtained = marksListRet.get(0).getNumber(MarksTable.MARKS_OBTAINED);
-                                                                                                     callDialog(view);
-                                                                                                 } else {
-                                                                                                     Toast.makeText(student_exams.this, "Not Yet Added", Toast.LENGTH_LONG).show();
-                                                                                                 }
-
-                                                                                             } else {
-                                                                                                 Log.d("user", "ErrorIn: " + e.getMessage());
-                                                                                             }
-                                                                                         }
-                                                                                     });
-
-                                                                                 } else {
-                                                                                     Log.d("user", "ErrorOut: " + e.getMessage());
-                                                                                 }
-                                                                             }
-                                                                         });
-
-
-                                                                     }
                                                                  }
+                                                             }
 
-                                );
+                            );
 
 
-                            } else {
-                                Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
-                                Log.d("user", "Error: " + e.getMessage());
-                            }
+                        }else{
+                            Toast.makeText(student_exams.this, "no exam added", Toast.LENGTH_LONG).show();
                         }
-                    });
-                }else{
-                        Toast.makeText(student_exams.this, "No Exam added yet", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
+                        Log.d("user", "Error: " + e.getMessage());
                     }
-
-                            } else {
-                                Toast.makeText(student_exams.this, "error", Toast.LENGTH_LONG).show();
-                                Log.d("user", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
+                }
+            });
 
 
 
         // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
+        }
 
+
+
+    public void examSelected(String examName,String examObjectId,Number maxMarks)
+    {
+
+
+                    examid = examObjectId;
+                    Log.d("user", "examId: " + examid);
+                    Log.d("user", "examId: " + studentId);
+                    this.examName =examName;
+                    totalMarks = maxMarks;
+
+                    ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+                    marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
+                    marksQuery.whereEqualTo(MarksTable.EXAM_REF, ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid));
+                    marksQuery.findInBackground(new FindCallback<ParseObject>() {
+                        public void done(List<ParseObject> marksListRet, ParseException e) {
+                            if (e == null) {
+
+                                if (marksListRet.size() != 0) {
+                                    marksObtained = marksListRet.get(0).getNumber(MarksTable.MARKS_OBTAINED);
+                                    callDialog();
+                                } else {
+                                    Toast.makeText(student_exams.this, "Not Yet Added", Toast.LENGTH_LONG).show();
+                                }
+
+                            } else {
+                                Log.d("user", "ErrorIn: " + e.getMessage());
+                            }
+                        }
+                    });
 
 
 
     }
 
-    public void callDialog(View view){
+
+    public void callDialog(){
         Dialog dialog = new Dialog(student_exams.this);
         dialog.setContentView(R.layout.view_marks);
         dialog.setTitle("Marks Information");
