@@ -46,23 +46,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Broadcast"
                 android:id="@+id/broadcast"
 
-                 />
+                android:background="#20BF9F"
+                android:textColor="#ffffff" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Send to Selected"
-                    android:id="@+id/selected"
-                    android:layout_toEndOf="@+id/broadcast"
-                    android:nestedScrollingEnabled="false" />
             </RelativeLayout>
 
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send to Selected"
+                android:id="@+id/selected"
+                android:layout_toEndOf="@+id/broadcast"
+                android:nestedScrollingEnabled="false"
+                android:textColor="#ffffff"
+                android:background="#000000"
+                android:layout_gravity="right" />
 
             <ListView
                 android:layout_width="match_parent"

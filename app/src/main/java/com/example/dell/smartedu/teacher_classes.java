@@ -216,6 +216,8 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_message.putExtra("institution_name", institution_name);
                                 to_message.putExtra("role", role);
                                 to_message.putExtra("id", id);
+                                to_message.putExtra("classGradeId", classMap.get(item));
+                                to_message.putExtra("_for", _for);
                                 startActivity(to_message);
                             } else if (_for.equals("attendance")) {
                                 Intent to_att = new Intent(teacher_classes.this, AddAttendance_everyday.class);

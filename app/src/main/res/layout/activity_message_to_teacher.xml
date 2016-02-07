@@ -6,16 +6,9 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#13ff77">
+    >
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#13ff77">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,20 +41,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Broadcast"
                         android:id="@+id/broadcast"
-                        android:layout_alignParentRight="true"
-                        />
+
+                        android:background="#20BF9F"
+                        android:textColor="#ffffff" />
 
                     <Button
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Send to Selected"
                         android:id="@+id/selected"
-
-                        android:nestedScrollingEnabled="false" />
+                        android:layout_below="@+id/broadcast"
+                        android:nestedScrollingEnabled="false"
+                        android:background="#000000"
+                        android:textColor="#ffffff" />
                 </RelativeLayout>
 
 
@@ -69,15 +65,10 @@
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/studentList"
-                    android:layout_gravity="center_horizontal" />
+                    android:id="@+id/studentList" />
 
             </LinearLayout>
 
-
-
-        </LinearLayout>
-    </ScrollView>
 
 
     <fragment
