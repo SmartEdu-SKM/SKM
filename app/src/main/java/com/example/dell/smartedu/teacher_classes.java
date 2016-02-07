@@ -125,10 +125,6 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         final HashMap<String,String> classMap=new HashMap<String,String>();
 
 
-
-
-
-
         ParseQuery<ParseObject> classQueryz = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQueryz.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
        // classQueryz.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
@@ -223,6 +219,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 Intent to_att = new Intent(teacher_classes.this, AddAttendance_everyday.class);
                                 to_att.putExtra("institution_code", institution_code);
                                 to_att.putExtra("institution_name", institution_name);
+                                to_att.putExtra("classGradeId", classMap.get(item));
                                 to_att.putExtra("role", role);
                                 to_att.putExtra("id", id);
                                 startActivity(to_att);
