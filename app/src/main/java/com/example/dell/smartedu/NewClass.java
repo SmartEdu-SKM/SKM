@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -14,8 +16,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,6 +40,11 @@ public class NewClass extends BaseActivity {
     EditText classGradeName;
     EditText newSection;
     Button addClassButton;
+    Spinner classteacherspinner;
+    String classteachername;
+    EditText classteachersubject;
+    String subjectofclassteacher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +63,45 @@ public class NewClass extends BaseActivity {
 
         classGradeName = (EditText) findViewById(R.id.newClassGrade);
         newSection = (EditText) findViewById(R.id.newClassSection);
-
+classteacherspinner=(Spinner)findViewById(R.id.classteacherselection);
         addClassButton = (Button) findViewById(R.id.addClassButton);
+        classteachersubject=(EditText)findViewById(R.id.classteachersubject);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
 
 
-        addClassButton.setOnClickListener(new View.OnClickListener() {
+        final HashMap<String,String> teacherMap=new HashMap<String,String>();
+        ParseQuery teacherListQuery=ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+        teacherListQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+        teacherListQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void onClick(View v) {
-                classname = classGradeName.getText().toString().trim();
-               classsection = newSection.getText().toString().trim();
+            public void done(List<ParseObject> teacherListRet, ParseException e) {
+                if (e == null) {
+                    if (teacherListRet.size() != 0) {
+                        Log.d("here", "here");
+                        ArrayList<String> teacherLt = new ArrayList<String>();
+                        ArrayAdapter teacheradapter = new ArrayAdapter(NewClass.this, android.R.layout.simple_spinner_item, teacherLt);
+                        teacheradapter.add("");
+                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                        for (int x = 0; x < teacherListRet.size(); x++) {
+                            ParseObject teacher = teacherListRet.get(x);
+                            String teacher_name = teacher.getString(TeacherTable.TEACHER_NAME);
+                            teacheradapter.add(teacher_name);
+                            teacherMap.put(teacher_name,teacher.getObjectId());
+                        }
+
+                        classteacherspinner.setAdapter(teacheradapter);
 
 
-                if (classname.equals("") || (classsection.equals(""))) {
+                        addClassButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                classname = classGradeName.getText().toString().trim();
+                                classsection = newSection.getText().toString().trim();
+                                classteachername=classteacherspinner.getSelectedItem().toString();
+                                subjectofclassteacher=classteachersubject.getText().toString();
+
+                if( (classname.equals("")) || (classsection.equals("")) || (classteachername.equals("")) || subjectofclassteacher.equals("")) {
                     Toast.makeText(getApplicationContext(), "New Class details cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
                     ParseQuery checkClass=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
@@ -77,11 +112,9 @@ public class NewClass extends BaseActivity {
                         public void done(List<ParseObject> classGradeobjects, ParseException e) {
                             if (e == null) {
                                 if (classGradeobjects.size() == 0) {
-                                    ParseObject newClass = new ParseObject(ClassGradeTable.TABLE_NAME);
-                                    newClass.put(ClassGradeTable.CLASS_GRADE, classname);
-                                    newClass.put(ClassGradeTable.SECTION, classsection);
-                                    newClass.put(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-                                    newClass.saveEventually();
+                                    Log.d("objid",teacherMap.get(classteachername));
+                                    addClassGrade(classname, classsection, teacherMap.get(classteachername),subjectofclassteacher);
+
 
                                     Toast.makeText(NewClass.this, "New Class Added", Toast.LENGTH_LONG).show();
                                     Intent to_admin_classes = new Intent(NewClass.this, Admin_classes.class);
@@ -101,8 +134,57 @@ public class NewClass extends BaseActivity {
                     });
 
                 }
+                            }
+                        });
+
+
+                    } else {
+                        Toast.makeText(NewClass.this, "no teacher is added in this institution", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("teachers", "error");
+                }
+            }
+
+        });
+
+
+
+
+
+
+    }
+
+
+    protected void  addClassGrade(String name,String section, final String selectedteacherObjectId, final String subject){
+        final ParseObject newClass = new ParseObject(ClassGradeTable.TABLE_NAME);
+        newClass.put(ClassGradeTable.CLASS_GRADE, name);
+        newClass.put(ClassGradeTable.SECTION, section);
+        newClass.put(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+        newClass.saveEventually(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    addClass(newClass.getObjectId(),selectedteacherObjectId,subject);
+                } else {
+                    Log.d("classGrade", "error in saving");
+                }
             }
         });
+
+    }
+
+
+    protected void addClass(final String classGradeObjectId,String selectedteacherObjectId,String subject){
+        ParseObject newClass=new ParseObject(ClassTable.TABLE_NAME);
+        newClass.put(ClassTable.SUBJECT, subject);
+        newClass.put(ClassTable.IF_CLASS_TEACHER, true);
+        newClass.put(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeObjectId));
+        ParseUser  teacheruser=(ParseUser)(ParseObject.createWithoutData(TeacherTable.TABLE_NAME, selectedteacherObjectId)).get(TeacherTable.TEACHER_USER_REF);
+        newClass.put(ClassTable.TEACHER_USER_REF, teacheruser);
+        newClass.saveEventually();
+
+
     }
 
 
