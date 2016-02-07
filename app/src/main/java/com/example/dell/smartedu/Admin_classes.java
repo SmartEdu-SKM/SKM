@@ -359,7 +359,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
        proceed=(Button)confirm_step.findViewById(R.id.proceedButton);
        cancel=(Button)confirm_step.findViewById(R.id.cancelButton);
        confirm_message.setText("All data related to class " + selectedClass + ",including sections,students,attendance,uploads etc, will be deleted permanently!!");
-       setDialogSize(confirm_step);
+       //setDialogSize(confirm_step);
 
        confirm_step.show();
 

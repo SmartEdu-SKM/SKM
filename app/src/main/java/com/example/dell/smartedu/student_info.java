@@ -1,12 +1,15 @@
 package com.example.dell.smartedu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,10 @@ public class student_info extends Fragment{
     String userid;
     String institution_code;
     String institution_name;
+    TextView confirm_message;
+    Button cancel;
+    Button proceed;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,19 +67,53 @@ public class student_info extends Fragment{
     deleteStudent.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ParseObject institution=ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code);
-            ParseObject studentObject=ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId);
-            ParseUser studentUser=studentObject.getParseUser(StudentTable.STUDENT_USER_REF);
-            deleteParentData(institution,studentUser);
-            deleteStudentData(institution,studentUser,studentObject);
 
 
-            Intent to_student = new Intent(getActivity(), Students.class);
-            to_student.putExtra("institution_code", institution_code);
-            to_student.putExtra("institution_name", institution_name);
-            to_student.putExtra("id", classId);
 
-            startActivity(to_student);
+            final Dialog confirm_step=new Dialog(getActivity());
+            confirm_step.setContentView(R.layout.confirm_message);
+            confirm_message=(TextView)confirm_step.findViewById(R.id.confirm_message);
+            proceed=(Button)confirm_step.findViewById(R.id.proceedButton);
+            cancel=(Button)confirm_step.findViewById(R.id.cancelButton);
+            confirm_message.setText("All data related to this student including attendance,marks etc, will be deleted permanently!!");
+
+
+            confirm_step.show();
+
+            proceed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParseObject institution = ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code);
+                    ParseObject studentObject = ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId);
+                    ParseUser studentUser = studentObject.getParseUser(StudentTable.STUDENT_USER_REF);
+                    deleteParentData(institution, studentUser);
+                    deleteStudentData(institution, studentUser, studentObject);
+
+
+                    Intent to_student = new Intent(getActivity(), Students.class);
+                    to_student.putExtra("institution_code", institution_code);
+                    to_student.putExtra("institution_name", institution_name);
+                    to_student.putExtra("id", classId);
+
+                    startActivity(to_student);
+
+                }
+            });
+
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirm_step.dismiss();
+                }
+            });
+
+
+
+
+
+
+
 
         }
     });
@@ -203,7 +244,7 @@ public class student_info extends Fragment{
         roleQuery.whereEqualTo(RoleTable.OF_USER_REF,studentUser);
         //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
         roleQuery.whereEqualTo(RoleTable.ROLE, "Student");
-        roleQuery.whereEqualTo(RoleTable.ENROLLED_WITH,institution);
+        roleQuery.whereEqualTo(RoleTable.ENROLLED_WITH, institution);
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
                 if (e == null) {
@@ -229,4 +270,7 @@ studentObject.deleteEventually();
     public void onDrawerItemSelected(View view, int position) {
 
     }*/
+
 }
+
+
