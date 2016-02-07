@@ -51,6 +51,7 @@ public class UploadImage_students extends ListActivity {
     String classGradeId;
     String institution_name;
     String institution_code;
+    String role;
     private Uri mMediaUri;
 
     public void queryImagesFromParse(){
@@ -104,6 +105,7 @@ public class UploadImage_students extends ListActivity {
 
         Intent from_upload_material_students = getIntent();
 
+        role= from_upload_material_students.getStringExtra("role");
         classId=from_upload_material_students.getStringExtra("classId");
         uploadId=from_upload_material_students.getStringExtra("uploadId");
         classGradeId=from_upload_material_students.getStringExtra("id");
@@ -238,6 +240,8 @@ public class UploadImage_students extends ListActivity {
         i.putExtra("institution_name",institution_name);
         i.putExtra("institution_code",institution_code);
         i.putExtra("id", classGradeId);
+        i.putExtra("role", role);
+        i.putExtra("classId", classId);
         startActivity(i);
     }
 

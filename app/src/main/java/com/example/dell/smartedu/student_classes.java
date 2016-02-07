@@ -45,7 +45,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             setContentView(R.layout.activity_student_classes);
 
             Intent from_home = getIntent();
-           // _for = from_home.getStringExtra("for");
+            _for = from_home.getStringExtra("for");
             role = from_home.getStringExtra("role");
             institution_code=from_home.getStringExtra("institution_code");
             institution_name=from_home.getStringExtra("institution_name");
@@ -86,40 +86,39 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
 
-        Log.d("classGradeid ", classGradeId);
+//        Log.d("classGradeid ", classGradeId);
 
         final HashMap<String,String> classMap=new HashMap<String,String>();
 
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
-        // classQueryz.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+        classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
 
-                    if(classListRet.size()!=0){
+                    if (classListRet.size() != 0) {
 
-                    ArrayList<String> classLt = new ArrayList<String>();
-                    ArrayAdapter adapter = new ArrayAdapter(student_classes.this, android.R.layout.simple_list_item_1, classLt);
-
-
-                    Log.d("classes", "Retrieved " + classListRet.size() + " users");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-                    for (int i = 0; i < classListRet.size(); i++) {
-                        ParseObject u = (ParseObject) classListRet.get(i);
-                       // ParseObject classGradeObject = ((ParseObject) u.get(ClassTable.CLASS_NAME));
-
-                                String name = u.getString(ClassTable.SUBJECT);
+                        ArrayList<String> classLt = new ArrayList<String>();
+                        ArrayAdapter adapter = new ArrayAdapter(student_classes.this, android.R.layout.simple_list_item_1, classLt);
 
 
-                                adapter.add(name);
-                                classMap.put(name, u.getObjectId());
+                        Log.d("classes", "Retrieved " + classListRet.size() + " users");
+                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+                        for (int i = 0; i < classListRet.size(); i++) {
+                            ParseObject u = (ParseObject) classListRet.get(i);
+                            // ParseObject classGradeObject = ((ParseObject) u.get(ClassTable.CLASS_NAME));
+
+                            String name = u.getString(ClassTable.SUBJECT);
 
 
-                    }
-                    classList.setAdapter(adapter);
-                }else{
-                        Log.d("class","error in query");
+                            adapter.add(name);
+                            classMap.put(name, u.getObjectId());
+
+
+                        }
+                        classList.setAdapter(adapter);
+                    } else {
+                        Log.d("class", "error in query");
                     }
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
@@ -142,12 +141,26 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
                classId = classMap.get(item);          //object id corresponding to selected item will be retreived
                 Log.d("student_classes ", "class id: " + classId);
 
-                Intent to_view_atten = new Intent(student_classes.this, view_attendance.class);
-                to_view_atten.putExtra("studentId", studentId);
-                to_view_atten.putExtra("classId", classId);
-                to_view_atten.putExtra("role", role);
+                if (_for.equals("attendance")) {
+                    Intent to_view_atten = new Intent(student_classes.this, view_attendance.class);
+                    to_view_atten.putExtra("studentId", studentId);
+                    to_view_atten.putExtra("classId", classId);
+                    to_view_atten.putExtra("institution_code",institution_code);
+                    to_view_atten.putExtra("institution_name",institution_name);
+                    to_view_atten.putExtra("role", role);
 
-                startActivity(to_view_atten);
+                    startActivity(to_view_atten);
+                }
+                else if (_for.equals("upload")) {
+                    Intent to_upload = new Intent(student_classes.this, UploadMaterial_students.class);
+                    to_upload.putExtra("studentId", studentId);
+                    to_upload.putExtra("classId", classId);
+                    to_upload.putExtra("institution_code",institution_code);
+                    to_upload.putExtra("institution_name",institution_name);
+                    to_upload.putExtra("role", role);
+
+                    startActivity(to_upload);
+                }
 
 
             }

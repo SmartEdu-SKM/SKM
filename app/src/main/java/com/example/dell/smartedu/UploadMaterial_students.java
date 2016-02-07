@@ -75,6 +75,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
     int Monthcal;
     int Daycal;
 
+    int flag=0;
+
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
@@ -92,7 +94,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Uploads");
         Intent from_main = getIntent();
-        classGradeId=from_main.getStringExtra("id");
+        //classGradeId=from_main.getStringExtra("id");
+        classId= from_main.getStringExtra("classId");
         institution_code=from_main.getStringExtra("institution_code");
         institution_name=from_main.getStringExtra("institution_name");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -108,7 +111,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
+        //classQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
+        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> classListRet, ParseException e) {
                 if (e == null) {
@@ -117,29 +121,19 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                     //   classRef[0] = classListRet.get(0);
 
 
-                        final Dialog class_selection_dialog=new Dialog(UploadMaterial_students.this);
+                       /* final Dialog class_selection_dialog=new Dialog(UploadMaterial_students.this);
                         class_selection_dialog.setContentView(R.layout.singelistdisplay);
                         setDialogSize(class_selection_dialog);
-                        classList=(ListView)class_selection_dialog.findViewById(R.id.examList);
+                        classList=(ListView)class_selection_dialog.findViewById(R.id.examList); */
                         ArrayList<String> classLt = new ArrayList<String>();
                         //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
                         //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
-                        ArrayAdapter adapter = new ArrayAdapter(UploadMaterial_students.this, android.R.layout.simple_list_item_1, classLt) {
+                        ArrayAdapter adapter = new ArrayAdapter(UploadMaterial_students.this, android.R.layout.simple_list_item_1, classLt) ;
 
-                            @Override
-                            public View getView(int position, View convertView,
-                                                ViewGroup parent) {
-                                View view = super.getView(position, convertView, parent);
 
-                                TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
-            /*YOUR CHOICE OF COLOR*/
-                                textView.setTextColor(Color.WHITE);
-
-                                return view;
-                            }
-                        };
+                    /*
                         final HashMap<String,String> classMap=new HashMap<String,String>();
                         for(int x=0;x<classListRet.size();x++)
                         {
@@ -152,7 +146,6 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                         class_selection_dialog.show();
 
 
-
                         classList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -161,20 +154,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                 class_selection_dialog.dismiss();
                                 showUploads();
                             }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        }); */
+                    showUploads();
 
 
 
@@ -196,6 +177,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
     protected void showUploads()
     {
 
+        final HashMap<String,String> uploadMap=new HashMap<String,String>();
+
         ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
         uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
 
@@ -204,7 +187,21 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                 if (e == null) {
 
                     ArrayList<String> uploadLt = new ArrayList<String>();
-                    ArrayAdapter adapter = new ArrayAdapter(UploadMaterial_students.this, android.R.layout.simple_list_item_1, uploadLt);
+                    ArrayAdapter adapter = new ArrayAdapter(UploadMaterial_students.this, android.R.layout.simple_list_item_1, uploadLt){
+                        @Override
+                        public View getView(int position, View convertView,
+                                            ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+
+                            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+
+            /*YOUR CHOICE OF COLOR*/
+                            textView.setTextColor(Color.WHITE);
+
+                            return view;
+                        }
+                    };
+
 
 
                     Log.d("user", "Retrieved " + uploadListRet.size() + " uploads");
@@ -226,6 +223,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                         }
 
                         adapter.add(name);
+                        uploadMap.put(name,u.getObjectId());
 
                     }
 
@@ -237,6 +235,10 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                         @Override
                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                             // selected item
+                            String item = ((TextView) view).getText().toString().trim();
+                            String upload_id= uploadMap.get(item);
+                            Log.d("upload ", "retrieved id: " + upload_id);
+
                             String[] product = ((TextView) view).getText().toString().split("\n");
                             final String[] details = new String[3];
                             details[2] = "";
@@ -294,9 +296,10 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                             //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
                             ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
-                            uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
-                            uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
-                            uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
+                            uploadQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadMap.get(item));
+                            //uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
+                            //uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
+                            //uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
                             uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
                                     if (e == null) {
@@ -313,6 +316,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                         List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
                                         if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                                             if (!pFileList.isEmpty()) {
+                                                flag=1;
                                                 ParseFile pFile = pFileList.get(0);
                                                 byte[] bitmapdata = new byte[0];  // here it throws error
                                                 try {
@@ -336,13 +340,18 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
                                             public void onClick(View v) {
 
-                                                Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
-                                                to_upload_image.putExtra("institution_name",institution_name);
-                                                to_upload_image.putExtra("institution_code",institution_code);
-                                                to_upload_image.putExtra("classGradeId",classGradeId);
-                                                to_upload_image.putExtra("classId", classId);
-                                                to_upload_image.putExtra("uploadId", uploadid);
-                                                startActivity(to_upload_image);
+                                                if(flag==1) {
+                                                    Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
+                                                    to_upload_image.putExtra("institution_name", institution_name);
+                                                    to_upload_image.putExtra("institution_code", institution_code);
+                                                    to_upload_image.putExtra("classGradeId", classGradeId);
+                                                    to_upload_image.putExtra("classId", classId);
+                                                    to_upload_image.putExtra("uploadId", uploadid);
+                                                    to_upload_image.putExtra("role", role);
+                                                    startActivity(to_upload_image);
+                                                }
+                                                else
+                                                    Toast.makeText(UploadMaterial_students.this, "None Uploaded", Toast.LENGTH_LONG).show();
 
                                                 dialog.dismiss();
 

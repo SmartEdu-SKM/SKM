@@ -114,6 +114,7 @@ public class student_home_activity extends BaseActivity{
                                                 atten_intent.putExtra("classGradeId", classGradeId);
                                                 atten_intent.putExtra("institution_code",institution_code);
                                                 atten_intent.putExtra("institution_name",institution_name);
+                                                atten_intent.putExtra("for", "attendance");
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
@@ -149,11 +150,13 @@ public class student_home_activity extends BaseActivity{
                                                 startActivity(exam_intent);
 
                                             } else if (position == 5) {
-                                                Intent exam_intent = new Intent(student_home_activity.this, UploadMaterial_students.class);
-                                                exam_intent.putExtra("institution_name", institution_name);
-                                                exam_intent.putExtra("institution_code", institution_code);
-                                                exam_intent.putExtra("id", classGradeId);
-                                                startActivity(exam_intent);
+                                                Intent upload_intent = new Intent(student_home_activity.this, student_classes.class);
+                                                upload_intent.putExtra("institution_name", institution_name);
+                                                upload_intent.putExtra("institution_code", institution_code);
+                                                upload_intent.putExtra("role", role);
+                                                upload_intent.putExtra("classGradeId", classGradeId);
+                                                upload_intent.putExtra("for", "upload");
+                                                startActivity(upload_intent);
                                             }else if (position == 6) {
 
 
