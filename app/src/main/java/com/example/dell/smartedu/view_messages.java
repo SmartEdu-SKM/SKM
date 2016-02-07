@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,8 +24,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Dell on 10/7/2015.
@@ -51,7 +51,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     TextView title;
     TextView change_mode;
     TextView new_message;
-    String classId;
+    String classGradeId;
     String studentId;
     Button reply;
     EditText reply_message;
@@ -70,6 +70,8 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         final Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
         _for = from_student.getStringExtra("_for");
+        classGradeId= from_student.getStringExtra("classGradeId");
+        studentId= from_student.getStringExtra("studentId");
         institution_name= from_student.getStringExtra("institution_name");
         institution_code= from_student.getStringExtra("institution_code");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
@@ -93,7 +95,6 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                     message_intent.putExtra("institution_name", institution_name);
                     message_intent.putExtra("institution_code", institution_code);
                     message_intent.putExtra("role", role);
-                    message_intent.putExtra("institution",institution_name);
                     message_intent.putExtra("for", "message");
                     startActivity(message_intent);
                 }
@@ -109,14 +110,15 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                 public void onClick(View v) {
                     classId=from_student.getStringExtra("classId");
                     studentId=from_student.getStringExtra("studentId");
-                    Log.d("test",classId);
+                   // Log.d("test",classId);
                     Log.d("test",studentId);
                     Intent message_intent = new Intent(view_messages.this, message_to_teacher.class);
                     message_intent.putExtra("role", role);
                     message_intent.putExtra("institution",institution_name);
                     message_intent.putExtra("institution_code",institution_code);
-                    message_intent.putExtra("classId", classId);
+                    message_intent.putExtra("classGradeId", classGradeId);
                     message_intent.putExtra("studentId", studentId);
+                    message_intent.putExtra("for", "message");
                     startActivity(message_intent);
                 }
             });
@@ -138,7 +140,7 @@ if(_for.equals("received")){
                 read_message_intent.putExtra("classId", classId);
                 read_message_intent.putExtra("studentId", studentId);
                 read_message_intent.putExtra("institution_code", institution_code);
-                read_message_intent.putExtra("institution", institution_name);
+                read_message_intent.putExtra("institution_name", institution_name);
             }
             read_message_intent.putExtra("_for", "sent");
             startActivity(read_message_intent);
@@ -238,13 +240,7 @@ if(_for.equals("received")){
                             dialog.setContentView(R.layout.messsage_info);
                             dialog.setTitle("Message");
 
-                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                            lp.copyFrom(dialog.getWindow().getAttributes());
-                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp.gravity = Gravity.CENTER;
-
-                            dialog.getWindow().setAttributes(lp);
+                            setDialogSize(dialog);
 
 
                             title = (TextView) dialog.findViewById(R.id.title);
@@ -412,7 +408,7 @@ if(_for.equals("received")){
                     read_message_intent.putExtra("role", role);
                     read_message_intent.putExtra("_for", "received");
                     read_message_intent.putExtra("institution_code", institution_code);
-                    read_message_intent.putExtra("institution", institution_name);
+                    read_message_intent.putExtra("institution_name", institution_name);
                     startActivity(read_message_intent);
                 }
             });

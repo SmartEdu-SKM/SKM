@@ -41,6 +41,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     ListView studentList;
     Notification_bar noti_bar;
     String classId;
+    String classGradeId;
 
     Button selected_button;
     EditText message;
@@ -60,6 +61,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         super.role=from_student.getStringExtra("role");
         institution_name=from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
+        classGradeId= from_student.getStringExtra("classGradeId");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -99,7 +101,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
 
 
-        final ParseObject[] classRef = new ParseObject[1];
+       /* final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -108,10 +110,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                    classRef[0] = studentListRet.get(0);
+                    classRef[0] = studentListRet.get(0); */
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -140,13 +142,13 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                 }
 
 
-                                customAdapter = new CustomAdapter(teacher_message.this, modelItems, classRef[0]);
+                                customAdapter = new CustomAdapter(teacher_message.this, modelItems, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                                 studentList.setAdapter(customAdapter);
                                 selected_button.setVisibility(View.VISIBLE);
                                 selected_button.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        sendToSelected(classRef[0]);
+                                        sendToSelected();
                                     }
                                 });
 
@@ -197,12 +199,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     });
 
 
-                } else {
-                    Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
 
     }
 
@@ -238,15 +234,15 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     if(role.getSelectedItem().equals("Student"))
                     {
 
-                        final ParseObject[] classRef = new ParseObject[1];
+                    /*    final ParseObject[] classRef = new ParseObject[1];
                         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                         classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                         classQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
-                                    classRef[0] = studentListRet.get(0);
+                                    classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF,  ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -286,26 +282,21 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                     });
 
 
-                                } else {
-                                    Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
-                                    Log.d("user", "Error: " + e.getMessage());
-                                }
-                            }
-                        });
+
 
 
                     }else       //if parent selected
                     {
 
-                        final ParseObject[] classRef = new ParseObject[1];
+                     /*   final ParseObject[] classRef = new ParseObject[1];
                         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                         classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
                         classQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
-                                    classRef[0] = studentListRet.get(0);
+                                    classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF,  ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -364,12 +355,12 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                     });
 
 
-                                } else {
+                             /*   } else {
                                     Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
                                     Log.d("user", "Error: " + e.getMessage());
                                 }
                             }
-                        });
+                        }); */
 
                    }
                 }
@@ -380,7 +371,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     }
 
 
-    protected void sendToSelected(final ParseObject classobject)
+    protected void sendToSelected()
     {
         int count=0;
         for(int i=0;i<customAdapter.getCount();i++)
@@ -440,7 +431,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                         studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
                         studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
-                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classobject);
+                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                 if (e == null) {
