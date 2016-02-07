@@ -64,6 +64,8 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
     ListView studentList;
     Notification_bar noti_bar;
     String classId;
+    String classGradeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,21 +78,21 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         getSupportActionBar().setTitle("Attendance");
         Intent from_student = getIntent();
         //final String id = from_student.getStringExtra("id");
-        role=from_student.getStringExtra("role");
-        classId=from_student.getStringExtra("id");
-        institution_name=from_student.getStringExtra("institution_name");
-        institution_code=from_student.getStringExtra("institution_code");
-        noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
-        dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
-
+        role = from_student.getStringExtra("role");
+        classId = from_student.getStringExtra("id");
+        classGradeId = from_student.getStringExtra("classGradeId");
+        institution_name = from_student.getStringExtra("institution_name");
+        institution_code = from_student.getStringExtra("institution_code");
+        noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher", institution_name);
+        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
 
         studentList = (ListView) findViewById(R.id.studentList);
-saveButton=(Button)findViewById(R.id.saveButton);
+        saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
 
 
@@ -112,7 +114,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                         classRef[0] = studentListRet.get(0);
 
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                         studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -141,7 +143,7 @@ saveButton=(Button)findViewById(R.id.saveButton);
                                     }
 
 
-                                    adapter = new CustomAdapter(AddAttendance_everyday.this, modelItems, classRef[0]);
+                                    adapter = new CustomAdapter(AddAttendance_everyday.this, modelItems, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentList.setAdapter(adapter);
                                     saveButton.setVisibility(View.VISIBLE);
                                     saveButton.setOnClickListener(new View.OnClickListener() {
@@ -239,129 +241,137 @@ saveButton=(Button)findViewById(R.id.saveButton);
         final long newmilliseconds = d.getTime();
 
         try {
-        int checked=0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            final Model item = adapter.getItem(i);
-            if (item.isChecked()) {
-                checked = 1;
-                break;
+            //int checked=0;
+            for (int i = 0; i < adapter.getCount(); i++) {
+                final Model item = adapter.getItem(i);
+                if (item.isChecked()) {
+                    // checked = 1;
+                    break;
+                }
+
             }
 
-        }
-
-        if (checked==0)
+       /* if (checked==0)
             Toast.makeText(getApplicationContext(), "None Selected", Toast.LENGTH_LONG).show();
 
-        else{
+        else{ */
 
-                ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
-                attQuery.whereEqualTo(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
-                attQuery.whereEqualTo(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-                attQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
-                attQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> attListRet, ParseException e) {
-                        if (e == null) {
-                            Log.d("user in attendaily", "Retrieved " + attListRet.size() + " students");
-                            if (attListRet.size() != 0) {
+            ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+            attQuery.whereEqualTo(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
+            attQuery.whereEqualTo(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+            attQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
+            attQuery.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> attListRet, ParseException e) {
+                    if (e == null) {
+                        Log.d("user in attendaily", "Retrieved " + attListRet.size() + " students");
+                        if (attListRet.size() != 0) {
 
-                                Toast.makeText(getApplicationContext(), "Attendance Already added for today", Toast.LENGTH_LONG).show();
-                            } else {
-
-                                for (int i = 0; i < adapter.getCount(); i++) {
-                                    final Model item = adapter.getItem(i);
-
-
-                                    String[] studentdetails = item.getName().split("\\. ");
-                                    final int itemvalue = Integer.parseInt(studentdetails[0]);
-
-
-                                    final ParseObject[] classRef = new ParseObject[1];
-                                    ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                                    classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-                                    classQuery.whereEqualTo(ClassTable.IF_CLASS_TEACHER, true);
-                                    classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
-                                    classQuery.findInBackground(new FindCallback<ParseObject>() {
-                                        public void done(final List<ParseObject> classListRet, ParseException e) {
-                                            if (e == null) {
-                                                //Log.d("class", "Retrieved the class");
-                                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                                                if (classListRet.size() == 0) {
-                                                    Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
-                                                } else {
-                                                    classRef[0] = classListRet.get(0);
-                                                    final ParseObject[] studentRef = new ParseObject[1];
-                                                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                                                    studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, itemvalue);
-                                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
-                                                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                        public void done(final List<ParseObject> studentListRet, ParseException e) {
-                                                            if (e == null) {
-                                                                if (studentListRet.size() != 0) {
-                                                                    // Log.d("class", "Retrieved the class");
-                                                                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-
-                                                                    studentRef[0] = studentListRet.get(0);
-
-
-                                                                    ParseObject attendance = new ParseObject(AttendanceDailyTable.TABLE_NAME);
-                                                                    attendance.put(AttendanceDailyTable.STUDENT_USER_REF, studentRef[0]);
-                                                                    attendance.put(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
-                                                                    if (item.isChecked()) {
-                                                                        attendance.put(AttendanceDailyTable.STATUS, "A");
-                                                                        giveMessageParent(studentRef[0], string_date);
-                                                                        //sleep(1000);
-                                                                        Log.d("user", item.getName() + " is Checked!!");
-                                                                    } else
-                                                                        attendance.put(AttendanceDailyTable.STATUS, "P");
-                                                                    attendance.put(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-                                                                    attendance.put(AttendanceDailyTable.FOR_CLASS, classRef[0]);
-
-                                                                    attendance.saveEventually();
-                                                                    // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
-
-
-                                                                }
-                                                            } else {
-                                                                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                                                                Log.d("user", "Error: " + e.getMessage());
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            } else {
-                                                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                                                Log.d("user", "Error: " + e.getMessage());
-                                            }
-                                        }
-                                    });
-                                }
-
-
-                                Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(getApplicationContext(), "Attendance Already added for today", Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                            Log.d("user", "Error: " + e.getMessage());
+
+                            for (int i = 0; i < adapter.getCount(); i++) {
+                                final Model item = adapter.getItem(i);
+
+
+                                String[] studentdetails = item.getName().split("\\. ");
+                                final int itemvalue = Integer.parseInt(studentdetails[0]);
+
+
+                                final ParseObject[] classRef = new ParseObject[1];
+                                ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                classQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                                classQuery.whereEqualTo(ClassTable.IF_CLASS_TEACHER, true);
+                                classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
+                                classQuery.findInBackground(new FindCallback<ParseObject>() {
+                                    public void done(final List<ParseObject> classListRet, ParseException e) {
+                                        if (e == null) {
+                                            //Log.d("class", "Retrieved the class");
+                                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+
+                                            if (classListRet.size() == 0) {
+                                                Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();
+                                            } else {
+                                                classRef[0] = classListRet.get(0);
+                                                final ParseObject[] studentRef = new ParseObject[1];
+                                                ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                                studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, itemvalue);
+                                                studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
+                                                studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                                    public void done(final List<ParseObject> studentListRet, ParseException e) {
+                                                        if (e == null) {
+                                                            if (studentListRet.size() != 0) {
+                                                                // Log.d("class", "Retrieved the class");
+                                                                //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
+
+
+                                                                studentRef[0] = studentListRet.get(0);
+
+
+                                                                ParseObject attendance = new ParseObject(AttendanceDailyTable.TABLE_NAME);
+                                                                attendance.put(AttendanceDailyTable.STUDENT_USER_REF, studentRef[0]);
+                                                                attendance.put(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
+                                                                if (item.isChecked()) {
+                                                                    attendance.put(AttendanceDailyTable.STATUS, "A");
+                                                                    giveMessageParent(studentRef[0], string_date);
+                                                                    //sleep(1000);
+                                                                    Log.d("user", item.getName() + " is Checked!!");
+                                                                } else
+                                                                    attendance.put(AttendanceDailyTable.STATUS, "P");
+                                                                attendance.put(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
+                                                                // attendance.put(AttendanceDailyTable.FOR_CLASS, classRef[0]);
+                                                                attendance.put(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
+
+                                                                attendance.saveEventually();
+                                                                // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
+
+
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                                                            Log.d("user", "Error: " + e.getMessage());
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                                            Log.d("user", "Error: " + e.getMessage());
+                                        }
+                                    }
+                                });
+                            }
+
+
+                            Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_LONG).show();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+                        Log.d("user", "Error: " + e.getMessage());
                     }
-                });
+                }
+            });
 
 
-        Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
-            task_intent.putExtra("institution_code",institution_code);
-            task_intent.putExtra("institution_name",institution_name);
-        task_intent.putExtra("role", role);
-        task_intent.putExtra("id", classId);
-        startActivity(task_intent);
-    }} catch (Exception ex)
+            Intent task_intent = new Intent(AddAttendance_everyday.this, AddAttendance_everyday.class);
+            task_intent.putExtra("institution_code", institution_code);
+            task_intent.putExtra("institution_name", institution_name);
+            task_intent.putExtra("role", role);
+            task_intent.putExtra("id", classId);
+            task_intent.putExtra("classGradeId", classGradeId);
+            startActivity(task_intent);
 
-        {
-            Toast.makeText(getApplicationContext(), "error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-            Log.d("user", "Error catch: " + ex.getMessage());
-        }
     }
+
+    catch(
+    Exception ex
+    )
+
+    {
+        Toast.makeText(getApplicationContext(), "error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+        Log.d("user", "Error catch: " + ex.getMessage());
+    }
+
+}
 
     public void giveMessageParent(final ParseObject studentRef, final String string_date) {
 
