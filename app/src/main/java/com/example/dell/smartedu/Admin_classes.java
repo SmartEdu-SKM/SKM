@@ -51,6 +51,9 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button addSubjectButton;
     ListView classSubjectList;
     TextView dialog_heading;
+    TextView confirm_message;
+    Button cancel;
+    Button proceed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +197,8 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 deleteClassButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        deleteClass(item);
+                                        deleteClassGrade(item);
+                                        class_info.dismiss();
                                     }
                                 });
 
@@ -247,7 +251,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
         String[] classSection=item.split(" ");
 
-        Log.d("class","class " + classSection[0] + " section " + classSection[1]);
+        Log.d("class", "class " + classSection[0] + " section " + classSection[1]);
         final Dialog classSection_details=new Dialog(Admin_classes.this);
         classSection_details.setContentView(R.layout.class_details);
         setDialogSize(classSection_details);
@@ -261,22 +265,22 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
 
         ParseQuery<ParseObject> subjectQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-        subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,classSection[0]);
-        subjectQuery.whereEqualTo(ClassGradeTable.SECTION,classSection[1]);
+        subjectQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE, classSection[0]);
+        subjectQuery.whereEqualTo(ClassGradeTable.SECTION, classSection[1]);
         subjectQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if(e==null){
-                    if(objects.size()!=0){
+                if (e == null) {
+                    if (objects.size() != 0) {
 
 
-                        ParseQuery<ParseObject> subjects=ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                        subjects.whereEqualTo(ClassTable.CLASS_NAME,objects.get(0));
+                        ParseQuery<ParseObject> subjects = ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                        subjects.whereEqualTo(ClassTable.CLASS_NAME, objects.get(0));
                         subjects.findInBackground(new FindCallback<ParseObject>() {
                             @Override
                             public void done(List<ParseObject> subjectobjects, ParseException e) {
-                                if(e==null){
-                                    if(subjectobjects.size()!=0){
+                                if (e == null) {
+                                    if (subjectobjects.size() != 0) {
 
 
                                         ArrayList<String> subjectLt = new ArrayList<String>();
@@ -289,20 +293,19 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                             ParseObject u = (ParseObject) subjectobjects.get(i);
                                             //  if(u.getString("class").equals(id)) {
                                             String subject_name = u.getString(ClassTable.SUBJECT);
-                                            ParseObject teacher_object=(ParseObject)u.get(ClassTable.TEACHER_USER_REF);
+                                            ParseObject teacher_object = (ParseObject) u.get(ClassTable.TEACHER_USER_REF);
 
-                                            String teacher_name= null;
+                                            String teacher_name = null;
                                             try {
                                                 teacher_name = teacher_object.fetchIfNeeded().getString("username");
-                                                String entry=subject_name+ " by " + teacher_name;
+                                                String entry = subject_name + " by " + teacher_name;
                                                 subjectadapter.add(entry);
                                             } catch (ParseException e1) {
                                                 e1.printStackTrace();
                                             }
 
 
-
-                                            if(u.getBoolean(ClassTable.IF_CLASS_TEACHER)){
+                                            if (u.getBoolean(ClassTable.IF_CLASS_TEACHER)) {
                                                 dialog_heading.setText("Class Teacher : " + teacher_name + "\n" + "Subjects:");
                                             }
                                             // }
@@ -322,24 +325,22 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                         });
 
 
-
-                                    }else
-                                    {
-                                        Log.d("subjects","error in query");
+                                    } else {
+                                        Log.d("subjects", "error in query");
                                     }
-                                }else{
-                                    Log.d("subjects","error");
+                                } else {
+                                    Log.d("subjects", "error");
                                 }
                             }
                         });
 
 
-                    }else{
-                        Log.d("claddGrade","error in query");
+                    } else {
+                        Log.d("claddGrade", "error in query");
                     }
 
-                }else {
-                    Log.d("classGrade","error");
+                } else {
+                    Log.d("classGrade", "error");
                 }
             }
         });
@@ -350,29 +351,315 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-   protected void deleteClass(String selectedClass)                 //incomplete code....class must be deleted from other tables too
+   protected void deleteClassGrade(final String selectedClass)                 //incomplete code....class must be deleted from other tables too
    {
-       ParseQuery<ParseObject> deleteClassQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-       deleteClassQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE,selectedClass);
-       deleteClassQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-       deleteClassQuery.findInBackground(new FindCallback<ParseObject>() {
+       final Dialog confirm_step=new Dialog(Admin_classes.this);
+       confirm_step.setContentView(R.layout.confirm_message);
+       confirm_message=(TextView)confirm_step.findViewById(R.id.confirm_message);
+       proceed=(Button)confirm_step.findViewById(R.id.proceedButton);
+       cancel=(Button)confirm_step.findViewById(R.id.cancelButton);
+       confirm_message.setText("All data related to class " + selectedClass + ",including sections,students,attendance,uploads etc, will be deleted permanently!!");
+       setDialogSize(confirm_step);
+
+       confirm_step.show();
+
+       proceed.setOnClickListener(new View.OnClickListener() {
            @Override
-           public void done(List<ParseObject> classobjects, ParseException e) {
-               if (e == null) {
-                   if (classobjects.size() != 0) {
-                       for (int x = 0; x < classobjects.size(); x++) {
-                           classobjects.get(x).deleteEventually();
+           public void onClick(View v) {
+
+
+               ParseQuery<ParseObject> deleteClassGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
+               deleteClassGradeQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE, selectedClass);
+               deleteClassGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+               deleteClassGradeQuery.findInBackground(new FindCallback<ParseObject>() {
+                   @Override
+                   public void done(List<ParseObject> classgradeobjects, ParseException e) {
+                       if (e == null) {
+                           if (classgradeobjects.size() != 0) {
+                               for (int x = 0; x < classgradeobjects.size(); x++) {
+
+
+                                   deleteClass(classgradeobjects.get(x));
+                                   deleteStudent(classgradeobjects.get(x));
+
+
+                                   //class object deletion
+
+                                   classgradeobjects.get(x).deleteEventually();//classgrade object deletion
+                                   Toast.makeText(Admin_classes.this,"Deletion completed",Toast.LENGTH_LONG).show();
+                               }
+                           } else {
+                               Log.d("classGrade", "error in query");
+                           }
+                       } else {
+                           Log.d("classGrade", "error");
                        }
-                   } else {
-                       Log.d("classGrade", "error in query");
                    }
-               } else {
-                   Log.d("classGrade", "error");
-               }
+               });
+
+
            }
        });
+
+
+       cancel.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               confirm_step.dismiss();
+           }
+       });
+
+
    }
 
+
+
+    protected void deleteClass(ParseObject classGradeObject){
+        ParseQuery<ParseObject> deleteClassQuery=ParseQuery.getQuery(ClassTable.TABLE_NAME);
+        deleteClassQuery.whereEqualTo(ClassTable.CLASS_NAME, classGradeObject);
+        deleteClassQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> classobjects, ParseException e) {
+                if (e == null) {
+                    if (classobjects.size() != 0) {
+                        for (int x = 0; x < classobjects.size(); x++) {
+
+                            deleteUpload(classobjects.get(x));          //uploads deletion related to class
+                            deleteAttendance(classobjects.get(x));          //attendance deletion related to class
+                            deleteExam(classobjects.get(x));            //exam deletions related to class
+
+                            classobjects.get(x).deleteEventually(); //class object deletion
+                        }
+
+
+                    } else {
+                        Log.d("class", "error in query");
+                    }
+                } else {
+                    Log.d("class", "exception error in class deletion");
+                }
+            }
+        });
+
+    }
+
+
+    protected void deleteUpload(ParseObject classObject){
+        ParseQuery<ParseObject> deleteUploads=ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
+        deleteUploads.whereEqualTo(ImageUploadsTable.CLASS_REF, classObject);
+        deleteUploads.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> uploadsobjects, ParseException e) {
+                if (e == null) {
+                    if (uploadsobjects.size() != 0) {
+                        for (int x = 0; x < uploadsobjects.size(); x++) {
+                            uploadsobjects.get(x).deleteEventually();
+                        }
+                    } else {
+                        Log.d("uploads", "error in query");
+                    }
+                } else {
+                    Log.d("uploads", "exception error in class deletion");
+                }
+            }
+        });
+    }
+
+
+    protected void deleteAttendance(ParseObject classObject){
+        ParseQuery<ParseObject> deleteAttendance=ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+        deleteAttendance.whereEqualTo(AttendanceDailyTable.FOR_CLASS,classObject);
+        deleteAttendance.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> attendanceobjects, ParseException e) {
+                if(e==null){
+                    if(attendanceobjects.size()!=0){
+                        for(int x=0;x<attendanceobjects.size();x++){
+                            attendanceobjects.get(x).deleteEventually();
+                        }
+                    }else{
+                        Log.d("attendance", "error in query");
+                    }
+                }else
+                {
+                    Log.d("attendance", "exception error in class deletion");
+                }
+            }
+        });
+    }
+
+    protected void deleteExam(ParseObject classObject){
+        ParseQuery<ParseObject> deleteExams=ParseQuery.getQuery(ExamTable.TABLE_NAME);
+        deleteExams.whereEqualTo(ExamTable.FOR_CLASS,classObject);
+        deleteExams.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> examobjects, ParseException e) {
+                if(e==null){
+                    if(examobjects.size()!=0){
+                        for(int x=0;x<examobjects.size();x++){
+                            examobjects.get(x).deleteEventually();
+                        }
+                    }else{
+                        Log.d("exam", "error in query");
+                    }
+                }else
+                {
+                    Log.d("exam", "exception error in class deletion");
+                }
+            }
+        });
+
+    }
+
+
+
+    protected void deleteStudent(ParseObject classGradeObject)
+    {
+        ParseQuery<ParseObject> deleteStudent=ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        deleteStudent.whereEqualTo(StudentTable.CLASS_REF,classGradeObject);
+        deleteStudent.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> studentobjects, ParseException e) {
+                if(e==null){
+                    if(studentobjects.size()!=0){
+
+                        ParseObject institution=ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code);
+
+                        for(int x=0;x<studentobjects.size();x++){
+                           deleteMarks(studentobjects.get(x));      //deletion marks objects related to student
+                            deleteStudentRelatedData(studentobjects.get(x),institution);        //parent object,roles deletion
+
+                            studentobjects.get(x).deleteEventually();
+                            //parent object deletion
+                            //role deletion
+                            //student deletion
+                        }
+
+                    }else{
+                        Log.d("student","error in query");
+                    }
+
+                }else{
+                    Log.d("student","exception error in student query while deletion");
+                }
+            }
+        });
+    }
+
+
+
+    protected void deleteMarks(ParseObject studentObject){
+
+        ParseQuery<ParseObject> deleteMarks=ParseQuery.getQuery(MarksTable.TABLE_NAME);
+        deleteMarks.whereEqualTo(MarksTable.STUDENT_USER_REF,studentObject);
+        deleteMarks.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> marksobjects, ParseException e) {
+                if(e==null){
+                    if(marksobjects.size()!=0){
+                        for(int x=0;x<marksobjects.size();x++){
+                            marksobjects.get(x).deleteEventually();
+                        }
+                    }else{
+                        Log.d("marks", "error in query");
+                    }
+                }else
+                {
+                    Log.d("marks", "exception error in class deletion");
+                }
+            }
+        });
+
+    }
+
+
+    protected void deleteStudentRelatedData(ParseObject studentObject,ParseObject institution){
+        ParseUser studentUser=studentObject.getParseUser(StudentTable.STUDENT_USER_REF);
+        deleteParentData(studentUser, institution);          //deleting parent relationand role
+        deleteStudentData(studentUser, institution);         //deleting student role
+    }
+
+
+
+    protected void deleteParentData(final ParseUser studentUser, final ParseObject institution)
+    {
+        ParseQuery<ParseObject> deleteParentRelation=ParseQuery.getQuery(ParentTable.TABLE_NAME);
+        deleteParentRelation.whereEqualTo(ParentTable.CHILD_USER_REF,studentUser);
+        deleteParentRelation.whereEqualTo(ParentTable.INSTITUTION, institution);
+        deleteParentRelation.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parentrelationobjects, ParseException e) {
+                if (e == null) {
+                    if (parentrelationobjects.size() != 0) {
+                        for (int x = 0; x < parentrelationobjects.size(); x++) {
+                            ParseUser u = parentrelationobjects.get(x).getParseUser(ParentTable.PARENT_USER_REF);
+
+                            deleteParentRole(u,institution);                    //parent role deletion
+                            parentrelationobjects.get(x).deleteEventually();        //deleting relation
+                        }
+                    } else {
+                        Log.d("parent", "error in query");
+                    }
+                } else {
+                    Log.d("parent", "exception error in class deletion");
+                }
+            }
+        });
+    }
+
+
+
+
+    protected void deleteStudentData(ParseUser studentUser,ParseObject institution)
+    {
+        ParseQuery<ParseObject> deleteStudentRole=ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        deleteStudentRole.whereEqualTo(RoleTable.OF_USER_REF,studentUser);
+        deleteStudentRole.whereEqualTo(RoleTable.ENROLLED_WITH,institution);
+        deleteStudentRole.whereEqualTo(RoleTable.ROLE,"Student");
+        deleteStudentRole.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> roleobjects, ParseException e) {
+                if(e==null){
+                    if(roleobjects.size()!=0){
+                        for(int x=0;x<roleobjects.size();x++){
+                            roleobjects.get(x).deleteEventually();
+                        }
+                    }else{
+                        Log.d("parent", "error in query");
+                    }
+                }else
+                {
+                    Log.d("parent", "exception error in class deletion");
+                }
+            }
+        });
+    }
+
+
+
+    protected void deleteParentRole(ParseUser parentUser,ParseObject institution){
+        ParseQuery<ParseObject> deleteParentRole=ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        deleteParentRole.whereEqualTo(RoleTable.OF_USER_REF,parentUser);
+        deleteParentRole.whereEqualTo(RoleTable.ROLE,"Parent");
+        deleteParentRole.whereEqualTo(RoleTable.ENROLLED_WITH,institution);
+        deleteParentRole.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> roleobjects, ParseException e) {
+                if(e==null){
+                    if(roleobjects.size()!=0){
+                        for(int x=0;x<roleobjects.size();x++){
+                            roleobjects.get(x).deleteEventually();
+                        }
+                    }else{
+                        Log.d("role", "error in query");
+                    }
+                }else
+                {
+                    Log.d("role", "exception error in class deletion");
+                }
+            }
+        });
+    }
 
 
     protected  void addSectionCall(final String selectedClass)

@@ -60,9 +60,11 @@ public class student_info extends Fragment{
     deleteStudent.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            deleteParentData();
-            deleteStudentData();
+            ParseObject institution=ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code);
+            ParseObject studentObject=ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId);
+            ParseUser studentUser=studentObject.getParseUser(StudentTable.STUDENT_USER_REF);
+            deleteParentData(institution,studentUser);
+            deleteStudentData(institution,studentUser,studentObject);
 
 
             Intent to_student = new Intent(getActivity(), Students.class);
@@ -77,227 +79,150 @@ public class student_info extends Fragment{
         return android;
     }
 
-    protected void deleteParentData()
+    protected void deleteParentData(final ParseObject institution,ParseUser studentUser)
     {
-        final ParseObject[] studentRef = new ParseObject[1];
-        final ParseUser[] parent_user= new ParseUser[1];
-        final ParseUser[] user_student = {new ParseUser()};
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-        studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
-        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                          public void done(List<ParseObject> studentListRet, ParseException e) {
-                                              if (e == null) {
-                                                  if (studentListRet.size() != 0) {
-                                                      user_student[0] = (ParseUser) studentListRet.get(0).get(StudentTable.STUDENT_USER_REF);
-                                                      //userid = String.valueOf(studentListRet.get(0).get("userId"));
 
-                                                      ParseQuery<ParseObject> parentQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
-                                                      parentQuery.whereEqualTo(ParentTable.CHILD_USER_REF, user_student[0]);
-                                                      parentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                          public void done(List<ParseObject> parentListRet, ParseException e) {
-                                                              if (e == null) {
-                                                                  if (parentListRet.size() != 0) {
-                                                                      parent_user[0] = (ParseUser) parentListRet.get(0).get(ParentTable.PARENT_USER_REF);
-                                                                      parentListRet.get(0).deleteEventually();
-                                                                      Log.d("user", "Deleted: Parent child relation");
-                                                                  } else {
+        ParseQuery<ParseObject> parentrelationQuery = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+        parentrelationQuery.whereEqualTo(ParentTable.CHILD_USER_REF, studentUser);
+        parentrelationQuery.whereEqualTo(ParentTable.INSTITUTION, institution);
+        parentrelationQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> parentReltionListRet, ParseException e) {
+                if (e == null) {
+                    if (parentReltionListRet.size() != 0) {
+                        ParseUser parent_user = parentReltionListRet.get(0).getParseUser(ParentTable.PARENT_USER_REF);
+                        deleteParentRole(parent_user, institution);
+                        parentReltionListRet.get(0).deleteEventually();
+                        Toast.makeText(getActivity(), "error deleted parent", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
+                        Log.d("parent relation", "error in query");
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
+                    Log.d("parent relation", "Error: " + e.getMessage());
+                }
+            }
+        });
 
-                                                                  }
-                                                              } else {
-                                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                  Log.d("user", "Error: " + e.getMessage());
-                                                              }
-                                                          }
-                                                      });
-
-
-                                                      ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-                                                      userQuery.findInBackground(new FindCallback<ParseUser>() {
-                                                          @Override
-                                                          public void done(List<ParseUser> objects, ParseException e) {
-                                                              if (e == null) {
-                                                                  for (int i = 0; i < objects.size(); i++) {
-                                                                      if (objects.get(i) == parent_user[0]) {
-                                                                          userid = objects.get(i).getObjectId().trim();
-                                                                          Log.d("userQuery", " Parent UserId: " + userid);
-                                                                          break;
-                                                                      }
-                                                                  }
-
-                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
-                                                                  roleQuery.whereEqualTo(RoleTable.OF_USER_REF, parent_user[0]);
-                                                                  //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
-                                                                  roleQuery.whereEqualTo(RoleTable.ROLE, "Parent");
-                                                                  roleQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                      public void done(List<ParseObject> roleListRet, ParseException e) {
-                                                                          if (e == null) {
-                                                                              if (roleListRet.size() != 0) {
-                                                                                  roleListRet.get(0).deleteEventually();
-                                                                                  Log.d("role", "Parent Deleted from roles");
-                                                                              } else {
-
-                                                                                  Log.d("role", "Not Added");
-
-                                                                              }
-                                                                          } else {
-                                                                              Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                              Log.d("user", "Error: " + e.getMessage());
-                                                                          }
-                                                                      }
-                                                                  });
-
-
-                                                              } else {
-                                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                  Log.d("user", "Error: in userQuery" + e.getMessage());
-                                                              }
-
-                                                          }
-                                                      });
-
-
-                                                      //String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
-
-
-                                                  } else {
-
-                                                  }
-                                              } else {
-                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                  Log.d("user", "Error: " + e.getMessage());
-                                              }
-                                          }
-                                      }
-
-        );
-
-        Toast.makeText(getActivity(), "Parent deleted", Toast.LENGTH_LONG).show();
 
 
     }
 
-    protected void deleteStudentData()
+
+
+
+
+
+    protected void deleteParentRole(ParseUser parentUser,ParseObject institution){
+        ParseQuery<ParseObject> deleteParentRole=ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        deleteParentRole.whereEqualTo(RoleTable.OF_USER_REF,parentUser);
+        deleteParentRole.whereEqualTo(RoleTable.ROLE,"Parent");
+        deleteParentRole.whereEqualTo(RoleTable.ENROLLED_WITH, institution);
+        deleteParentRole.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> roleobjects, ParseException e) {
+                if (e == null) {
+                    if (roleobjects.size() != 0) {
+                        for (int x = 0; x < roleobjects.size(); x++) {
+                            roleobjects.get(x).deleteEventually();
+                        }
+                    } else {
+                        Log.d("role", "error in query");
+                        Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
+
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
+                    Log.d("role", "exception error in class deletion");
+                }
+            }
+        });
+    }
+
+
+
+
+    protected void deleteStudentData(ParseObject institution,ParseUser studentUser,ParseObject studentObject)
     {
-        final ParseObject[] studentRef = new ParseObject[1];
-        final ParseUser[] userRef= new ParseUser[1];
-        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-        studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
-        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                          public void done(List<ParseObject> studentListRet, ParseException e) {
-                                              if (e == null) {
-                                                  if (studentListRet.size() != 0) {
-                                                      studentRef[0] = studentListRet.get(0);
-                                                      userRef[0] = (ParseUser) studentListRet.get(0).get(StudentTable.OBJECT_ID);
-                                                      //userid = String.valueOf(studentListRet.get(0).get("userId"));
+        ParseQuery<ParseObject> deleteAttendanceQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
+        deleteAttendanceQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, studentObject);
+        deleteAttendanceQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> attendanceListRet, ParseException e) {
+                if (e == null) {
+                    if (attendanceListRet.size() != 0) {
+                        for(int x=0;x<attendanceListRet.size();x++) {
+                            attendanceListRet.get(x).deleteEventually();
+                        }
+                        Toast.makeText(getActivity(), "deleted student attendance", Toast.LENGTH_LONG).show();
 
-                                                      ParseQuery<ParseObject> attendanceQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
-                                                      attendanceQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
-                                                      attendanceQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                          public void done(List<ParseObject> attendanceListRet, ParseException e) {
-                                                              if (e == null) {
-                                                                  if (attendanceListRet.size() != 0) {
-                                                                      attendanceListRet.get(0).deleteEventually();
-                                                                      Log.d("user", "Deleted: " + "student attendance");
-                                                                  } else {
+                    } else {
+                        Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
 
-                                                                  }
-                                                              } else {
-                                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                  Log.d("user", "Error: " + e.getMessage());
-                                                              }
-                                                          }
-                                                      });
+                        Log.d("attendance", "error in query");
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
+
+                    Log.d("attendance", "Exceptional error");
+                }
+            }
+        });
 
 
-                                                      ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-                                                      userQuery.findInBackground(new FindCallback<ParseUser>() {
-                                                          @Override
-                                                          public void done(List<ParseUser> objects, ParseException e) {
-                                                              if (e == null) {
-                                                                  for (int i = 0; i < objects.size(); i++) {
-                                                                      if (objects.get(i) == userRef[0]) {
-                                                                          userid = objects.get(i).getObjectId().trim();
-                                                                          Log.d("userQuery", "Student UserId: " + userid);
-                                                                          break;
-                                                                      }
-                                                                  }
-
-                                                                  ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
-                                                                  roleQuery.whereEqualTo(RoleTable.OF_USER_REF, userRef[0]);
-                                                                  //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
-                                                                  roleQuery.whereEqualTo(RoleTable.ROLE, "Student");
-                                                                  roleQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                                      public void done(List<ParseObject> roleListRet, ParseException e) {
-                                                                          if (e == null) {
-                                                                              if (roleListRet.size() != 0) {
-                                                                                  roleListRet.get(0).deleteEventually();
-                                                                                  Log.d("role", "Student Deleted from roles");
-                                                                              } else {
-
-                                                                                  Log.d("role", "Not Added");
-
-                                                                              }
-                                                                          } else {
-                                                                              Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                              Log.d("user", "Error: " + e.getMessage());
-                                                                          }
-                                                                      }
-                                                                  });
 
 
-                                                              } else {
-                                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                  Log.d("user", "Error: in userQuery" + e.getMessage());
-                                                              }
 
-                                                          }
-                                                      });
+        ParseQuery<ParseObject> deleteMarksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+        deleteMarksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, studentUser);
+        deleteMarksQuery.findInBackground(new FindCallback<ParseObject>()
 
-
-                                                      //String userid= String.valueOf( ParseObject.createWithoutData("Student",studentId).get("userId"));
-
-
-                                                      ParseQuery<ParseObject> marksQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
-                                                      marksQuery.whereEqualTo(MarksTable.STUDENT_USER_REF, ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId));
-                                                      marksQuery.findInBackground(new FindCallback<ParseObject>()
-
-                                                                                  {
-                                                                                      public void done
-                                                                                              (List<ParseObject> marksListRet, ParseException e) {
-                                                                                          if (e == null) {
-                                                                                              if (marksListRet.size() != 0) {
-                                                                                                  for (int i = 0; i < marksListRet.size(); i++) {
-                                                                                                      marksListRet.get(i).deleteEventually();
-                                                                                                      Log.d("user", "Deleted: " + "student marks");
-                                                                                                  }
-                                                                                              } else {
-
-                                                                                              }
-                                                                                          } else {
-                                                                                              Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                                                              Log.d("user", "Error: " + e.getMessage());
-                                                                                          }
-                                                                                      }
-                                                                                  }
-
-                                                      );
-
-
-                                                  } else {
-
-                                                  }
-                                              } else {
-                                                  Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
-                                                  Log.d("user", "Error: " + e.getMessage());
-                                              }
-                                          }
-                                      }
+                                    {
+                                        public void done(List<ParseObject> marksListRet, ParseException e) {
+                                            if (e == null) {
+                                                if (marksListRet.size() != 0) {
+                                                    for (int i = 0; i < marksListRet.size(); i++) {
+                                                        marksListRet.get(i).deleteEventually();
+                                                    }
+                                                    Toast.makeText(getActivity(), "Marks deleted", Toast.LENGTH_LONG).show();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
+                                                    Log.d("marks", "error in query");
+                                                }
+                                            } else {
+                                                Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
+                                                Log.d("marks", "Error: " + e.getMessage());
+                                            }
+                                        }
+                                    }
 
         );
 
-        Toast.makeText(getActivity(), "student deleted",Toast.LENGTH_LONG).show();
 
-        ParseObject.createWithoutData(StudentTable.TABLE_NAME,studentId).deleteEventually();
+
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        roleQuery.whereEqualTo(RoleTable.OF_USER_REF,studentUser);
+        //roleQuery.whereEqualTo("createdBy",ParseUser.createWithoutData("User",userid));
+        roleQuery.whereEqualTo(RoleTable.ROLE, "Student");
+        roleQuery.whereEqualTo(RoleTable.ENROLLED_WITH,institution);
+        roleQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> roleListRet, ParseException e) {
+                if (e == null) {
+                    if (roleListRet.size() != 0) {
+                        roleListRet.get(0).deleteEventually();
+                        Log.d("role", "Student Deleted from roles");
+                    } else {
+                        Toast.makeText(getActivity(), "error in deleting student role", Toast.LENGTH_LONG).show();
+                        Log.d("role", "error in query");
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
+studentObject.deleteEventually();
     }
 
   /*  @Override
