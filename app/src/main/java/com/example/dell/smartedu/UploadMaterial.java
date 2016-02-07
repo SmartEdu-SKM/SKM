@@ -57,6 +57,8 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     TextView myType;
     TextView mySubject;
     TextView myTopic;
+    TextView detailHead;
+
     EditText subject;
     EditText topic;
     Date date1;
@@ -185,6 +187,9 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         dialog.setTitle("Upload Details");
 
                                         setDialogSize(dialog);
+
+                                        detailHead= (TextView) dialog.findViewById(R.id.textView20);
+                                        detailHead.setSelected(true);
 
                                         myType = (TextView) dialog.findViewById(R.id.typeDesc);
                                         mySubject = (TextView) dialog.findViewById(R.id.subject);
