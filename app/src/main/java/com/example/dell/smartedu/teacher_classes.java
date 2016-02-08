@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
     // Students students = new Students();
     //ArrayList<Task> myList;
     ListView classList;
+    RelativeLayout layout;
+
     Notification_bar noti_bar;
 
 
@@ -41,8 +44,11 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         try {
+            //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
             setContentView(R.layout.activity_teacher_classes);
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
             Intent from_home = getIntent();
             _for = from_home.getStringExtra("for");
@@ -66,6 +72,10 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
             drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, "Teacher");
             drawerFragment.setDrawerListener(this);
 
+            layout= (RelativeLayout) findViewById(R.id.loadingPanel);
+
+           // findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
         }catch(Exception create_error){
             Log.d("user", "error in create teacher_classes: " + create_error.getMessage());
             Toast.makeText(teacher_classes.this,"error " + create_error, Toast.LENGTH_LONG).show();
@@ -76,7 +86,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
         //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
         //taskList.setAdapter(adapter);
-        Log.d("institution", institution_code);
+//        Log.d("institution", institution_code);
 
 
 
@@ -112,15 +122,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
 
-
-
-
-
-
-
-
-
-
+        //new LoadingSyncList(layout,classList).execute();
 
         final HashMap<String,String> classMap=new HashMap<String,String>();
 
@@ -149,6 +151,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 String section=classGradeObject.getString(ClassGradeTable.SECTION);
                                 String item=name+" "+section;
                                 adapter.add(item);
+                                //new LoadingSyncList(layout,classList,adapter).execute();
                                 classMap.put(item,classGradeObject.getObjectId());
                             }
                         } catch (ParseException e1) {
@@ -159,6 +162,9 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
                     classList.setAdapter(adapter);
+                    new LoadingSyncList(layout,classList).execute();
+
+                    //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }

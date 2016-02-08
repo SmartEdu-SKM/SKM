@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +40,23 @@ public class SignUp extends AppCompatActivity {
     Button signUp;
     TextView alreadyUser;
 
+    RelativeLayout layoutLoading;
+    RelativeLayout layoutSignUp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
+        layoutSignUp=(RelativeLayout)findViewById(R.id.signUpScreen);
+
+        layoutLoading.setVisibility(View.VISIBLE);
+
+       //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
+
         UserNameSignup=(EditText)findViewById(R.id.userNameSignup);
         EmailSignup= (EditText)findViewById(R.id.emailSignup);
         PasswordSignup= (EditText)findViewById(R.id.passwordSignup);
@@ -80,29 +92,43 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+        if(ParseUser.getCurrentUser()==null){
+            layoutLoading.setVisibility(View.GONE);
+            Log.d("sign up ", "null");
+        }else{
+            layoutSignUp.setVisibility(View.GONE);
+            Log.d("sign up ", "not null");
+            adminCheck();
+        }
+    }
+
+    public void adminCheck(){
         if(ParseUser.getCurrentUser()!=null)
         {
+           // layoutLoading.setVisibility(View.VISIBLE);
+           // layoutSignUp.setVisibility(View.GONE);
+            new LoadingSyncClass(layoutLoading,layoutSignUp);
+            //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
             ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
-            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
+            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER, ParseUser.getCurrentUser());
             institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> institutionListRet, ParseException e) {
                     if (e == null) {
 
-                        if(institutionListRet.size()==0)
-                        {
+                        if (institutionListRet.size() == 0) {
                             Intent i = new Intent(SignUp.this, Role.class);
                             startActivity(i);
-                        }else
-                        {
-                            try{
+                        } else {
+                            try {
                                 ParseObject insti = institutionListRet.get(0);
-                                Intent i=new Intent(SignUp.this,admin_home.class);
-                                i.putExtra("institution_name",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
-                                i.putExtra("institution_code",insti.fetchIfNeeded().getObjectId());
+                                Intent i = new Intent(SignUp.this, admin_home.class);
+                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
                                 i.putExtra("role", "Admin");
                                 startActivity(i);
                             } catch (Exception admin_excep) {
-                                Toast.makeText(SignUp.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignUp.this, "ERROR FOR ADMIN", Toast.LENGTH_LONG).show();
                             }
                         }
                     } else {
@@ -113,9 +139,11 @@ public class SignUp extends AppCompatActivity {
                 }
 
             });
+
+            //layoutLoading.setVisibility(View.GONE);
+            //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
     }
-
 
     public void addUser()
     {
@@ -217,41 +245,7 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if( ParseUser.getCurrentUser()!=null)
-        {  final ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
-            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
-            institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> institutionListRet, ParseException e) {
-                    if (e == null) {
-
-                        if (institutionListRet.size() == 0) {
-                            Intent i = new Intent(SignUp.this, Role.class);
-                            startActivity(i);
-                        } else {
-                            try {
-                                ParseObject insti = institutionListRet.get(0);
-                                final Intent i = new Intent(SignUp.this, admin_home.class);
-                                i.putExtra("role", "Admin");
-                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
-                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
-
-
-                                        startActivity(i);
-
-
-                            } catch (Exception admin_excep) {
-                                Toast.makeText(SignUp.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    } else {
-                        Log.d("institution", "error");
-                    }
-
-
-                }
-
-            });
-        }
+        adminCheck();
     }
 
     protected void sleep(int x)
