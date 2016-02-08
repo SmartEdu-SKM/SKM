@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2A2A2A"
+    android:background="#ffffff"
     android:weightSum="1">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 
         android:id="@+id/confirm_message"
-        android:textSize="25sp"
-        android:textColor="#ffff"
+        android:textSize="15sp"
+        android:textColor="#010101"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
