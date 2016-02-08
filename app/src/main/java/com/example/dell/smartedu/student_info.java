@@ -89,7 +89,7 @@ public class student_info extends Fragment{
                     deleteParentData(institution, studentUser);
                     deleteStudentData(institution, studentUser, studentObject);
 
-
+                    confirm_step.dismiss();
                     Intent to_student = new Intent(getActivity(), Students.class);
                     to_student.putExtra("institution_code", institution_code);
                     to_student.putExtra("institution_name", institution_name);

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,9 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     TextView confirm_message;
     Button cancel;
     Button proceed;
+    EditText newSubject;
+    Spinner subjectTeacherSpinner;
+    Button addSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +251,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-    protected void sectionSelected(String item,String sectionObjectId)
+    protected void sectionSelected(final String item,String sectionObjectId)
     {
 
         String[] classSection=item.split(" ");
@@ -312,8 +316,30 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                         deleteSectionButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                deleteClass(classSectionObject);
-                                deleteStudent(classSectionObject);
+                                final Dialog confirm_delete = new Dialog(Admin_classes.this);
+                                confirm_delete.setContentView(R.layout.confirm_message);
+                                confirm_message = (TextView) confirm_delete.findViewById(R.id.confirm_message);
+                                cancel = (Button) confirm_delete.findViewById(R.id.cancelButton);
+                                proceed = (Button) confirm_delete.findViewById(R.id.proceedButton);
+                                confirm_message.setText("All data related to  " + item + ",including students,attendance,uploads etc, will be deleted permanently!!");
+                                confirm_delete.show();
+                                proceed.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        confirm_delete.dismiss();
+                                        deleteClass(classSectionObject);
+                                        deleteStudent(classSectionObject);
+
+                                    }
+                                });
+
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        confirm_delete.dismiss();
+                                    }
+                                });
+
                             }
                         });
 
@@ -321,6 +347,13 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                             @Override
                             public void onClick(View v) {
                                 classSection_details.dismiss();
+                            }
+                        });
+
+                        addSubjectButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addSubjectCall(classSectionObject);
                             }
                         });
 
@@ -337,6 +370,81 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
     }
 
+
+
+    protected void addSubjectCall(final ParseObject classSectionObject){
+        final Dialog newSubejectDialog=new Dialog(Admin_classes.this);
+        newSubejectDialog.setContentView(R.layout.new_subject);
+        newSubject=(EditText)newSubejectDialog.findViewById(R.id.newsubject);
+        subjectTeacherSpinner=(Spinner)newSubejectDialog.findViewById(R.id.subjectteacherselection);
+        addSubject=(Button)newSubejectDialog.findViewById(R.id.addsubjectButton);
+
+
+        final HashMap<String,String> teacherMap=new HashMap<String,String>();
+        ParseQuery teacherListQuery=ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+        teacherListQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+        teacherListQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> teacherListRet, ParseException e) {
+                if (e == null) {
+                    if (teacherListRet.size() != 0) {
+
+                        ArrayList<String> teacherLt = new ArrayList<String>();
+                        ArrayAdapter teacheradapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_spinner_item, teacherLt);
+                        teacheradapter.add("");
+                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                        for (int x = 0; x < teacherListRet.size(); x++) {
+                            ParseObject teacher = teacherListRet.get(x);
+                            String teacher_name = teacher.getString(TeacherTable.TEACHER_NAME);
+                            teacheradapter.add(teacher_name);
+                            teacherMap.put(teacher_name,teacher.getObjectId());
+                        }
+
+                        subjectTeacherSpinner.setAdapter(teacheradapter);
+                        newSubejectDialog.show();
+
+                        addSubject.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String subjectname = newSubject.getText().toString().trim();
+                                String teachername=subjectTeacherSpinner.getSelectedItem().toString();
+                                ParseUser teacheruser= null;
+                                try {
+                                    teacheruser = (ParseObject.createWithoutData(TeacherTable.TABLE_NAME, teacherMap.get(teachername))).fetchIfNeeded().getParseUser(TeacherTable.TEACHER_USER_REF);
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                if( (subjectname.equals("")) || (teachername.equals("")) ) {
+                                    Toast.makeText(getApplicationContext(), "New Subject details cannot be empty!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    ParseObject newClass=new ParseObject(ClassTable.TABLE_NAME);
+                                    newClass.put(ClassTable.SUBJECT,subjectname);
+                                    newClass.put(ClassTable.TEACHER_USER_REF, teacheruser);
+                                    newClass.put(ClassTable.IF_CLASS_TEACHER, false);
+                                    newClass.put(ClassTable.CLASS_NAME, classSectionObject);
+                                    newClass.saveEventually();
+                                    newSubejectDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "New Subject Added Successfully", Toast.LENGTH_LONG).show();
+
+
+                                }
+                            }
+                        });
+
+
+                    } else {
+                        Toast.makeText(Admin_classes.this, "no teacher is added in this institution", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("teachers", "error");
+                }
+            }
+
+        });
+
+
+    }
 
 
 
@@ -356,6 +464,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
            @Override
            public void onClick(View v) {
 
+               confirm_step.dismiss();
 
                ParseQuery<ParseObject> deleteClassGradeQuery = ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
                deleteClassGradeQuery.whereEqualTo(ClassGradeTable.CLASS_GRADE, selectedClass);
