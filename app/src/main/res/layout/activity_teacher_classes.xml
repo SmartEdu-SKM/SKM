@@ -7,6 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            />
+
+    </RelativeLayout>
 
 
         <LinearLayout
@@ -34,6 +49,8 @@
                     android:layout_gravity="center_horizontal"
                     tools:layout="@layout/fragment_notification_bar" />
             </LinearLayout>
+
+
 
             <ListView
                 android:layout_width="match_parent"
