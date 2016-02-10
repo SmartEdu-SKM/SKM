@@ -165,7 +165,7 @@ classteacherspinner=(Spinner)findViewById(R.id.classteacherselection);
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    addClass(newClass,selectedteacherObjectId,subject);
+                    addClass(newClass.getObjectId(),selectedteacherObjectId,subject);
                 } else {
                     Log.d("classGrade", "error in saving");
                 }
@@ -175,11 +175,11 @@ classteacherspinner=(Spinner)findViewById(R.id.classteacherselection);
     }
 
 
-    protected void addClass(ParseObject classGradeObject,String selectedteacherObjectId,String subject){
+    protected void addClass(final String classGradeObjectId,String selectedteacherObjectId,String subject){
         ParseObject newClass=new ParseObject(ClassTable.TABLE_NAME);
         newClass.put(ClassTable.SUBJECT, subject);
         newClass.put(ClassTable.IF_CLASS_TEACHER, true);
-        newClass.put(ClassTable.CLASS_NAME,classGradeObject);
+        newClass.put(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeObjectId));
         ParseUser  teacheruser=(ParseUser)(ParseObject.createWithoutData(TeacherTable.TABLE_NAME, selectedteacherObjectId)).get(TeacherTable.TEACHER_USER_REF);
         newClass.put(ClassTable.TEACHER_USER_REF, teacheruser);
         newClass.saveEventually();

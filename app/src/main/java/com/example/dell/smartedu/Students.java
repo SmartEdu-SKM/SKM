@@ -82,7 +82,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
         studentQuery.whereEqualTo("class",classname);
         studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
-        final ParseObject[] classGradeRef = new ParseObject[1];
+        final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
         classQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -91,10 +91,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                    classGradeRef[0] = (ParseObject) studentListRet.get(0).get(ClassTable.CLASS_NAME);
+                    classRef[0] = studentListRet.get(0);
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classGradeRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -155,7 +155,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                                         studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
                                         studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
-                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classGradeRef[0]);
+                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
