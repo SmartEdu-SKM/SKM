@@ -22,6 +22,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button deleteClassButton;
     Button addSectionButton;
     EditText getNewSection;
-    TextView singleInputField;
+
     Button done;
     Button deleteSectionButton;
     Button addSubjectButton;
@@ -58,6 +59,8 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     EditText newSubject;
     Spinner subjectTeacherSpinner;
     Button addSubject;
+    Spinner newsectionclassteacher;
+    EditText classTeacherSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -763,20 +766,62 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     protected  void addSectionCall(final String selectedClass)
     {
         final Dialog newSection=new Dialog(Admin_classes.this);
-        newSection.setContentView(R.layout.get_single_detail);
-        singleInputField=(TextView)newSection.findViewById(R.id.single_entity);
-        done=(Button)newSection.findViewById(R.id.okButton);
-        getNewSection=(EditText)newSection.findViewById(R.id.inputdata);
-        singleInputField.setText("Section Name:");
+        newSection.setContentView(R.layout.new_section);
+        newsectionclassteacher=(Spinner)newSection.findViewById(R.id.sectionclassteacherselection);
+        done=(Button)newSection.findViewById(R.id.addsectionButton);
+        getNewSection=(EditText)newSection.findViewById(R.id.newsectionname);
+        classTeacherSubject=(EditText)newSection.findViewById(R.id.classteachersubject);
+
+
+
+        final HashMap<String,String> teacherMap=new HashMap<String,String>();
+        ParseQuery teacherListQuery=ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+        teacherListQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+        teacherListQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> teacherListRet, ParseException e) {
+                if (e == null) {
+                    if (teacherListRet.size() != 0) {
+
+                        ArrayList<String> teacherLt = new ArrayList<String>();
+                        ArrayAdapter teacheradapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_spinner_item, teacherLt);
+                        teacheradapter.add("");
+                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                        for (int x = 0; x < teacherListRet.size(); x++) {
+                            ParseObject teacher = teacherListRet.get(x);
+                            String teacher_name = teacher.getString(TeacherTable.TEACHER_NAME);
+                            teacheradapter.add(teacher_name);
+                            teacherMap.put(teacher_name,teacher.getObjectId());
+                        }
+
+                        newsectionclassteacher.setAdapter(teacheradapter);
+                        newSection.show();
+
+
+                    } else {
+                        Toast.makeText(Admin_classes.this, "no teacher is added in this institution", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("teachers", "error");
+                }
+            }
+
+        });
+
+
+
+
+
         newSection.show();
 
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getNewSection.getText().toString().equals(""))
+                final String selectedTeacher=newsectionclassteacher.getSelectedItem().toString();
+                if( (getNewSection.getText().toString().equals("")) || (newsectionclassteacher.getSelectedItem().equals("")) || (classTeacherSubject.getText().equals("")) )
                 {
-                    Toast.makeText(Admin_classes.this,"Section field left empty",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Admin_classes.this,"Information incomplete",Toast.LENGTH_LONG).show();
                 }else
                 {
 
@@ -803,11 +848,30 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                     }
                                     if(flag==0)
                                     {
-                                        ParseObject newSectionObject=new ParseObject(ClassGradeTable.TABLE_NAME);
+
+                                        final ParseObject newSectionObject=new ParseObject(ClassGradeTable.TABLE_NAME);
                                         newSectionObject.put(ClassGradeTable.CLASS_GRADE,selectedClass);
                                         newSectionObject.put(ClassGradeTable.SECTION,getNewSection.getText().toString());
                                         newSectionObject.put(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-                                        newSectionObject.saveInBackground();
+                                        newSectionObject.saveEventually(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+
+
+                                                ParseObject newClass=new ParseObject(ClassTable.TABLE_NAME);
+                                                newClass.put(ClassTable.SUBJECT, classTeacherSubject.getText().toString());
+                                                newClass.put(ClassTable.IF_CLASS_TEACHER, true);
+                                                newClass.put(ClassTable.CLASS_NAME, newSectionObject);
+                                                String selectedteacherObjectId=teacherMap.get(selectedTeacher);
+                                                ParseUser  teacheruser=(ParseUser)(ParseObject.createWithoutData(TeacherTable.TABLE_NAME, selectedteacherObjectId)).get(TeacherTable.TEACHER_USER_REF);
+                                                newClass.put(ClassTable.TEACHER_USER_REF, teacheruser);
+                                                newClass.saveEventually();
+
+
+
+
+                                            }
+                                        });
                                         newSection.dismiss();
                                     }
                                 }else
