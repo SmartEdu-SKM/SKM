@@ -134,14 +134,14 @@ if(_for.equals("received")){
         public void onClick(View v) {
             Intent read_message_intent = new Intent(view_messages.this, view_messages.class);
             read_message_intent.putExtra("role", role);
-            if (role.equals("Parent") || role.equals("Student")) {
+
                 classId = from_student.getStringExtra("classId");
                 studentId = from_student.getStringExtra("studentId");
                 read_message_intent.putExtra("classId", classId);
                 read_message_intent.putExtra("studentId", studentId);
                 read_message_intent.putExtra("institution_code", institution_code);
                 read_message_intent.putExtra("institution_name", institution_name);
-            }
+
             read_message_intent.putExtra("_for", "sent");
             startActivity(read_message_intent);
         }
@@ -168,7 +168,7 @@ if(_for.equals("received")){
                             TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                            textView.setTextColor(Color.WHITE);
+                            textView.setTextColor(Color.BLACK);
 
                             return view;
                         }

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Edit"
         android:id="@+id/editButton"
-        android:background="#ff8d94"
+        android:background="#20BF9F"
         android:textColor="#ffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

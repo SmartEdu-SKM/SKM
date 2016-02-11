@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -34,6 +34,9 @@ public class login extends AppCompatActivity {
 
     Button login;
 
+    RelativeLayout layoutLogin;
+    RelativeLayout layoutLoading;
+
 
 
 
@@ -41,6 +44,12 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
+        layoutLogin=(RelativeLayout)findViewById(R.id.loginScreen);
+
+        layoutLoading.setVisibility(View.GONE);
+
         user =(EditText)findViewById(R.id.userEmailInput);
         pass= (EditText)findViewById(R.id.userPasswordInput);
 
@@ -51,7 +60,16 @@ public class login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //layoutLogin.setVisibility(View.GONE);
+
+                layoutLoading.setVisibility(View.VISIBLE);
+
+                //layoutLoading.setVisibility(View.VISIBLE);
+
+
                 onClickLogin();
+                //layoutLoading.setVisibility(View.GONE);
+
             }
         });
 
@@ -69,20 +87,29 @@ public class login extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if(ParseUser.getCurrentUser()!=null)
+      /*  if(ParseUser.getCurrentUser()!=null)
         {
             Intent nouser=new Intent(login.this,Role.class);
             startActivity(nouser);
-        }
+        } */
+
+        adminCheck();
 
 
     }
 
     public void onClickLogin() {
+
         // get The User name and Password
+
+
+
         String userName=user.getText().toString().trim();
         String password=pass.getText().toString().trim();
 
+        new LoadingSyncClass(this,layoutLoading,layoutLogin).execute(userName,password);
+
+/*
         ParseUser.logInInBackground(userName, password,
                 new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
@@ -92,8 +119,9 @@ public class login extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),
                                     "Successfully Logged in",
                                     Toast.LENGTH_LONG).show();
-                            ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
-                            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER,ParseUser.getCurrentUser());
+
+                            ParseQuery institution_admin_query = ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+                            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER, ParseUser.getCurrentUser());
                             institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> institutionListRet, ParseException e) {
                                     if (e == null) {
@@ -102,15 +130,15 @@ public class login extends AppCompatActivity {
                                             Intent i = new Intent(login.this, Role.class);
                                             startActivity(i);
                                         } else {
-                                            try{
+                                            try {
                                                 ParseObject insti = institutionListRet.get(0);
-                                                Intent i=new Intent(login.this,admin_home.class);
-                                                i.putExtra("institution_name",insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
-                                                i.putExtra("institution_code",insti.fetchIfNeeded().getObjectId());
+                                                Intent i = new Intent(login.this, admin_home.class);
+                                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
                                                 i.putExtra("role", "Admin");
                                                 startActivity(i);
                                             } catch (Exception admin_excep) {
-                                                Toast.makeText(login.this,"ERROR FOR ADMIN",Toast.LENGTH_LONG).show();
+                                                Toast.makeText(login.this, "ERROR FOR ADMIN", Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     } else {
@@ -123,17 +151,16 @@ public class login extends AppCompatActivity {
                             });
 
                         } else {
-                           /* Toast.makeText(
-                                    getApplicationContext(),
-                                    "No such user exist, please signup",
-                                    Toast.LENGTH_LONG).show();*/
+
                             Toast.makeText(
-                                    getApplicationContext(),e.getMessage()
+                                    getApplicationContext(), e.getMessage()
                                     ,
                                     Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+        //new LoadingSyncClass(layoutLoading,layoutLogin).execute();
+        //layoutLoading.setVisibility(View.GONE); */
 
 
     }
@@ -145,6 +172,51 @@ public class login extends AppCompatActivity {
     {
         Intent intent = new Intent(login.this , SignUp.class);
         startActivity(intent);
+    }
+
+
+    public void adminCheck(){
+        if(ParseUser.getCurrentUser()!=null)
+        {
+            // layoutLoading.setVisibility(View.VISIBLE);
+            // layoutSignUp.setVisibility(View.GONE);
+           // new LoadingSyncClass(this,layoutLoading,layoutLogin);
+            //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
+            ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+            institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER, ParseUser.getCurrentUser());
+            institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> institutionListRet, ParseException e) {
+                    if (e == null) {
+
+                        if (institutionListRet.size() == 0) {
+                            Intent i = new Intent(login.this, Role.class);
+                            startActivity(i);
+                        } else {
+                            try {
+                                ParseObject insti = institutionListRet.get(0);
+                                Intent i = new Intent(login.this, admin_home.class);
+                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
+                                i.putExtra("role", "Admin");
+                                startActivity(i);
+                            } catch (Exception admin_excep) {
+                                Toast.makeText(login.this, "ERROR FOR ADMIN", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Log.d("institution", "error");
+                    }
+
+
+                }
+
+            });
+
+            //layoutLoading.setVisibility(View.GONE);
+            //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+
     }
 
     @Override

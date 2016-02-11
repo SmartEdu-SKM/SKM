@@ -20,6 +20,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -114,8 +115,9 @@ public View getView(int position, View convertView, ViewGroup parent) {
                     Log.d("classRef", classRef.toString());
                     final ParseObject[] studentRef = new ParseObject[1];
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("rollNumber", itemvalue);
-                    studentQuery.whereEqualTo("class", classRef);
+                    studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, itemvalue);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef);
+                    studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, ParseUser.getCurrentUser());
                     //Log.d("class", itemvalue + "");
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -153,7 +155,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
                                                     present = totalDays - absent;
                                                     percentage = (present / totalDays) * 100;
                                                     information(v, absent, totalDays, percentage);
-                                                }else{
+                                                } else {
                                                     Toast.makeText(getContext(), "No Attendance Added", Toast.LENGTH_LONG).show();
                                                 }
 
