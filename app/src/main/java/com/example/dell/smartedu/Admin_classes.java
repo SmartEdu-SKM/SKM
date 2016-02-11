@@ -61,6 +61,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button addSubject;
     Spinner newsectionclassteacher;
     EditText classTeacherSubject;
+    Button edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,8 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 class_info.setTitle(item);
 
                                 setDialogSize(class_info);
+                                edit=(Button)class_info.findViewById(R.id.editSectionButton);
+                                edit.setVisibility(View.INVISIBLE);
                                 dialog_heading = (TextView) class_info.findViewById(R.id.description);
                                 dialog_heading.setText("Sections");
                                 classSectionList = (ListView) class_info.findViewById(R.id.subjectList);
@@ -263,6 +266,9 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         final Dialog classSection_details=new Dialog(Admin_classes.this);
         classSection_details.setContentView(R.layout.class_details);
         setDialogSize(classSection_details);
+        edit=(Button)classSection_details.findViewById(R.id.editSectionButton);
+        edit=(Button)classSection_details.findViewById(R.id.editSectionButton);
+        edit.setVisibility(View.VISIBLE);
         deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
         addSubjectButton=(Button)classSection_details.findViewById(R.id.addSubjectButton);
         dialog_heading=(TextView)classSection_details.findViewById(R.id.description);
@@ -315,6 +321,13 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                         classSubjectList.setAdapter(subjectadapter);
                         classSection_details.show();
 
+
+                        edit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                
+                            }
+                        });
 
                         deleteSectionButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -791,7 +804,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                             ParseObject teacher = teacherListRet.get(x);
                             String teacher_name = teacher.getString(TeacherTable.TEACHER_NAME);
                             teacheradapter.add(teacher_name);
-                            teacherMap.put(teacher_name,teacher.getObjectId());
+                            teacherMap.put(teacher_name, teacher.getObjectId());
                         }
 
                         newsectionclassteacher.setAdapter(teacheradapter);
@@ -858,16 +871,14 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                             public void done(ParseException e) {
 
 
-                                                ParseObject newClass=new ParseObject(ClassTable.TABLE_NAME);
+                                                ParseObject newClass = new ParseObject(ClassTable.TABLE_NAME);
                                                 newClass.put(ClassTable.SUBJECT, classTeacherSubject.getText().toString());
                                                 newClass.put(ClassTable.IF_CLASS_TEACHER, true);
                                                 newClass.put(ClassTable.CLASS_NAME, newSectionObject);
-                                                String selectedteacherObjectId=teacherMap.get(selectedTeacher);
-                                                ParseUser  teacheruser=(ParseUser)(ParseObject.createWithoutData(TeacherTable.TABLE_NAME, selectedteacherObjectId)).get(TeacherTable.TEACHER_USER_REF);
+                                                String selectedteacherObjectId = teacherMap.get(selectedTeacher);
+                                                ParseUser teacheruser = (ParseUser) (ParseObject.createWithoutData(TeacherTable.TABLE_NAME, selectedteacherObjectId)).get(TeacherTable.TEACHER_USER_REF);
                                                 newClass.put(ClassTable.TEACHER_USER_REF, teacheruser);
                                                 newClass.saveEventually();
-
-
 
 
                                             }
