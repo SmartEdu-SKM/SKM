@@ -4,11 +4,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -140,8 +142,22 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                             if (e == null) {
 
                                 ArrayList<String> uploadLt = new ArrayList<String>();
-                                ArrayAdapter adapter = new ArrayAdapter(UploadMaterial.this, android.R.layout.simple_list_item_1, uploadLt);
+                                ArrayAdapter adapter = new ArrayAdapter(UploadMaterial.this, android.R.layout.simple_list_item_1, uploadLt)
+                                {
 
+                                @Override
+                                public View getView(int position, View convertView,
+                                        ViewGroup parent) {
+                                    View view = super.getView(position, convertView, parent);
+
+                                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+
+            /*YOUR CHOICE OF COLOR*/
+                                    textView.setTextColor(Color.WHITE);
+
+                                    return view;
+                                }
+                            };
 
                                 Log.d("user", "Retrieved " + uploadListRet.size() + " uploads");
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
@@ -494,73 +510,71 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                     uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, topicDesc);
 
                     uploadQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                     public void done(List<ParseObject> uploadListRet, ParseException e) {
-                                                         if (e == null) {
+                        public void done(List<ParseObject> uploadListRet, ParseException e) {
+                            if (e == null) {
 
-                                                             if (uploadListRet.size() != 0) {
-                                                                 Toast.makeText(getApplicationContext(), "Similar details exist. Add under same entry of Type, Subject and Topic!", Toast.LENGTH_LONG).show();
-                                                             } else {
+                                if (uploadListRet.size() != 0) {
+                                    Toast.makeText(getApplicationContext(), "Similar details exist. Add under same entry of Type, Subject and Topic!", Toast.LENGTH_LONG).show();
+                                } else {
 
-                                                                 final ParseObject upload = new ParseObject(ImageUploadsTable.TABLE_NAME);
+                                    final ParseObject upload = new ParseObject(ImageUploadsTable.TABLE_NAME);
 
-                                                                 upload.put(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
-                                                                 upload.put(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData("Class", classId));
-                                                                 upload.put(ImageUploadsTable.UPLOAD_TYPE, typeSelected);
-                                                                 upload.put(ImageUploadsTable.TOPIC, topicDesc);
-                                                                 upload.put(ImageUploadsTable.SUBJECT, subjectDesc);
-                                                                 upload.put(ImageUploadsTable.DATE_UPLOADED, upload_date_milliseconds);
-
-
-                                                                 if (Daycal == 0 && Monthcal == 0 && Yearcal == 0)
-                                                                     upload.put("dueDate", 0);
-
-                                                                 else {
-                                                                     String string_duedate = String.valueOf(Daycal) + "-" + String.valueOf(Monthcal) + "-" + String.valueOf(Yearcal);
-
-                                                                     Toast.makeText(getApplicationContext(), "updated duedate = " + Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
-
-                                                                     SimpleDateFormat f2 = new SimpleDateFormat("dd-MM-yyyy");
-                                                                     Date d = null;
-                                                                     try {
-                                                                         d = f2.parse(string_duedate);
-                                                                     } catch (java.text.ParseException e1) {
-                                                                         e1.printStackTrace();
-                                                                     }
-                                                                     long due_date_milliseconds = d.getTime();
-                                                                     upload.put(ImageUploadsTable.DUE_DATE, due_date_milliseconds);
-                                                                 }
+                                    upload.put(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
+                                    upload.put(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData("Class", classId));
+                                    upload.put(ImageUploadsTable.UPLOAD_TYPE, typeSelected);
+                                    upload.put(ImageUploadsTable.TOPIC, topicDesc);
+                                    upload.put(ImageUploadsTable.SUBJECT, subjectDesc);
+                                    upload.put(ImageUploadsTable.DATE_UPLOADED, upload_date_milliseconds);
 
 
-                                                                 upload.saveInBackground(new SaveCallback() {
-                                                                     public void done(ParseException e) {
-                                                                         if (e == null) {
-                                                                             // Success!
-                                                                             uploadId = upload.getObjectId();
-                                                                             Log.d("user", "Object Id: " + uploadId);
+                                    if (Daycal == 0 && Monthcal == 0 && Yearcal == 0)
+                                        upload.put("dueDate", 0);
 
-                                                                             Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
-                                                                             to_upload_image.putExtra("classId", classId);
-                                                                             to_upload_image.putExtra("uploadId", uploadId);
-                                                                             startActivity(to_upload_image);
+                                    else {
+                                        String string_duedate = String.valueOf(Daycal) + "-" + String.valueOf(Monthcal) + "-" + String.valueOf(Yearcal);
 
-                                                                         } else {
-                                                                             // Failure!
-                                                                         }
-                                                                     }
-                                                                 });
+                                        Toast.makeText(getApplicationContext(), "updated duedate = " + Daycal + "/" + Monthcal + "/" + Yearcal, Toast.LENGTH_LONG).show();
 
-                                                             }
-                                                         }else{
-                                                             Log.d("Post Query", "Error in Query: " + e.getMessage());
-                                                         }
+                                        SimpleDateFormat f2 = new SimpleDateFormat("dd-MM-yyyy");
+                                        Date d = null;
+                                        try {
+                                            d = f2.parse(string_duedate);
+                                        } catch (java.text.ParseException e1) {
+                                            e1.printStackTrace();
+                                        }
+                                        long due_date_milliseconds = d.getTime();
+                                        upload.put(ImageUploadsTable.DUE_DATE, due_date_milliseconds);
+                                    }
 
-                                                     }
-                                                 });
+
+                                    upload.saveInBackground(new SaveCallback() {
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                // Success!
+                                                uploadId = upload.getObjectId();
+                                                Log.d("user", "Object Id: " + uploadId);
+
+                                                Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
+                                                to_upload_image.putExtra("classId", classId);
+                                                to_upload_image.putExtra("uploadId", uploadId);
+                                                startActivity(to_upload_image);
+
+                                            } else {
+                                                // Failure!
+                                            }
+                                        }
+                                    });
+
+                                }
+                            } else {
+                                Log.d("Post Query", "Error in Query: " + e.getMessage());
+                            }
+
+                        }
+                    });
+                    dialog_upload.dismiss();
                 }
 
-
-
-                        dialog_upload.dismiss();
 
                     }
                 });

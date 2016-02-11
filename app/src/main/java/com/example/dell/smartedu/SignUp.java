@@ -107,7 +107,7 @@ public class SignUp extends AppCompatActivity {
         {
            // layoutLoading.setVisibility(View.VISIBLE);
            // layoutSignUp.setVisibility(View.GONE);
-            new LoadingSyncClass(layoutLoading,layoutSignUp);
+            //new LoadingSyncClass(layoutLoading,layoutSignUp).execute();
             //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
             ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);

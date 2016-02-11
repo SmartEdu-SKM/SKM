@@ -114,6 +114,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                         classRef[0] = studentListRet.get(0);
 
                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                        studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF,ParseUser.getCurrentUser());
                         studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                         studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -145,7 +146,11 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
                                     adapter = new CustomAdapter(AddAttendance_everyday.this, modelItems, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentList.setAdapter(adapter);
-                                    saveButton.setVisibility(View.VISIBLE);
+                                    if(studentListRet.size()!=0) {
+                                        saveButton.setVisibility(View.VISIBLE);
+                                        Toast.makeText(AddAttendance_everyday.this, "No List to Display", Toast.LENGTH_LONG).show();
+                                    }
+
                                     saveButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -294,13 +299,14 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                                 classRef[0] = classListRet.get(0);
                                                 final ParseObject[] studentRef = new ParseObject[1];
                                                 ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                                                studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, ParseUser.getCurrentUser());
                                                 studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, itemvalue);
                                                 studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                                 studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                                     public void done(final List<ParseObject> studentListRet, ParseException e) {
                                                         if (e == null) {
                                                             if (studentListRet.size() != 0) {
-                                                                // Log.d("class", "Retrieved the class");
+                                                                 Log.d("class", "Retrieved the class"+studentListRet.size());
                                                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
 
@@ -319,7 +325,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                                                     attendance.put(AttendanceDailyTable.STATUS, "P");
                                                                 attendance.put(AttendanceDailyTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
                                                                 // attendance.put(AttendanceDailyTable.FOR_CLASS, classRef[0]);
-                                                                attendance.put(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
+                                                                attendance.put(AttendanceDailyTable.FOR_CLASS, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
 
                                                                 attendance.saveEventually();
                                                                 // Toast.makeText(getApplicationContext(), "Attendance Successfully Added", Toast.LENGTH_LONG).show();
