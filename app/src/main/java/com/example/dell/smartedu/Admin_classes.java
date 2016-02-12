@@ -267,7 +267,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         classSection_details.setContentView(R.layout.class_details);
         setDialogSize(classSection_details);
         edit=(Button)classSection_details.findViewById(R.id.editSectionButton);
-        edit=(Button)classSection_details.findViewById(R.id.editSectionButton);
+
         edit.setVisibility(View.VISIBLE);
         deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
         addSubjectButton=(Button)classSection_details.findViewById(R.id.addSubjectButton);
