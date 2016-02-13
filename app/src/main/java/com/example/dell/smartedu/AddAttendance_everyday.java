@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -412,6 +413,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                         }
 
                         newmessage.put(MessageTable.SENT_AT, d.getTime());
+                        newmessage.put(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                         newmessage.saveEventually();
                         //Toast.makeText(AddAttendance_everyday.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
 
