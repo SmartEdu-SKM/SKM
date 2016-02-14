@@ -137,5 +137,6 @@
     <string name="title_activity_view_attendance_classes">view_attendance_classes</string>
     <string name="title_activity_student_classes">student_classes</string>
     <string name="title_activity_new_class">NewClass</string>
+    <string name="title_activity_admin_edit_subjects">Admin_edit_subjects</string>
 
 </resources>

@@ -257,7 +257,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-    protected void sectionSelected(final String item,String sectionObjectId)
+    protected void sectionSelected(final String item, final String sectionObjectId)
     {
 
         String[] classSection=item.split(" ");
@@ -325,6 +325,13 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                         edit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                Intent edit_class=new Intent(Admin_classes.this,Admin_edit_subjects.class);
+                                edit_class.putExtra("institution_code",institution_code);
+                                edit_class.putExtra("institution_name",institution_name);
+                                edit_class.putExtra("role",role);
+                                edit_class.putExtra("classGradeId",sectionObjectId);
+                                startActivity(edit_class);
                                 
                             }
                         });
