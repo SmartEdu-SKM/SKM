@@ -107,7 +107,7 @@ public class login extends AppCompatActivity {
         String userName=user.getText().toString().trim();
         String password=pass.getText().toString().trim();
 
-        new LoadingSyncClass(this,layoutLoading,layoutLogin).execute(userName,password);
+        new LoadingSyncClass(this,layoutLoading,layoutLogin,"login").execute(userName,password);
 
 /*
         ParseUser.logInInBackground(userName, password,
