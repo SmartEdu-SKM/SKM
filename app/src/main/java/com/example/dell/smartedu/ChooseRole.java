@@ -1,23 +1,20 @@
 package com.example.dell.smartedu;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.List;
 
 public class ChooseRole extends AppCompatActivity {
 
@@ -26,12 +23,20 @@ public class ChooseRole extends AppCompatActivity {
     Button parent;
     Button teacher;
 
+    LinearLayout layoutChooseRole;
+    RelativeLayout layoutLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try{
         setContentView(R.layout.activity_choose_role);
+
+            layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
+            layoutChooseRole=(LinearLayout)findViewById(R.id.addrole);
+
+            layoutLoading.setVisibility(View.GONE);
 
         if(ParseUser.getCurrentUser()==null)
         {
@@ -117,7 +122,10 @@ public class ChooseRole extends AppCompatActivity {
 
     public void roleChosen(final String role) {
 
-        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        new LoadingSyncClass(this,layoutLoading,null,"choose_role").execute(role);
+
+
+       /* ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
         roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
@@ -160,7 +168,7 @@ public class ChooseRole extends AppCompatActivity {
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }
-        });
+        });  */
 
     }
 
