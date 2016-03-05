@@ -220,7 +220,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId));
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId).get(ClassTable.CLASS_NAME));
                     studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
                     studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {

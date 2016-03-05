@@ -232,10 +232,6 @@
             android:name=".NewClass"
             android:label="@string/title_activity_new_class" >
         </activity>
-        <activity
-            android:name=".Admin_edit_subjects"
-            android:label="@string/title_activity_admin_edit_subjects" >
-        </activity>
     </application>
 
 </manifest>

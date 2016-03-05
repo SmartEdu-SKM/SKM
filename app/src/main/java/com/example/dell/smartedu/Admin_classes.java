@@ -61,7 +61,9 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     Button addSubject;
     Spinner newsectionclassteacher;
     EditText classTeacherSubject;
-    Button edit;
+    TextView edit;
+    Button deleteSubject;
+    TextView subjectname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +142,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 class_info.setTitle(item);
 
                                 setDialogSize(class_info);
-                                edit=(Button)class_info.findViewById(R.id.editSectionButton);
+                                edit=(TextView)class_info.findViewById(R.id.edittext);
                                 edit.setVisibility(View.INVISIBLE);
                                 dialog_heading = (TextView) class_info.findViewById(R.id.description);
                                 dialog_heading.setText("Sections");
@@ -266,7 +268,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         final Dialog classSection_details=new Dialog(Admin_classes.this);
         classSection_details.setContentView(R.layout.class_details);
         setDialogSize(classSection_details);
-        edit=(Button)classSection_details.findViewById(R.id.editSectionButton);
+        edit=(TextView)classSection_details.findViewById(R.id.edittext);
 
         edit.setVisibility(View.VISIBLE);
         deleteSectionButton=(Button)classSection_details.findViewById(R.id.delClassButton);
@@ -278,6 +280,8 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         done=(Button)classSection_details.findViewById(R.id.doneButton);
         classSubjectList=(ListView)classSection_details.findViewById(R.id.subjectList);
 
+
+        final HashMap<String,String> subjectMap=new HashMap<String,String>();
         final ParseObject classSectionObject=ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,sectionObjectId);
         ParseQuery<ParseObject> subjects = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         subjects.whereEqualTo(ClassTable.CLASS_NAME, classSectionObject);
@@ -292,18 +296,21 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                         ArrayAdapter subjectadapter = new ArrayAdapter(classSection_details.getContext(), android.R.layout.simple_list_item_1, subjectLt);
                         //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
-                        Log.d("user", "Retrieved " + subjectobjects.size() + " sections");
+                        Log.d("user", "Retrieved " + subjectobjects.size() + " subjects");
                         //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                         for (int i = 0; i < subjectobjects.size(); i++) {
                             ParseObject u = (ParseObject) subjectobjects.get(i);
                             //  if(u.getString("class").equals(id)) {
                             String subject_name = u.getString(ClassTable.SUBJECT);
                             ParseObject teacher_object = (ParseObject) u.get(ClassTable.TEACHER_USER_REF);
+                            String idclass=u.getObjectId();
 
                             String teacher_name = null;
                             try {
                                 teacher_name = teacher_object.fetchIfNeeded().getString("username");
                                 String entry = subject_name + " by " + teacher_name;
+
+                                subjectMap.put(entry,idclass);
                                 subjectadapter.add(entry);
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
@@ -322,19 +329,162 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                         classSection_details.show();
 
 
-                        edit.setOnClickListener(new View.OnClickListener() {
+                        classSubjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
-                            public void onClick(View v) {
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                final String item = ((TextView) view).getText().toString();
+                                final Dialog edit_subject_dialog=new Dialog(Admin_classes.this);
+                                edit_subject_dialog.setContentView(R.layout.subject_edit);
+                                setDialogSize(edit_subject_dialog);
+                                cancel=(Button)edit_subject_dialog.findViewById(R.id.cancelButton);
+                                done=(Button)edit_subject_dialog.findViewById(R.id.doneButton);
+                                deleteSubject=(Button)edit_subject_dialog.findViewById(R.id.delSubjectButton);
+                                subjectTeacherSpinner=(Spinner)edit_subject_dialog.findViewById(R.id.subjectTeacher);
+                                subjectname=(TextView)edit_subject_dialog.findViewById(R.id.subjectname);
+                                final String subid=subjectMap.get(item);
+                                final ParseObject classobj=ParseObject.createWithoutData(ClassTable.TABLE_NAME,subid);
 
-                                Intent edit_class=new Intent(Admin_classes.this,Admin_edit_subjects.class);
-                                edit_class.putExtra("institution_code",institution_code);
-                                edit_class.putExtra("institution_name",institution_name);
-                                edit_class.putExtra("role",role);
-                                edit_class.putExtra("classGradeId",sectionObjectId);
-                                startActivity(edit_class);
-                                
+                                String sub[]=item.split(" by ");
+
+
+                                    subjectname.setText(sub[1]);
+
+                                final HashMap<String,String> teacherMap=new HashMap<String,String>();
+                                ParseQuery teacherListQuery=ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+                                teacherListQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                teacherListQuery.findInBackground(new FindCallback<ParseObject>() {
+                                    @Override
+                                    public void done(List<ParseObject> teacherListRet, ParseException e) {
+                                        if (e == null) {
+                                            if (teacherListRet.size() != 0) {
+
+                                                ArrayList<String> teacherLt = new ArrayList<String>();
+                                                ArrayAdapter teacheradapter = new ArrayAdapter(Admin_classes.this, android.R.layout.simple_spinner_item, teacherLt);
+                                                teacheradapter.add("");
+                                                //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
+                                                for (int x = 0; x < teacherListRet.size(); x++) {
+                                                    ParseObject teacher = teacherListRet.get(x);
+                                                    String teacher_name = teacher.getString(TeacherTable.TEACHER_NAME);
+                                                    teacheradapter.add(teacher_name);
+                                                    teacherMap.put(teacher_name, teacher.getObjectId());
+                                                }
+
+                                                subjectTeacherSpinner.setAdapter(teacheradapter);
+                                                edit_subject_dialog.show();
+
+
+                                                cancel.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        edit_subject_dialog.dismiss();
+                                                    }
+                                                });
+
+
+                                                deleteSubject.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        ParseQuery<ParseObject> edit=ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                                        edit.whereEqualTo(ClassTable.OBJECT_ID, subid);
+                                                        edit.findInBackground(new FindCallback<ParseObject>() {
+                                                            @Override
+                                                            public void done(List<ParseObject> objects, ParseException e) {
+                                                                if (e == null) {
+                                                                    if (objects.size() != 0) {
+
+                                                                        objects.get(0).deleteEventually();
+                                                                        Toast.makeText(Admin_classes.this, "Deletion Done", Toast.LENGTH_LONG).show();
+
+
+                                                                        edit_subject_dialog.dismiss();
+                                                                    } else {
+                                                                        Log.d("class", "error in query");
+                                                                    }
+                                                                } else {
+                                                                    Log.d("class", "error");
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                });
+
+
+                                                done.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+
+
+
+                                                        if(subjectTeacherSpinner.getSelectedItem().equals(""))
+                                                        {
+                                                            Toast.makeText(Admin_classes.this,"No teacher selected",Toast.LENGTH_LONG).show();
+                                                        }else {
+
+
+                                                            String teacherid = teacherMap.get(subjectTeacherSpinner.getSelectedItem());
+                                                            ParseObject teacher = ParseObject.createWithoutData(TeacherTable.TABLE_NAME, teacherid);
+                                                            final ParseUser teacheruser;
+                                                            try {
+                                                                teacheruser = teacher.fetchIfNeeded().getParseUser(TeacherTable.TEACHER_USER_REF);
+
+                                                           ParseQuery<ParseObject> edit=ParseQuery.getQuery(ClassTable.TABLE_NAME);
+                                                            edit.whereEqualTo(ClassTable.OBJECT_ID, subid);
+                                                            edit.findInBackground(new FindCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(List<ParseObject> objects, ParseException e) {
+                                                                    if (e == null) {
+                                                                        if (objects.size() != 0) {
+
+                                                                            objects.get(0).put(ClassTable.TEACHER_USER_REF,teacheruser);
+                                                                            objects.get(0).saveEventually();
+                                                                            Toast.makeText(Admin_classes.this, "Edit Done", Toast.LENGTH_LONG).show();
+
+
+                                                                            edit_subject_dialog.dismiss();
+                                                                        } else {
+                                                                            Log.d("class", "error in query");
+                                                                        }
+                                                                    } else {
+                                                                        Log.d("class", "error");
+                                                                    }
+                                                                }
+                                                            });
+                                                            } catch (ParseException e1) {
+                                                                e1.printStackTrace();
+                                                            }
+
+
+
+
+                                                        }
+                                                    }
+                                                });
+
+
+
+                                            } else {
+                                                Toast.makeText(Admin_classes.this, "no teacher is added in this institution", Toast.LENGTH_LONG).show();
+                                            }
+                                        } else {
+                                            Log.d("teachers", "error");
+                                        }
+                                    }
+
+                                });
+
+
+
+
+
+
+
+
+
+
+
                             }
                         });
+
 
                         deleteSectionButton.setOnClickListener(new View.OnClickListener() {
                             @Override
