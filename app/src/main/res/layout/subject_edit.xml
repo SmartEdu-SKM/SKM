@@ -14,31 +14,22 @@
         android:orientation="horizontal">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Subjects"
-            android:id="@+id/description"
-            android:textSize="25sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OK"
+            android:text="Done"
             android:id="@+id/doneButton"
             android:background="#20BF9F"
             android:textColor="#ffff"
 
-            android:layout_below="@+id/subjectList"
+            android:layout_alignTop="@+id/cancelButton"
             android:layout_centerHorizontal="true" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete Class"
-            android:id="@+id/delClassButton"
+            android:text="Delete Subject"
+            android:id="@+id/delSubjectButton"
             android:background="#20BF9F"
             android:textColor="#ffff"
             android:layout_alignParentBottom="true"
@@ -47,31 +38,47 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Subject"
-            android:id="@+id/addSubjectButton"
+            android:text="Cancel"
+            android:id="@+id/cancelButton"
             android:background="#20BF9F"
             android:textColor="#ffff"
-
             android:layout_alignParentBottom="true"
-            android:layout_alignEnd="@+id/subjectList" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/subjectList"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/description"
-            android:layout_alignParentEnd="true"
-            android:layout_above="@+id/delClassButton" />
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Click on subjects for edits"
-            android:id="@+id/edittext"
-            android:layout_above="@+id/doneButton"
-            android:layout_centerHorizontal="true" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Subject:"
+            android:id="@+id/textView6"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="79dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/subjectname"
+            android:layout_below="@+id/textView6"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Teacher:"
+            android:id="@+id/textView7"
+            android:layout_below="@+id/subjectname"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="70dp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/subjectTeacher"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
