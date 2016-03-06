@@ -1,7 +1,9 @@
 package com.example.dell.smartedu;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -18,15 +20,15 @@ import com.parse.ParseUser;
 import java.util.List;
 
 
-class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
+class LoadingSyncClass extends AsyncTask<String, Integer, String> {
 
-    private Context context;
+    private Activity context;
     RelativeLayout layoutOriginal;
     RelativeLayout layoutLoading;
     String _for;
 
 
-    protected LoadingSyncClass(Context context,RelativeLayout layoutLoading, RelativeLayout layoutOriginal, String _for) {
+    protected LoadingSyncClass(Activity context,RelativeLayout layoutLoading, RelativeLayout layoutOriginal, String _for) {
         this.layoutLoading = layoutLoading;
         this.layoutOriginal= layoutOriginal;
         this.context=context;
@@ -35,7 +37,7 @@ class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
 
 
     @Override
-    protected Boolean doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
         if (_for.equals("login"))
         {
@@ -142,8 +144,54 @@ class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
                 }
             });
         }
+        else if(_for.equals("student_create_id")){
 
-        return null;
+            final String classId = params[0];
+            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+
+            try {
+                studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class", classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
+            studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
+            studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> studentListRet, ParseException e) {
+                    if (e == null) {
+                        if(studentListRet.size()==0){
+                            Toast.makeText(context, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            for(int i=0; i<studentListRet.size(); i++) {
+                                ParseObject u = studentListRet.get(i);
+                                String name = u.getString(StudentTable.STUDENT_NAME);
+                                Integer age = u.getInt(StudentTable.STUDENT_AGE);
+                                Integer rollno = u.getInt(StudentTable.ROLL_NUMBER);
+
+                                final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
+                                Students.addStudentUser(name, age, rollno, sessionToken, u);
+                                Students.sleep(10000);
+                                Students.addParentUser(name, age, rollno, sessionToken);
+                                Log.d("shareCode", "Main: ");
+                                // u.put("addedBy", ParseUser.getCurrentUser());
+                                //u.saveEventually();
+                            }
+                        }
+
+
+                    } else {
+                        //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+                        Log.d("user", "Error: " + e.getMessage());
+                    }
+                }
+            });
+
+
+
+        }
+
+        return "All Done";
     }
 
     @Override
@@ -151,6 +199,7 @@ class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
 
         super.onPreExecute();
 
+        lockScreenOrientation();
         if(layoutOriginal!=null)
         layoutOriginal.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.VISIBLE);
@@ -161,7 +210,7 @@ class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
         //loadingMore=
@@ -171,6 +220,21 @@ class LoadingSyncClass extends AsyncTask<String, Integer, Boolean> {
         layoutOriginal.setVisibility(View.VISIBLE);
 
         Log.d("async task ", "post ");
+        unlockScreenOrientation();
 
+    }
+
+    private void lockScreenOrientation() {
+
+        int currentOrientation = context.getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    private void unlockScreenOrientation() {
+        context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 }

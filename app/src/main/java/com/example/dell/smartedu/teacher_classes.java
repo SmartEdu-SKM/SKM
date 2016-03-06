@@ -190,7 +190,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                         if (e == null) {
                             ParseObject u = (ParseObject) classObjRet.get(0);
                             String id = u.getObjectId();
-                            Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
+                           // Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
                             if (_for.equals("students")) {
                                 Intent to_student = new Intent(teacher_classes.this, Students.class);
                                 to_student.putExtra("institution_code", institution_code);
