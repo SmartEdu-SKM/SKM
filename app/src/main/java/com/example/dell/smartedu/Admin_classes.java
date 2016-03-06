@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -1071,18 +1070,6 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent i = new Intent(Admin_classes.this,MainActivity.class);
-                startActivity(i);
-                finish();
-                //do your own thing here
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
 
 
 }

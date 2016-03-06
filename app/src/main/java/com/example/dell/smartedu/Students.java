@@ -299,6 +299,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_student);
                     roleobject.put(RoleTable.ROLE, "Student");
+                    roleobject.put(RoleTable.ENROLLED_WITH, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                     roleobject.saveInBackground();
 
                     ParseObject parent=new ParseObject(ParentTable.TABLE_NAME);
@@ -358,6 +359,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_parent);
                     roleobject.put(RoleTable.ROLE, "Parent");
+                    roleobject.put(RoleTable.ENROLLED_WITH, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                     roleobject.saveInBackground();
 
 
