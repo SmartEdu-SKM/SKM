@@ -1,7 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,16 +44,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete Class"
+            android:singleLine="true"
             android:id="@+id/delClassButton"
             android:background="#20BF9F"
             android:textColor="#ffff"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/edittext" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Subject"
+            android:singleLine="true"
             android:id="@+id/addSubjectButton"
             android:background="#20BF9F"
             android:textColor="#ffff"
@@ -76,3 +85,5 @@
     </RelativeLayout>
 
 </LinearLayout>
+
+    </ScrollView>
