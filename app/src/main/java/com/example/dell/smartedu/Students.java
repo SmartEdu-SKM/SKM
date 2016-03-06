@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +44,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     Integer rollno;
     Button createIDs;
 
+    RelativeLayout layoutLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +63,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Students");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         addStudentButton = (Button)findViewById(R.id.addButton);
@@ -69,8 +71,12 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         createIDs=(Button)findViewById(R.id.shareCode);
         createIDs.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
+
+
+        layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
+        layoutLoading.setVisibility(View.GONE);
 
         //  myList = dbHandler.getAllTasks();
 
@@ -126,7 +132,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 createIDs.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        //layoutLoading.setVisibility(View.VISIBLE);
                                         shareCode();
+                                       // layoutLoading.setVisibility(View.GONE);
                                     }
                                 });
 
@@ -218,8 +226,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
     public void shareCode(){
 
+        new LoadingSyncClass(this,layoutLoading,null,"student_create_id").execute(classId);
 
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+                 /*   ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                     studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId).get(ClassTable.CLASS_NAME));
                     studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
                     studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
@@ -253,20 +262,20 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                             }
                         }
                     });
-
+                        */
 
 
 
     }
 
-    protected void sleep(int time)
+    public static void sleep(int time)
     {
         for(int x=0;x<time;x++)
         {
 
         }
     }
-    protected void addStudentUser(final String Name, int Age, final int Rollno, final String presession, final ParseObject u)
+    public static void addStudentUser(final String Name, int Age, final int Rollno, final String presession, final ParseObject u)
     {
         final ParseUser[] userRef = new ParseUser[1];
         // Set up a new Parse user
@@ -281,8 +290,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                 if (e != null) {
                     // Show the error message
-                    Toast.makeText(Students.this, e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    Log.d("In addStudentUser:", " error " + e.getMessage());
+                    //Toast.makeText(Students.this, e.getMessage(),Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_student;
                    // Toast.makeText(Students.this, "Student User made " + " " + user_student.getObjectId(), Toast.LENGTH_LONG).show();
@@ -304,11 +313,12 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                         ParseUser.become(presession);
                        // Log.d("student", "adding userId");
                        // u.put("userId", user_student);
-                        u.put(StudentTable.ADDED_BY_USER_REF,ParseUser.getCurrentUser());
+                        u.put(StudentTable.ADDED_BY_USER_REF, ParseUser.getCurrentUser());
 
                     } catch (ParseException e1) {
-                        Toast.makeText(Students.this, "cant add student",
-                                Toast.LENGTH_LONG).show();
+                        Log.d("In addStudentUser:", " Cant add User error " + e1.getMessage());
+
+                        //Toast.makeText(Students.this, "cant add student",Toast.LENGTH_LONG).show();
                     }
                     u.saveInBackground();
                     //addStudent(userRef[0],rollno);
@@ -324,7 +334,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
 
-    protected void addParentUser(final String Name, int Age, final int Rollno, final String presession)
+    public static void addParentUser(final String Name, int Age, final int Rollno, final String presession)
     {
         final ParseUser[] userRef = {new ParseUser()};
         // Set up a new Parse user
@@ -339,11 +349,11 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                 if (e != null) {
                     // Show the error message
-                    Toast.makeText(Students.this, e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                    Log.d("In addParentUser:", " error " + e.getMessage());
+                    //Toast.makeText(Students.this, e.getMessage(),Toast.LENGTH_LONG).show();
                 } else {
                     userRef[0] = user_parent;
-                   // Toast.makeText(Students.this, "Parent User made "+ " "+user_parent.getObjectId(),Toast.LENGTH_LONG).show();
+                    // Toast.makeText(Students.this, "Parent User made "+ " "+user_parent.getObjectId(),Toast.LENGTH_LONG).show();
                     Log.d("role", "added Parent role of " + user_parent.getObjectId());
                     ParseObject roleobject = new ParseObject(RoleTable.TABLE_NAME);
                     roleobject.put(RoleTable.OF_USER_REF, user_parent);
@@ -351,11 +361,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     roleobject.saveInBackground();
 
 
-
-
-                    ParseQuery<ParseUser> user=ParseUser.getQuery();
-                    user.whereEqualTo("username",Name +String.valueOf(Rollno));
-                    Log.d("user", Name+String.valueOf(Rollno));
+                    ParseQuery<ParseUser> user = ParseUser.getQuery();
+                    user.whereEqualTo("username", Name + String.valueOf(Rollno));
+                    Log.d("user", Name + String.valueOf(Rollno));
                     user.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {
@@ -391,15 +399,12 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     });
 
 
-
-
-
                     try {
 
                         ParseUser.become(presession);
                     } catch (ParseException e1) {
-                        Toast.makeText(Students.this,"cant add parent",
-                                Toast.LENGTH_LONG).show();
+                        Log.d("In addParentUser:", " cant add parent error " + e.getMessage());
+                        //  Toast.makeText(Students.this,"cant add parent", Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -470,18 +475,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent i = new Intent(Students.this,MainActivity.class);
-                startActivity(i);
-                finish();
-                //do your own thing here
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
+
 
 
 }

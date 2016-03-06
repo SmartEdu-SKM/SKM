@@ -62,8 +62,6 @@ public class login extends AppCompatActivity {
             public void onClick(View v) {
                 //layoutLogin.setVisibility(View.GONE);
 
-                layoutLoading.setVisibility(View.VISIBLE);
-
                 //layoutLoading.setVisibility(View.VISIBLE);
 
 

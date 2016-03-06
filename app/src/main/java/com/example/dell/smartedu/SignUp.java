@@ -110,35 +110,36 @@ public class SignUp extends AppCompatActivity {
             //new LoadingSyncClass(layoutLoading,layoutSignUp).execute();
             //findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
-            ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+            ParseQuery<ParseObject> institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
             institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER, ParseUser.getCurrentUser());
             institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> institutionListRet, ParseException e) {
-                    if (e == null) {
+                    public void done(List<ParseObject> institutionListRet, ParseException e) {
+                        if (e == null) {
 
-                        if (institutionListRet.size() == 0) {
-                            Intent i = new Intent(SignUp.this, Role.class);
-                            startActivity(i);
-                        } else {
-                            try {
-                                ParseObject insti = institutionListRet.get(0);
-                                Intent i = new Intent(SignUp.this, admin_home.class);
-                                i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
-                                i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
-                                i.putExtra("role", "Admin");
+                            if (institutionListRet.size() == 0) {
+                                Intent i = new Intent(SignUp.this, Role.class);
                                 startActivity(i);
-                            } catch (Exception admin_excep) {
-                                Toast.makeText(SignUp.this, "ERROR FOR ADMIN", Toast.LENGTH_LONG).show();
+                            } else {
+                                try {
+                                    ParseObject insti = institutionListRet.get(0);
+                                    Intent i = new Intent(SignUp.this, admin_home.class);
+                                    i.putExtra("institution_name", insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME));
+                                    i.putExtra("institution_code", insti.fetchIfNeeded().getObjectId());
+                                    i.putExtra("role", "Admin");
+                                    startActivity(i);
+                                } catch (Exception admin_excep) {
+                                    Toast.makeText(SignUp.this, "ERROR FOR ADMIN", Toast.LENGTH_LONG).show();
+                                }
                             }
+                        } else {
+                            Log.d("institution", "error");
                         }
-                    } else {
-                        Log.d("institution", "error");
+
+
                     }
 
+                });
 
-                }
-
-            });
 
             //layoutLoading.setVisibility(View.GONE);
             //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
