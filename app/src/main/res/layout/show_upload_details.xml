@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Type"
         android:id="@+id/typeHead"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:layout_marginTop="57dp"
         android:layout_below="@+id/date"
         android:layout_alignParentLeft="true"
@@ -50,7 +50,7 @@
         android:backgroundTint="#fff"
         android:nestedScrollingEnabled="false"
         android:layout_alignBottom="@+id/date"
-        android:layout_alignParentLeft="true"
+
         android:layout_alignParentStart="true" />
 
 
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="Subject"
         android:id="@+id/textView19"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:layout_above="@+id/subject"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -81,7 +81,7 @@
         android:text="Due Date"
         android:id="@+id/dueDate"
         android:textColor="#ffff"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_above="@+id/typeHead"
         android:layout_toRightOf="@+id/dateText2"
         android:layout_toEndOf="@+id/dateText2" />
@@ -114,7 +114,7 @@
         android:text="Date"
         android:id="@+id/uploadDate"
         android:textColor="#ffff"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_alignTop="@+id/dateText2"
         android:layout_alignLeft="@+id/dueDate"
         android:layout_alignStart="@+id/dueDate" />
@@ -131,10 +131,10 @@
         android:textColor="#ffffff" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200sp"
+        android:layout_height="200sp"
         android:id="@+id/imageUpload"
-        android:layout_marginTop="40dp"
+
         android:layout_below="@+id/subject"
         android:layout_centerHorizontal="true" />
 
@@ -171,7 +171,7 @@
         android:layout_alignTop="@+id/typeHead"
         android:layout_alignRight="@+id/doneButton"
         android:layout_alignEnd="@+id/doneButton"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:textColor="#ffffff" />
 
     <TextView

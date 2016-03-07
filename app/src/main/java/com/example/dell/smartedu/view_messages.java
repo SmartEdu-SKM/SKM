@@ -158,21 +158,7 @@ if(_for.equals("received")){
                     ArrayList<String> messageLt = new ArrayList<String>();
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
-
-                        @Override
-                        public View getView(int position, View convertView,
-                                            ViewGroup parent) {
-                            View view = super.getView(position, convertView, parent);
-
-                            TextView textView = (TextView) view.findViewById(android.R.id.text1);
-
-            /*YOUR CHOICE OF COLOR*/
-                            textView.setTextColor(Color.BLACK);
-
-                            return view;
-                        }
-                    };
+                            getApplicationContext(), android.R.layout.simple_list_item_1, messageLt);
 
 
                     Log.d("user", "Retrieved " + messageListRet.size() + " messages");

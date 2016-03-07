@@ -62,14 +62,16 @@ public class NewTeacher extends BaseActivity {
 
         addTeacherButton = (Button) findViewById(R.id.addTeacherButton);
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Teacher",institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
 
 
         addTeacherButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 name = teacherName.getText().toString().trim();
+                if(!teacherAge.getText().toString().trim().equals(""))
                 age = Integer.parseInt(teacherAge.getText().toString().trim());
+                if(!teacherSerial.getText().toString().trim().equals(""))
                 serial = Integer.parseInt(teacherSerial.getText().toString().trim());
 
 

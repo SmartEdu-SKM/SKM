@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -32,6 +33,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
     private FragmentDrawer drawerFragment;
     String _for;
     MyDBHandler dbHandler;
+    Activity context;
     // Students students = new Students();
     //ArrayList<Task> myList;
     ListView classList;
@@ -43,7 +45,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context=this;
 
         try {
             //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -162,7 +164,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
                     classList.setAdapter(adapter);
-                    new LoadingSyncList(layout,classList).execute();
+                    new LoadingSyncList(context,layout,classList).execute();
 
                     //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 } else {

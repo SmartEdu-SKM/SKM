@@ -35,6 +35,21 @@ class LoadingSyncClass extends AsyncTask<String, Integer, String> {
         this._for= _for;
     }
 
+    @Override
+    protected void onPreExecute() {
+
+        super.onPreExecute();
+
+        lockScreenOrientation();
+        layoutLoading.setVisibility(View.VISIBLE);
+        if(layoutOriginal!=null)
+            layoutOriginal.setVisibility(View.GONE);
+
+
+        Log.d("async task ", "pre ");
+
+
+    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -144,6 +159,7 @@ class LoadingSyncClass extends AsyncTask<String, Integer, String> {
                 }
             });
         }
+        /*
         else if(_for.equals("student_create_id")){
 
             final String classId = params[0];
@@ -189,25 +205,12 @@ class LoadingSyncClass extends AsyncTask<String, Integer, String> {
 
 
 
-        }
+        } */
 
         return "All Done";
     }
 
-    @Override
-    protected void onPreExecute() {
 
-        super.onPreExecute();
-
-        lockScreenOrientation();
-        if(layoutOriginal!=null)
-        layoutOriginal.setVisibility(View.GONE);
-        layoutLoading.setVisibility(View.VISIBLE);
-
-        Log.d("async task ", "pre ");
-
-
-    }
 
     @Override
     protected void onPostExecute(String result) {
@@ -215,12 +218,11 @@ class LoadingSyncClass extends AsyncTask<String, Integer, String> {
 
         //loadingMore=
 
-        layoutLoading.setVisibility(View.GONE);
-        if(layoutOriginal!=null)
-        layoutOriginal.setVisibility(View.VISIBLE);
-
         Log.d("async task ", "post ");
         unlockScreenOrientation();
+        layoutLoading.setVisibility(View.GONE);
+        if(layoutOriginal!=null)
+            layoutOriginal.setVisibility(View.VISIBLE);
 
     }
 

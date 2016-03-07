@@ -50,7 +50,7 @@
                     android:id="@+id/addClassButton"
                     android:layout_alignParentTop="true"
                     android:textColor="#ffff"
-                    android:background="#080808"
+                    android:background="#20BF9F"
                     android:layout_gravity="center_horizontal" />
 
                 <ListView
