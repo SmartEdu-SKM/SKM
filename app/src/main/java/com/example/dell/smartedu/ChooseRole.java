@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 public class ChooseRole extends AppCompatActivity {
 
@@ -26,12 +32,16 @@ public class ChooseRole extends AppCompatActivity {
     LinearLayout layoutChooseRole;
     RelativeLayout layoutLoading;
 
+    Activity context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try{
         setContentView(R.layout.activity_choose_role);
+
+            context= this;
 
             layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
             layoutChooseRole=(LinearLayout)findViewById(R.id.addrole);
@@ -122,10 +132,10 @@ public class ChooseRole extends AppCompatActivity {
 
     public void roleChosen(final String role) {
 
-        new LoadingSyncClass(this,layoutLoading,null,"choose_role").execute(role);
+        //new LoadingSyncClass(this,layoutLoading,null,"choose_role").execute(role);
 
 
-       /* ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
+        ParseQuery<ParseObject> roleQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
         roleQuery.whereEqualTo(RoleTable.OF_USER_REF, ParseUser.getCurrentUser());
         roleQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> roleListRet, ParseException e) {
@@ -162,13 +172,13 @@ public class ChooseRole extends AppCompatActivity {
                                 .show();
                     }
 
-
+                    new LoadingSyncList(context,layoutLoading,null).execute();
 
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }
-        });  */
+        });
 
     }
 
