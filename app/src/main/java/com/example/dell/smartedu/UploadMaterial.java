@@ -322,7 +322,9 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                                 Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
                                                                 to_upload_image.putExtra("classId", classId);
                                                                 to_upload_image.putExtra("uploadId", uploadid);
-                                                                //to_upload_image.putExtra("role", role);
+                                                                to_upload_image.putExtra("role", role);
+                                                                to_upload_image.putExtra("institution_code", institution_code);
+                                                                to_upload_image.putExtra("institution_name", institution_name);
                                                                 startActivity(to_upload_image);
 
 
@@ -557,6 +559,9 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                 Intent to_upload_image = new Intent(UploadMaterial.this, UploadImage.class);
                                                 to_upload_image.putExtra("classId", classId);
                                                 to_upload_image.putExtra("uploadId", uploadId);
+                                                to_upload_image.putExtra("institution_code", institution_code);
+                                                to_upload_image.putExtra("institution_name", institution_name);
+                                                to_upload_image.putExtra("role", role);
                                                 startActivity(to_upload_image);
 
                                             } else {

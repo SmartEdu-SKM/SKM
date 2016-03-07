@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -45,11 +46,14 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     Button createIDs;
 
     RelativeLayout layoutLoading;
+    Activity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students);
+
+        context= this;
 
         Intent from_student = getIntent();
         classId = from_student.getStringExtra("id");
@@ -101,6 +105,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                     studentQuery.whereEqualTo(StudentTable.CLASS_REF, classGradeRef[0]);
+                    studentQuery.whereNotEqualTo(StudentTable.ADDED_BY_USER_REF, null);
                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -132,7 +137,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 createIDs.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        //layoutLoading.setVisibility(View.VISIBLE);
+                                        layoutLoading.setVisibility(View.VISIBLE);
                                         shareCode();
                                        // layoutLoading.setVisibility(View.GONE);
                                     }
@@ -226,11 +231,15 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
     public void shareCode(){
 
-        new LoadingSyncClass(this,layoutLoading,null,"student_create_id").execute(classId);
+       // new LoadingSyncClass(this,layoutLoading,null,"student_create_id").execute(classId);
 
-                 /*   ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId).get(ClassTable.CLASS_NAME));
-                    studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
+                   ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        try {
+            studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
                     studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -255,6 +264,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                     }
                                 }
 
+                                //sleep(100000);
+                                //new LoadingSyncList(layoutLoading,null).execute();
+                                //Toast.makeText(Students.this, "Done", Toast.LENGTH_LONG).show();
+
 
                             } else {
                                 //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
@@ -262,7 +275,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                             }
                         }
                     });
-                        */
+
 
 
 
@@ -275,8 +288,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
         }
     }
-    public static void addStudentUser(final String Name, int Age, final int Rollno, final String presession, final ParseObject u)
+    public void addStudentUser(final String Name, int Age, final int Rollno, final String presession, final ParseObject u)
     {
+        layoutLoading.setVisibility(View.VISIBLE);
         final ParseUser[] userRef = new ParseUser[1];
         // Set up a new Parse user
         final ParseUser user_student = new ParseUser();
@@ -323,6 +337,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                     }
                     u.saveInBackground();
                     //addStudent(userRef[0],rollno);
+                    new LoadingSyncList(context,layoutLoading,null).execute();
 
                 }
 
@@ -335,8 +350,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
 
-    public static void addParentUser(final String Name, int Age, final int Rollno, final String presession)
+    public void addParentUser(final String Name, int Age, final int Rollno, final String presession)
     {
+        layoutLoading.setVisibility(View.VISIBLE);
         final ParseUser[] userRef = {new ParseUser()};
         // Set up a new Parse user
         final ParseUser user_parent = new ParseUser();
@@ -408,6 +424,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                         Log.d("In addParentUser:", " cant add parent error " + e.getMessage());
                         //  Toast.makeText(Students.this,"cant add parent", Toast.LENGTH_LONG).show();
                     }
+
+                    new LoadingSyncList(context,layoutLoading,null).execute();
 
                 }
 

@@ -58,6 +58,9 @@ public class UploadImage extends ListActivity {
     ImageLoaderAdapter adapter;
     File mediaStorageDir;
 
+    String institution_name;
+    String institution_code;
+
     private Uri mMediaUri;
 
     public void queryImagesFromParse(){
@@ -115,6 +118,8 @@ public class UploadImage extends ListActivity {
         classId=from_upload_material.getStringExtra("classId");
         uploadId=from_upload_material.getStringExtra("uploadId");
         role= from_upload_material.getStringExtra("role");
+        institution_code=from_upload_material.getStringExtra("institution_code");
+        institution_name=from_upload_material.getStringExtra("institution_name");
 
 
 
@@ -221,6 +226,10 @@ public class UploadImage extends ListActivity {
 
                                                        Intent to_upload_image = new Intent(UploadImage.this, UploadImage.class);
                                                         to_upload_image.putExtra("uploadId", uploadId);
+                                                        to_upload_image.putExtra("classId", classId);
+                                                        to_upload_image.putExtra("role", role);
+                                                        to_upload_image.putExtra("institution_code", institution_code);
+                                                        to_upload_image.putExtra("institution_name", institution_name);
                                                         startActivity(to_upload_image);
                                                         //finish();
                                                     }
@@ -228,7 +237,7 @@ public class UploadImage extends ListActivity {
 
                                             } else {
                                                 //there was an error
-                                                //there was an error
+
                                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         }
@@ -416,7 +425,17 @@ public class UploadImage extends ListActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i=new Intent(UploadImage.this,UploadMaterial.class);
+        i.putExtra("institution_name",institution_name);
+        i.putExtra("institution_code",institution_code);
+       // i.putExtra("id", classGradeId);
+        i.putExtra("role", role);
+        i.putExtra("id", classId);
+        startActivity(i);
+    }
 
 
 }

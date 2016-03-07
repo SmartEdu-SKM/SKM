@@ -99,7 +99,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/classteacherselection"
         android:layout_below="@+id/textview"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:dropDownSelector="#ffffff"
+        android:popupBackground="#20BF9F" />
 
     <TextView
         android:layout_width="wrap_content"

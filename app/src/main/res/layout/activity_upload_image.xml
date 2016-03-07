@@ -26,11 +26,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add and Upload!"
+            android:text="Add and Upload one by one!"
             android:textColor="#ffff"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:layout_gravity="center_horizontal"
             android:id="@+id/text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click on Add again to change image"
+            android:textColor="#ffff"
+            android:textSize="15sp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/text1" />
 
     <ListView
         android:layout_width="match_parent"

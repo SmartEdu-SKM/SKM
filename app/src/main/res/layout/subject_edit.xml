@@ -36,6 +36,7 @@
             android:text="Delete Subject"
             android:id="@+id/delSubjectButton"
             android:background="#20BF9F"
+            android:padding="0sp"
             android:textColor="#ffff"
             android:layout_alignParentBottom="true"
             android:layout_alignEnd="@+id/textView6" />

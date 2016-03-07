@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -36,6 +38,7 @@ public class login extends AppCompatActivity {
 
     RelativeLayout layoutLogin;
     RelativeLayout layoutLoading;
+    Activity context;
 
 
 
@@ -44,6 +47,8 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        context=this;
 
         layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
         layoutLogin=(RelativeLayout)findViewById(R.id.loginScreen);
@@ -62,7 +67,7 @@ public class login extends AppCompatActivity {
             public void onClick(View v) {
                 //layoutLogin.setVisibility(View.GONE);
 
-                //layoutLoading.setVisibility(View.VISIBLE);
+                layoutLoading.setVisibility(View.VISIBLE);
 
 
                 onClickLogin();
@@ -105,9 +110,10 @@ public class login extends AppCompatActivity {
         String userName=user.getText().toString().trim();
         String password=pass.getText().toString().trim();
 
-        new LoadingSyncClass(this,layoutLoading,layoutLogin,"login").execute(userName,password);
+        //new LoadingSyncClass(this,layoutLoading,layoutLogin,"login").execute(userName,password);
+        //layoutLoading.setVisibility(View.GONE);
 
-/*
+
         ParseUser.logInInBackground(userName, password,
                 new LogInCallback() {
                     public void done(ParseUser user, ParseException e) {
@@ -148,6 +154,8 @@ public class login extends AppCompatActivity {
 
                             });
 
+                            new LoadingSyncList(context,layoutLoading,null).execute();
+
                         } else {
 
                             Toast.makeText(
@@ -158,7 +166,7 @@ public class login extends AppCompatActivity {
                     }
                 });
         //new LoadingSyncClass(layoutLoading,layoutLogin).execute();
-        //layoutLoading.setVisibility(View.GONE); */
+        //layoutLoading.setVisibility(View.GONE);
 
 
     }
