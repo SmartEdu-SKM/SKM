@@ -77,6 +77,23 @@
             android:textColor="#ffff"
             android:background="#080808"
             android:layout_gravity="center_horizontal" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:text="Id's to be created, Hit Create ID's"
+            android:id="@+id/createIDsText"
+            android:textColor="#20BF9F"
+            android:layout_centerInParent="true"
+            />
+        </RelativeLayout>
 
         <ListView
             android:layout_width="match_parent"

@@ -44,6 +44,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     Integer age;
     Integer rollno;
     Button createIDs;
+    TextView createIDsText;
 
     RelativeLayout layoutLoading;
     Activity context;
@@ -74,6 +75,11 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         studentList = (ListView) findViewById(R.id.studentList);
         createIDs=(Button)findViewById(R.id.shareCode);
         createIDs.setVisibility(View.INVISIBLE);
+
+        createIDsText= (TextView) findViewById(R.id.createIDsText);
+        createIDsText.setSelected(true);
+        createIDsText.setVisibility(View.INVISIBLE);
+
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
@@ -81,6 +87,33 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
         layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
         layoutLoading.setVisibility(View.GONE);
+
+
+        // marquee text
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+        try {
+            studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class", classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+        studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
+        studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
+        studentQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> studentListRet, ParseException e) {
+                if (e == null) {
+                    if (studentListRet.size() != 0) {
+                        Log.d("marquee", "entered ");
+                        createIDsText.setVisibility(View.VISIBLE);
+                        createIDsText.setSelected(true);
+                    } else
+                        Log.d("marquee", "didnt enter ");
+
+                } else {
+                    //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+                    Log.d("user", "Error: " + e.getMessage());
+                }
+            }
+        });
 
         //  myList = dbHandler.getAllTasks();
 
@@ -120,9 +153,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                 for (int i = 0; i < studentListRet.size(); i++) {
                                     ParseObject u = (ParseObject) studentListRet.get(i);
                                     //  if(u.getString("class").equals(id)) {
-                                    int rollnumber=u.getInt(StudentTable.ROLL_NUMBER);
+                                    int rollnumber = u.getInt(StudentTable.ROLL_NUMBER);
                                     String name = u.getString(StudentTable.STUDENT_NAME);
-                                    name= String.valueOf(rollnumber) + ". " + name;
+                                    name = String.valueOf(rollnumber) + ". " + name;
                                     //name += "\n";
                                     // name += u.getInt("age");
 
@@ -133,15 +166,21 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
                                 studentList.setAdapter(adapter);
+
+
                                 createIDs.setVisibility(View.VISIBLE);
                                 createIDs.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        createIDsText.setVisibility(View.INVISIBLE);
                                         layoutLoading.setVisibility(View.VISIBLE);
                                         shareCode();
-                                       // layoutLoading.setVisibility(View.GONE);
+                                        // layoutLoading.setVisibility(View.GONE);
                                     }
                                 });
+
+
+
 
 
                                 studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,7 +194,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                                         final String[] details = new String[2];
                                         int j = 0;
-                                        for(int i=0; i<=1; i++){
+                                        for (int i = 0; i <= 1; i++) {
                                             Log.d("user", itemValues[i]);
                                         }
 
@@ -163,7 +202,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                             details[j++] = x;
                                         }
 
-                                        Log.d("user", "rno: " + details[0].trim()+"name "+details[1]);  //extracts Chit as Chi and query fails???
+                                        Log.d("user", "rno: " + details[0].trim() + "name " + details[1]);  //extracts Chit as Chi and query fails???
 
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                                         studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
@@ -172,10 +211,10 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
-                                                    if(studentListRet.size()!=0) {
+                                                    if (studentListRet.size() != 0) {
                                                         ParseObject u = (ParseObject) studentListRet.get(0);
                                                         String id = u.getObjectId();
-                                                       // Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
+                                                        // Toast.makeText(Students.this,"id of student selected is = " + id, Toast.LENGTH_LONG).show();
                                                         Intent to_student_info = new Intent(Students.this, StudentInfo.class);
                                                         to_student_info.putExtra("id", id);
                                                         to_student_info.putExtra("classId", classId);
@@ -217,9 +256,9 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Students.this, NewStudent.class);
-                i.putExtra("institution_name",institution_name);
-                i.putExtra("institution_code",institution_code);
-                i.putExtra("id",classId);
+                i.putExtra("institution_name", institution_name);
+                i.putExtra("institution_code", institution_code);
+                i.putExtra("id", classId);
                 startActivity(i);
             }
         });
@@ -246,6 +285,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                             if (e == null) {
                                 if(studentListRet.size()==0){
                                     Toast.makeText(Students.this, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
+                                    layoutLoading.setVisibility(View.GONE);
                                 }
                                 else{
                                     for(int i=0; i<studentListRet.size(); i++) {
