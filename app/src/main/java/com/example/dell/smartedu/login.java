@@ -158,6 +158,7 @@ public class login extends AppCompatActivity {
 
                         } else {
 
+                            layoutLoading.setVisibility(View.GONE);
                             Toast.makeText(
                                     getApplicationContext(), e.getMessage()
                                     ,

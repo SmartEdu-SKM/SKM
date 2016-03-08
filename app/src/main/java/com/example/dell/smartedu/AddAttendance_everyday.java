@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -149,8 +148,9 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                     studentList.setAdapter(adapter);
                                     if(studentListRet.size()!=0) {
                                         saveButton.setVisibility(View.VISIBLE);
-                                        Toast.makeText(AddAttendance_everyday.this, "No List to Display", Toast.LENGTH_LONG).show();
                                     }
+                                    else
+                                        Toast.makeText(AddAttendance_everyday.this, "No List to Display", Toast.LENGTH_LONG).show();
 
                                     saveButton.setOnClickListener(new View.OnClickListener() {
                                         @Override

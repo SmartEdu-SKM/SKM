@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,14 +48,24 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
     Button delButton;
     ListView teacherList;
 
+    TextView createIDsText;
+
     TextView Name;
     TextView Age;
+
+    RelativeLayout layoutLoading;
+    Activity context;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teachers);
+
+        context= this;
+
+        layoutLoading=(RelativeLayout)findViewById(R.id.loadingPanel);
+        layoutLoading.setVisibility(View.GONE);
 
         Intent from_student = getIntent();
 
@@ -67,19 +79,74 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Teachers");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         addTeacherButton = (Button)findViewById(R.id.addTeacher);
 
 
         createIDs=(Button)findViewById(R.id.shareCode);
+        createIDs.setVisibility(View.INVISIBLE);
+
+        createIDsText= (TextView) findViewById(R.id.createIDsText);
+        createIDsText.setSelected(true);
+        createIDsText.setVisibility(View.INVISIBLE);
+
 
         teacherList = (ListView) findViewById(R.id.teacherList);
         //createIDs.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
+
+
+        //marquee
+        final String[] instituteName = {null};
+        ParseQuery institution_admin_query=ParseQuery.getQuery(InstitutionTable.TABLE_NAME);
+        institution_admin_query.whereEqualTo(InstitutionTable.ADMIN_USER, ParseUser.getCurrentUser());
+        institution_admin_query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> institutionListRet, ParseException e) {
+                if (e == null) {
+
+                    if (institutionListRet.size() != 0) {
+
+
+                        final ParseObject institute = institutionListRet.get(0);
+                        instituteName[0] = institute.getString(InstitutionTable.INSTITUTION_NAME);
+
+                        ParseQuery<ParseObject> teacherQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
+                        teacherQuery.whereEqualTo(TeacherTable.INSTITUTION, null);
+                        teacherQuery.whereEqualTo(TeacherTable.TEACHER_USER_REF, null);
+                        teacherQuery.whereEqualTo(TeacherTable.INSTITUTION_NAME, instituteName[0]);
+                        teacherQuery.findInBackground(new FindCallback<ParseObject>() {
+                            public void done(List<ParseObject> teacheListRet, ParseException e) {
+                                if (e == null) {
+                                    if (teacheListRet.size() != 0) {
+                                        Log.d("marquee", "entered ");
+                                        createIDsText.setVisibility(View.VISIBLE);
+                                        createIDsText.setSelected(true);
+                                    } else {
+                                        Log.d("marquee", "didnt enter ");
+                                    }
+
+
+                                } else {
+                                    //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+                                    Log.d("user", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.d("institution", "error");
+                }
+
+
+            }
+
+        });
+
+
 
         //  myList = dbHandler.getAllTasks();
 
@@ -129,6 +196,8 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                     createIDs.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            createIDsText.setVisibility(View.INVISIBLE);
+                            layoutLoading.setVisibility(View.VISIBLE);
                             shareCode();
                         }
                     });
@@ -261,6 +330,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                                 if (e == null) {
                                     if(teacheListRet.size()==0){
                                         Toast.makeText(Teachers.this, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
+                                        layoutLoading.setVisibility(View.GONE);
                                     }
 
                                     else{
@@ -309,6 +379,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
     }
     protected void addTeacherUser(final String Name, int Age, final String presession, final ParseObject teacher, final ParseObject institute)
     {
+        layoutLoading.setVisibility(View.VISIBLE);
         final ParseUser[] userRef = {new ParseUser()};
         // Set up a new Parse user
         final ParseUser user_teacher = new ParseUser();
@@ -343,6 +414,8 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                         Toast.makeText(Teachers.this, "cant add teacher",
                                 Toast.LENGTH_LONG).show();
                     }
+
+                    new LoadingSyncList(context,layoutLoading,null).execute();
 
                 }
 
