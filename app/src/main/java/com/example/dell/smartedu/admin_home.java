@@ -87,6 +87,7 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("role", role);
                         startActivity(student_intent);
                     }
+                    /*
                     else if (position == 3) {
                         Intent student_intent = new Intent(admin_home.this, teacher_classes.class);
                         student_intent.putExtra("institution_code",institution_code);
@@ -94,7 +95,7 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("role", role);
                         student_intent.putExtra("for", "students");
                         startActivity(student_intent);
-                    }
+                    }*/
 
                 }
             });
