@@ -79,7 +79,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         Intent from_student = getIntent();
         //final String id = from_student.getStringExtra("id");
         role = from_student.getStringExtra("role");
-        classId = from_student.getStringExtra("id");
+        classId = from_student.getStringExtra("classId");
         classGradeId = from_student.getStringExtra("classGradeId");
         institution_name = from_student.getStringExtra("institution_name");
         institution_code = from_student.getStringExtra("institution_code");
