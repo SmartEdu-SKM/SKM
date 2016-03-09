@@ -40,6 +40,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
     ListView studentList;
     Notification_bar noti_bar;
     String classId;
+    String classGradeId;
     String examId;
     TextView examname;
     EditText marksobt;
@@ -52,6 +53,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         Intent from_student = getIntent();
         examId=from_student.getStringExtra("examid");
         classId = from_student.getStringExtra("classId");
+        classGradeId= from_student.getStringExtra("classGradeId");
         role= from_student.getStringExtra("role");
         institution_name = from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
@@ -94,7 +96,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                     classRef[0] = studentListRet.get(0);
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -143,7 +145,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                                         studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, Integer.parseInt(details[0].trim()));
                                         studentQuery.whereEqualTo(StudentTable.STUDENT_NAME, details[1].trim());
-                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                                        studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                         studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                             public void done(List<ParseObject> studentListRet, ParseException e) {
                                                 if (e == null) {
@@ -199,7 +201,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
     {
         final Dialog marks_add=new Dialog(teacher_marks_studentlist.this);
         marks_add.setContentView(R.layout.activity_add_marks);
-        marks_add.setTitle("add marks");
+        marks_add.setTitle("Add Marks");
         examname=(TextView)marks_add.findViewById(R.id.exam);
         marksobt = (EditText)marks_add.findViewById(R.id.marksDesc);
         addmarks=(Button)marks_add.findViewById(R.id.addMarks);

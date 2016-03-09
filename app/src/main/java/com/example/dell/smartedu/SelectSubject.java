@@ -230,6 +230,16 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
                                 to_uploads.putExtra("classId", id);
                                 startActivity(to_uploads);
                             }
+
+                            else if (_for.equals("exam")) {
+                                Intent to_exams = new Intent(SelectSubject.this, teacher_exams.class);
+                                to_exams.putExtra("institution_code", institution_code);
+                                to_exams.putExtra("institution_name", institution_name);
+                                to_exams.putExtra("role", role);
+                                to_exams.putExtra("classId", id);
+                                to_exams.putExtra("classGradeId", classGradeId);
+                                startActivity(to_exams);
+                            }
                         }else {
                                 Log.d("user", "Error: " + e.getMessage());
                             }

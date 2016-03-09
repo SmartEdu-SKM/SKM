@@ -156,9 +156,9 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
                                 //new LoadingSyncList(layout,classList,adapter).execute();
                                 if(!classMap.containsKey(item)){
-                                    
+
                                     adapter.add(item);
-                                    classMap.put(item,classGradeObject.getObjectId());
+                                    classMap.put(item, classGradeObject.getObjectId());
                                 }
 
 
@@ -208,11 +208,13 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);
                             } else if (_for.equals("exam")) {
-                                Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
+                                Intent to_exams = new Intent(teacher_classes.this, SelectSubject.class);
                                 to_exams.putExtra("institution_code", institution_code);
                                 to_exams.putExtra("institution_name", institution_name);
                                 to_exams.putExtra("role", role);
                                 to_exams.putExtra("id", id);
+                                to_exams.putExtra("classGradeId", classMap.get(item));
+                                to_exams.putExtra("_for", _for);
                                 startActivity(to_exams);
                             } else if (_for.equals("upload")) {
                                 Intent to_uploads = new Intent(teacher_classes.this, SelectSubject.class);
