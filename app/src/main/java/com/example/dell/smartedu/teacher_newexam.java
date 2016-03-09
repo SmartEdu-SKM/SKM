@@ -1,18 +1,11 @@
 package com.example.dell.smartedu;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -20,11 +13,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -37,6 +25,7 @@ public class teacher_newexam extends BaseActivity {
     String marks;
     Button addExamButton;
     String classId;
+    String role;
 
 
     @Override
@@ -44,6 +33,7 @@ public class teacher_newexam extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_newexam);
         classId=getIntent().getStringExtra("id");
+        role=getIntent().getStringExtra("role");
        /* mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -84,6 +74,7 @@ public class teacher_newexam extends BaseActivity {
                                 to_exams.putExtra("institution_name",institution_name);
                                 to_exams.putExtra("institution_code",institution_code);
                                 to_exams.putExtra("id", classId);
+                                to_exams.putExtra("role", role);
                                 startActivity(to_exams);
                                 finish();
 

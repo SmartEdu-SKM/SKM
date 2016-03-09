@@ -38,13 +38,16 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
     ListView examsList;
     Notification_bar noti_bar;
     String classId;
+    String classGradeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_exams);
 
         Intent from_student = getIntent();
-        classId = from_student.getStringExtra("id");
+        classId = from_student.getStringExtra("classId");
+        classGradeId = from_student.getStringExtra("classGradeId");
         role=from_student.getStringExtra("role");
         institution_name = from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
@@ -133,6 +136,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                                    to_marksstudent.putExtra("institution_name",institution_name);
                                                     to_marksstudent.putExtra("examid", examid);
                                                     to_marksstudent.putExtra("classId", classId);
+                                                    to_marksstudent.putExtra("classGradeId", classGradeId);
                                                     to_marksstudent.putExtra("role",role);
 
                                                     startActivity(to_marksstudent);
@@ -174,6 +178,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                 Intent i = new Intent(teacher_exams.this, teacher_newexam.class);
                 i.putExtra("institution_name",institution_name);
                 i.putExtra("institution_code",institution_code);
+                i.putExtra("role",role);
                 i.putExtra("id",classId);
                 startActivity(i);
             }
