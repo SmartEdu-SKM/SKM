@@ -94,7 +94,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         setContentView(R.layout.activity_upload_material);
 
         Intent from_main = getIntent();
-        classId=from_main.getStringExtra("id");
+        classId=from_main.getStringExtra("classId");
         role=from_main.getStringExtra("role");
         institution_name = from_main.getStringExtra("institution_name");
         institution_code=from_main.getStringExtra("institution_code");
