@@ -436,7 +436,7 @@ if(_for.equals("received")){
                                     TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                                    textView.setTextColor(Color.WHITE);
+                                    textView.setTextColor(Color.BLACK);
 
                                     return view;
                                 }
@@ -448,23 +448,27 @@ if(_for.equals("received")){
                             for (int i = 0; i < messageListRet.size(); i++) {
                                 ParseObject u = messageListRet.get(i);
                                 //  if(u.getString("class").equals(id)) {
-                                ParseUser receiveruser = (ParseUser) u.get(MessageTable.TO_USER_REF);
+                                ParseUser receiveruser = u.getParseUser(MessageTable.TO_USER_REF);
+                                Log.d("test",receiveruser.getObjectId());
 
                                 String to = null;
                                 try {
                                     to = receiveruser.fetchIfNeeded().getUsername();
+
+                                    //name += "\n";
+                                    // name += u.getInt("age");
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+
+                                    final String dateString = formatter.format(new Date(u.getLong(MessageTable.SENT_AT)));
+                                    Log.d("user", dateString);
+                                    String name = to + "\nat " + dateString;
+                                    Log.d("msg",name);
+                                    adapter.add(name);
+                                    // }
                                 } catch (ParseException e1) {
                                     e1.printStackTrace();
                                 }
-                                //name += "\n";
-                                // name += u.getInt("age");
-                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
 
-                                final String dateString = formatter.format(new Date(u.getLong(MessageTable.SENT_AT)));
-                                Log.d("user", dateString);
-                                String name = to + "\nat " + dateString;
-                                adapter.add(name);
-                                // }
 
                             }
 
@@ -497,7 +501,7 @@ if(_for.equals("received")){
                                     message = (TextView) dialog.findViewById(R.id.message);
                                     messageFrom = (TextView) dialog.findViewById(R.id.message_from);
                                     messagedate = (TextView) dialog.findViewById(R.id.date);
-                                    delete = (Button) dialog.findViewById(R.id.doneButton);
+                                    delete = (Button) dialog.findViewById(R.id.delButton);
                                     ok = (Button) dialog.findViewById(R.id.doneButton);
                                     reply=(Button)dialog.findViewById(R.id.replyButton);
                                     reply.setVisibility(View.INVISIBLE);

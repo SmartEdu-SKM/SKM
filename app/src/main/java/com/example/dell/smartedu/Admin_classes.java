@@ -366,7 +366,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                                 String sub[]=item.split(" by ");
 
 
-                                    subjectname.setText(sub[1]);
+                                    subjectname.setText(sub[0]);
 
                                 final HashMap<String,String> teacherMap=new HashMap<String,String>();
                                 ParseQuery teacherListQuery=ParseQuery.getQuery(TeacherTable.TABLE_NAME);
