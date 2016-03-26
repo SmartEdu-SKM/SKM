@@ -139,10 +139,9 @@
         android:text="Topic/Details"
         android:id="@+id/textView20"
         android:textSize="18sp"
+        android:textColor="#ffffff"
         android:layout_alignTop="@+id/typeHead"
-        android:layout_toRightOf="@+id/viewAll"
-        android:layout_toEndOf="@+id/viewAll"
-        android:textColor="#ffffff" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
