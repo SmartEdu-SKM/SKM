@@ -42,6 +42,8 @@
         android:id="@+id/nameText"
         android:layout_marginTop="33dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/passwordSignup" />
 
     <TextView
@@ -56,6 +58,8 @@
         android:id="@+id/emailText"
         android:layout_marginTop="31dp"
         android:layout_below="@+id/nameText"
+        android:layout_marginStart="15dp"
+        android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/nameText" />
 
     <TextView
@@ -69,7 +73,9 @@
         android:scrollHorizontally="true"
         android:id="@+id/passwordText"
         android:layout_marginTop="31dp"
+        android:layout_marginStart="15dp"
         android:layout_below="@+id/emailText"
+        android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/emailText" />
 
     <TextView
@@ -83,7 +89,9 @@
         android:scrollHorizontally="true"
         android:id="@+id/confirmPasswordText"
         android:layout_marginTop="31dp"
+        android:layout_marginStart="15dp"
         android:layout_below="@+id/passwordText"
+        android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/passwordText"
          />
 
@@ -93,6 +101,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/userNameSignup"
+        android:layout_toRightOf="@+id/nameText"
         android:layout_alignBottom="@+id/nameText"
         android:layout_toEndOf="@+id/nameText" />
 
@@ -102,6 +111,7 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/emailSignup"
+        android:layout_toRightOf="@+id/emailText"
         android:layout_alignBottom="@+id/emailText"
         android:layout_toEndOf="@+id/emailText" />
 
@@ -112,6 +122,7 @@
         android:ems="10"
         android:id="@+id/passwordSignup"
         android:layout_alignBottom="@+id/passwordText"
+
         android:layout_alignEnd="@+id/already" />
 
     <EditText
@@ -120,9 +131,9 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/confirmPasswordSignup"
-        android:layout_above="@+id/signUpButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+
+        android:layout_alignBottom="@+id/confirmPasswordText"
+        android:layout_toEndOf="@+id/confirmPasswordText" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -130,6 +141,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Already a SmartEdu User?"
         android:id="@+id/already"
+
+
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
@@ -139,12 +152,13 @@
         android:text="Sign Up"
         android:id="@+id/signUpButton"
 
-        android:layout_marginTop="78dp"
-        android:layout_below="@+id/confirmPasswordText"
-        android:layout_alignRight="@+id/passwordSignup"
-        android:layout_alignEnd="@+id/passwordSignup"
+        android:layout_marginEnd="15dp"
         android:background="#20BF9F"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:layout_below="@+id/confirmPasswordSignup"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignEnd="@+id/passwordSignup" />
 
     </RelativeLayout>
 
