@@ -363,7 +363,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
             task_intent.putExtra("institution_code", institution_code);
             task_intent.putExtra("institution_name", institution_name);
             task_intent.putExtra("role", role);
-            task_intent.putExtra("classI'd", classId);
+            task_intent.putExtra("classId", classId);
             task_intent.putExtra("classGradeId", classGradeId);
             startActivity(task_intent);
 

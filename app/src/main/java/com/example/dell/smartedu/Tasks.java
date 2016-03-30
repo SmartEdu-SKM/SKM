@@ -201,7 +201,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                 //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
                 ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
-                taskQuery.whereEqualTo(TaskTable.TABLE_NAME, details[0].trim());
+                taskQuery.whereEqualTo(TaskTable.TASK_NAME, details[0].trim());
                 taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
                 taskQuery.whereEqualTo(TaskTable.BY_USER_ROLE, role);
                 taskQuery.whereEqualTo(TaskTable.DUE_DATE, milliseconds);
