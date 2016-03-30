@@ -16,9 +16,21 @@
             android:id="@+id/viewImage"
             android:layout_gravity="center_vertical"
 
+            android:src="@drawable/splash4"
             android:layout_below="@+id/textView22"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/delButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="#20BF9F"
+        android:textColor="#ffffff" />
 
 
 </RelativeLayout>

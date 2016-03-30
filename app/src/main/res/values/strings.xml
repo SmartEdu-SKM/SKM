@@ -139,5 +139,7 @@
     <string name="title_activity_new_class">NewClass</string>
     <string name="title_activity_admin_edit_subjects">Admin_edit_subjects</string>
     <string name="title_activity_select_subject">SelectSubject</string>
+    <string name="title_activity_upload_image_multiple">UploadImageMultiple</string>
+    <string name="title_activity_custom_photo_gallery">CustomPhotoGalleryActivity</string>
 
 </resources>
