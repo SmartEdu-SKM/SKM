@@ -1,21 +1,15 @@
 package com.example.dell.smartedu;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -69,30 +62,25 @@ public class UploadImage extends ListActivity {
     String institution_code;
 
     private Uri mMediaUri;
-    Activity context;
-    RelativeLayout layout;
-    Button delImage;
-
-    //boolean permission_storage;
 
     public void queryImagesFromParse(){
         Log.d("user", "Object Id: uploadImage: " + uploadId);
         ParseQuery<ParseObject> imagesQuery = new ParseQuery<>(ImageUploadsTable.TABLE_NAME);
-        imagesQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadId.trim());
+        imagesQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID,uploadId.trim());
         imagesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> images, ParseException e) {
-                if (e == null) {
+                if(e == null){
 
-                    if (images.size() != 0) {
-                        ParseObject u = (ParseObject) images.get(0);
+                    if(images.size()!=0) {
+                    ParseObject u = (ParseObject) images.get(0);
 
-                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
+                    List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
 
 
-                        // if(images.size()!=0) {
-                        //   for (int i = 0; i < images.size(); i++) {
-                        //     if (images.get(i).get("imageContent") != null) {
+                   // if(images.size()!=0) {
+                     //   for (int i = 0; i < images.size(); i++) {
+                       //     if (images.get(i).get("imageContent") != null) {
                         if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                             adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
                             //lv.setAdapter(adapter);
@@ -100,18 +88,15 @@ public class UploadImage extends ListActivity {
 
                             adapter.notifyDataSetChanged();
                         }
-                        //       }
-                        // }
-                    }
-                    //new LoadingSyncList(context, layout, null).execute();
+                     //       }
+                       // }
+                   }
 
-                } else {
-                    //layout.setVisibility(View.GONE);
+                }else{
                     Toast.makeText(UploadImage.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
-
 
     }
 
@@ -119,11 +104,6 @@ public class UploadImage extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_image);
-
-        context=this;
-        lockScreenOrientation();
-        layout= (RelativeLayout) findViewById(R.id.loadingPanel);
-        layout.setVisibility(View.GONE);
 
        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -140,11 +120,12 @@ public class UploadImage extends ListActivity {
         role= from_upload_material.getStringExtra("role");
         institution_code=from_upload_material.getStringExtra("institution_code");
         institution_name=from_upload_material.getStringExtra("institution_name");
-        //permission_storage= Boolean.parseBoolean(from_upload_material.getStringExtra("permission_storage"));
 
 
-        queryImagesFromParse();
-        lockScreenOrientation();
+
+        //lv = (ListView)findViewById(R.id.imageList);
+
+       queryImagesFromParse();
 
 
         lv = getListView();
@@ -172,7 +153,37 @@ public class UploadImage extends ListActivity {
         mAddImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkHigherApiPermission();
+                //show dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(UploadImage.this);
+                builder.setTitle("Upload or Take a photo");
+                builder.setPositiveButton("Upload", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //upload image
+                        Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        choosePictureIntent.setType("image/*");
+                        startActivityForResult(choosePictureIntent, CHOOSE_PIC_REQUEST_CODE);
+
+                    }
+                });
+                builder.setNegativeButton("Take Photo", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //take photo
+                        //Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                        if (mMediaUri == null) {
+                            //display error
+                            Toast.makeText(getApplicationContext(), "Sorry there was an error! Try again.", Toast.LENGTH_LONG).show();
+                        } else {
+                            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                            startActivityForResult(takePicture, TAKE_PIC_REQUEST_CODE);
+                        }
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -181,11 +192,9 @@ public class UploadImage extends ListActivity {
             @Override
             public void onClick(View v) {
 
-
                 try{
                     //String path= (String) mPreviewImageView[i].getTag();
                     //convert image to bytes for upload.
-                    layout.setVisibility(View.VISIBLE);
                     final byte[][] fileBytes = {FileHelper.getByteArrayFromFile(UploadImage.this, mMediaUri)};
                     if(fileBytes[0] == null){
                         //there was an error
@@ -215,7 +224,7 @@ public class UploadImage extends ListActivity {
                                                     public void done(ParseException e) {
                                                         Toast.makeText(getApplicationContext(), "Success Uploading iMage!", Toast.LENGTH_LONG).show();
 
-                                                        Intent to_upload_image = new Intent(UploadImage.this, UploadImage.class);
+                                                       Intent to_upload_image = new Intent(UploadImage.this, UploadImage.class);
                                                         to_upload_image.putExtra("uploadId", uploadId);
                                                         to_upload_image.putExtra("classId", classId);
                                                         to_upload_image.putExtra("role", role);
@@ -226,12 +235,9 @@ public class UploadImage extends ListActivity {
                                                     }
                                                 });
 
-                                                new LoadingSyncList(context,layout,lv).execute();
-                                                layout.setVisibility(View.VISIBLE);
-
                                             } else {
                                                 //there was an error
-                                                layout.setVisibility(View.GONE);
+
                                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         }
@@ -240,10 +246,7 @@ public class UploadImage extends ListActivity {
                                         Toast.makeText(getApplicationContext(), file_error.getMessage(), Toast.LENGTH_LONG).show();
                                        // onPostResume();
                                     }
-
-                                    new LoadingSyncList(context,layout,lv).execute();
                                 }else {
-                                        layout.setVisibility(View.GONE);
                                         Log.d("Post retrieval", "Error: " + e.getMessage());
                                     }
 
@@ -259,119 +262,18 @@ public class UploadImage extends ListActivity {
             }
         });
 
-        lockScreenOrientation();
 
 
-    }
-
-    public void addImageDialog(){
-
-        //show dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(UploadImage.this);
-        builder.setTitle("Upload or Take a photo");
-        builder.setPositiveButton("Upload", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-                //upload image
-
-
-                Intent choosePictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                choosePictureIntent.setType("image/*");
-                startActivityForResult(choosePictureIntent, CHOOSE_PIC_REQUEST_CODE);
-
-            }
-        });
-        builder.setNegativeButton("Take Photo", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //take photo
-                //Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-                if (mMediaUri == null) {
-                    //display error
-                    Toast.makeText(getApplicationContext(), "Sorry there was an error! Try again.", Toast.LENGTH_LONG).show();
-                } else {
-                    takePicture.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                    startActivityForResult(takePicture, TAKE_PIC_REQUEST_CODE);
-                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    public void checkHigherApiPermission(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            // Marshmallow+
-            int hasReadPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-            if (hasReadPermission != PackageManager.PERMISSION_GRANTED) {
-                boolean shouldShow = shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (!shouldShow) {
-                    showCustomDialog("You need to allow access to External Storage",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                            Uri.fromParts("package", getPackageName(), null));
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                            });
-                    return;
-                }
-
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        10);
-                return;
-            }
-            addImageDialog();
-        }
 
     }
 
-    private void showCustomDialog(String message, DialogInterface.OnClickListener listener) {
-        new AlertDialog.Builder(UploadImage.this)
-                .setMessage(message)
-                .setPositiveButton("OK", listener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 10:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-
-                    addImageDialog();
-                    Toast.makeText(getApplicationContext(), "READ_EXTERNAL_STORAGE accept", Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    // Permission Denied
-                    Toast.makeText(getApplicationContext(), "READ_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    protected void onListItemClick(View v, final int pos, long id) {
+    protected void onListItemClick(View v, int pos, long id) {
         ParseFile  itemValue    = (ParseFile) lv.getItemAtPosition(pos);
 
         final Dialog dialog = new Dialog(UploadImage.this);
-
         dialog.setContentView(R.layout.view_image);
         dialog.setTitle("Image");
         viewImage=(ImageView) dialog.findViewById(R.id.viewImage);
-        delImage=(Button) dialog.findViewById(R.id.delButton);
 
         Picasso.with(this)
                 .load(itemValue.getUrl()).into(viewImage);
@@ -393,86 +295,7 @@ public class UploadImage extends ListActivity {
         });
 
         dialog.show();
-
-        delImage.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-
-                try {
-                    delImage(v, pos);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-        dialog.show();
     }
-
-    public void delImage(View v, final int pos) throws FileNotFoundException {
-
-
-        Log.d("del image ", pos + "");
-        ParseQuery<ParseObject> imagesQuery = new ParseQuery<>(ImageUploadsTable.TABLE_NAME);
-        imagesQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadId.trim());
-        imagesQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> images, ParseException e) {
-                if (e == null) {
-
-                    if (images.size() != 0) {
-                        ParseObject u = (ParseObject) images.get(0);
-
-                        List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
-                        ArrayList<ParseFile> pFileListNew = new ArrayList<ParseFile>(pFileList.size());
-
-                        // if(images.size()!=0) {
-                        //   for (int i = 0; i < images.size(); i++) {
-                        //     if (images.get(i).get("imageContent") != null) {
-                        if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
-
-                            Log.d("Old size ", pFileList.size() + "");
-                            for (int x = 0; x < pFileList.size(); x++) {
-                                if (x == pos)
-                                    pFileListNew.add(pFileList.get(x));
-
-                            }
-                            Log.d("New size ", pFileListNew.size() + "");
-                            u.removeAll(ImageUploadsTable.UPLOAD_CONTENT,pFileListNew);
-
-                            u.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    Toast.makeText(getApplicationContext(), "Success Uploading iMage!", Toast.LENGTH_LONG).show();
-
-                                    Intent to_upload_image = new Intent(UploadImage.this, UploadImage.class);
-                                    to_upload_image.putExtra("uploadId", uploadId);
-                                    to_upload_image.putExtra("classId", classId);
-                                    to_upload_image.putExtra("role", role);
-                                    to_upload_image.putExtra("institution_code", institution_code);
-                                    to_upload_image.putExtra("institution_name", institution_name);
-                                    startActivity(to_upload_image);
-
-                                }
-                            });
-
-                        }
-
-                    }
-                    //new LoadingSyncList(context, layout, null).execute();
-
-                } else {
-                    //layout.setVisibility(View.GONE);
-                    Toast.makeText(UploadImage.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-
-    }
-
 
     public void saveImage(View v) throws FileNotFoundException {
         //File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "UPLOADIMAGES");
@@ -562,6 +385,21 @@ public class UploadImage extends ListActivity {
                     mMediaUri = data.getData();
                     //set previews
                     mPreviewImageView.setImageURI(mMediaUri);
+
+                   /* if(mPreviewImageView[0].getDrawable() == null){
+                        mPreviewImageView[0].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getAbsolutePath();
+                        //mPreviewImageView[0].setTag(path);
+                    }
+                    else if(mPreviewImageView[1].getDrawable() == null){
+                        mPreviewImageView[1].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getPath();
+                        //mPreviewImageView[1].setTag(path);
+                    }else {
+                        mPreviewImageView[2].setImageURI(mMediaUri);
+                        //String path= mediaStorageDir.getPath();
+                        //mPreviewImageView[2].setTag(path);
+                    } */
                 }
             }else {
 
@@ -570,6 +408,15 @@ public class UploadImage extends ListActivity {
                 sendBroadcast(mediaScanIntent);
                 //set previews
                 mPreviewImageView.setImageURI(mMediaUri);
+
+               /* if(mPreviewImageView[0].getDrawable() == null){
+                    mPreviewImageView[0].setImageURI(mMediaUri);
+                }
+                else if(mPreviewImageView[1].getDrawable() == null){
+                    mPreviewImageView[1].setImageURI(mMediaUri);
+                }else {
+                    mPreviewImageView[2].setImageURI(mMediaUri);
+                } */
 
             }
 
@@ -581,24 +428,14 @@ public class UploadImage extends ListActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        unlockScreenOrientation();
         Intent i=new Intent(UploadImage.this,UploadMaterial.class);
         i.putExtra("institution_name",institution_name);
         i.putExtra("institution_code",institution_code);
        // i.putExtra("id", classGradeId);
         i.putExtra("role", role);
-        i.putExtra("classId", classId);
+        i.putExtra("id", classId);
         startActivity(i);
     }
 
-    private void lockScreenOrientation() {
-
-            context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-    }
-
-    private void unlockScreenOrientation() {
-        context.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-    }
 
 }
