@@ -87,10 +87,10 @@ public class Schedule_days extends Fragment {
                     {
                         scheduleList.setVisibility(View.INVISIBLE);
                         noschedule.setText("No Schedule Added");
-                    }
-                    if (size>0) {
+                    }else if (size>0) {
                         noschedule.setVisibility(View.INVISIBLE);
                         noScheduleImage.setVisibility(View.INVISIBLE);
+                        scheduleList.setVisibility(View.VISIBLE);
                         //Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                         items = new String[scheduleListRet.size()];
                         for (int i = 0; i < scheduleListRet.size(); i++) {
@@ -398,6 +398,7 @@ public class Schedule_days extends Fragment {
             schedule.put(ScheduleTable.SCHEDULE_INFO, info.getText().toString());
           schedule.put(ScheduleTable.START_TIME, startmilli);
            schedule.put(ScheduleTable.END_TIME, endmilli);
+            schedule.put(ScheduleTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
             schedule.saveEventually();
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
             dialog.dismiss();
