@@ -325,7 +325,6 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                                 to_upload_image.putExtra("role", role);
                                                                 to_upload_image.putExtra("institution_code", institution_code);
                                                                 to_upload_image.putExtra("institution_name", institution_name);
-                                                                to_upload_image.putExtra("permission_storage", permission_storage);
                                                                 startActivity(to_upload_image);
 
 
@@ -563,7 +562,6 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                 to_upload_image.putExtra("institution_code", institution_code);
                                                 to_upload_image.putExtra("institution_name", institution_name);
                                                 to_upload_image.putExtra("role", role);
-                                                to_upload_image.putExtra("permission_storage", permission_storage);
                                                 startActivity(to_upload_image);
 
                                             } else {
@@ -649,7 +647,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         to_uploads.putExtra("institution_name",institution_name);
         to_uploads.putExtra("institution_code",institution_code);
         to_uploads.putExtra("role",role);
-        to_uploads.putExtra("classId", classId);
+        to_uploads.putExtra("id", classId);
         startActivity(to_uploads);
         finish();
 

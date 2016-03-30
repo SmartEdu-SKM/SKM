@@ -3,7 +3,6 @@ package com.example.dell.smartedu;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +53,6 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     String classId;
     int densityX;
     int densityY;
-    public boolean permission_storage=false;
 
 
 
@@ -652,27 +650,5 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         dialogcal.getWindow().setAttributes(lp);
 
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 10:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-
-
-                    Toast.makeText(getApplicationContext(), "READ_EXTERNAL_STORAGE accept", Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    // Permission Denied
-                    Toast.makeText(getApplicationContext(), "READ_EXTERNAL_STORAGE Denied", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
     }
 }
