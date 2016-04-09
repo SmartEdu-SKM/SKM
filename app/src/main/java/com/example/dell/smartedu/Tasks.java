@@ -69,6 +69,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     ArrayList<String> taskLt;
     String [] items;
     ImageButton cal;
+String child_username;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -92,6 +93,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         role = fromrole.getString("role");
         institution_name=fromrole.getString("institution_name");
         institution_code=fromrole.getString("institution_code");
+        if(role=="Parent"){
+            child_username=fromrole.getString("child_username");
+        }
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
@@ -418,6 +422,31 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         {
             Intent nouser=new Intent(Tasks.this,login.class);
             startActivity(nouser);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role=="Teacher") {
+            Intent tohome = new Intent(Tasks.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role=="Student"){
+            Intent tohome = new Intent(Tasks.this, student_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            startActivity(tohome);
+        }else if(role=="Parent"){
+            Intent tohome = new Intent(Tasks.this, parent_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
         }
     }
 

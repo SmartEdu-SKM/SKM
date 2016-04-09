@@ -149,9 +149,7 @@ public class NewTask extends BaseActivity {
                 }
                 else {
                     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                   // final String string_current_date = df.format(calendar.getTime());
                     date1 = new Date(Year - 1900, Month, Day);
-                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
                     DATE.setText(df.format(date1), TextView.BufferType.EDITABLE);
                     Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
                     dialog.dismiss();
@@ -174,6 +172,7 @@ public class NewTask extends BaseActivity {
             startActivity(nouser);
         }
     }
+
 
 
 }

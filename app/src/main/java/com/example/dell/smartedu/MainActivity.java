@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity{
                     startActivity(student_intent);
                 } else if (position == 3) {
                     Intent schedule_intent = new Intent(MainActivity.this, Schedule.class);
-                   schedule_intent.putExtra("institution_code",institution_code);
+                    schedule_intent.putExtra("institution_code",institution_code);
                     schedule_intent.putExtra("institution_name",institution_name);
                     schedule_intent.putExtra("role", role);
                     startActivity(schedule_intent);

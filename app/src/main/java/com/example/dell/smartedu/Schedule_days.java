@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -88,6 +89,9 @@ public class Schedule_days extends Fragment {
                         scheduleList.setVisibility(View.INVISIBLE);
                         noschedule.setText("No Schedule Added");
                     }else if (size>0) {
+                        LinearLayout.LayoutParams layoutParams  = new LinearLayout.LayoutParams(0,0);
+                        noScheduleImage.setLayoutParams(layoutParams);
+                        noschedule.setLayoutParams(layoutParams);
                         noschedule.setVisibility(View.INVISIBLE);
                         noScheduleImage.setVisibility(View.INVISIBLE);
                         scheduleList.setVisibility(View.VISIBLE);
@@ -167,7 +171,7 @@ public class Schedule_days extends Fragment {
                         if (e == null) {
                             ParseObject u = (ParseObject) scheduleListRet.get(0);
                             scheduleId[0] = u.getObjectId();
-                            Toast.makeText(getActivity(), "id of schedule selected is = " + scheduleId[0], Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "id of schedule selected is = " + scheduleId[0], Toast.LENGTH_LONG).show();
                         } else {
                             Log.d("user", "Error: " + e.getMessage());
                         }
@@ -175,7 +179,7 @@ public class Schedule_days extends Fragment {
                 });
 
                 okButton = (Button) show_dialog.findViewById(R.id.doneButton);
-                delButton = (Button) show_dialog.findViewById(R.id.doneButton);
+                delButton = (Button) show_dialog.findViewById(R.id.delButton);
                 editButton = (Button) show_dialog.findViewById(R.id.editButton);
 
 
@@ -190,9 +194,11 @@ public class Schedule_days extends Fragment {
 
                 delButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        Toast.makeText(getActivity(), "schedule item deleted ", Toast.LENGTH_LONG).show();
 
                         ParseObject.createWithoutData(ScheduleTable.TABLE_NAME, scheduleId[0]).deleteEventually();
                         show_dialog.dismiss();
+                        reload();
 
                     }
                 });
@@ -225,6 +231,7 @@ public class Schedule_days extends Fragment {
                                         if (e == null) {
                                             objectRet.get(0).put(ScheduleTable.SCHEDULE_INFO, ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
                                             objectRet.get(0).saveEventually();
+                                            reload();
 
                                         } else {
                                             Log.d("Post retrieval", "Error: " + e.getMessage());
@@ -313,32 +320,13 @@ public class Schedule_days extends Fragment {
 
 
 
-        /*startmins.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int selectedstartmins = Integer.parseInt(startmins.getSelectedItem().toString());
-                String[] mins_end = new String[60 - selectedstartmins];
-                int x = selectedstartmins + 1;
-                for (int i = 0; i < 59 - selectedstartmins; i++) {
-                    mins_end[i] = String.valueOf(x);
-                    x++;
-                }
-                ArrayAdapter<String> adapter_end = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, mins_end);
-                endmins.setAdapter(adapter_end);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });*/
 
 
         endhours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int selectedendhours = Integer.parseInt(endhours.getSelectedItem().toString());
-                if(!(selectedendhours==Integer.parseInt(starthours.getSelectedItem().toString()))) {
+                if (!(selectedendhours == Integer.parseInt(starthours.getSelectedItem().toString()))) {
                     String[] mins_end = new String[60];
                     for (int i = 0; i < 60; i++) {
                         mins_end[i] = String.valueOf(i);
@@ -347,8 +335,7 @@ public class Schedule_days extends Fragment {
                     ArrayAdapter<String> adapter_end = new ArrayAdapter<String>(getActivity(),
                             android.R.layout.simple_spinner_item, mins_end);
                     endmins.setAdapter(adapter_end);
-                }else
-                {
+                } else {
                     int selectedstartmins = Integer.parseInt(startmins.getSelectedItem().toString());
                     String[] mins_end = new String[60 - selectedstartmins];
                     int x = selectedstartmins + 1;
@@ -391,6 +378,8 @@ public class Schedule_days extends Fragment {
             Toast.makeText(getActivity(), "selected time overlaps with other schedule in this or some other institute", Toast.LENGTH_LONG).show();
         }else
         {
+            Log.d("while adding", institution_code + " " + institution_name);
+
             ParseObject schedule = new ParseObject(ScheduleTable.TABLE_NAME);
             schedule.put(ScheduleTable.BY_USER_REF, ParseUser.getCurrentUser());
             schedule.put(ScheduleTable.BY_USER_ROLE, role);
@@ -398,19 +387,22 @@ public class Schedule_days extends Fragment {
             schedule.put(ScheduleTable.SCHEDULE_INFO, info.getText().toString());
           schedule.put(ScheduleTable.START_TIME, startmilli);
            schedule.put(ScheduleTable.END_TIME, endmilli);
-            schedule.put(ScheduleTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
+            schedule.put(ScheduleTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
             schedule.saveEventually();
             Toast.makeText(getActivity(), "schedule added ", Toast.LENGTH_LONG).show();
             dialog.dismiss();
-            Intent reload=new Intent(getActivity(),Schedule.class);
-            reload.putExtra("institution_code",institution_code);
-            reload.putExtra("institution_name",institution_name);
-            reload.putExtra("day", day);
-            reload.putExtra("role", role);
-            startActivity(reload);
+           reload();
         }
     }
 
+    protected void reload(){
+        Intent reload=new Intent(getActivity(),Schedule.class);
+        reload.putExtra("institution_code",institution_code);
+        reload.putExtra("institution_name",institution_name);
+        reload.putExtra("day", day);
+        reload.putExtra("role", role);
+        startActivity(reload);
+    }
 
     public boolean checkTime(final long start, final long end)
     {   // Log.d("user", "checking and flag = " + String.valueOf(flag));
@@ -463,52 +455,7 @@ public class Schedule_days extends Fragment {
             e.printStackTrace();
         }
         return false;
-       /* taskQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> scheduleListRet, ParseException e) {
-                if (e == null) {
-                    if (scheduleListRet.size() == 0) {
-                        Toast.makeText(getActivity(), "No schedule added", Toast.LENGTH_LONG).show();
-                    } else {
-                        check[0] = 0;
-                        Log.d("user", "checking new schedule timings with " + scheduleListRet.size() + " schedules");
-                        Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
-                        for (int i = 0; i < scheduleListRet.size(); i++) {
 
-                            ParseObject u = (ParseObject) scheduleListRet.get(i);
-                            long ret_start = u.getLong("startTime");
-                            long ret_end = u.getLong("endTime");
-                            if (start >= ret_start && start < ret_end) {
-                                Log.d("user", "here");
-                                // Schedule_days.this.flag = 1;
-
-                                //flag=1;
-                                check[0] = 1;
-                                break;
-                            }
-                            if (end > ret_start && end <= ret_end) {
-                                Schedule_days.this.flag = 1;
-                                check[0] = 1;
-                                break;
-                            }
-                            if (start < ret_start && end > ret_end) {
-                                Schedule_days.this.flag = 1;
-                                check[0] = 1;
-                                break;
-                            }
-                        }
-                        //Log.d("user", "checking and flag = " + String.valueOf(check[0]));
-                    }
-                } else {
-                    Log.d("user", "Error: " + e.getMessage());
-                }
-            }
-        });
-        //Log.d("user", "checking and flag = " + String.valueOf(this.flag));
-       Log.d("user", "checking and flag = " + String.valueOf(check[0]));
-        if(check[0] ==1)
-            return true;
-        else
-            return false;*/
 
     }
 

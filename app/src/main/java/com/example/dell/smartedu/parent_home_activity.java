@@ -127,7 +127,8 @@ String child_username;
                                                 Intent task_intent = new Intent(parent_home_activity.this, Tasks.class);
                                                 task_intent.putExtra("institution_name",institution_name);
                                                 task_intent.putExtra("institution_code",institution_code);
-                                                task_intent.putExtra("role", "Parent");
+                                                task_intent.putExtra("role","Parent");
+                                                task_intent.putExtra("child_username",child_username);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
