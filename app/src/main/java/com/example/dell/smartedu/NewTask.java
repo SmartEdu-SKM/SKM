@@ -88,7 +88,7 @@ public class NewTask extends BaseActivity {
                     ParseObject task = new ParseObject(TaskTable.TABLE_NAME);
                     task.put(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
                     task.put(TaskTable.BY_USER_ROLE, role);
-                    task.put(TaskTable.TABLE_NAME, myTitle);
+                    task.put(TaskTable.TASK_NAME, myTitle);
                     task.put(TaskTable.TASK_DESCRIPTION, myDesc);
                     //String id = task.getObjectId();
                     String string_date = String.valueOf(Day) + "-" + String.valueOf(Month+1) + "-" + String.valueOf(Year);
@@ -148,9 +148,11 @@ public class NewTask extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "Choose Future Date!", Toast.LENGTH_LONG).show();
                 }
                 else {
+                    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                   // final String string_current_date = df.format(calendar.getTime());
                     date1 = new Date(Year - 1900, Month, Day);
                     DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-                    DATE.setText(dateFormat.format(date1), TextView.BufferType.EDITABLE);
+                    DATE.setText(df.format(date1), TextView.BufferType.EDITABLE);
                     Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                 }
