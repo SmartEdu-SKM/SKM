@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -150,6 +151,55 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                     }
                                 });
 
+                                examsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                    @Override
+                                    public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                                                   int pos, long id) {
+
+                                        String item = ((TextView) arg1).getText().toString();
+
+                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ExamTable.TABLE_NAME);
+                                        studentQuery.whereEqualTo(ExamTable.EXAM_NAME,item);
+                                        studentQuery.whereEqualTo(ExamTable.FOR_CLASS, classRef[0]);
+                                        studentQuery.findInBackground(new FindCallback<ParseObject>() {
+                                            public void done(List<ParseObject> studentListRet, ParseException e) {
+                                                if (e == null) {
+                                                    ParseObject u = studentListRet.get(0);
+                                                    final String examid = u.getObjectId();
+                                                    final Dialog dialog = new Dialog(teacher_exams.this);
+                                                    dialog.setContentView(R.layout.delete);
+                                                   // dialog.setTitle("Upload Details");
+
+                                                    TextView delText= (TextView) dialog.findViewById(R.id.delText);
+                                                    delText.setOnClickListener(new View.OnClickListener() {
+                                                        public void onClick(View v) {
+
+                                                            ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid).deleteEventually();
+
+
+                                                            onRestart();
+
+
+                                                            dialog.dismiss();
+
+                                                        }
+                                                    });
+                                                    dialog.show();
+
+
+
+                                                } else {
+                                                    Log.d("user", "Error: " + e.getMessage());
+                                                }
+                                            }
+                                        });
+
+                                        Log.v("long clicked","pos: " + pos);
+
+                                        return true;
+                                    }
+                                });
+
 
                             } else {
                                 Toast.makeText(teacher_exams.this, "error", Toast.LENGTH_LONG).show();
@@ -179,7 +229,8 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                 i.putExtra("institution_name",institution_name);
                 i.putExtra("institution_code",institution_code);
                 i.putExtra("role",role);
-                i.putExtra("id",classId);
+                i.putExtra("classId",classId);
+                i.putExtra("classGradeId",classId);
                 startActivity(i);
             }
         });
@@ -189,6 +240,20 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
 
     }
 
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent to_uploads = new Intent(teacher_exams.this, teacher_exams.class);
+        to_uploads.putExtra("institution_name",institution_name);
+        to_uploads.putExtra("institution_code",institution_code);
+        to_uploads.putExtra("role",role);
+        to_uploads.putExtra("classId", classId);
+        to_uploads.putExtra("classGradeId", classGradeId);
+        startActivity(to_uploads);
+        finish();
+
+    }
 
     @Override
     protected void onPostResume() {

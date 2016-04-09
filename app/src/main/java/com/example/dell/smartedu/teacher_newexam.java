@@ -25,6 +25,7 @@ public class teacher_newexam extends BaseActivity {
     String marks;
     Button addExamButton;
     String classId;
+    String classGradeId;
     String role;
 
 
@@ -32,8 +33,11 @@ public class teacher_newexam extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_newexam);
-        classId=getIntent().getStringExtra("id");
+        classId=getIntent().getStringExtra("classId");
+        classGradeId=getIntent().getStringExtra("classGradeId");
         role=getIntent().getStringExtra("role");
+        institution_name=getIntent().getStringExtra("institution_name");
+        institution_code=getIntent().getStringExtra("institution_code");
        /* mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -73,7 +77,8 @@ public class teacher_newexam extends BaseActivity {
                                 Intent to_exams = new Intent(teacher_newexam.this, teacher_exams.class);
                                 to_exams.putExtra("institution_name",institution_name);
                                 to_exams.putExtra("institution_code",institution_code);
-                                to_exams.putExtra("id", classId);
+                                to_exams.putExtra("classId", classId);
+                                to_exams.putExtra("classGradeId", classGradeId);
                                 to_exams.putExtra("role", role);
                                 startActivity(to_exams);
                                 finish();
