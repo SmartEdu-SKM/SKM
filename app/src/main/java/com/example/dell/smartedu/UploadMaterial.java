@@ -136,6 +136,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
                     ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
                     uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, classRef[0]);
+                    uploadQuery.whereEqualTo(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
 
                     uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> uploadListRet, ParseException e) {
