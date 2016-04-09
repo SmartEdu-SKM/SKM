@@ -265,6 +265,8 @@ String child_username;
                         dialog_in.setContentView(R.layout.activity_new_event__teacher);
                         dialog_in.setTitle("Edit Details");
 
+                        setDialogSize(dialog_in);
+
                         Title = (EditText) dialog_in.findViewById(R.id.taskTitle);
                         Desc = (EditText) dialog_in.findViewById(R.id.scheduleinfo);
                         myDate = (TextView) dialog_in.findViewById(R.id.date);
