@@ -36,10 +36,7 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //getSupportActionBar().setTitle("Schedule");
-       /* drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        drawerFragment.setDrawerListener(this);*/
+
             Bundle fromrole = getIntent().getExtras();
             role = fromrole.getString("role");
             institution_code=fromrole.getString("institution_code");

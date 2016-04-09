@@ -69,6 +69,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     ArrayList<String> taskLt;
     String [] items;
     ImageButton cal;
+String child_username;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -92,6 +93,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         role = fromrole.getString("role");
         institution_name=fromrole.getString("institution_name");
         institution_code=fromrole.getString("institution_code");
+        if(role=="Parent"){
+            child_username=fromrole.getString("child_username");
+        }
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
@@ -113,32 +117,34 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                 if (e == null) {
                     //Log.d("user", "Retrieved " + userList.size() + " users");
 
+                    if (taskListRet.size()!=0) {
+                        Log.d("user", "Retrieved " + taskListRet.size() + " users");
+                        //Toast.makeText(getApplicationContext(), taskListRet.toString(), Toast.LENGTH_LONG).show();
+                        items = new String[taskListRet.size()];
+                        for (int i = 0; i < taskListRet.size(); i++) {
+                            ParseObject u = (ParseObject) taskListRet.get(i);
+                            String name = u.getString(TaskTable.TASK_NAME);
+                            name += "\n";
+                            name += u.getString(TaskTable.TASK_DESCRIPTION);
 
-                    Log.d("user", "Retrieved " + taskListRet.size() + " users");
-                    //Toast.makeText(getApplicationContext(), taskListRet.toString(), Toast.LENGTH_LONG).show();
-                    items = new String[taskListRet.size()];
-                    for (int i = 0; i < taskListRet.size(); i++) {
-                        ParseObject u = (ParseObject) taskListRet.get(i);
-                        String name = u.getString(TaskTable.TASK_NAME);
-                        name += "\n";
-                        name += u.getString(TaskTable.TASK_DESCRIPTION);
+                            name += "\n";
+                            Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG);
 
-                        name += "\n";
-                        Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG);
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                            final String dateString = formatter.format(new Date(u.getLong(TaskTable.DUE_DATE)));
+                            name += dateString;
+                            items[i] = name;
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                        final String dateString = formatter.format(new Date(u.getLong(TaskTable.DUE_DATE)));
-                        name += dateString;
-                        items[i] = name;
+                            // adapter.add(name);
 
-                        // adapter.add(name);
+                        }
 
+                        taskLt = new ArrayList<>(Arrays.asList(items));
+                        adapter = new ArrayAdapter(Tasks.this, android.R.layout.simple_list_item_1, taskLt);
+                        taskList.setAdapter(adapter);
+                    }else{
+                        Toast.makeText(Tasks.this,"No tasks added",Toast.LENGTH_SHORT).show();
                     }
-
-                    taskLt = new ArrayList<>(Arrays.asList(items));
-                    adapter = new ArrayAdapter(Tasks.this, android.R.layout.simple_list_item_1, taskLt);
-                    taskList.setAdapter(adapter);
-
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
@@ -209,10 +215,11 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                     public void done(List<ParseObject> taskListRet, com.parse.ParseException e) {
                         if (e == null) {
                             if (taskListRet.size() != 0) {
-                                ParseObject u = (ParseObject) taskListRet.get(0);
+                                ParseObject u = taskListRet.get(0);
                                 taskid = u.getObjectId();
                                 Toast.makeText(Tasks.this, "id of task selected is = " + taskid, Toast.LENGTH_LONG).show();
                             } else {
+
                                 Log.d("user", "error in query");
                             }
                         }
@@ -415,6 +422,31 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         {
             Intent nouser=new Intent(Tasks.this,login.class);
             startActivity(nouser);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role=="Teacher") {
+            Intent tohome = new Intent(Tasks.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role=="Student"){
+            Intent tohome = new Intent(Tasks.this, student_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            startActivity(tohome);
+        }else if(role=="Parent"){
+            Intent tohome = new Intent(Tasks.this, parent_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
         }
     }
 
