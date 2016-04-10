@@ -52,6 +52,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     static String institution_code;
     String studentId;
     String classId;
+    String classGradeId;
     int densityX;
     int densityY;
     public boolean permission_storage=false;
@@ -407,11 +408,15 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-                Intent atten_intent = new Intent(BaseActivity.this, view_attendance.class);
+                Intent atten_intent = new Intent(BaseActivity.this, student_classes.class);
 
                 atten_intent.putExtra("role", role);
                 atten_intent.putExtra("studentId", studentId);
                 atten_intent.putExtra("classId", classId);
+                atten_intent.putExtra("classGradeId", classGradeId);
+                atten_intent.putExtra("institution_code",institution_code);
+                atten_intent.putExtra("institution_name",institution_name);
+                atten_intent.putExtra("for", "attendance");
                 startActivity(atten_intent);
             }
 
@@ -424,9 +429,12 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 4) { //assignments
-                Intent exam_intent = new Intent(BaseActivity.this, UploadMaterial_students.class);
+                Intent exam_intent = new Intent(BaseActivity.this, student_classes.class);
                 exam_intent.putExtra("institution_name", institution_name);
                 exam_intent.putExtra("institution_code", institution_code);
+                exam_intent.putExtra("role", role);
+                exam_intent.putExtra("classGradeId", classGradeId);
+                exam_intent.putExtra("for", "upload");
                 exam_intent.putExtra("id", classId);
                 startActivity(exam_intent);
             }
@@ -437,6 +445,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 exam_intent.putExtra("institution_code", institution_code);
                 exam_intent.putExtra("role", role);
                 exam_intent.putExtra("classId", classId);
+                exam_intent.putExtra("classGradeId", classGradeId);
                 exam_intent.putExtra("studentId", studentId);
                 startActivity(exam_intent);
             }
@@ -475,9 +484,13 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             if (position == 2) { //attendance
-                Intent atten_intent = new Intent(getApplicationContext(), view_attendance.class);
+                Intent atten_intent = new Intent(getApplicationContext(), student_classes.class);
                 atten_intent.putExtra("role", "Parent");
                 atten_intent.putExtra("studentId", studentId);
+                atten_intent.putExtra("for","attendance");
+                atten_intent.putExtra("classGradeId", classGradeId);
+                atten_intent.putExtra("institution_code",institution_code);
+                atten_intent.putExtra("institution_name",institution_name);
                 atten_intent.putExtra("classId", classId);
                 startActivity(atten_intent);
             }
@@ -488,6 +501,9 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 exam_intent.putExtra("role", "Parent");
                 exam_intent.putExtra("classId", classId);
                 exam_intent.putExtra("studentId", studentId);
+                exam_intent.putExtra("institution_name", institution_name);
+                exam_intent.putExtra("institution_code", institution_code);
+                exam_intent.putExtra("classGradeId", classGradeId);
                 startActivity(exam_intent);
 
             }
@@ -497,6 +513,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 Intent message_intent = new Intent(getApplicationContext(), view_messages.class);
                 message_intent.putExtra("role", "Parent");
                 message_intent.putExtra("classId", classId);
+                message_intent.putExtra("classGradeId", classGradeId);
                 message_intent.putExtra("studentId", studentId);
                 message_intent.putExtra("institution_name", institution_name);
                 message_intent.putExtra("institution_code", institution_code);
