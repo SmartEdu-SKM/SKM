@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -201,7 +200,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                                     TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                                    textView.setTextColor(Color.WHITE);
+                                    textView.setTextColor(Color.BLACK);
 
                                     return view;
                                 }
@@ -296,6 +295,8 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         Dialog dialog = new Dialog(student_exams.this);
         dialog.setContentView(R.layout.view_marks);
         dialog.setTitle("Marks Information");
+
+        setDialogSize(dialog);
 
         myExamName= (TextView) dialog.findViewById(R.id.exam);
         myMarksObtained= (TextView) dialog.findViewById(R.id.obtained);

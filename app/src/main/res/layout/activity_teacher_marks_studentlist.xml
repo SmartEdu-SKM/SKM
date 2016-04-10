@@ -41,6 +41,20 @@
                     tools:layout="@layout/fragment_notification_bar" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:background="#20BF9F">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:text="Select the students and update Marks"
+                    android:id="@+id/att_text"
+                    android:textColor="#ffff"
+                    android:layout_centerInParent="true"
+                    />
+            </RelativeLayout>
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

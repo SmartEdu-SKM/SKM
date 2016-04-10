@@ -138,6 +138,7 @@ public class UploadImage_students extends ListActivity {
         dialog.setContentView(R.layout.view_image);
         dialog.setTitle("Image");
         viewImage=(ImageView) dialog.findViewById(R.id.viewImage);
+        dialog.findViewById(R.id.delButton).setVisibility(View.GONE);
 
         Picasso.with(this)
                 .load(itemValue.getUrl()).into(viewImage);

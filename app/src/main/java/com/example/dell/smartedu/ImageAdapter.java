@@ -109,6 +109,7 @@ public class ImageAdapter extends BaseAdapter {
                 else if(role.equals("Student"))
 
                 {
+
                     imageView.setImageResource(mThumbIdsStudent[position]);
                 }
 
