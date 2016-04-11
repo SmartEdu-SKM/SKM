@@ -6,16 +6,29 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#006064">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    >
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            />
+
+    </RelativeLayout>
+
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#006064">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +68,7 @@
 
     </LinearLayout>
 
-</ScrollView>
+
     <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="com.example.dell.smartedu.FragmentDrawer"

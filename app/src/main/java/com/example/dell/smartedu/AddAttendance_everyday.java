@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,12 +89,18 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
 
+
+
         studentList = (ListView) findViewById(R.id.studentList);
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setVisibility(View.INVISIBLE);
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
+
+
+        context = this;
+        layoutLoading=(RelativeLayout) findViewById(R.id.loadingPanel);
 
 
         final ParseObject[] classRef = new ParseObject[1];
@@ -146,6 +153,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
                                     adapter = new CustomAdapter(AddAttendance_everyday.this, modelItems, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentList.setAdapter(adapter);
+                                    new LoadingSyncList(context,layoutLoading,studentList).execute();
                                     if(studentListRet.size()!=0) {
                                         saveButton.setVisibility(View.VISIBLE);
                                     }

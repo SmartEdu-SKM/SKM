@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,9 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         role= from_student.getStringExtra("role");
         institution_name = from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
+
+        context = this;
+        layoutLoading=(RelativeLayout) findViewById(R.id.loadingPanel);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -124,6 +128,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
 
 
                                 studentList.setAdapter(adapter);
+                                new LoadingSyncList(context,layoutLoading,studentList).execute();
 
 
                                 studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -157,6 +162,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
                                                     to_addmarks.putExtra("classId",classId);
                                                     startActivity(to_addmarks);*/
                                                     addMarks(examId,student);
+                                                    new LoadingSyncList(context,layoutLoading,studentList).execute();
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
                                                 }

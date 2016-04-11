@@ -76,6 +76,7 @@ public class UploadImage extends ListActivity {
     RelativeLayout layout;
     Button delImage;
 
+
     //boolean permission_storage;
 
     public void queryImagesFromParse(){
@@ -100,13 +101,14 @@ public class UploadImage extends ListActivity {
                             adapter = new ImageLoaderAdapter(UploadImage.this, pFileList);
                             //lv.setAdapter(adapter);
                             setListAdapter(adapter);
+                            new LoadingSyncList(context, layout, lv).execute();
 
                             adapter.notifyDataSetChanged();
                         }
                         //       }
                         // }
                     }
-                    //new LoadingSyncList(context, layout, null).execute();
+                    new LoadingSyncList(context, layout, lv).execute();
 
                 } else {
                     //layout.setVisibility(View.GONE);

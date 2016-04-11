@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,9 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
 
+        context = this;
+        layoutLoading=(RelativeLayout) findViewById(R.id.loadingPanel);
+
 
        // examsList = (ListView) findViewById(R.id.examList);
         subjectList = (ListView) findViewById(R.id.examList);
@@ -124,6 +128,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                         }
                         // classRef[0] = studentListRet.get(0);
                         subjectList.setAdapter(subjectadapter);
+                        new LoadingSyncList(context,layoutLoading,examsList).execute();
                     } else {
                         Log.d("class", "error in query");
                     }

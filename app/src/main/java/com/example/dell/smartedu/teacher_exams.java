@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +59,14 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Exams");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
+        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         addExamButton = (Button)findViewById(R.id.addExam);
         examsList = (ListView) findViewById(R.id.examList);
+
+        context = this;
+        layoutLoading=(RelativeLayout) findViewById(R.id.loadingPanel);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
@@ -116,6 +120,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
 
 
                                 examsList.setAdapter(adapter);
+                                new LoadingSyncList(context,layoutLoading,examsList).execute();
 
 
                                examsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -18,6 +18,7 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,9 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
 
         uploadList = (ListView) findViewById(R.id.uploadList);
+        layoutLoading= (RelativeLayout)findViewById(R.id.loadingPanel);
+        context= this;
+
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Student");
@@ -196,7 +200,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                             TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                            textView.setTextColor(Color.WHITE);
+                            textView.setTextColor(Color.BLACK);
 
                             return view;
                         }
@@ -229,6 +233,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
 
                     uploadList.setAdapter(adapter);
+                    new LoadingSyncList(context,layoutLoading,uploadList).execute();
 
 
                     uploadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -236,7 +241,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                             // selected item
                             String item = ((TextView) view).getText().toString().trim();
-                            String upload_id= uploadMap.get(item);
+                            String upload_id = uploadMap.get(item);
                             Log.d("upload ", "retrieved id: " + upload_id);
 
                             String[] product = ((TextView) view).getText().toString().split("\n");
@@ -316,7 +321,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                         List<ParseFile> pFileList = (ArrayList<ParseFile>) u.get(ImageUploadsTable.UPLOAD_CONTENT);
                                         if (u.get(ImageUploadsTable.UPLOAD_CONTENT) != null) {
                                             if (!pFileList.isEmpty()) {
-                                                flag=1;
+                                                flag = 1;
                                                 ParseFile pFile = pFileList.get(0);
                                                 byte[] bitmapdata = new byte[0];  // here it throws error
                                                 try {
@@ -340,7 +345,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
                                             public void onClick(View v) {
 
-                                                if(flag==1) {
+                                                if (flag == 1) {
                                                     Intent to_upload_image = new Intent(UploadMaterial_students.this, UploadImage_students.class);
                                                     to_upload_image.putExtra("institution_name", institution_name);
                                                     to_upload_image.putExtra("institution_code", institution_code);
@@ -349,8 +354,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                                     to_upload_image.putExtra("uploadId", uploadid);
                                                     to_upload_image.putExtra("role", role);
                                                     startActivity(to_upload_image);
-                                                }
-                                                else
+                                                } else
                                                     Toast.makeText(UploadMaterial_students.this, "None Uploaded", Toast.LENGTH_LONG).show();
 
                                                 dialog.dismiss();
@@ -360,6 +364,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
                                         });
 
                                         dialog.show();
+
+                                        new LoadingSyncList(context,layoutLoading,uploadList).execute();
 
                                     } else {
                                         Log.d("user", "Error: " + e.getMessage());
@@ -373,7 +379,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
                     });
 
-
+                    new LoadingSyncList(context,layoutLoading,uploadList).execute();
                 } else {
                     Toast.makeText(UploadMaterial_students.this, "error", Toast.LENGTH_LONG).show();
                     Log.d("user", "Error: " + e.getMessage());
