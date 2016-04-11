@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +35,9 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -186,23 +189,25 @@ public class UploadImage extends ListActivity {
                     //String path= (String) mPreviewImageView[i].getTag();
                     //convert image to bytes for upload.
                     layout.setVisibility(View.VISIBLE);
-                    final byte[][] fileBytes = {FileHelper.getByteArrayFromFile(UploadImage.this, mMediaUri)};
-                    if(fileBytes[0] == null){
+                    byte[] fileBytes = FileHelper.getByteArrayFromFile(UploadImage.this, mMediaUri);
+                    fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+                    if(fileBytes == null){
                         //there was an error
                         Toast.makeText(getApplicationContext(), "There was an error. Try again!", Toast.LENGTH_LONG).show();
                     }else{
 
                         ParseQuery<ParseObject> imageQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
                         imageQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadId);
+                        final byte[] finalFileBytes = fileBytes;
                         imageQuery.findInBackground(new FindCallback<ParseObject>() {
                             public void done(final List<ParseObject> objectRet, ParseException e) {
 
                                 if (e == null) {
 
                                     try {
-                                        fileBytes[0] = FileHelper.reduceImageForUpload(fileBytes[0]);
+
                                         String fileName = FileHelper.getFileName(UploadImage.this, mMediaUri, "image");
-                                        final ParseFile file = new ParseFile(fileName, fileBytes[0]);
+                                        final ParseFile file = new ParseFile(fileName, finalFileBytes);
 
                                     objectRet.get(0).saveEventually(new SaveCallback() {
                                         @Override
@@ -237,6 +242,7 @@ public class UploadImage extends ListActivity {
                                         }
                                     });
                                     }catch (Exception file_error){
+                                        layout.setVisibility(View.GONE);
                                         Toast.makeText(getApplicationContext(), file_error.getMessage(), Toast.LENGTH_LONG).show();
                                        // onPostResume();
                                     }
@@ -253,6 +259,7 @@ public class UploadImage extends ListActivity {
                     }
 
                 }catch (Exception e1){
+                    layout.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), e1.getMessage(), Toast.LENGTH_LONG).show();
                    // onPostResume();
                 }
@@ -327,8 +334,9 @@ public class UploadImage extends ListActivity {
                         10);
                 return;
             }
-            addImageDialog();
+
         }
+        addImageDialog();
 
     }
 
@@ -569,7 +577,28 @@ public class UploadImage extends ListActivity {
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
                 //set previews
-                mPreviewImageView.setImageURI(mMediaUri);
+                File imageFile = new File(mMediaUri.getPath());
+                FileInputStream fis = null;
+
+                try
+                {
+                    fis = new FileInputStream(imageFile);
+                }
+                catch(FileNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 3;
+               Bitmap bitmap = BitmapFactory.decodeStream( fis,null,options );
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos );
+
+                byte[] b = baos.toByteArray();
+
+
+                mPreviewImageView.setImageBitmap(bitmap);
 
             }
 
