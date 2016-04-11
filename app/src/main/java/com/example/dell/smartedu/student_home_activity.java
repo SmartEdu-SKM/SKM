@@ -188,16 +188,21 @@ public class student_home_activity extends BaseActivity{
 
                 }
 
-                @Override
-                protected void onPostResume () {
-                    super.onPostResume();
-                    if (ParseUser.getCurrentUser() == null) {
-                        Intent nouser = new Intent(student_home_activity.this, login.class);
-                        startActivity(nouser);
-                    }
-                }
+    @Override
+    protected void onPostResume () {
+        super.onPostResume();
+        if (ParseUser.getCurrentUser() == null) {
+            Intent nouser = new Intent(student_home_activity.this, login.class);
+            startActivity(nouser);
+        }
+    }
 
-   /* public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    /* public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;

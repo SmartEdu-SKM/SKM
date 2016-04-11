@@ -121,6 +121,7 @@ String child_username;
                                                 atten_intent.putExtra("classGradeId", classGradeId);
                                                 atten_intent.putExtra("institution_code",institution_code);
                                                 atten_intent.putExtra("institution_name",institution_name);
+                                                atten_intent.putExtra("child_username",child_username);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
@@ -137,6 +138,7 @@ String child_username;
                                                 message_intent.putExtra("studentId", studentId);
                                                 message_intent.putExtra("institution_name", institution_name);
                                                 message_intent.putExtra("institution_code", institution_code);
+                                                message_intent.putExtra("child_username",child_username);
                                                 message_intent.putExtra("_for", "received");
                                                 startActivity(message_intent);
 
@@ -191,6 +193,10 @@ String child_username;
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
    /* public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);

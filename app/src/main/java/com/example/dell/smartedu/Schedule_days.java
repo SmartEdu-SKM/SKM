@@ -420,14 +420,13 @@ public class Schedule_days extends Fragment {
             } else {
                 check[0] = 0;
                 Log.d("user", "checking new schedule timings with " + scheduleListRet.size() + " schedules");
-                Toast.makeText(getActivity(), scheduleListRet.toString(), Toast.LENGTH_LONG).show();
                 for (int i = 0; i < scheduleListRet.size(); i++) {
 
                     ParseObject u = (ParseObject) scheduleListRet.get(i);
                     long ret_start = u.getLong(ScheduleTable.START_TIME);
                     long ret_end = u.getLong(ScheduleTable.END_TIME);
                     if (start >= ret_start && start < ret_end) {
-                        Log.d("user", "here");
+
                         // Schedule_days.this.flag = 1;
 
                         //flag=1;
@@ -458,6 +457,8 @@ public class Schedule_days extends Fragment {
 
 
     }
+
+
 
 
 

@@ -56,7 +56,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     Button reply;
     EditText reply_message;
     Button reply_button;
-
+    String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +74,9 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         studentId= from_student.getStringExtra("studentId");
         institution_name= from_student.getStringExtra("institution_name");
         institution_code= from_student.getStringExtra("institution_code");
+        if(role.equals("Parent")){
+            child_username=from_student.getStringExtra("child_username");
+        }
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
@@ -712,6 +715,7 @@ if(_for.equals("received")){
         to_view_messages.putExtra("institution_code",institution_code);
         to_view_messages.putExtra("role", role);
         to_view_messages.putExtra("_for",_for);
+        to_view_messages.putExtra("child_username",child_username);
         startActivity(to_view_messages);
         finish();
     }
@@ -726,7 +730,30 @@ if(_for.equals("received")){
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role.equals("Teacher")) {
+            Intent tohome = new Intent(view_messages.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Student")){
+            Intent tohome = new Intent(view_messages.this, student_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Parent")){
+            Intent tohome = new Intent(view_messages.this, parent_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            startActivity(tohome);
+        }
+    }
 
 
 

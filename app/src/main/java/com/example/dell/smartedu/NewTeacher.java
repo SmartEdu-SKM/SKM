@@ -149,7 +149,6 @@ public class NewTeacher extends BaseActivity {
 
     protected void addTeacher(final ParseUser userRef){
 
-
         ParseQuery<ParseObject> teacherQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
         teacherQuery.whereEqualTo(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
         teacherQuery.whereEqualTo(TeacherTable.SERIAL_NUMBER, serial);
@@ -165,6 +164,7 @@ public class NewTeacher extends BaseActivity {
                         teacher.put(TeacherTable.INSTITUTION_NAME, institution_name);
                         teacher.put(TeacherTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                         teacher.put(TeacherTable.TEACHER_USER_REF, userRef);
+                        teacher.put(TeacherTable.SERIAL_NUMBER,serial);
                         teacher.saveInBackground();
 
                         Toast.makeText(getApplicationContext(), "Teacher details successfully stored", Toast.LENGTH_LONG).show();

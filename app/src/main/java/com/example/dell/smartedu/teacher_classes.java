@@ -308,6 +308,18 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role.equals("Teacher")) {
+            Intent tohome = new Intent(teacher_classes.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }
+    }
+
     /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

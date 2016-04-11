@@ -28,6 +28,7 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
     String role;
     String institution_name;
     String institution_code;
+    String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -41,6 +42,9 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
             role = fromrole.getString("role");
             institution_code=fromrole.getString("institution_code");
             institution_name=fromrole.getString("institution_name");
+            if(role.equals("Parent")){
+                child_username=fromrole.getString("child_username");
+            }
             Log.d("institution",institution_code + " " + institution_name);
 
 
@@ -160,6 +164,31 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
 
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role.equals("Teacher")) {
+            Intent tohome = new Intent(Schedule.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Student")){
+            Intent tohome = new Intent(Schedule.this, student_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Parent")){
+            Intent tohome = new Intent(Schedule.this, parent_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            startActivity(tohome);
+        }
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
 
         View v = getCurrentFocus();
@@ -197,4 +226,6 @@ public class Schedule extends AppCompatActivity implements ActionBar.TabListener
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
     }
+
+
 }

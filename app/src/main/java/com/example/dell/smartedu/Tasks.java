@@ -93,7 +93,7 @@ String child_username;
         role = fromrole.getString("role");
         institution_name=fromrole.getString("institution_name");
         institution_code=fromrole.getString("institution_code");
-        if(role=="Parent"){
+        if(role.equals("Parent")){
             child_username=fromrole.getString("child_username");
         }
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -430,24 +430,24 @@ String child_username;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(role=="Teacher") {
+        if(role.equals("Teacher")) {
             Intent tohome = new Intent(Tasks.this, MainActivity.class);
             tohome.putExtra("role",role);
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
             startActivity(tohome);
-        }else if(role=="Student"){
+        }else if(role.equals("Student")){
             Intent tohome = new Intent(Tasks.this, student_home_activity.class);
             tohome.putExtra("role",role);
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
-            tohome.putExtra("child_username",child_username);
             startActivity(tohome);
-        }else if(role=="Parent"){
+        }else if(role.equals("Parent")){
             Intent tohome = new Intent(Tasks.this, parent_home_activity.class);
             tohome.putExtra("role",role);
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
             startActivity(tohome);
         }
     }
