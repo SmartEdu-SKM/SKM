@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,6 +49,9 @@ public class NewTask extends BaseActivity {
         setContentView(R.layout.activity_new_task);
 
 
+        context= this;
+        layoutLoading= (RelativeLayout) findViewById(R.id.loadingPanel);
+        layoutLoading.setVisibility(View.GONE);
         taskTitle = (EditText) findViewById(R.id.taskTitle);
 
         taskDescription = (EditText) findViewById(R.id.scheduleinfo);
@@ -59,6 +62,7 @@ public class NewTask extends BaseActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //layoutLoading.setVisibility(View.VISIBLE);
                 open();
             }
         });
@@ -124,6 +128,7 @@ public class NewTask extends BaseActivity {
     public void open()
     {
 
+        //new LoadingSyncClass(context, layoutLoading, null,"calendar_task").execute(Year,Month,Day);
         final Dialog dialog = new Dialog(NewTask.this);
         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setTitle("Select Date");
@@ -142,22 +147,23 @@ public class NewTask extends BaseActivity {
                 Day = dayOfMonth;
                 long[] milliseconds = new long[2];
 
-                checkDate(Day, Month+1, Year, milliseconds);
+                checkDate(Day, Month + 1, Year, milliseconds);
                 Log.d("date test ", milliseconds[0] + " selected:" + milliseconds[1]);
-                if(milliseconds[1] <= milliseconds[0]){
+                if (milliseconds[1] <= milliseconds[0]) {
                     Toast.makeText(getApplicationContext(), "Choose Future Date!", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                     date1 = new Date(Year - 1900, Month, Day);
                     DATE.setText(df.format(date1), TextView.BufferType.EDITABLE);
                     Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
                     dialog.dismiss();
+                   // layoutLoading.setVisibility(View.GONE);
                 }
 
             }
         });
         dialog.show();
+
 
 
 

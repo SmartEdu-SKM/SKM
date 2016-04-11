@@ -162,47 +162,44 @@ class LoadingSyncClass extends AsyncTask<String, Integer, String> {
         /*
         else if(_for.equals("student_create_id")){
 
-            final String classId = params[0];
-            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
+            String Year = params[0];
+            String Month = params[1];
+            String Day = params[2];
+            final Dialog dialog = new Dialog(context);
+            //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setTitle("Select Date");
+            dialog.setContentView(R.layout.activity_calendar2);
 
-            try {
-                studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class", classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            studentQuery.whereEqualTo(StudentTable.ADDED_BY_USER_REF, null);
-            studentQuery.whereEqualTo(StudentTable.STUDENT_USER_REF, null);
-            studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> studentListRet, ParseException e) {
-                    if (e == null) {
-                        if(studentListRet.size()==0){
-                            Toast.makeText(context, "No ID to be added. Already Updated", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            for(int i=0; i<studentListRet.size(); i++) {
-                                ParseObject u = studentListRet.get(i);
-                                String name = u.getString(StudentTable.STUDENT_NAME);
-                                Integer age = u.getInt(StudentTable.STUDENT_AGE);
-                                Integer rollno = u.getInt(StudentTable.ROLL_NUMBER);
+            context.setDialogSize(dialog);
 
-                                final String sessionToken = ParseUser.getCurrentUser().getSessionToken();
-                                Students.addStudentUser(name, age, rollno, sessionToken, u);
-                                Students.sleep(10000);
-                                Students.addParentUser(name, age, rollno, sessionToken);
-                                Log.d("shareCode", "Main: ");
-                                // u.put("addedBy", ParseUser.getCurrentUser());
-                                //u.saveEventually();
-                            }
-                        }
+            calendar= (CalendarView)dialog.findViewById(R.id.calendar);
 
+            calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 
-                    } else {
-                        //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
-                        Log.d("user", "Error: " + e.getMessage());
+                    Year = year;
+                    Month = month;
+                    Day = dayOfMonth;
+                    long[] milliseconds = new long[2];
+
+                    checkDate(Day, Month+1, Year, milliseconds);
+                    Log.d("date test ", milliseconds[0] + " selected:" + milliseconds[1]);
+                    if(milliseconds[1] <= milliseconds[0]){
+                        Toast.makeText(getApplicationContext(), "Choose Future Date!", Toast.LENGTH_LONG).show();
                     }
+                    else {
+                        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                        date1 = new Date(Year - 1900, Month, Day);
+                        DATE.setText(df.format(date1), TextView.BufferType.EDITABLE);
+                        Toast.makeText(getApplicationContext(), dayOfMonth + "/" + (Month + 1) + "/" + year, Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+
                 }
             });
-
+            dialog.show();
+            layoutLoading.setVisibility(View.GONE);
 
 
         } */

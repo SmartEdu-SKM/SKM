@@ -1,5 +1,6 @@
 package com.example.dell.smartedu;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -53,6 +55,8 @@ public class UploadImage_students extends ListActivity {
     String institution_code;
     String role;
     private Uri mMediaUri;
+    Activity context;
+    RelativeLayout layoutLoading;
 
     public void queryImagesFromParse(){
         ParseQuery<ParseObject> imagesQuery = new ParseQuery<>(ImageUploadsTable.TABLE_NAME);
@@ -75,6 +79,7 @@ public class UploadImage_students extends ListActivity {
                             adapter = new ImageLoaderAdapter(UploadImage_students.this, pFileList);
                             //lv.setAdapter(adapter);
                             setListAdapter(adapter);
+                            new LoadingSyncList(context, layoutLoading, lv).execute();
 
                             adapter.notifyDataSetChanged();
                         }
@@ -96,6 +101,8 @@ public class UploadImage_students extends ListActivity {
         setContentView(R.layout.activity_upload_image_students);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        layoutLoading= (RelativeLayout)findViewById(R.id.loadingPanel);
 
         /*
         setSupportActionBar(mToolbar);

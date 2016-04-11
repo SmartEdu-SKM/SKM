@@ -52,6 +52,8 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             studentId=from_home.getStringExtra("studentId");
             classGradeId=from_home.getStringExtra("classGradeId");
 
+            context=this;
+
 
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(mToolbar);
@@ -117,6 +119,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
 
                         }
                         classList.setAdapter(adapter);
+                        new LoadingSyncList(context,layoutLoading,classList).execute();
                     } else {
                         Log.d("class", "error in query");
                     }

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +82,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     int Yearcal;
     int Monthcal;
     int Daycal;
+    ListView list;
 
     private FragmentDrawer drawerFragment;
 
@@ -98,6 +100,10 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         role=from_main.getStringExtra("role");
         institution_name = from_main.getStringExtra("institution_name");
         institution_code=from_main.getStringExtra("institution_code");
+
+       layoutLoading= (RelativeLayout)findViewById(R.id.loadingPanel);
+        context= this;
+        list = (ListView) findViewById(R.id.uploadList);
 
 
 
@@ -143,22 +149,21 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                             if (e == null) {
 
                                 ArrayList<String> uploadLt = new ArrayList<String>();
-                                ArrayAdapter adapter = new ArrayAdapter(UploadMaterial.this, android.R.layout.simple_list_item_1, uploadLt)
-                                {
+                                ArrayAdapter adapter = new ArrayAdapter(UploadMaterial.this, android.R.layout.simple_list_item_1, uploadLt) {
 
-                                @Override
-                                public View getView(int position, View convertView,
-                                        ViewGroup parent) {
-                                    View view = super.getView(position, convertView, parent);
+                                    @Override
+                                    public View getView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                        View view = super.getView(position, convertView, parent);
 
-                                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                                        TextView textView = (TextView) view.findViewById(android.R.id.text1);
 
             /*YOUR CHOICE OF COLOR*/
-                                    textView.setTextColor(Color.WHITE);
+                                        textView.setTextColor(Color.BLACK);
 
-                                    return view;
-                                }
-                            };
+                                        return view;
+                                    }
+                                };
 
                                 Log.d("user", "Retrieved " + uploadListRet.size() + " uploads");
                                 //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
@@ -184,6 +189,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
 
                                 uploadList.setAdapter(adapter);
+                                new LoadingSyncList(context, layoutLoading, list).execute();
 
 
                                 uploadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -205,7 +211,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
                                         setDialogSize(dialog);
 
-                                        detailHead= (TextView) dialog.findViewById(R.id.textView20);
+                                        detailHead = (TextView) dialog.findViewById(R.id.textView20);
                                         detailHead.setSelected(true);
 
                                         myType = (TextView) dialog.findViewById(R.id.typeDesc);
@@ -252,12 +258,11 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                         }
 
 
-
                                         //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
                                         ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
                                         uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
-                                                uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
+                                        uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
                                         uploadQuery.whereEqualTo(ImageUploadsTable.CLASS_REF, ParseObject.createWithoutData(ClassTable.TABLE_NAME, classId));
                                         uploadQuery.whereEqualTo(ImageUploadsTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
                                         uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
@@ -315,7 +320,6 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                         Log.d("user", "upload id: " + uploadid);
 
 
-
                                                         viewAllButton.setOnClickListener(new View.OnClickListener() {
 
                                                             public void onClick(View v) {
@@ -359,8 +363,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
                                                             }
                                                         });
                                                         dialog.show();
-
-
+                                                        new LoadingSyncList(context,layoutLoading,list).execute();
                                                     }
                                                 } else {
                                                     Log.d("user", "Error: " + e.getMessage());
@@ -376,14 +379,14 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
                                 });
 
-
+                                new LoadingSyncList(context,layoutLoading,list).execute();
                             } else {
                                 Toast.makeText(UploadMaterial.this, "error", Toast.LENGTH_LONG).show();
                                 Log.d("user", "Error: " + e.getMessage());
                             }
                         }
                     });
-
+                    new LoadingSyncList(context,layoutLoading,list).execute();
 
                 } else {
                     Toast.makeText(UploadMaterial.this, "error", Toast.LENGTH_LONG).show();
