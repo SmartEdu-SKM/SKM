@@ -65,6 +65,8 @@ public class ImageResizer {
         // Only decode the bounds of the image, not the whole image, to get the dimensions
         options.inJustDecodeBounds = true;
         options.inSampleSize=2;
+        options.inPreferredConfig= Bitmap.Config.RGB_565;
+        options.inDither= true;
         BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
 
         return new Pair<Integer, Integer>(options.outWidth, options.outHeight);

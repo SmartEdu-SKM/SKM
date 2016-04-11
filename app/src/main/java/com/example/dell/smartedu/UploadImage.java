@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -197,6 +198,7 @@ public class UploadImage extends ListActivity {
                         //there was an error
                         Toast.makeText(getApplicationContext(), "There was an error. Try again!", Toast.LENGTH_LONG).show();
                     }else{
+                        Toast.makeText(getApplicationContext(), "Uploading ...", Toast.LENGTH_LONG).show();
 
                         ParseQuery<ParseObject> imageQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
                         imageQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadId);
@@ -571,7 +573,19 @@ public class UploadImage extends ListActivity {
                 }else{
                     mMediaUri = data.getData();
                     //set previews
-                    mPreviewImageView.setImageURI(mMediaUri);
+                    InputStream input = null;
+                    try {
+                        input = this.getContentResolver().openInputStream(mMediaUri);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 2;
+                    options.inPreferredConfig= Bitmap.Config.RGB_565;
+                    options.inDither= true;
+                    Bitmap bitmap = BitmapFactory.decodeStream( input,null,options );
+
+                    mPreviewImageView.setImageBitmap(bitmap);
                 }
             }else {
 
@@ -592,7 +606,9 @@ public class UploadImage extends ListActivity {
                 }
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 3;
+                options.inSampleSize = 2;
+                options.inPreferredConfig= Bitmap.Config.RGB_565;
+                options.inDither= true;
                Bitmap bitmap = BitmapFactory.decodeStream( fis,null,options );
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, baos );
