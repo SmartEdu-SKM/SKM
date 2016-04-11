@@ -29,7 +29,7 @@ public class FileHelper {
                 inStream = context.getContentResolver().openInputStream(uri);
                 outStream = new ByteArrayOutputStream();
 
-                byte[] bytesFromFile = new byte[1024*1024]; // buffer size (1 MB)
+                byte[] bytesFromFile = new byte[1024]; // buffer size (1 MB)
                 int bytesRead = inStream.read(bytesFromFile);
                 while (bytesRead != -1) {
                     outStream.write(bytesFromFile, 0, bytesRead);
