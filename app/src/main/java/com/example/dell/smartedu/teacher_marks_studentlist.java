@@ -36,7 +36,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-   
+
     ListView studentList;
     Notification_bar noti_bar;
     String classId;

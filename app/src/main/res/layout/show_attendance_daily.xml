@@ -61,7 +61,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/exam"
-        android:text="absent days"
         android:layout_below="@+id/absentDays_head"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -72,7 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/totalMarks"
-        android:text="total days"
         android:layout_below="@+id/totalDays_head"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -91,7 +89,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="percentage"
         android:id="@+id/percentage"
         android:layout_below="@+id/percentage_head"
         android:layout_marginTop="10dp"
