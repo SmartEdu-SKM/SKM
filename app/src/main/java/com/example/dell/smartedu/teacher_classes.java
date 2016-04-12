@@ -214,7 +214,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_exams.putExtra("role", role);
                                 to_exams.putExtra("id", id);
                                 to_exams.putExtra("classGradeId", classMap.get(item));
-                                to_exams.putExtra("_for", _for);
+                                to_exams.putExtra("for", _for);
                                 startActivity(to_exams);
                             } else if (_for.equals("upload")) {
                                 Intent to_uploads = new Intent(teacher_classes.this, SelectSubject.class);
@@ -223,7 +223,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_uploads.putExtra("role", role);
                                 to_uploads.putExtra("id", id);
                                 to_uploads.putExtra("classGradeId", classMap.get(item));
-                                to_uploads.putExtra("_for", _for);
+                                to_uploads.putExtra("for", _for);
                                 startActivity(to_uploads);
                             } else if (_for.equals("message")) {
                                 Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
@@ -241,7 +241,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_att.putExtra("classGradeId", classMap.get(item));
                                 to_att.putExtra("role", role);
                                 to_att.putExtra("id", id);
-                                to_att.putExtra("_for", _for);
+                                to_att.putExtra("for", _for);
                                 startActivity(to_att);
                             }
                         } else {

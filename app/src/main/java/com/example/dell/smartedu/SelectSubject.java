@@ -53,7 +53,7 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
             Intent from_home = getIntent();
-            _for = from_home.getStringExtra("_for");
+            _for = from_home.getStringExtra("for");
             role = from_home.getStringExtra("role");
             institution_code = from_home.getStringExtra("institution_code");
             institution_name = from_home.getStringExtra("institution_name");
