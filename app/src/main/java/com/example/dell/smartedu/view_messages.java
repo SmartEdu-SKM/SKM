@@ -130,7 +130,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
 
 if(_for.equals("received")){
     getSupportActionBar().setTitle("Received Messages");
-        change_mode.setText("GO TO SENT MESSAGES");
+        change_mode.setText("SEE SENT MESSAGES");
 
     change_mode.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -138,12 +138,12 @@ if(_for.equals("received")){
             Intent read_message_intent = new Intent(view_messages.this, view_messages.class);
             read_message_intent.putExtra("role", role);
 
-                classId = from_student.getStringExtra("classId");
-                studentId = from_student.getStringExtra("studentId");
-                read_message_intent.putExtra("classId", classId);
-                read_message_intent.putExtra("studentId", studentId);
-                read_message_intent.putExtra("institution_code", institution_code);
-                read_message_intent.putExtra("institution_name", institution_name);
+            classId = from_student.getStringExtra("classId");
+            studentId = from_student.getStringExtra("studentId");
+            read_message_intent.putExtra("classId", classId);
+            read_message_intent.putExtra("studentId", studentId);
+            read_message_intent.putExtra("institution_code", institution_code);
+            read_message_intent.putExtra("institution_name", institution_name);
 
             read_message_intent.putExtra("for", "sent");
             startActivity(read_message_intent);
@@ -153,6 +153,7 @@ if(_for.equals("received")){
         ParseQuery<ParseObject> messageQuery = ParseQuery.getQuery(MessageTable.TABLE_NAME);
         messageQuery.whereEqualTo(MessageTable.TO_USER_REF, ParseUser.getCurrentUser());
     messageQuery.whereEqualTo(MessageTable.DELETED_BY_RECEIVER, false);
+    messageQuery.addDescendingOrder(MessageTable.SENT_AT);
     messageQuery.findInBackground(new FindCallback<ParseObject>() {
         public void done(List<ParseObject> messageListRet, ParseException e) {
             if (e == null) {
@@ -403,7 +404,7 @@ if(_for.equals("received")){
 
         if(_for.equals("sent")){
             getSupportActionBar().setTitle("Sent Messages");
-            change_mode.setText("GO TO RECEIVED MESSAGES");
+            change_mode.setText("SEE RECEIVED MESSAGES");
 
             change_mode.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -421,6 +422,8 @@ if(_for.equals("received")){
             messageQuery.whereEqualTo(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
             messageQuery.whereEqualTo(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
             messageQuery.whereEqualTo(MessageTable.DELETED_BY_SENDER, false);
+            messageQuery.addDescendingOrder(MessageTable.SENT_AT);
+
             messageQuery.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> messageListRet, ParseException e) {
                     if (e == null) {

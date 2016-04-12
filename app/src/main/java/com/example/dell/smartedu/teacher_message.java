@@ -50,7 +50,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     Spinner role;
     Model[] modelItems;
     CustomAdapter customAdapter;
-
+String rolename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         institution_name=from_student.getStringExtra("institution_name");
         institution_code=from_student.getStringExtra("institution_code");
         classGradeId= from_student.getStringExtra("classGradeId");
-
+        rolename=super.role;
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
@@ -149,46 +149,10 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                     @Override
                                     public void onClick(View v) {
                                         sendToSelected();
+
+
                                     }
                                 });
-
-                                /*
-                                studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        String item = ((TextView) view).getText().toString();
-
-                                        String[] itemValues = item.split(". ");
-
-                                        final String[] details = new String[2];
-                                        int j = 0;
-
-                                        for (String x : itemValues) {
-                                            details[j++] = x;
-                                        }
-
-                                        Log.d("user", "rno: " + details[0].trim()+"name "+details[1]);  //extracts Chit as Chi and query fails???
-
-                                        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                        studentQuery.whereEqualTo("rollNumber", Integer.parseInt(details[0].trim()));
-                                        studentQuery.whereEqualTo("name", details[1].trim());
-                                        studentQuery.whereEqualTo("class", classRef[0]);
-                                        studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                            public void done(List<ParseObject> studentListRet, ParseException e) {
-                                                if (e == null) {
-                                                    if(studentListRet.size()!=0) {
-                                                        ParseObject student = studentListRet.get(0);
-                                                        giveMessage(student);
-                                                    }
-                                                } else {
-                                                    Log.d("user", "Error: " + e.getMessage());
-                                                }
-                                            }
-                                        });
-
-
-                                    }
-                                });*/
 
 
                             } else {
@@ -234,13 +198,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     if(role.getSelectedItem().equals("Student"))
                     {
 
-                    /*    final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
-                        classQuery.findInBackground(new FindCallback<ParseObject>() {
-                            public void done(List<ParseObject> studentListRet, ParseException e) {
-                                if (e == null) {
-                                    classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                                     studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
@@ -269,7 +226,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
-
+                                                    goToViewMessages();
 
                                                 }
                                                 Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
@@ -289,13 +246,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                     }else       //if parent selected
                     {
 
-                     /*   final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
-                        classQuery.findInBackground(new FindCallback<ParseObject>() {
-                            public void done(List<ParseObject> studentListRet, ParseException e) {
-                                if (e == null) {
-                                    classRef[0] = studentListRet.get(0); */
+
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
                                     studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
@@ -334,7 +285,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
-
+goToViewMessages();
 
                                                                 } else {
                                                                     Log.d("user", "Error in query");
@@ -357,12 +308,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                     });
 
 
-                             /*   } else {
-                                    Toast.makeText(teacher_message.this, "error", Toast.LENGTH_LONG).show();
-                                    Log.d("user", "Error: " + e.getMessage());
-                                }
-                            }
-                        }); */
 
 
                     }
@@ -442,6 +387,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         ParseObject student = studentListRet.get(0);
                                         giveMessage(student, role.getSelectedItem().toString());
                                         marks_add.dismiss();
+                                        Toast.makeText(teacher_message.this, "Message Successfully Sent to " + role.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                                        goToViewMessages();
                                     }
                                 } else {
                                     Log.d("user", "Error: " + e.getMessage());
@@ -485,7 +432,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
 
                         newmessage.put(MessageTable.SENT_AT, d.getTime());
                         newmessage.saveEventually();
-            Toast.makeText(teacher_message.this, "Message Successfully Sent to Student", Toast.LENGTH_LONG).show();
 
                     }else       //if parent selected
                     {
@@ -520,7 +466,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                         newmessage.put(MessageTable.SENT_AT, d.getTime());
                                         newmessage.saveEventually();
 
-                                        Toast.makeText(teacher_message.this, "Message Successfully Sent to Parent", Toast.LENGTH_LONG).show();
 
 
                                     } else
@@ -546,6 +491,16 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
             Intent nouser=new Intent(teacher_message.this,login.class);
             startActivity(nouser);
         }
+    }
+
+
+    protected void goToViewMessages(){
+        Intent read_message_intent = new Intent(teacher_message.this, view_messages.class);
+        read_message_intent.putExtra("role", rolename);
+        read_message_intent.putExtra("institution_code", institution_code);
+        read_message_intent.putExtra("institution_name", institution_name);
+        read_message_intent.putExtra("for", "sent");
+        startActivity(read_message_intent);
     }
 
     @Override
