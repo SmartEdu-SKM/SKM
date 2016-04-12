@@ -36,8 +36,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+   
     ListView studentList;
     Notification_bar noti_bar;
     String classId;
@@ -78,16 +77,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,"Teacher");
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
 
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-        Toast.makeText(teacher_marks_studentlist.this, "id class selected is = " +classId, Toast.LENGTH_LONG).show();
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
@@ -95,7 +85,6 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
                     Log.d("class", "Retrieved the class");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
                     classRef[0] = studentListRet.get(0);
 
