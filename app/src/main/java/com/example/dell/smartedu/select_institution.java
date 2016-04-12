@@ -74,9 +74,6 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
         drawerFragment.setDrawerListener(this);
 
 
-        Toast.makeText(select_institution.this, "role selected = " +role, Toast.LENGTH_LONG).show();
-
-
         ParseQuery<ParseObject> institutionQuery = ParseQuery.getQuery(RoleTable.TABLE_NAME);
         institutionQuery.whereEqualTo(RoleTable.ROLE,role);
         institutionQuery.whereEqualTo(RoleTable.OF_USER_REF,ParseUser.getCurrentUser());

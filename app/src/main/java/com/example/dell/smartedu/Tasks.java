@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -99,15 +100,11 @@ String child_username;
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
-        
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-
 
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
 
+        final HashMap<String,String> taskmap=new HashMap<>();
         ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
         taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
         taskQuery.whereEqualTo(TaskTable.BY_USER_ROLE, role);
@@ -115,7 +112,7 @@ String child_username;
         taskQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> taskListRet, ParseException e) {
                 if (e == null) {
-                    //Log.d("user", "Retrieved " + userList.size() + " users");
+
 
                     if (taskListRet.size()!=0) {
                         Log.d("user", "Retrieved " + taskListRet.size() + " users");
@@ -134,7 +131,7 @@ String child_username;
                             final String dateString = formatter.format(new Date(u.getLong(TaskTable.DUE_DATE)));
                             name += dateString;
                             items[i] = name;
-
+                            taskmap.put(name,u.getObjectId());
                             // adapter.add(name);
 
                         }
@@ -158,6 +155,7 @@ String child_username;
 
 
                 // selected item
+              //  Log.d("id",taskmap.get(((TextView) view).getText().toString()));
                 String[] product = ((TextView) view).getText().toString().split("\n");
                 final String[] details = new String[3];
                 int i = 0;
@@ -206,28 +204,16 @@ String child_username;
 
                 //Toast.makeText(Tasks.this, "date = " + d.toString() + "ms" + milliseconds, Toast.LENGTH_LONG).show();
 
-                ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
+                final ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
                 taskQuery.whereEqualTo(TaskTable.TASK_NAME, details[0].trim());
                 taskQuery.whereEqualTo(TaskTable.CREATED_BY_USER_REF, ParseUser.getCurrentUser());
                 taskQuery.whereEqualTo(TaskTable.BY_USER_ROLE, role);
                 taskQuery.whereEqualTo(TaskTable.DUE_DATE, milliseconds);
-                taskQuery.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> taskListRet, com.parse.ParseException e) {
-                        if (e == null) {
-                            if (taskListRet.size() != 0) {
-                                ParseObject u = taskListRet.get(0);
-                                taskid = u.getObjectId();
-                                Toast.makeText(Tasks.this, "id of task selected is = " + taskid, Toast.LENGTH_LONG).show();
-                            } else {
 
-                                Log.d("user", "error in query");
-                            }
-                        }
-                        else {
-                            Log.d("user", "Error: " + e.getMessage());
-                        }
-                    }
-                });
+              taskid=taskmap.get(((TextView) view).getText().toString());
+
+
+
 
                 okButton = (Button) dialog.findViewById(R.id.doneButton);
                 delButton = (Button) dialog.findViewById(R.id.doneButton);
@@ -285,6 +271,7 @@ String child_username;
                                 myDate.setText(String.valueOf(Daycal) + "/" + String.valueOf(Monthcal) + "/" + String.valueOf(Yearcal));
                             }
                         });
+//Log.d("taskid",taskid);
 
                         EditButton.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
@@ -292,14 +279,10 @@ String child_username;
                                 if (Title.equals("") || Desc.equals("") ) {
                                     Toast.makeText(getApplicationContext(), "Event details cannot be empty!", Toast.LENGTH_LONG).show();
                                 } else {
-                                    ParseQuery<ParseObject> taskQuery = ParseQuery.getQuery(TaskTable.TABLE_NAME);
-                                    taskQuery.whereEqualTo(TaskTable.OBJECT_ID, taskid);
-                                    taskQuery.findInBackground(new FindCallback<ParseObject>() {
-                                        public void done(List<ParseObject> objectRet, ParseException e) {
-
-                                            if (e == null) {
-                                                objectRet.get(0).put(TaskTable.TASK_NAME, ((EditText) dialog_in.findViewById(R.id.taskTitle)).getText().toString());
-                                                objectRet.get(0).put(TaskTable.TASK_DESCRIPTION, ((EditText) dialog_in.findViewById(R.id.scheduleinfo)).getText().toString());
+                                    ParseObject taskeditobject=ParseObject.createWithoutData(TaskTable.TABLE_NAME,taskid);
+                                                taskeditobject.put(TaskTable.TASK_NAME,Title.getText().toString());
+                                    Log.d("task",Title.getText().toString());
+                                                taskeditobject.put(TaskTable.TASK_DESCRIPTION, Desc.getText().toString());
                                                 if (flag[0] == 1) {
                                                     Day = Daycal;
                                                     Month = Monthcal;
@@ -327,18 +310,13 @@ String child_username;
                                                 try {
                                                     d = f.parse(string_date);
                                                 } catch (java.text.ParseException e1) {
-                                                    e.printStackTrace();
+                                                    e1.printStackTrace();
                                                 }
                                                 long newmilliseconds = d.getTime();
-                                                objectRet.get(0).put(TaskTable.DUE_DATE, newmilliseconds);
-                                                objectRet.get(0).saveEventually();
+                                                taskeditobject.put(TaskTable.DUE_DATE, newmilliseconds);
+                                                taskeditobject.saveEventually();
 
-                                            } else {
-                                                Log.d("Post retrieval", "Error: " + e.getMessage());
-                                            }
 
-                                        }
-                                    });
                                     dialog_in.dismiss();
                                     onRestart();
                                 }
@@ -347,14 +325,12 @@ String child_username;
                         });
 
                         dialog_in.show();
-                        // taskLt.set(position, Title.getText().toString() + "\n" + Desc.getText().toString() + "\n" + myDate.getText().toString());
-                        //adapter.notifyDataSetChanged();
+
                         dialog.dismiss();
                     }
                 });
 
                 dialog.show();
-                //recreate();
 
 
             }
