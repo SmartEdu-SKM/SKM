@@ -49,6 +49,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     Model[] modelItems;
     CustomAdapter customAdapter;
     String studentId;
+    String child_username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,11 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         role = from_student.getStringExtra("role");
         institution_name= from_student.getStringExtra("institution");
         institution_code= from_student.getStringExtra("institution_code");
+        classGradeId=from_student.getStringExtra("classGradeId");
+        studentId=from_student.getStringExtra("studentId");
+        if(role.equals("Parent")){
+            child_username=from_student.getStringExtra("child_username");
+        }
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(),role,institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -177,14 +183,6 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                 }else
                 {
 
-
-                      /*  final ParseObject[] classRef = new ParseObject[1];
-                        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-                        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
-                        classQuery.findInBackground(new FindCallback<ParseObject>() {
-                            public void done(List<ParseObject> studentListRet, ParseException e) {
-                                if (e == null) {
-                                    classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                                     studentQuery.whereEqualTo(ClassTable.CLASS_NAME, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
                                    // studentQuery.whereEqualTo(ClassTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
@@ -216,10 +214,12 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
-                                                    Toast.makeText(message_to_teacher.this, "Message Successfully Broadcasted to teachers", Toast.LENGTH_LONG).show();
 
 
                                                 }
+                                                goToViewMessages();
+
+                                                Toast.makeText(message_to_teacher.this, "Message Successfully Broadcasted to teachers", Toast.LENGTH_LONG).show();
 
                                             } else {
                                                 Toast.makeText(message_to_teacher.this, "error broadcasting to teachers", Toast.LENGTH_LONG).show();
@@ -304,6 +304,9 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                             }
 
                         }
+                        goToViewMessages();
+
+                        Toast.makeText(message_to_teacher.this, "Message Successfully Sent to Teacher", Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -338,9 +341,33 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
             newmessage.put(MessageTable.SENT_AT, d.getTime());
             newmessage.saveEventually();
-            Toast.makeText(message_to_teacher.this, "Message Successfully Sent to Teacher", Toast.LENGTH_LONG).show();
 
 
+    }
+
+
+
+    protected void goToViewMessages(){
+        if(role.equals("Parent")) {
+            Intent message_intent = new Intent(message_to_teacher.this, view_messages.class);
+            message_intent.putExtra("role", "Parent");
+            message_intent.putExtra("classGradeId", classGradeId);
+            message_intent.putExtra("studentId", studentId);
+            message_intent.putExtra("institution_name", institution_name);
+            message_intent.putExtra("institution_code", institution_code);
+            message_intent.putExtra("child_username", child_username);
+            message_intent.putExtra("for", "sent");
+            startActivity(message_intent);
+        }else if(role.equals("Student")){
+            Intent message_intent = new Intent(message_to_teacher.this, view_messages.class);
+            message_intent.putExtra("role", role);
+            message_intent.putExtra("classGradeId", classGradeId);
+            message_intent.putExtra("studentId", studentId);
+            message_intent.putExtra("institution_name", institution_name);
+            message_intent.putExtra("institution_code", institution_code);
+            message_intent.putExtra("for","sent");
+            startActivity(message_intent);
+        }
     }
 
     @Override

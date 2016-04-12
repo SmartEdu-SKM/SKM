@@ -38,8 +38,6 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
     ListView messageList;
     Notification_bar noti_bar;
     TextView message;
@@ -122,6 +120,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                     message_intent.putExtra("classGradeId", classGradeId);
                     message_intent.putExtra("studentId", studentId);
                     message_intent.putExtra("for", "message");
+                    message_intent.putExtra("child_username",child_username);
                     startActivity(message_intent);
                 }
             });
@@ -757,6 +756,7 @@ if(_for.equals("received")){
             startActivity(tohome);
         }
     }
+
 
 
 

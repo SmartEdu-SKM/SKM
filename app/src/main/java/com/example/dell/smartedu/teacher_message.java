@@ -212,7 +212,8 @@ String rolename;
                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                                                     newmessage.put(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-
+                                                    newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+                                                    newmessage.put(MessageTable.DELETED_BY_SENDER,false);
                                                     java.util.Calendar calendar = Calendar.getInstance();
                                                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                                                     String date = format.format(new Date(calendar.getTimeInMillis()));
@@ -272,6 +273,8 @@ String rolename;
                                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
                                                                     newmessage.put(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                                                    newmessage.put(MessageTable.DELETED_BY_RECEIVER,false);
+                                                                    newmessage.put(MessageTable.DELETED_BY_SENDER,false);
                                                                     java.util.Calendar calendar = Calendar.getInstance();
                                                                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
                                                                     String date = format.format(new Date(calendar.getTimeInMillis()));
@@ -285,7 +288,6 @@ String rolename;
                                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
-goToViewMessages();
 
                                                                 } else {
                                                                     Log.d("user", "Error in query");
@@ -297,6 +299,8 @@ goToViewMessages();
                                                     });
 
                                                 }
+                                                goToViewMessages();
+
                                                 Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
 
 
@@ -388,7 +392,7 @@ goToViewMessages();
                                         giveMessage(student, role.getSelectedItem().toString());
                                         marks_add.dismiss();
                                         Toast.makeText(teacher_message.this, "Message Successfully Sent to " + role.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-                                        goToViewMessages();
+
                                     }
                                 } else {
                                     Log.d("user", "Error: " + e.getMessage());
@@ -398,6 +402,7 @@ goToViewMessages();
                     }
 
                 }
+                goToViewMessages();
 
             }
         }
