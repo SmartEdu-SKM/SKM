@@ -216,7 +216,7 @@ String child_username;
 
 
                 okButton = (Button) dialog.findViewById(R.id.doneButton);
-                delButton = (Button) dialog.findViewById(R.id.doneButton);
+                delButton = (Button) dialog.findViewById(R.id.delButton);
                 editButton = (Button) dialog.findViewById(R.id.editButton);
 
 
