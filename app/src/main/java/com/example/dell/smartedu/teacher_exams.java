@@ -284,4 +284,20 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
     }
 
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent tohome = new Intent(teacher_exams.this, SelectSubject.class);
+        tohome.putExtra("role",role);
+        tohome.putExtra("institution_name",institution_name);
+        tohome.putExtra("institution_code",institution_code);
+        tohome.putExtra("for","exam");
+        tohome.putExtra("classGradeId", classGradeId);
+
+        startActivity(tohome);
+
+    }
+
 }

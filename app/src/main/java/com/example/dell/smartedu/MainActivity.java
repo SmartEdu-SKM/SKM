@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity{
                     read_message_intent.putExtra("role", role);
                     read_message_intent.putExtra("institution_code",institution_code);
                     read_message_intent.putExtra("institution_name",institution_name);
-                    read_message_intent.putExtra("_for", "received");
+                    read_message_intent.putExtra("for", "received");
                     startActivity(read_message_intent);
                 } else if (position == 7) {
 

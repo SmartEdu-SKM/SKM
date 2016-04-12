@@ -545,4 +545,17 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent tohome = new Intent(teacher_message.this, teacher_classes.class);
+        tohome.putExtra("role",super.role);
+        tohome.putExtra("institution_name",institution_name);
+        tohome.putExtra("institution_code",institution_code);
+        tohome.putExtra("for","message");
+        startActivity(tohome);
+
+    }
+
 }

@@ -521,7 +521,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 message_intent.putExtra("studentId", studentId);
                 message_intent.putExtra("institution_name", institution_name);
                 message_intent.putExtra("institution_code", institution_code);
-                message_intent.putExtra("_for", "received");
+                message_intent.putExtra("for", "received");
                 startActivity(message_intent);
             }
 

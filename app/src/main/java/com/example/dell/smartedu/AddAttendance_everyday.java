@@ -456,6 +456,21 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                         }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent tohome = new Intent(AddAttendance_everyday.this, SelectSubject.class);
+        tohome.putExtra("role",role);
+        tohome.putExtra("institution_name",institution_name);
+        tohome.putExtra("institution_code",institution_code);
+        tohome.putExtra("for","attendance");
+        tohome.putExtra("classGradeId",classGradeId);
+
+        startActivity(tohome);
+
+    }
+
                     }
 
 

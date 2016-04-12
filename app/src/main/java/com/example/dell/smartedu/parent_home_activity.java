@@ -139,7 +139,7 @@ String child_username;
                                                 message_intent.putExtra("institution_name", institution_name);
                                                 message_intent.putExtra("institution_code", institution_code);
                                                 message_intent.putExtra("child_username",child_username);
-                                                message_intent.putExtra("_for", "received");
+                                                message_intent.putExtra("for", "received");
                                                 startActivity(message_intent);
 
                                             } else if (position == 3) {

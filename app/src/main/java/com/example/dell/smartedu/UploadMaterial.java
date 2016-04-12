@@ -100,7 +100,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
         role=from_main.getStringExtra("role");
         institution_name = from_main.getStringExtra("institution_name");
         institution_code=from_main.getStringExtra("institution_code");
-
+        classGradeId=from_main.getStringExtra("classGradeId");
        layoutLoading= (RelativeLayout)findViewById(R.id.loadingPanel);
         context= this;
         list = (ListView) findViewById(R.id.uploadList);
@@ -645,6 +645,20 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent tohome = new Intent(UploadMaterial.this, SelectSubject.class);
+        tohome.putExtra("role", role);
+        tohome.putExtra("institution_name", institution_name);
+        tohome.putExtra("institution_code", institution_code);
+        tohome.putExtra("for","upload");
+        tohome.putExtra("classGradeId", classGradeId);
+
+        startActivity(tohome);
+
+    }
 
     @Override
     protected void onRestart() {

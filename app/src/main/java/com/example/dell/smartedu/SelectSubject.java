@@ -227,6 +227,7 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
                                 to_uploads.putExtra("institution_code", institution_code);
                                 to_uploads.putExtra("institution_name", institution_name);
                                 to_uploads.putExtra("role", role);
+                                to_uploads.putExtra("classGradeId",classGradeId);
                                 to_uploads.putExtra("classId", id);
                                 startActivity(to_uploads);
                             }
@@ -267,5 +268,18 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent tohome = new Intent(SelectSubject.this, teacher_classes.class);
+        tohome.putExtra("role",role);
+        tohome.putExtra("institution_name",institution_name);
+        tohome.putExtra("institution_code",institution_code);
+        tohome.putExtra("for","exam");
+        startActivity(tohome);
+
+    }
 
 }
