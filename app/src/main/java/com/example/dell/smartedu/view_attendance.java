@@ -37,6 +37,7 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
     //ArrayList<Task> myList;
     ListView classList;
     Notification_bar noti_bar;
+    String child_username;
 
 
     @Override
@@ -48,7 +49,11 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
         role = from_home.getStringExtra("role");
         studentId = from_home.getStringExtra("studentId");
         classId = from_home.getStringExtra("classId");
+        classGradeId= from_home.getStringExtra("classGradeId");
 
+if(role.equals("Parent")){
+    child_username=from_home.getStringExtra("child_username");
+}
         /*
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -140,5 +145,35 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role.equals("Teacher")) {
+            Intent tohome = new Intent(view_attendance.this, student_classes.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Student")){
+            Intent tohome = new Intent(view_attendance.this, student_classes.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("classGradeId",classGradeId);
+            tohome.putExtra("studentId",studentId);
+            tohome.putExtra("for","attendance");
+            startActivity(tohome);
+        }else if(role.equals("Parent")){
+            Intent tohome = new Intent(view_attendance.this,student_classes.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            tohome.putExtra("classGradeId",classGradeId);
+            tohome.putExtra("studentId",studentId);
+            tohome.putExtra("for","attendance");
+            startActivity(tohome);
+        }
+    }
 
 }

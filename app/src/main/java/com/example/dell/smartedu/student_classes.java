@@ -36,7 +36,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
     ListView classList;
     Notification_bar noti_bar;
     String classGradeId;
-
+    String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,10 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             studentId=from_home.getStringExtra("studentId");
             classGradeId=from_home.getStringExtra("classGradeId");
 
+            if(role.equals("Parent")){
+                child_username=from_home.getStringExtra("child_username");
+            }
+
             context=this;
 
 
@@ -61,7 +65,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Classes");
             noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,super.institution_name);
+            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, super.institution_name);
 
 
             dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
@@ -151,16 +155,19 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
                     to_view_atten.putExtra("institution_code",institution_code);
                     to_view_atten.putExtra("institution_name",institution_name);
                     to_view_atten.putExtra("role", role);
-
+                    to_view_atten.putExtra("classGradeId",classGradeId);
+                    to_view_atten.putExtra("child_username",child_username);
                     startActivity(to_view_atten);
                 }
                 else if (_for.equals("upload")) {
                     Intent to_upload = new Intent(student_classes.this, UploadMaterial_students.class);
                     to_upload.putExtra("studentId", studentId);
                     to_upload.putExtra("classId", classId);
+                    to_upload.putExtra("classGradeId",classGradeId);
                     to_upload.putExtra("institution_code",institution_code);
                     to_upload.putExtra("institution_name",institution_name);
                     to_upload.putExtra("role", role);
+
 
                     startActivity(to_upload);
                 }
@@ -184,6 +191,31 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(role.equals("Teacher")) {
+            Intent tohome = new Intent(student_classes.this, MainActivity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Student")){
+            Intent tohome = new Intent(student_classes.this, student_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            startActivity(tohome);
+        }else if(role.equals("Parent")){
+            Intent tohome = new Intent(student_classes.this, parent_home_activity.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+            tohome.putExtra("child_username",child_username);
+            startActivity(tohome);
+        }
+    }
 
 
 }

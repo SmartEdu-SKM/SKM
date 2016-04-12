@@ -242,7 +242,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                 if (e == null) {
                                     classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF,  ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -254,7 +254,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
-                                                    newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                                    newmessage.put(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
 
                                                     java.util.Calendar calendar = Calendar.getInstance();
                                                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
@@ -269,10 +269,11 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                     newmessage.saveEventually();
                                                     marks_add.dismiss();
-                                                    Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
 
 
                                                 }
+                                                Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Students", Toast.LENGTH_LONG).show();
+
 
                                             } else {
                                                 Toast.makeText(teacher_message.this, "error broadcasting to students", Toast.LENGTH_LONG).show();
@@ -296,7 +297,7 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                 if (e == null) {
                                     classRef[0] = studentListRet.get(0); */
                                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF,  ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId));
+                                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME, classGradeId));
                                     studentQuery.addAscendingOrder(StudentTable.ROLL_NUMBER);
                                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -305,9 +306,9 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                 for (int i = 0; i < studentListRet.size(); i++) {
 
 
-                                                    ParseUser student_ofclient=(ParseUser)studentListRet.get(i).get(StudentTable.STUDENT_USER_REF);
-                                                    ParseQuery<ParseObject> parent_relation= ParseQuery.getQuery(ParentTable.TABLE_NAME);
-                                                    parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF,student_ofclient);
+                                                    ParseUser student_ofclient = (ParseUser) studentListRet.get(i).get(StudentTable.STUDENT_USER_REF);
+                                                    ParseQuery<ParseObject> parent_relation = ParseQuery.getQuery(ParentTable.TABLE_NAME);
+                                                    parent_relation.whereEqualTo(ParentTable.CHILD_USER_REF, student_ofclient);
                                                     parent_relation.findInBackground(new FindCallback<ParseObject>() {
                                                         @Override
                                                         public void done(List<ParseObject> objects, ParseException e) {
@@ -319,13 +320,13 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put(MessageTable.FROM_USER_REF, ParseUser.getCurrentUser());
                                                                     newmessage.put(MessageTable.TO_USER_REF, client_user);
                                                                     newmessage.put(MessageTable.MESSAGE_CONTENT, message.getText().toString());
-                                                                    newmessage.put(MessageTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
-                                                                    java.util.Calendar calendar= Calendar.getInstance();
-                                                                    SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
-                                                                    String date= format.format(new Date(calendar.getTimeInMillis()));
-                                                                    Date d=null;
+                                                                    newmessage.put(MessageTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code));
+                                                                    java.util.Calendar calendar = Calendar.getInstance();
+                                                                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss aa");
+                                                                    String date = format.format(new Date(calendar.getTimeInMillis()));
+                                                                    Date d = null;
                                                                     try {
-                                                                        d=format.parse(date);
+                                                                        d = format.parse(date);
                                                                     } catch (java.text.ParseException e1) {
                                                                         e1.printStackTrace();
                                                                     }
@@ -333,7 +334,6 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                                     newmessage.put(MessageTable.SENT_AT, d.getTime());
                                                                     newmessage.saveEventually();
                                                                     marks_add.dismiss();
-                                                                    Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
 
 
                                                                 } else {
@@ -346,6 +346,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                                                     });
 
                                                 }
+                                                Toast.makeText(teacher_message.this, "Message Successfully Broadcasted to Parents", Toast.LENGTH_LONG).show();
+
 
                                             } else {
                                                 Toast.makeText(teacher_message.this, "error broadcasting to parents", Toast.LENGTH_LONG).show();
@@ -362,7 +364,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
                             }
                         }); */
 
-                   }
+
+                    }
                 }
 
             }

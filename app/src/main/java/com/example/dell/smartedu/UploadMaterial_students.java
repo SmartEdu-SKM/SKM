@@ -84,6 +84,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
     ListView uploadList;
     Notification_bar noti_bar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +100,8 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
         classId= from_main.getStringExtra("classId");
         institution_code=from_main.getStringExtra("institution_code");
         institution_name=from_main.getStringExtra("institution_name");
+        classGradeId= from_main.getStringExtra("classGradeId");
+        studentId= from_main.getStringExtra("studentId");
         noti_bar = (Notification_bar)getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), "Student",super.institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(),null,null,1);
@@ -412,6 +415,22 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
             startActivity(nouser);
         }
     }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+            Intent tohome = new Intent(UploadMaterial_students.this,student_classes.class);
+            tohome.putExtra("role",role);
+            tohome.putExtra("institution_name",institution_name);
+            tohome.putExtra("institution_code",institution_code);
+          tohome.putExtra("classGradeId",classGradeId);
+        tohome.putExtra("studentId",studentId);
+        tohome.putExtra("for","upload");
+            startActivity(tohome);
+        }
+
 
 
 }

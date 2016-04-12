@@ -69,7 +69,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
         //getSupportActionBar().setTitle("Messages");
         final Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
-        _for = from_student.getStringExtra("_for");
+        _for = from_student.getStringExtra("for");
         classGradeId= from_student.getStringExtra("classGradeId");
         studentId= from_student.getStringExtra("studentId");
         institution_name= from_student.getStringExtra("institution_name");
@@ -130,7 +130,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
 
 if(_for.equals("received")){
     getSupportActionBar().setTitle("Received Messages");
-        change_mode.setText("SENT MESSAGES");
+        change_mode.setText("GO TO SENT MESSAGES");
 
     change_mode.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -145,7 +145,7 @@ if(_for.equals("received")){
                 read_message_intent.putExtra("institution_code", institution_code);
                 read_message_intent.putExtra("institution_name", institution_name);
 
-            read_message_intent.putExtra("_for", "sent");
+            read_message_intent.putExtra("for", "sent");
             startActivity(read_message_intent);
         }
     });
@@ -403,14 +403,14 @@ if(_for.equals("received")){
 
         if(_for.equals("sent")){
             getSupportActionBar().setTitle("Sent Messages");
-            change_mode.setText("RECEIVED MESSAGES");
+            change_mode.setText("GO TO RECEIVED MESSAGES");
 
             change_mode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent read_message_intent = new Intent(view_messages.this, view_messages.class);
                     read_message_intent.putExtra("role", role);
-                    read_message_intent.putExtra("_for", "received");
+                    read_message_intent.putExtra("for", "received");
                     read_message_intent.putExtra("institution_code", institution_code);
                     read_message_intent.putExtra("institution_name", institution_name);
                     startActivity(read_message_intent);
@@ -714,7 +714,7 @@ if(_for.equals("received")){
         to_view_messages.putExtra("institution_name",institution_name);
         to_view_messages.putExtra("institution_code",institution_code);
         to_view_messages.putExtra("role", role);
-        to_view_messages.putExtra("_for",_for);
+        to_view_messages.putExtra("for",_for);
         to_view_messages.putExtra("child_username",child_username);
         startActivity(to_view_messages);
         finish();
