@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -126,6 +127,9 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
                                         createIDsText.setVisibility(View.VISIBLE);
                                         createIDsText.setSelected(true);
                                     } else {
+                                        createIDs.setVisibility(View.INVISIBLE);
+                                        LinearLayout.LayoutParams layoutParams  = new LinearLayout.LayoutParams(0,0);
+                                        createIDs.setLayoutParams(layoutParams);
                                         Log.d("marquee", "didnt enter ");
                                     }
 
