@@ -38,7 +38,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     //ArrayList<Task> myList;
     ListView teacherList;
     Notification_bar noti_bar;
-    String classGradeId;
+
 
     Button selected_button;
     EditText message;
@@ -63,9 +63,9 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         getSupportActionBar().setTitle("Teachers");
         Intent from_student = getIntent();
         role = from_student.getStringExtra("role");
-        institution_name= from_student.getStringExtra("institution");
+        institution_name= from_student.getStringExtra("institution_name");
         institution_code= from_student.getStringExtra("institution_code");
-        classGradeId=from_student.getStringExtra("classGradeId");
+       // classGradeId=from_student.getStringExtra("classGradeId");
         studentId=from_student.getStringExtra("studentId");
         if(role.equals("Parent")){
             child_username=from_student.getStringExtra("child_username");
@@ -287,7 +287,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                 ParseQuery<ParseUser> studentQuery = ParseUser.getQuery();
                                 studentQuery.whereEqualTo("username", details[0]);
                                 studentQuery.findInBackground(new FindCallback<ParseUser>() {
-                                    @Override
+                                     @Override
                                     public void done(List<ParseUser> objects, ParseException e) {
                                         if (e == null) {
                                             if (objects.size() != 0) {

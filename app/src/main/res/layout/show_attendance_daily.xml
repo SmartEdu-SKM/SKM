@@ -52,7 +52,6 @@
         android:layout_alignBottom="@+id/dateText1"
 
         android:backgroundTint="#20BF9F"
-        android:onClick="open"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 

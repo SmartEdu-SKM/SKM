@@ -109,18 +109,20 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
             new_message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    classId=from_student.getStringExtra("classId");
+                  //  classId=from_student.getStringExtra("classId");
                     studentId=from_student.getStringExtra("studentId");
                    // Log.d("test",classId);
                     Log.d("test",studentId);
                     Intent message_intent = new Intent(view_messages.this, message_to_teacher.class);
                     message_intent.putExtra("role", role);
-                    message_intent.putExtra("institution",institution_name);
+                    message_intent.putExtra("institution_name",institution_name);
                     message_intent.putExtra("institution_code",institution_code);
                     message_intent.putExtra("classGradeId", classGradeId);
                     message_intent.putExtra("studentId", studentId);
                     message_intent.putExtra("for", "message");
+                    if(role.equals("Parent")){
                     message_intent.putExtra("child_username",child_username);
+                    }
                     startActivity(message_intent);
                 }
             });

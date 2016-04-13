@@ -377,13 +377,13 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(addmarks_intent);
             }
 
-            if(position==7) //choose another role
+            if(position==6) //choose another role
             {
                 Intent i = new Intent(BaseActivity.this,ChooseRole.class);
                 startActivity(i);
             }
 
-            if(position==8) //logout
+            if(position==7) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
@@ -454,13 +454,13 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(exam_intent);
             }
 
-            if(position==7) //choose another role
+            if(position==6) //choose another role
             {
                 Intent i = new Intent(BaseActivity.this,ChooseRole.class);
                 startActivity(i);
             }
 
-            if(position==8) //logout
+            if(position==7) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
@@ -525,17 +525,13 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 startActivity(message_intent);
             }
 
-            if (position == 5) { //settings
-
-            }
-
-            if(position==6) //choose another role
+            if(position==5) //choose another role
             {
                 Intent i = new Intent(getApplicationContext(),ChooseRole.class);
                 startActivity(i);
             }
 
-            if(position==7) //logout
+            if(position==6) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
@@ -569,16 +565,10 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             }
 
-            if (position == 4) { //allotments
-
-            }
-
-            if (position == 5) { //settings
-
-            }
 
 
-            if(position==6) //logout
+
+            if(position==4) //logout
             {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null

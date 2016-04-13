@@ -50,6 +50,8 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
         studentId = from_home.getStringExtra("studentId");
         classId = from_home.getStringExtra("classId");
         classGradeId= from_home.getStringExtra("classGradeId");
+        institution_code=from_home.getStringExtra("institution_code");
+        institution_name=from_home.getStringExtra("institution_name");
 
 if(role.equals("Parent")){
     child_username=from_home.getStringExtra("child_username");

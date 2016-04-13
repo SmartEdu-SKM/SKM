@@ -103,7 +103,7 @@ public class Schedule_days extends Fragment {
                             long end = TimeUnit.MILLISECONDS.toMinutes(u.getInt(ScheduleTable.END_TIME));
                             String st = String.valueOf(start / 60) + ":" + String.valueOf(start % 60);
                             String et = String.valueOf(end / 60) + ":" + String.valueOf(end % 60);
-                            Toast.makeText(getActivity(), "done", Toast.LENGTH_LONG);
+//                            Toast.makeText(getActivity(), "done", Toast.LENGTH_LONG);
 
                             String info = u.getString(ScheduleTable.SCHEDULE_INFO);
                             String schedule = st + "\n" + et + "\n" + info;

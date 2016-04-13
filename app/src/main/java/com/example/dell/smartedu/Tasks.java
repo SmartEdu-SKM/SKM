@@ -233,7 +233,7 @@ String child_username;
                     public void onClick(View v) {
 
                         ParseObject.createWithoutData(TaskTable.TABLE_NAME, taskid).deleteEventually();
-
+                        Toast.makeText(Tasks.this,"Selected Task Deleted",Toast.LENGTH_SHORT).show();
                         onRestart();
 
 

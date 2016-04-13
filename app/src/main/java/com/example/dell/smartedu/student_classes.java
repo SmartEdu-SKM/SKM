@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             }
 
             context=this;
+            layoutLoading= (RelativeLayout)findViewById(R.id.loadingPanel);
 
 
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,7 +67,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Classes");
             noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, super.institution_name);
+            noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
 
 
             dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
