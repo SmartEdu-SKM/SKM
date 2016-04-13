@@ -648,10 +648,13 @@ if(_for.equals("received")){
                             });
 
                         } else {
+                            layoutLoading.setVisibility(View.GONE);
                             Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
                         }
+                        new LoadingSyncList(context,layoutLoading,messageList).execute();
 
                     } else {
+                        layoutLoading.setVisibility(View.GONE);
                         Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
                         Log.d("user", "Error: " + e.getMessage());
                     }

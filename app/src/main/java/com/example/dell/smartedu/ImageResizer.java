@@ -27,9 +27,9 @@ public class ImageResizer {
 
 
         Bitmap reducedBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(reducedBitmap, targetWidth, targetHeight, false);
+    //    Bitmap resizedBitmap = Bitmap.createScaledBitmap(reducedBitmap, targetWidth, targetHeight, false);
 
-        return resizedBitmap;
+        return reducedBitmap;
     }
 
     public static Bitmap resizeImageMaintainAspectRatio(byte[] imageData, int shorterSideTarget) {
