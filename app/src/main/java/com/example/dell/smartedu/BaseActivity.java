@@ -408,6 +408,7 @@ String child_username;
                 task_intent.putExtra("institution_code",institution_code);
                 task_intent.putExtra("institution_name",institution_name);
                 task_intent.putExtra("role", role);
+                task_intent.putExtra("classGradeId",classGradeId);
                 startActivity(task_intent);
             }
 
@@ -482,9 +483,13 @@ String child_username;
 
             if (position == 1) { //tasks
                 Intent task_intent = new Intent(getApplicationContext(), Tasks.class);
-                task_intent.putExtra("institution_code",institution_code);
-                task_intent.putExtra("institution_name",institution_name);
-                task_intent.putExtra("role", role);
+                task_intent.putExtra("institution_name", institution_name);
+                task_intent.putExtra("institution_code", institution_code);
+                task_intent.putExtra("role", "Parent");
+                task_intent.putExtra("studentId", studentId);
+                task_intent.putExtra("child_username", child_username);
+                task_intent.putExtra("classGradeId", classGradeId);
+              
                 startActivity(task_intent);
             }
 
@@ -554,6 +559,7 @@ String child_username;
                 task_intent.putExtra("institution_code",institution_code);
                 task_intent.putExtra("institution_name",institution_name);
                 task_intent.putExtra("role", role);
+
                 startActivity(task_intent);
             }
 

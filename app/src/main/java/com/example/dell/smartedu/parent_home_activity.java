@@ -125,6 +125,7 @@ public class parent_home_activity extends BaseActivity{
                                                 task_intent.putExtra("role", "Parent");
                                                 task_intent.putExtra("studentId", studentId);
                                                 task_intent.putExtra("child_username", child_username);
+                                                task_intent.putExtra("classGradeId", classGradeId);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
@@ -145,6 +146,7 @@ public class parent_home_activity extends BaseActivity{
                                                 exam_intent.putExtra("institution_code", institution_code);
                                                 exam_intent.putExtra("classGradeId", classGradeId);
                                                 exam_intent.putExtra("studentId", studentId);
+                                                exam_intent.putExtra("child_username",child_username);
                                                 startActivity(exam_intent);
 
                                             } else if (position == 4) {

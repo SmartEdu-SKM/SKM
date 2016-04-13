@@ -94,6 +94,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         role = fromrole.getString("role");
         institution_name=fromrole.getString("institution_name");
         institution_code=fromrole.getString("institution_code");
+        classGradeId=fromrole.getString("classGradeId");
         if(role.equals("Parent")){
             child_username=fromrole.getString("child_username");
             studentId=fromrole.getString("studentId");
@@ -363,6 +364,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         to_tasks.putExtra("institution_name",institution_name);
         to_tasks.putExtra("institution_code",institution_code);
         to_tasks.putExtra("role", role);
+        to_tasks.putExtra("child_username",child_username);
+        to_tasks.putExtra("classGradeId",classGradeId);
+        to_tasks.putExtra("studentId",studentId);
         startActivity(to_tasks);
         finish();
 
@@ -417,12 +421,18 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             tohome.putExtra("role",role);
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
+
+            tohome.putExtra("classGradeId",classGradeId);
+
             startActivity(tohome);
         }else if(role.equals("Student")){
             Intent tohome = new Intent(Tasks.this, student_home_activity.class);
             tohome.putExtra("role",role);
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
+
+            tohome.putExtra("classGradeId",classGradeId);
+            tohome.putExtra("studentId",studentId);
             startActivity(tohome);
         }else if(role.equals("Parent")){
             Intent tohome = new Intent(Tasks.this, parent_home_activity.class);
@@ -430,6 +440,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
             tohome.putExtra("child_username",child_username);
+            tohome.putExtra("child_username",child_username);
+            tohome.putExtra("classGradeId",classGradeId);
+            tohome.putExtra("studentId",studentId);
             startActivity(tohome);
         }
     }

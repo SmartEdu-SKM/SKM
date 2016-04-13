@@ -117,11 +117,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
                                     }
                                     String name= teacher_name + ", " + subject;
                                     teacherMap.put(name,(ParseObject)(u.get(ClassTable.TEACHER_USER_REF)));
-                                    //name += "\n";
-                                    // name += u.getInt("age");
 
-                                    //  adapter.add(name);
-                                    // }
                                     modelItems[i]=new Model(name,0);
 
                                 }

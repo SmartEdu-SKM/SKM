@@ -70,7 +70,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         role = from_student.getStringExtra("role");
         institution_code = from_student.getStringExtra("institution_code");
         institution_name = from_student.getStringExtra("institution_name");
-
+        child_username=from_student.getStringExtra("child_username");
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role, institution_name);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);

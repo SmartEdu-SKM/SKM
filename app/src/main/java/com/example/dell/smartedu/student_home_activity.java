@@ -122,6 +122,7 @@ public class student_home_activity extends BaseActivity{
                                                 task_intent.putExtra("institution_name",institution_name);
                                                 task_intent.putExtra("role", role);
                                                 task_intent.putExtra("studentId", studentId);
+                                                task_intent.putExtra("classGradeId", classGradeId);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
