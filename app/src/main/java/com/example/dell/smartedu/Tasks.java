@@ -15,6 +15,7 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +89,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
         addTaskButton = (Button)findViewById(R.id.addButton);
         taskList = (ListView) findViewById(R.id.taskList);
 
+        layoutLoading= (RelativeLayout) findViewById(R.id.loadingPanel);
+        context = this;
+
 
         myList = dbHandler.getAllTasks();
         Bundle fromrole= getIntent().getExtras();
@@ -146,10 +150,13 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                         taskLt = new ArrayList<>(Arrays.asList(items));
                         adapter = new ArrayAdapter(Tasks.this, android.R.layout.simple_list_item_1, taskLt);
                         taskList.setAdapter(adapter);
+                        new LoadingSyncList(context,layoutLoading,taskList).execute();
                     }else{
+                        layoutLoading.setVisibility(View.GONE);
                         Toast.makeText(Tasks.this,"No tasks added",Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    layoutLoading.setVisibility(View.GONE);
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }
@@ -351,6 +358,9 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
                i.putExtra("institution_name",institution_name);
                 i.putExtra("institution_code",institution_code);
                 i.putExtra("role", role);
+                i.putExtra("classGradeId",classGradeId);
+                i.putExtra("studentId", studentId);
+               i.putExtra("child_username",child_username);
                 startActivity(i);
             }
         });
@@ -440,7 +450,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
             tohome.putExtra("institution_name",institution_name);
             tohome.putExtra("institution_code",institution_code);
             tohome.putExtra("child_username",child_username);
-            tohome.putExtra("child_username",child_username);
+
             tohome.putExtra("classGradeId",classGradeId);
             tohome.putExtra("studentId",studentId);
             startActivity(tohome);

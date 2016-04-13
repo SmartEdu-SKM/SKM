@@ -489,7 +489,7 @@ String child_username;
                 task_intent.putExtra("studentId", studentId);
                 task_intent.putExtra("child_username", child_username);
                 task_intent.putExtra("classGradeId", classGradeId);
-              
+
                 startActivity(task_intent);
             }
 
@@ -501,7 +501,7 @@ String child_username;
                 atten_intent.putExtra("classGradeId", classGradeId);
                 atten_intent.putExtra("institution_code",institution_code);
                 atten_intent.putExtra("institution_name",institution_name);
-                atten_intent.putExtra("classId", classId);
+
                 startActivity(atten_intent);
             }
 

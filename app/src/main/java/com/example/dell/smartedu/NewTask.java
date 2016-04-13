@@ -77,6 +77,13 @@ public class NewTask extends BaseActivity {
         institution_code=fromrole.getString("institution_code");
         institution_name=fromrole.getString("institution_name");
         studentId=fromrole.getString("studentId");
+        classGradeId=fromrole.getString("classGradeId");
+        if(role.equals("Parent")){
+            child_username=fromrole.getString("child_username");
+
+        }
+
+
 
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
@@ -114,8 +121,13 @@ public class NewTask extends BaseActivity {
 
                     Intent to_tasks = new Intent(NewTask.this, Tasks.class);
                     to_tasks.putExtra("institution_code",institution_code);
-                    to_tasks.putExtra("institution_name",institution_name);
+                    to_tasks.putExtra("institution_name", institution_name);
                     to_tasks.putExtra("role", role);
+
+                   to_tasks.putExtra("studentId", studentId);
+                   to_tasks.putExtra("child_username", child_username);
+                    to_tasks.putExtra("classGradeId", classGradeId);
+
                     startActivity(to_tasks);
                     finish();
 

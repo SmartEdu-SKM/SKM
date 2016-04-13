@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,10 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
+
+        layoutLoading= (RelativeLayout) findViewById(R.id.loadingPanel);
+        context = this;
+
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -145,7 +150,9 @@ if(_for.equals("received")){
             read_message_intent.putExtra("studentId", studentId);
             read_message_intent.putExtra("institution_code", institution_code);
             read_message_intent.putExtra("institution_name", institution_name);
-
+            read_message_intent.putExtra("classGradeId",classGradeId);
+            if(role.equals("Parent"))
+            read_message_intent.putExtra("child_username",child_username);
             read_message_intent.putExtra("for", "sent");
             startActivity(read_message_intent);
         }
@@ -163,8 +170,7 @@ if(_for.equals("received")){
                     ArrayList<String> messageLt = new ArrayList<String>();
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getApplicationContext(), android.R.layout.simple_list_item_1, messageLt)
-                    {
+                            getApplicationContext(), android.R.layout.simple_list_item_1, messageLt) {
 
                         @Override
                         public View getView(int position, View convertView,
@@ -202,7 +208,7 @@ if(_for.equals("received")){
                         Log.d("user", dateString);
 
                         ParseObject institute = (ParseObject) u.get(MessageTable.INSTITUTION);
-                        String insti= null;
+                        String insti = null;
                         if (institute != null) {
                             try {
                                 insti = institute.fetchIfNeeded().get(InstitutionTable.INSTITUTION_NAME).toString();
@@ -221,18 +227,19 @@ if(_for.equals("received")){
                     messageList.setAdapter(adapter);
 
 
+
                     messageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                             String item = ((TextView) view).getText().toString();
-                            String[] itemVal= item.split("\n");
+                            String[] itemVal = item.split("\n");
                             Log.d("user", "1 " + itemVal[0].trim() + " 2 " + itemVal[1]);
 
                             final String[] details = new String[2];
-                            details[0]= itemVal[0];
+                            details[0] = itemVal[0];
 
                             String[] itemValues = itemVal[1].split("at ");
-                            details[1]=itemValues[1];
+                            details[1] = itemValues[1];
 
                             /*
                             int j = 0;
@@ -390,10 +397,13 @@ if(_for.equals("received")){
                     });
 
                 } else {
+                    layoutLoading.setVisibility(View.GONE);
                     Toast.makeText(view_messages.this, "No messsages", Toast.LENGTH_LONG).show();
                 }
+                new LoadingSyncList(context,layoutLoading,messageList).execute();
 
             } else {
+                layoutLoading.setVisibility(View.GONE);
                 Toast.makeText(view_messages.this, "error", Toast.LENGTH_LONG).show();
                 Log.d("user", "Error: " + e.getMessage());
             }
@@ -415,6 +425,10 @@ if(_for.equals("received")){
                     read_message_intent.putExtra("for", "received");
                     read_message_intent.putExtra("institution_code", institution_code);
                     read_message_intent.putExtra("institution_name", institution_name);
+                    read_message_intent.putExtra("studentId",studentId);
+                    read_message_intent.putExtra("classGradeId",classGradeId);
+                    if(role.equals("Parent"))
+                        read_message_intent.putExtra("child_username",child_username);
                     startActivity(read_message_intent);
                 }
             });
