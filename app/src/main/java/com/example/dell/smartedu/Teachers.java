@@ -151,18 +151,6 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
         });
 
 
-
-        //  myList = dbHandler.getAllTasks();
-
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
-
         final HashMap<String,String> teacherMap=new HashMap<String,String>();
 
         ParseQuery<ParseObject> teacherQuery = ParseQuery.getQuery(TeacherTable.TABLE_NAME);
@@ -174,25 +162,20 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
 
                     ArrayList<String> teacherLt = new ArrayList<String>();
                     ArrayAdapter adapter = new ArrayAdapter(Teachers.this, android.R.layout.simple_list_item_1, teacherLt);
-                    //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                     Log.d("user", "Retrieved " + teacherListRet.size() + " students");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                     for (int i = 0; i < teacherListRet.size(); i++) {
                         ParseObject u = (ParseObject) teacherListRet.get(i);
-                        //  if(u.getString("class").equals(id)) {
+
                         int serialno = u.getInt(TeacherTable.SERIAL_NUMBER);
                         String name = u.getString(TeacherTable.TEACHER_NAME);
                         name = String.valueOf(serialno) + ". " + name;
-                        //name += "\n";
-                        // name += u.getInt("age");
+
 
                         adapter.add(name);
                         teacherMap.put(name.trim(),u.getObjectId());
 
-                        // }
-
-                    }
+                   }
 
 
                     teacherList.setAdapter(adapter);
@@ -348,15 +331,13 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
 
 
                                             Log.d("shareCode", "Main: ");
-                                            // u.put("addedBy", ParseUser.getCurrentUser());
-                                            //u.saveEventually();
+
                                         }
                                         Toast.makeText(Teachers.this, "Done", Toast.LENGTH_LONG).show();
                                     }
 
 
                                 } else {
-                                    //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
                                     Log.d("user", "Error: " + e.getMessage());
                                 }
                             }

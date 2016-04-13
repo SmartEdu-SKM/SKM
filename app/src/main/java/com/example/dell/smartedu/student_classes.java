@@ -32,8 +32,7 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
     private FragmentDrawer drawerFragment;
     String _for;
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView classList;
     Notification_bar noti_bar;
 
@@ -81,20 +80,9 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
             Toast.makeText(student_classes.this,"error " + create_error, Toast.LENGTH_LONG).show();
         }
 
-        //  myList = dbHandler.getAllTasks();
 
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
         Log.d("institution", institution_code);
 
-
-
-
-
-
-
-//        Log.d("classGradeid ", classGradeId);
 
         final HashMap<String,String> classMap=new HashMap<String,String>();
 

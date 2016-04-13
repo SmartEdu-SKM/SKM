@@ -33,12 +33,11 @@ import java.util.List;
 public class student_exams extends BaseActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-    Button addExamButton;
+
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView examsList;
     Notification_bar noti_bar;
 
@@ -139,31 +138,6 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void displayExams(String subject,String subjectObjectId)
         {
             classId=subjectObjectId;
@@ -182,8 +156,6 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
                     if (e == null) {
                         if (examListRet.size() != 0) {
                             ArrayList<String> examLt = new ArrayList<String>();
-                            //ArrayAdapter adapter = new ArrayAdapter(teacher_exams.this, android.R.layout.simple_list_item_1, studentLt);
-                            //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                             ArrayAdapter adapter = new ArrayAdapter(student_exams.this, android.R.layout.simple_list_item_1, examLt) {
 

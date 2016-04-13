@@ -67,11 +67,7 @@ String child_username;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        //Parse.enableLocalDatastore(getApplicationContext());
-        //Parse.initialize(getApplicationContext(), "5pPTGNabAK5TyJDfxKMuhzATUnMXS3GvjOS98IGD", "TRPqa2TRC5JmF2NUJLKvcdlH7j9c4saF4TODVwlG");
-
-
-        //found width of Screen for Gridview
+              //found width of Screen for Gridview
         WindowManager windowManager = ((WindowManager) getSystemService(Context.WINDOW_SERVICE));
         Display display = windowManager.getDefaultDisplay();
         densityX = display.getWidth();
@@ -249,20 +245,7 @@ String child_username;
             });
 
 
-            /*ParseQuery<ParseUser> query = ParseQuery.getQuery("User");
 
-// Retrieve the object by id
-            query.getInBackground(String.valueOf(ParseUser.getCurrentUser()), new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject imgupload, com.parse.ParseException e) {
-                    if (e == null) {
-                        // Now let's update it with some new data. In this case, only cheatMode and score
-                        // will get sent to the Parse Cloud. playerName hasn't changed.
-                        imgupload.put("imageFile", file);
-                        imgupload.saveInBackground();
-                    }
-                }
-            });*/
             // Show a simple toast message
             Toast.makeText(BaseActivity.this, "Image Uploaded",
                     Toast.LENGTH_SHORT).show();

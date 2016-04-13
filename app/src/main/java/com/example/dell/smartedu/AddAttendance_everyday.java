@@ -157,36 +157,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                         }
                                     });
 
-                                    /*
-                                    studentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                                            String[] item = ((TextView) view).getText().toString().split(". ");
-                                            int itemvalue = Integer.parseInt(item[0]);
 
-                                            final ParseObject[] studentRef = new ParseObject[1];
-                                            ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                                            studentQuery.whereEqualTo("rollNumber", itemvalue);
-                                            studentQuery.whereEqualTo("class", classRef[0]);
-                                            studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                                                public void done(List<ParseObject> studentListRet, ParseException e) {
-                                                    if (e == null) {
-                                                        Log.d("class", "Retrieved the class");
-                                                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                                                        studentRef[0] = studentListRet.get(0);
-                                                        information(studentRef[0], view);
-
-                                                    } else {
-                                                        Toast.makeText(AddAttendance_Students.this, "error", Toast.LENGTH_LONG).show();
-                                                        Log.d("user", "Error: " + e.getMessage());
-                                                    }
-                                                }
-                                            });
-
-
-                                        }
-                                    }); */
 
                                 } else {
                                     Toast.makeText(AddAttendance_everyday.this, "error", Toast.LENGTH_LONG).show();
@@ -205,7 +176,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
         });
 
 
-        // Toast.makeText(Students.this, "object id = " + classRef[0].getObjectId(), Toast.LENGTH_LONG).show();
+
 
 
     }
@@ -214,7 +185,6 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
 
         calendar = java.util.Calendar.getInstance();
-        //System.out.println("Current time =&gt; " + calendar.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         final String string_current_date = df.format(calendar.getTime());
@@ -255,10 +225,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
 
             }
 
-       /* if (checked==0)
-            Toast.makeText(getApplicationContext(), "None Selected", Toast.LENGTH_LONG).show();
 
-        else{ */
 
             ParseQuery<ParseObject> attQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
             attQuery.whereEqualTo(AttendanceDailyTable.ATTENDANCE_DATE, newmilliseconds);
@@ -289,8 +256,6 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
                                 classQuery.findInBackground(new FindCallback<ParseObject>() {
                                     public void done(final List<ParseObject> classListRet, ParseException e) {
                                         if (e == null) {
-                                            //Log.d("class", "Retrieved the class");
-                                            //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
                                             if (classListRet.size() == 0) {
                                                 Toast.makeText(AddAttendance_everyday.this, "Not the ClassTeacher", Toast.LENGTH_LONG).show();

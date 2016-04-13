@@ -60,10 +60,7 @@ public class admin_home extends BaseActivity{
 
 
             GridView gridview = (GridView) findViewById(R.id.gridview);
-            //  SharedPreferences mySettings;
-            //mySettings = getSharedPreferences(SyncStateContract.Constants.PREFERENCES, Context.MODE_PRIVATE);
-            // int gridSize = 50 * Integer.parseInt(mySettings.getString("gridSize", "3"));
-            //gridview.setColumnWidth(gridSize + 10);
+
             gridview.setAdapter(new ImageAdapter(this, densityX,densityY, role));
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
@@ -86,9 +83,7 @@ public class admin_home extends BaseActivity{
                         student_intent.putExtra("institution_name",institution_name);
                         student_intent.putExtra("role", role);
                         startActivity(student_intent);
-                    }
-                    /*
-                    else if (position == 3) {
+                    } /* else if (position == 3) {
                         Intent student_intent = new Intent(admin_home.this, teacher_classes.class);
                         student_intent.putExtra("institution_code",institution_code);
                         student_intent.putExtra("institution_name",institution_name);
@@ -99,7 +94,6 @@ public class admin_home extends BaseActivity{
 
                 }
             });
-            ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
 
         }catch(Exception create_error){
             Log.d("user", "error in create admin home: " + create_error.getMessage());
@@ -117,22 +111,6 @@ public class admin_home extends BaseActivity{
             startActivity(nouser);
         }
     }
-
-   /* public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
 
 
 }

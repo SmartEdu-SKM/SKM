@@ -48,7 +48,7 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
         context = this;
 
         try {
-            //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
             setContentView(R.layout.activity_select_subject);
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
@@ -93,38 +93,6 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
-
-
-
-/*        ParseQuery<ParseObject> classGradeQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-        classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> classgradeobjects, ParseException e) {
-                if (e == null) {
-                    if (classgradeobjects.size() != 0) {
-                        HashMap<String, String> classGradeMap = new HashMap<String, String>();
-                        for (int x = 0; x < classgradeobjects.size(); x++) {
-                            ParseObject u = classgradeobjects.get(x);
-                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                            if (classGradeMap.get(name) == null) {
-                                classGradeMap.put(name, "1");
-                            }
-                        }
-                    } else {
-                        Toast.makeText(teacher_classes.this, "no classes added for this institution", Toast.LENGTH_LONG).show();
-                        Log.d("classGrade", "error in query");
-                    }
-                } else {
-                    Log.d("classGrade", "error");
-                }
-            }
-        });
-*/
-
-
-        //new LoadingSyncList(layout,classList).execute();
-
         final HashMap<String, String> classMap = new HashMap<String, String>();
 
 
@@ -139,17 +107,12 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
 
 
                     Log.d("classes", "Retrieved " + classListRet.size() + " users");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                     for (int i = 0; i < classListRet.size(); i++) {
                         ParseObject u = (ParseObject) classListRet.get(i);
 
                         String name = u.getString(ClassTable.SUBJECT);
-                        //name += "\n";
-                        // name += u.getInt("age");
-
 
                         adapter.add(name);
-                        //new LoadingSyncList(layout,classList,adapter).execute();
                         classMap.put(name, u.getObjectId());
 
 
@@ -159,7 +122,6 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
                     classList.setAdapter(adapter);
                     new LoadingSyncList(context, layout, classList).execute();
 
-                    //findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 } else {
                     Log.d("user", "Error: " + e.getMessage());
                 }
@@ -172,48 +134,14 @@ public class SelectSubject extends BaseActivity implements FragmentDrawer.Fragme
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String item = ((TextView) view).getText().toString();
-                //String[] classSpecs=item.split(" ");
                 ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
                 studentQuery.whereEqualTo(ClassTable.OBJECT_ID, classMap.get(item));
-                //studentQuery.whereEqualTo(ClassTable.TEACHER_USER_REF, ParseUser.getCurrentUser());
-                // studentQuery.whereEqualTo(ClassTable.INSTITUTION, ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                 studentQuery.findInBackground(new FindCallback<ParseObject>() {
                     public void done(List<ParseObject> classObjRet, ParseException e) {
                         if (e == null) {
                             ParseObject u = (ParseObject) classObjRet.get(0);
                             String id = u.getObjectId();
-                            // Toast.makeText(teacher_classes.this, "id of class selected is = " + id, Toast.LENGTH_LONG).show();
-                           /* if (_for.equals("students")) {
-                                Intent to_student = new Intent(teacher_classes.this, Students.class);
-                                to_student.putExtra("institution_code", institution_code);
-                                to_student.putExtra("institution_name", institution_name);
-                                to_student.putExtra("role", role);
-                                to_student.putExtra("id", id);
-                                startActivity(to_student);
-                            } else if (_for.equals("exam")) {
-                                Intent to_exams = new Intent(teacher_classes.this, teacher_exams.class);
-                                to_exams.putExtra("institution_code", institution_code);
-                                to_exams.putExtra("institution_name", institution_name);
-                                to_exams.putExtra("role", role);
-                                to_exams.putExtra("id", id);
-                                startActivity(to_exams);
-                            } else if (_for.equals("upload")) {
-                                Intent to_uploads = new Intent(teacher_classes.this, UploadMaterial.class);
-                                to_uploads.putExtra("institution_code", institution_code);
-                                to_uploads.putExtra("institution_name", institution_name);
-                                to_uploads.putExtra("role", role);
-                                to_uploads.putExtra("id", id);
-                                startActivity(to_uploads);
-                            } else if (_for.equals("message")) {
-                                Intent to_message = new Intent(teacher_classes.this, teacher_message.class);
-                                to_message.putExtra("institution_code", institution_code);
-                                to_message.putExtra("institution_name", institution_name);
-                                to_message.putExtra("role", role);
-                                to_message.putExtra("id", id);
-                                to_message.putExtra("classGradeId", classMap.get(item));
-                                to_message.putExtra("_for", _for);
-                                startActivity(to_message);
-                            } else */
+
                             if (_for.equals("attendance")) {
                                 Intent to_att = new Intent(SelectSubject.this, AddAttendance_everyday.class);
                                 to_att.putExtra("institution_code", institution_code);

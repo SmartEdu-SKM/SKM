@@ -34,8 +34,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView teacherList;
     Notification_bar noti_bar;
 
@@ -64,7 +63,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         role = from_student.getStringExtra("role");
         institution_name= from_student.getStringExtra("institution_name");
         institution_code= from_student.getStringExtra("institution_code");
-       // classGradeId=from_student.getStringExtra("classGradeId");
+
         studentId=from_student.getStringExtra("studentId");
         if(role.equals("Parent")){
             child_username=from_student.getStringExtra("child_username");

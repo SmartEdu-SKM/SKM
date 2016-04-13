@@ -34,8 +34,7 @@ public class parent_choose_child extends BaseActivity implements FragmentDrawer.
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView childList;
     Notification_bar noti_bar;
 
@@ -117,14 +116,12 @@ public class parent_choose_child extends BaseActivity implements FragmentDrawer.
 
 
 
-                            //name += "\n";
-                            // name += u.getInt("age");
 
                             adapter.add(name);
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
-                            // }
+
 
                         }
 
@@ -146,40 +143,7 @@ public class parent_choose_child extends BaseActivity implements FragmentDrawer.
                                 parent_home_page.putExtra("child_username", selected_child);
 
                                 startActivity(parent_home_page);
-/*
-                                ParseQuery chldQuery = ParseUser.getQuery();
-                                chldQuery.whereEqualTo("username", selected_child);
 
-                                chldQuery.findInBackground(new FindCallback<ParseObject>() {
-                                    @Override
-                                    public void done(List<ParseObject> children, ParseException e) {
-                                        if (e == null) {
-                                            if (children.size() != 0) {
-
-                                                try {
-                                                    String child_code = children.get(0).fetchIfNeeded().getObjectId();
-
-                                                        Intent parent_home_page = new Intent(parent_choose_child.this, select_institution.class);
-                                                        parent_home_page.putExtra("role", role);
-                                                        parent_home_page.putExtra("child_code", child_code);
-
-                                                        startActivity(parent_home_page);
-
-                                                } catch (ParseException e1) {
-                                                    e1.printStackTrace();
-                                                }
-
-
-                                            } else {
-                                                Log.d("child", "error in query");
-                                            }
-                                        } else {
-                                            Log.d("child", "error");
-                                        }
-                                    }
-
-                                });
-*/
 
                             }
                         });

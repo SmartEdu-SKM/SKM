@@ -37,8 +37,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView classList;
     ListView classSectionList;
     Notification_bar noti_bar;
@@ -820,9 +819,7 @@ public class Admin_classes extends BaseActivity implements FragmentDrawer.Fragme
                             deleteStudentRelatedData(studentobjects.get(x),institution);        //parent object,roles deletion
 
                             studentobjects.get(x).deleteEventually();
-                            //parent object deletion
-                            //role deletion
-                            //student deletion
+
                         }
 
                     }else{

@@ -67,10 +67,6 @@ public class student_home_activity extends BaseActivity{
 
                     if(studListRet.size()!=0){
 
-/*                    ParseObject u = (ParseObject) studListRet.get(0);
-                    studentId = u.getObjectId();
-                    classRef[0] = (ParseObject) u.get(StudentTable.CLASS_REF);*/
-
 
                         for(int x=0;x<studListRet.size();x++)
                         {
@@ -78,7 +74,6 @@ public class student_home_activity extends BaseActivity{
 
                             ParseObject classGradeobject= ( (ParseObject)u.get(StudentTable.CLASS_REF) );
                             try {
-                               // ParseObject classGradeobject=(ParseObject) for_class_check.fetchIfNeeded().get(ClassTable.CLASS_NAME);
                                 ParseObject test_insti=(ParseObject)classGradeobject.fetchIfNeeded().get(ClassGradeTable.INSTITUTION);
                                 if(test_insti.fetchIfNeeded().getString(InstitutionTable.INSTITUTION_NAME).equals(institution_name))
                                 {
@@ -205,20 +200,5 @@ public class student_home_activity extends BaseActivity{
         super.onBackPressed();
     }
 
-    /* public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-*/
-
-            }
+ }

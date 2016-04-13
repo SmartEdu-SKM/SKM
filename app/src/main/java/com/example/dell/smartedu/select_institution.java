@@ -34,12 +34,11 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
     private FragmentDrawer drawerFragment;
 
     MyDBHandler dbHandler;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
+
     ListView institutionList;
     Notification_bar noti_bar;
     ImageView noinsti;
-//String child_code;
+
     String child_username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +108,6 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                             {
                                 Intent parent_home_page=new Intent(select_institution.this,parent_home_activity.class);
                                 parent_home_page.putExtra("role", role);
-                              //  parent_home_page.putExtra("child_code",child_code);
                                 parent_home_page.putExtra("child_username",child_username);
                                 parent_home_page.putExtra("institution_code",institution_code);
                                 parent_home_page.putExtra("institution_name",institution_name);
@@ -127,13 +125,10 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
 
                         ArrayList<String> studentLt = new ArrayList<String>();
                         ArrayAdapter adapter = new ArrayAdapter(select_institution.this, android.R.layout.simple_list_item_1, studentLt);
-                        //Toast.makeText(Students.this, "here = ", Toast.LENGTH_LONG).show();
 
                         Log.d("user", "Retrieved " + institutionListRet.size() + " institutions");
-                        //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
                         for (int i = 0; i < institutionListRet.size(); i++) {
                             ParseObject u = (ParseObject) institutionListRet.get(i);
-                            //  if(u.getString("class").equals(id)) {
                             ParseObject inst=(ParseObject)u.get(RoleTable.ENROLLED_WITH);
                             String name = null;
                             try {
@@ -148,11 +143,9 @@ public class select_institution extends BaseActivity implements FragmentDrawer.F
                                 e1.printStackTrace();
                             }
                             String item = name + ", " + type;
-                            //name += "\n";
-                            // name += u.getInt("age");
 
                             adapter.add(item);
-                            // }
+
 
                         }
 
