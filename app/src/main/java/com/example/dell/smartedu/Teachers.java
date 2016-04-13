@@ -39,7 +39,7 @@ public class Teachers extends BaseActivity implements FragmentDrawer.FragmentDra
     MyDBHandler dbHandler;
 
     Notification_bar noti_bar;
-    String classId;
+
     String name;
     Integer age;
 

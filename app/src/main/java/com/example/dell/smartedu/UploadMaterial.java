@@ -72,7 +72,7 @@ public class UploadMaterial extends BaseActivity implements FragmentDrawer.Fragm
     int Year;
     int Month;
     int Day;
-    String classId;
+
     String typeSelected;
     String subjectDesc;
     String uploadId;

@@ -42,6 +42,7 @@ public class NewTask extends BaseActivity {
     ImageButton imageButton;
     String role;
     Notification_bar noti_bar;
+    String studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class NewTask extends BaseActivity {
         role = fromrole.getString("role");
         institution_code=fromrole.getString("institution_code");
         institution_name=fromrole.getString("institution_name");
+        studentId=fromrole.getString("studentId");
+
         noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
         noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role,institution_name);
         final Date date2 = new Date(Year - 1900, Month, Day + 1);

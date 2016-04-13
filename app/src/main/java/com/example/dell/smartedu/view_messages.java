@@ -49,12 +49,12 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
     TextView title;
     TextView change_mode;
     TextView new_message;
-    String classGradeId;
-    String studentId;
+
+
     Button reply;
     EditText reply_message;
     Button reply_button;
-    String child_username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +112,7 @@ public class view_messages extends BaseActivity implements FragmentDrawer.Fragme
                   //  classId=from_student.getStringExtra("classId");
                     studentId=from_student.getStringExtra("studentId");
                    // Log.d("test",classId);
-                    Log.d("test",studentId);
+                   // Log.d("test",studentId);
                     Intent message_intent = new Intent(view_messages.this, message_to_teacher.class);
                     message_intent.putExtra("role", role);
                     message_intent.putExtra("institution_name",institution_name);

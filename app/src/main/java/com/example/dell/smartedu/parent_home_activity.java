@@ -25,12 +25,10 @@ public class parent_home_activity extends BaseActivity{
     private FragmentDrawer drawerFragment;
     ArrayList<Task> myList;
 
-    String classGradeId;
-    String studentId;
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 //String child_code;
-String child_username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,14 +99,10 @@ String child_username;
 
                                     }
 
-                                 /*   try {
-                                        Log.d("insti", ((ParseObject) ((ParseObject) classRef[0].fetchIfNeeded().get(ClassTable.CLASS_NAME)).get(ClassGradeTable.INSTITUTION)).getString(InstitutionTable.INSTITUTION_NAME));
-                                    } catch (ParseException e1) {
-                                        e1.printStackTrace();
-                                    } */
+
 
                                     classGradeId = classGradeRef[0].getObjectId();
-
+                                    Log.d("check",studentId);
 
                                     gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         public void onItemClick(AdapterView<?> parent, View v,
@@ -117,19 +111,20 @@ String child_username;
                                                 Intent atten_intent = new Intent(parent_home_activity.this, student_classes.class);
                                                 atten_intent.putExtra("role", "Parent");
                                                 atten_intent.putExtra("studentId", studentId);
-                                                atten_intent.putExtra("for","attendance");
+                                                atten_intent.putExtra("for", "attendance");
                                                 atten_intent.putExtra("classGradeId", classGradeId);
-                                                atten_intent.putExtra("institution_code",institution_code);
-                                                atten_intent.putExtra("institution_name",institution_name);
-                                                atten_intent.putExtra("child_username",child_username);
+                                                atten_intent.putExtra("institution_code", institution_code);
+                                                atten_intent.putExtra("institution_name", institution_name);
+                                                atten_intent.putExtra("child_username", child_username);
                                                 startActivity(atten_intent);
 
                                             } else if (position == 1) {
                                                 Intent task_intent = new Intent(parent_home_activity.this, Tasks.class);
-                                                task_intent.putExtra("institution_name",institution_name);
-                                                task_intent.putExtra("institution_code",institution_code);
-                                                task_intent.putExtra("role","Parent");
-                                                task_intent.putExtra("child_username",child_username);
+                                                task_intent.putExtra("institution_name", institution_name);
+                                                task_intent.putExtra("institution_code", institution_code);
+                                                task_intent.putExtra("role", "Parent");
+                                                task_intent.putExtra("studentId", studentId);
+                                                task_intent.putExtra("child_username", child_username);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(parent_home_activity.this, view_messages.class);
@@ -138,7 +133,7 @@ String child_username;
                                                 message_intent.putExtra("studentId", studentId);
                                                 message_intent.putExtra("institution_name", institution_name);
                                                 message_intent.putExtra("institution_code", institution_code);
-                                                message_intent.putExtra("child_username",child_username);
+                                                message_intent.putExtra("child_username", child_username);
                                                 message_intent.putExtra("for", "received");
                                                 startActivity(message_intent);
 
@@ -170,6 +165,10 @@ String child_username;
 
                             }
                         });
+                    }else
+                    {
+                        Log.d("parent home", "no record listing");
+
                     }
 
 

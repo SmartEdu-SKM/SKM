@@ -40,13 +40,9 @@ import java.util.List;
 public class UploadMaterial_students extends BaseActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private Toolbar mToolbar;
-    Button uploadButton;
-    Button editButton;
+
     Button doneButton;
-    Button okButton;
-    Button delButton;
-    Button removeDueDate;
-    Button addMoreButton;
+
     Button viewAllButton;
     ListView classList;
     TextView myDate;
@@ -56,25 +52,16 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
     TextView mySubject;
     TextView myTopic;
     EditText subject;
-    EditText topic;
-    Date date1;
-    CalendarView calendarView;
+
     Calendar calendar;
-    ImageView cal;
+
     ImageView imageUpload;
     int Year;
     int Month;
     int Day;
-    String classGradeId;
-    String typeSelected;
-    String subjectDesc;
-    String uploadId;
+
     String uploadid;
-    String topicDesc;
-    Spinner type;
-    int Yearcal;
-    int Monthcal;
-    int Daycal;
+
 
     int flag=0;
 
@@ -305,9 +292,7 @@ public class UploadMaterial_students extends BaseActivity implements FragmentDra
 
                             ParseQuery<ParseObject> uploadQuery = ParseQuery.getQuery(ImageUploadsTable.TABLE_NAME);
                             uploadQuery.whereEqualTo(ImageUploadsTable.OBJECT_ID, uploadMap.get(item));
-                            //uploadQuery.whereEqualTo(ImageUploadsTable.TOPIC, details[0].trim());
-                            //uploadQuery.whereEqualTo(ImageUploadsTable.SUBJECT, details[1].trim());
-                            //uploadQuery.whereEqualTo(ImageUploadsTable.DUE_DATE, milliseconds);
+
                             uploadQuery.findInBackground(new FindCallback<ParseObject>() {
                                 public void done(List<ParseObject> uploadListRet, com.parse.ParseException e) {
                                     if (e == null) {

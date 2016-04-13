@@ -95,38 +95,6 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
 
 
 
-
-/*        ParseQuery<ParseObject> classGradeQuery=ParseQuery.getQuery(ClassGradeTable.TABLE_NAME);
-        classGradeQuery.whereEqualTo(ClassGradeTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
-        classGradeQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> classgradeobjects, ParseException e) {
-                if (e == null) {
-                    if (classgradeobjects.size() != 0) {
-                        HashMap<String, String> classGradeMap = new HashMap<String, String>();
-                        for (int x = 0; x < classgradeobjects.size(); x++) {
-                            ParseObject u = classgradeobjects.get(x);
-                            String name = u.getString(ClassGradeTable.CLASS_GRADE);
-                            if (classGradeMap.get(name) == null) {
-                                classGradeMap.put(name, "1");
-                            }
-                        }
-                    } else {
-                        Toast.makeText(teacher_classes.this, "no classes added for this institution", Toast.LENGTH_LONG).show();
-                        Log.d("classGrade", "error in query");
-                    }
-                } else {
-                    Log.d("classGrade", "error");
-                }
-            }
-        });
-*/
-
-
-
-
-        //new LoadingSyncList(layout,classList).execute();
-
         final Map<String,String> classMap=new HashMap<String,String>();
 
 
@@ -205,6 +173,7 @@ public class teacher_classes extends BaseActivity implements FragmentDrawer.Frag
                                 to_student.putExtra("institution_code", institution_code);
                                 to_student.putExtra("institution_name", institution_name);
                                 to_student.putExtra("role", role);
+                                to_student.putExtra("classGradeId", classMap.get(item));
                                 to_student.putExtra("id", id);
                                 startActivity(to_student);
                             } else if (_for.equals("exam")) {

@@ -38,8 +38,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
 
     ListView examsList;
     Notification_bar noti_bar;
-    String classId;
-    String classGradeId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

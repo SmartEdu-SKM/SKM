@@ -31,16 +31,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
     Button addButton;
     Button editButton;
     Button doneButton;
-    EditText editabsentDays;
-    //EditText editpercentage;
-    EditText edittotalDays;
-    TextView absentDays;
-    TextView percentage;
-    TextView totalDays;
-    TextView myDate;
-    TextView editmyDate;
-    Date date1;
-    // CalendarView calendar;
+
     Calendar calendar;
     ImageView cal;
     int Year;
@@ -64,8 +55,7 @@ public class AddAttendance_everyday extends BaseActivity implements FragmentDraw
     //ArrayList<Task> myList;
     ListView studentList;
     Notification_bar noti_bar;
-    String classId;
-    String classGradeId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

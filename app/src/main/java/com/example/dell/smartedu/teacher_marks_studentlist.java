@@ -39,8 +39,7 @@ public class teacher_marks_studentlist extends BaseActivity implements FragmentD
 
     ListView studentList;
     Notification_bar noti_bar;
-    String classId;
-    String classGradeId;
+
     String examId;
     TextView examname;
     EditText marksobt;

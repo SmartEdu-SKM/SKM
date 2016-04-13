@@ -48,8 +48,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
 
     Model[] modelItems;
     CustomAdapter customAdapter;
-    String studentId;
-    String child_username;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +83,7 @@ public class message_to_teacher extends BaseActivity implements FragmentDrawer.F
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
 
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-        Toast.makeText(message_to_teacher.this, "id class selected is = " +studentId, Toast.LENGTH_LONG).show();
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         broadcast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

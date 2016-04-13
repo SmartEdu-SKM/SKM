@@ -35,6 +35,7 @@ public class student_info extends Fragment{
     TextView confirm_message;
     Button cancel;
     Button proceed;
+    String classGradeId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,8 +44,9 @@ public class student_info extends Fragment{
         final View android = inflater.inflate(R.layout.fragment_student_info, container, false);
         studentId= getArguments().getString("id");
         classId= getArguments().getString("classId");
-        institution_code=getArguments().getString("institution_name");
-        institution_name=getArguments().getString("institution_code");
+        institution_code=getArguments().getString("institution_code");
+        institution_name=getArguments().getString("institution_name");
+        classGradeId=getArguments().getString("classGradeId");
         studentName=(TextView)android.findViewById(R.id.student_name);
         studentAge=(TextView)android.findViewById(R.id.student_age);
         deleteStudent=(Button)android.findViewById(R.id.delete_student);
@@ -95,7 +97,7 @@ public class student_info extends Fragment{
                     to_student.putExtra("institution_code", institution_code);
                     to_student.putExtra("institution_name", institution_name);
                     to_student.putExtra("id", classId);
-
+                    to_student.putExtra("classGradeId",classGradeId);
                     startActivity(to_student);
 
                 }
@@ -134,14 +136,14 @@ public class student_info extends Fragment{
                         ParseUser parent_user = parentReltionListRet.get(0).getParseUser(ParentTable.PARENT_USER_REF);
                         deleteParentRole(parent_user, institution);
                         parentReltionListRet.get(0).deleteEventually();
-                        Toast.makeText(getActivity(), "error deleted parent", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getActivity(), "parent data deleted", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
-                        Log.d("parent relation", "error in query");
+                     //   Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
+                        Log.d("parent child relation", "error in query");
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
-                    Log.d("parent relation", "Error: " + e.getMessage());
+                   /// Toast.makeText(getActivity(), "error deleting parent info", Toast.LENGTH_LONG).show();
+                    Log.d("parent child relation", "Error: " + e.getMessage());
                 }
             }
         });
@@ -169,13 +171,13 @@ public class student_info extends Fragment{
                             roleobjects.get(x).deleteEventually();
                         }
                     } else {
-                        Log.d("role", "error in query");
-                        Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
+                        Log.d("parent role", "error in query");
+                     //   Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
 
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
-                    Log.d("role", "exception error in class deletion");
+                 //   Toast.makeText(getActivity(), "error deleting parent role", Toast.LENGTH_LONG).show();
+                    Log.d("parent role", "exception error in class deletion");
                 }
             }
         });
@@ -188,6 +190,7 @@ public class student_info extends Fragment{
     {
         ParseQuery<ParseObject> deleteAttendanceQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
         deleteAttendanceQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, studentObject);
+        ///////////add class in query
         deleteAttendanceQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> attendanceListRet, ParseException e) {
                 if (e == null) {
@@ -195,15 +198,15 @@ public class student_info extends Fragment{
                         for(int x=0;x<attendanceListRet.size();x++) {
                             attendanceListRet.get(x).deleteEventually();
                         }
-                        Toast.makeText(getActivity(), "deleted student attendance", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getActivity(), "deleted student attendance", Toast.LENGTH_LONG).show();
 
                     } else {
-                        Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
 
                         Log.d("attendance", "error in query");
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
 
                     Log.d("attendance", "Exceptional error");
                 }
@@ -225,13 +228,13 @@ public class student_info extends Fragment{
                                                     for (int i = 0; i < marksListRet.size(); i++) {
                                                         marksListRet.get(i).deleteEventually();
                                                     }
-                                                    Toast.makeText(getActivity(), "Marks deleted", Toast.LENGTH_LONG).show();
+                                                  //  Toast.makeText(getActivity(), "Marks deleted", Toast.LENGTH_LONG).show();
                                                 } else {
-                                                    Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
+                                                    //Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
                                                     Log.d("marks", "error in query");
                                                 }
                                             } else {
-                                                Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
+                                               // Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
                                                 Log.d("marks", "Error: " + e.getMessage());
                                             }
                                         }
@@ -253,11 +256,11 @@ public class student_info extends Fragment{
                         roleListRet.get(0).deleteEventually();
                         Log.d("role", "Student Deleted from roles");
                     } else {
-                        Toast.makeText(getActivity(), "error in deleting student role", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getActivity(), "error in deleting student role", Toast.LENGTH_LONG).show();
                         Log.d("role", "error in query");
                     }
                 } else {
-                    Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }

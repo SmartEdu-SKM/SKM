@@ -41,8 +41,7 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
     //ArrayList<Task> myList;
     ListView examsList;
     Notification_bar noti_bar;
-    String classGradeId;
-    String studentId;
+
     String examid;
     String examName;
     ListView subjectList;
@@ -87,15 +86,6 @@ public class student_exams extends BaseActivity implements FragmentDrawer.Fragme
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar, role);
         drawerFragment.setDrawerListener(this);
 
-        //  myList = dbHandler.getAllTasks();
-
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
 
 
         final HashMap<String, String> classMap = new HashMap<String, String>();

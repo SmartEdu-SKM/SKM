@@ -24,9 +24,7 @@ public class teacher_newexam extends BaseActivity {
    String ExamName;
     String marks;
     Button addExamButton;
-    String classId;
-    String classGradeId;
-    String role;
+
 
 
     @Override

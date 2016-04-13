@@ -36,8 +36,8 @@ public class student_classes extends BaseActivity implements FragmentDrawer.Frag
     //ArrayList<Task> myList;
     ListView classList;
     Notification_bar noti_bar;
-    String classGradeId;
-    String child_username;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

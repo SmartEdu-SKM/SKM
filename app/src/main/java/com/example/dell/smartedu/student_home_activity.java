@@ -24,8 +24,7 @@ public class student_home_activity extends BaseActivity{
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
     ArrayList<Task> myList;
-    String studentId;
-    String classGradeId;
+
     MyDBHandler dbHandler;
     Notification_bar noti_bar;
 
@@ -122,6 +121,7 @@ public class student_home_activity extends BaseActivity{
                                                 task_intent.putExtra("institution_code",institution_code);
                                                 task_intent.putExtra("institution_name",institution_name);
                                                 task_intent.putExtra("role", role);
+                                                task_intent.putExtra("studentId", studentId);
                                                 startActivity(task_intent);
                                             } else if (position == 2) {
                                                 Intent message_intent = new Intent(student_home_activity.this, view_messages.class);
@@ -138,6 +138,7 @@ public class student_home_activity extends BaseActivity{
                                                 schedule_intent.putExtra("institution_name",institution_name);
                                                 schedule_intent.putExtra("institution_code",institution_code);
                                                 schedule_intent.putExtra("role",role);
+                                                schedule_intent.putExtra("studentId", studentId);
                                                 startActivity(schedule_intent);
 
                                             } else if (position == 4) {
@@ -156,6 +157,7 @@ public class student_home_activity extends BaseActivity{
                                                 upload_intent.putExtra("role", role);
                                                 upload_intent.putExtra("classGradeId", classGradeId);
                                                 upload_intent.putExtra("for", "upload");
+                                                upload_intent.putExtra("studentId", studentId);
                                                 startActivity(upload_intent);
                                             }else if (position == 6) {
 

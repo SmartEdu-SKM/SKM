@@ -39,7 +39,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     //ArrayList<Task> myList;
     ListView studentList;
     Notification_bar noti_bar;
-    String classId;
+
     String name;
     Integer age;
     Integer rollno;
@@ -61,6 +61,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
         role=from_student.getStringExtra("role");
         institution_code=from_student.getStringExtra("institution_code");
         institution_name=from_student.getStringExtra("institution_name");
+        classGradeId=from_student.getStringExtra("classGradeId");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -109,22 +110,14 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                         Log.d("marquee", "didnt enter ");
 
                 } else {
-                    //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
+
                     Log.d("user", "Error: " + e.getMessage());
                 }
             }
         });
 
-        //  myList = dbHandler.getAllTasks();
 
-        //Log.i("Anmol", "(Inside MainActivity) dbHandler.getAllTasks().toString() gives " + dbHandler.getAllTasks().toString());
-        //ListAdapter adapter = new CustomListAdapter(getApplicationContext(), dbHandler.getAllTasks());
-        //taskList.setAdapter(adapter);
-        Toast.makeText(Students.this, "id class selected is = " +classId, Toast.LENGTH_LONG).show();
 
-        /*ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Class");
-        studentQuery.whereEqualTo("class",classname);
-        studentQuery.whereEqualTo("teacher",ParseUser.getCurrentUser());*/
         final ParseObject[] classGradeRef = new ParseObject[1];
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
         classQuery.whereEqualTo(ClassTable.OBJECT_ID,classId);
@@ -218,6 +211,11 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                                         Intent to_student_info = new Intent(Students.this, StudentInfo.class);
                                                         to_student_info.putExtra("id", id);
                                                         to_student_info.putExtra("classId", classId);
+                                                        to_student_info.putExtra("classGradeId",classGradeId);
+                                                        to_student_info.putExtra("role",role);
+                                                        to_student_info.putExtra("institution_name",institution_name);
+                                                        to_student_info.putExtra("institution_code",institution_code);
+
                                                         startActivity(to_student_info);
                                                     }
                                                 } else {
@@ -259,6 +257,8 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                 i.putExtra("institution_name", institution_name);
                 i.putExtra("institution_code", institution_code);
                 i.putExtra("id", classId);
+                i.putExtra("role",role);
+                i.putExtra("classGradeId",classGradeId);
                 startActivity(i);
             }
         });
@@ -437,6 +437,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                                             if (e == null) {
                                                 if (objects.size() != 0) {
                                                     objects.get(0).put(ParentTable.PARENT_USER_REF, user_parent);
+                                                    objects.get(0).put(ParentTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                                                     objects.get(0).saveEventually();
                                                 } else {
 
@@ -475,55 +476,16 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
     }
 
 
-/*
-    protected void addStudent(final ParseUser userRef, final Integer rollno){
-        Log.d("in", "add student");
-        final ParseObject[] classRef = new ParseObject[1];
-        final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Class");
-        classQuery.whereEqualTo("objectId", classId);
-        classQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> studentListRet, ParseException e) {
-                if (e == null) {
-                    Log.d("class", "Retrieved the class");
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
-
-                    classRef[0] = studentListRet.get(0);
-
-                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery("Student");
-                    studentQuery.whereEqualTo("class", classRef[0]);
-                    studentQuery.whereEqualTo("rollNumber", rollno);
-                    studentQuery.findInBackground(new FindCallback<ParseObject>() {
-                        public void done(List<ParseObject> studentListRet, ParseException e) {
-                            if (e == null) {
-
-                                if (studentListRet.size() != 0) {
-                                    ParseObject student = studentListRet.get(0);
-
-                                    student.put("userId", userRef);
-                                    student.put("addedBy",ParseUser.getCurrentUser());
-                                    student.saveInBackground();
-
-                                    Toast.makeText(getApplicationContext(), "Student details successfully stored", Toast.LENGTH_LONG).show();
-
-                                }
-
-                            } else {
-                                //Toast.makeText(NewStudent.this, "errorInner", Toast.LENGTH_LONG).show();
-                                Log.d("user", "ErrorInner: " + e.getMessage());
-                            }
-                        }
-                    });
-
-
-                } else {
-                    //Toast.makeText(NewStudent.this, "errorOuter", Toast.LENGTH_LONG).show();
-                    Log.d("user", "ErrorOuter: " + e.getMessage());
-                }
-            }
-        });
-    }*/
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent tohome = new Intent(Students.this,teacher_classes.class);
+        tohome.putExtra("for", "students");
+        tohome.putExtra("role",role);
+      tohome.putExtra("institution_name",institution_name);
+        tohome.putExtra("institution_code",institution_code);
+        startActivity(tohome);
+    }
 
     @Override
     protected void onPostResume() {

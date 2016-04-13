@@ -22,22 +22,17 @@ import java.util.List;
  */
 public class view_attendance extends BaseActivity implements FragmentDrawer.FragmentDrawerListener {
 
-    private Toolbar mToolbar;
-    private FragmentDrawer drawerFragment;
-    String role;
-    String studentId;
-    String classId;
+
     MyDBHandler dbHandler;
     TextView absentDays;
     TextView totalDays;
     TextView percentage;
     java.util.Calendar calendar;
     TextView myDate;
-    // Students students = new Students();
-    //ArrayList<Task> myList;
-    ListView classList;
+
+
     Notification_bar noti_bar;
-    String child_username;
+
 
 
     @Override
@@ -56,23 +51,7 @@ public class view_attendance extends BaseActivity implements FragmentDrawer.Frag
 if(role.equals("Parent")){
     child_username=from_home.getStringExtra("child_username");
 }
-        /*
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Attendance");
 
-
-
-        noti_bar = (Notification_bar) getSupportFragmentManager().findFragmentById(R.id.noti);
-        noti_bar.setTexts(ParseUser.getCurrentUser().getUsername(), role);
-
-        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        classList = (ListView) findViewById(R.id.classesList);
-        drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        drawerFragment.setDrawerListener(this); */
 
 
         Log.d("view atten ", "stud id: " + studentId+" class id: " + classId);
@@ -83,10 +62,7 @@ if(role.equals("Parent")){
             public void done(List<ParseObject> attListRet, ParseException e) {
                 if (e == null) {
                     Log.d("class", "Retrieved the class" + attListRet.size());
-                    //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                    //studentRef[0] = studentListRet.get(0);
-                    //information(studentRef[0], v);
                     if(attListRet.size()!=0) {
                         double present = 0;
                         double absent = 0;

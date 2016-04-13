@@ -37,9 +37,7 @@ public class NewTeacher extends BaseActivity {
     EditText teacherSerial;
 
     Notification_bar noti_bar;
-    String classId;
-    String parentId;
-    String studentId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

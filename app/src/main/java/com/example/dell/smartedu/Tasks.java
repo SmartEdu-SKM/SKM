@@ -70,7 +70,7 @@ public class Tasks extends BaseActivity  implements FragmentDrawer.FragmentDrawe
     ArrayList<String> taskLt;
     String [] items;
     ImageButton cal;
-String child_username;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -96,6 +96,12 @@ String child_username;
         institution_code=fromrole.getString("institution_code");
         if(role.equals("Parent")){
             child_username=fromrole.getString("child_username");
+            studentId=fromrole.getString("studentId");
+        }
+
+        if(role.equals("Student"))
+        {
+            studentId=fromrole.getString("studentId");
         }
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar,role);

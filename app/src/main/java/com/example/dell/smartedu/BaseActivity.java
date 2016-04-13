@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public boolean permission_storage=false;
     RelativeLayout layoutLoading;
     Activity context;
-
+String child_username;
 
 
     @Override
@@ -476,6 +476,7 @@ public class BaseActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 i.putExtra("institution_code",institution_code);
                 i.putExtra("institution_name",institution_name);
                 i.putExtra("role", role);
+                i.putExtra("child_username",child_username);
                 startActivity(i);
             }
 

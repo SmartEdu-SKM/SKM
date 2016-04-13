@@ -40,8 +40,8 @@ public class teacher_message extends BaseActivity implements FragmentDrawer.Frag
     //ArrayList<Task> myList;
     ListView studentList;
     Notification_bar noti_bar;
-    String classId;
-    String classGradeId;
+
+
 
     Button selected_button;
     EditText message;

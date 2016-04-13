@@ -50,8 +50,10 @@ public class NewStudent extends BaseActivity {
 
         Intent from_students = getIntent();
         classId = from_students.getStringExtra("id");
+        role=from_students.getStringExtra("role");
         institution_code=from_students.getStringExtra("institution_code");
         institution_name=from_students.getStringExtra("institution_name");
+        classGradeId=from_students.getStringExtra("classGradeId");
 
         studentName = (EditText) findViewById(R.id.studentName);
         studentAge = (EditText) findViewById(R.id.studentAge);
@@ -192,6 +194,7 @@ public class NewStudent extends BaseActivity {
                                             if (e == null) {
                                                 if (objects.size() != 0) {
                                                     objects.get(0).put(ParentTable.PARENT_USER_REF, user_parent);
+                                                    objects.get(0).put(ParentTable.INSTITUTION,ParseObject.createWithoutData(InstitutionTable.TABLE_NAME,institution_code));
                                                     objects.get(0).saveEventually();
                                                 } else {
 
@@ -235,18 +238,15 @@ public class NewStudent extends BaseActivity {
     protected void addStudent(final ParseUser userRef){
        // Toast.makeText(NewStudent.this, "Student User made "+ userRef+" "+ParseUser.getCurrentUser().getObjectId(),Toast.LENGTH_LONG).show();
         final ParseObject[] classRef = new ParseObject[1];
-        final ParseQuery<ParseObject> classQuery = ParseQuery.getQuery(ClassTable.TABLE_NAME);
-        classQuery.whereEqualTo(ClassTable.OBJECT_ID, classId);
-        classQuery.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> studentListRet, ParseException e) {
-                if (e == null) {
+
+       final ParseObject classGradeobject=ParseObject.createWithoutData(ClassGradeTable.TABLE_NAME,classGradeId);
                     Log.d("class", "Retrieved the class");
                     //Toast.makeText(getApplicationContext(), studentListRet.toString(), Toast.LENGTH_LONG).show();
 
-                    classRef[0] = studentListRet.get(0);
+
 
                     ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classRef[0]);
+                    studentQuery.whereEqualTo(StudentTable.CLASS_REF, classGradeobject);
                     studentQuery.whereEqualTo(StudentTable.ROLL_NUMBER, rollno);
                     studentQuery.findInBackground(new FindCallback<ParseObject>() {
                         public void done(List<ParseObject> studentListRet, ParseException e) {
@@ -258,7 +258,7 @@ public class NewStudent extends BaseActivity {
                                     student.put(StudentTable.STUDENT_NAME, name);
                                     student.put(StudentTable.STUDENT_AGE, age);
                                     student.put(StudentTable.ROLL_NUMBER, rollno);
-                                    student.put(StudentTable.CLASS_REF, classRef[0]);
+                                    student.put(StudentTable.CLASS_REF,classGradeobject);
                                     student.put(StudentTable.STUDENT_USER_REF, userRef);
                                     student.saveInBackground();
 
@@ -267,6 +267,8 @@ public class NewStudent extends BaseActivity {
                                     i.putExtra("institution_code",institution_code);
                                     i.putExtra("institution_name",institution_name);
                                     i.putExtra("id", classId);
+                                    i.putExtra("role",role);
+                                    i.putExtra("classGradeId",classGradeId);
                                     startActivity(i);
                                     finish();
                                 } else {
@@ -281,63 +283,11 @@ public class NewStudent extends BaseActivity {
                     });
 
 
-                } else {
-                    //Toast.makeText(NewStudent.this, "errorOuter", Toast.LENGTH_LONG).show();
-                    Log.d("user", "ErrorOuter: " + e.getMessage());
-                }
-            }
-        });
+
     }
 
 
-/*
-    protected void addParent(final String Name, final int Rollno)
-    {
-        Log.d("user", "parent child realtion");
-        ParseQuery<ParseUser> user=ParseUser.getQuery();
-        user.whereEqualTo("username", "parent_" + Name + Rollno);
-        user.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> parentobjects, ParseException e) {
-                if(e==null) {
-                    if(parentobjects.size()!=0) {
-                        Log.d("user", "parent found");
-                        final ParseUser user_parent =parentobjects.get(0);
-                        ParseQuery<ParseUser> user=ParseUser.getQuery();
-                        user.whereEqualTo("username",Name+Rollno);
-                        user.findInBackground(new FindCallback<ParseUser>() {
-                            @Override
-                            public void done(List<ParseUser> objects, ParseException e) {
-                                if(e==null) {
-                                    if(objects.size()!=0) {
-                                        Log.d("user", "student found");
-                                        ParseUser user_student =objects.get(0);
-                                        ParseObject parent=new ParseObject("Parent");
-                                        parent.put("userId",user_parent);
-                                        parent.put("child",user_student);
-                                        parent.saveEventually();
-                                    }else
-                                    {
-                                        Log.d("user", "query logic error in student");
-                                    }
-                                }else
-                                {
-                                    Log.d("user", "no student");
-                                }
-                            }
-                        });
-                    }else
-                    {
-                        Log.d("user", "query logic error in parent");
-                    }
-                }else
-                {
-                    Log.d("user", "no parent");
-                }
-            }
-        });
-    }
-*/
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
