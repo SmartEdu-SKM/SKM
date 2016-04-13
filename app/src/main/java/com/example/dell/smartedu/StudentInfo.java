@@ -36,7 +36,7 @@ public class StudentInfo extends FragmentActivity{
         classId = from_student.getStringExtra("classId");
         institution_code=from_student.getStringExtra("institution_code");
         institution_name= from_student.getStringExtra("institution_name");
-        Toast.makeText(StudentInfo.this, "id of student selected is = " + id, Toast.LENGTH_LONG).show();
+       // Toast.makeText(StudentInfo.this, "id of student selected is = " + id, Toast.LENGTH_LONG).show();
         //TabAdapter = new TabPagerAdapter(getSupportFragmentManager(),id);
 
         Tab = (ViewPager) findViewById(R.id.pager);

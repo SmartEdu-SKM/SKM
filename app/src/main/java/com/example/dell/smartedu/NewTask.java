@@ -83,7 +83,7 @@ public class NewTask extends BaseActivity {
             @Override
             public void onClick(View v) {
                 myTitle = taskTitle.getText().toString().trim();
-                myDesc = taskDescription.getText().toString();
+                myDesc = taskDescription.getText().toString().trim();
 
 
                 if (myTitle.equals("") || myDesc.equals("") || ((DATE.getText().equals("Select Due Date")))) {

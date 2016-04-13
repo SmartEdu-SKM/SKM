@@ -111,11 +111,12 @@ public class UploadImage_students extends ListActivity {
         getSupportActionBar().setTitle("Uploads"); */
 
         Intent from_upload_material_students = getIntent();
+        context=this;
 
         role= from_upload_material_students.getStringExtra("role");
         classId=from_upload_material_students.getStringExtra("classId");
         uploadId=from_upload_material_students.getStringExtra("uploadId");
-        classGradeId=from_upload_material_students.getStringExtra("id");
+        classGradeId=from_upload_material_students.getStringExtra("classGradeId");
         institution_code=from_upload_material_students.getStringExtra("institution_code");
         institution_name=from_upload_material_students.getStringExtra("institution_name");
 

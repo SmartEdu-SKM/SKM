@@ -91,6 +91,7 @@ public class student_info extends Fragment{
 
                     confirm_step.dismiss();
                     Intent to_student = new Intent(getActivity(), Students.class);
+                    to_student.putExtra("role","Teacher");
                     to_student.putExtra("institution_code", institution_code);
                     to_student.putExtra("institution_name", institution_name);
                     to_student.putExtra("id", classId);
