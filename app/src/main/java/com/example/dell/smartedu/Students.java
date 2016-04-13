@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -106,8 +107,12 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
                         Log.d("marquee", "entered ");
                         createIDsText.setVisibility(View.VISIBLE);
                         createIDsText.setSelected(true);
-                    } else
+                    } else {
+                        createIDs.setVisibility(View.INVISIBLE);
+                        LinearLayout.LayoutParams layoutParams  = new LinearLayout.LayoutParams(0,0);
+                        createIDs.setLayoutParams(layoutParams);
                         Log.d("marquee", "didnt enter ");
+                    }
 
                 } else {
 
@@ -274,7 +279,7 @@ public class Students extends BaseActivity implements FragmentDrawer.FragmentDra
 
                    ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
         try {
-            studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData("Class",classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
+            studentQuery.whereEqualTo(StudentTable.CLASS_REF, ParseObject.createWithoutData(ClassTable.TABLE_NAME,classId).fetchIfNeeded().get(ClassTable.CLASS_NAME));
         } catch (ParseException e) {
             e.printStackTrace();
         }

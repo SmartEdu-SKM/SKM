@@ -51,7 +51,7 @@ public class student_info extends Fragment{
         studentAge=(TextView)android.findViewById(R.id.student_age);
         deleteStudent=(Button)android.findViewById(R.id.delete_student);
         ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(StudentTable.TABLE_NAME);
-        studentQuery.whereEqualTo(StudentTable.OBJECT_ID,studentId);
+        studentQuery.whereEqualTo(StudentTable.OBJECT_ID, studentId);
         studentQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> studentListRet, ParseException e) {
                 if (e == null) {
@@ -85,20 +85,27 @@ public class student_info extends Fragment{
             proceed.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ParseObject institution = ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code);
-                    ParseObject studentObject = ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId);
-                    ParseUser studentUser = studentObject.getParseUser(StudentTable.STUDENT_USER_REF);
-                    deleteParentData(institution, studentUser);
-                    deleteStudentData(institution, studentUser, studentObject);
+                    try {
+                        ParseObject institution = ParseObject.createWithoutData(InstitutionTable.TABLE_NAME, institution_code);
+                        ParseObject studentObject = ParseObject.createWithoutData(StudentTable.TABLE_NAME, studentId);
+                        ParseUser studentUser = null;
 
-                    confirm_step.dismiss();
-                    Intent to_student = new Intent(getActivity(), Students.class);
-                    to_student.putExtra("role","Teacher");
-                    to_student.putExtra("institution_code", institution_code);
-                    to_student.putExtra("institution_name", institution_name);
-                    to_student.putExtra("id", classId);
-                    to_student.putExtra("classGradeId",classGradeId);
-                    startActivity(to_student);
+                        studentUser = studentObject.fetchIfNeeded().getParseUser(StudentTable.STUDENT_USER_REF);
+
+                        deleteParentData(institution, studentUser);
+                        deleteStudentData(institution, studentUser, studentObject);
+
+                        confirm_step.dismiss();
+                        Intent to_student = new Intent(getActivity(), Students.class);
+                        to_student.putExtra("role", "Teacher");
+                        to_student.putExtra("institution_code", institution_code);
+                        to_student.putExtra("institution_name", institution_name);
+                        to_student.putExtra("id", classId);
+                        to_student.putExtra("classGradeId", classGradeId);
+                        startActivity(to_student);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             });
@@ -190,7 +197,8 @@ public class student_info extends Fragment{
     {
         ParseQuery<ParseObject> deleteAttendanceQuery = ParseQuery.getQuery(AttendanceDailyTable.TABLE_NAME);
         deleteAttendanceQuery.whereEqualTo(AttendanceDailyTable.STUDENT_USER_REF, studentObject);
-        ///////////add class in query
+
+        deleteAttendanceQuery.whereEqualTo(AttendanceDailyTable.FOR_CLASS,ParseObject.createWithoutData(ClassTable.TABLE_NAME,classId));
         deleteAttendanceQuery.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> attendanceListRet, ParseException e) {
                 if (e == null) {
@@ -203,12 +211,12 @@ public class student_info extends Fragment{
                     } else {
                        // Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
 
-                        Log.d("attendance", "error in query");
+                        Log.d("attendance deletion", "no attendance already");
                     }
                 } else {
                    // Toast.makeText(getActivity(), "error deleting attendance", Toast.LENGTH_LONG).show();
 
-                    Log.d("attendance", "Exceptional error");
+                    Log.d("attendance deletion", "Exceptional error");
                 }
             }
         });
@@ -231,7 +239,7 @@ public class student_info extends Fragment{
                                                   //  Toast.makeText(getActivity(), "Marks deleted", Toast.LENGTH_LONG).show();
                                                 } else {
                                                     //Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
-                                                    Log.d("marks", "error in query");
+                                                    Log.d("marks deletion", "no marks already");
                                                 }
                                             } else {
                                                // Toast.makeText(getActivity(), "error deleting marks", Toast.LENGTH_LONG).show();
@@ -257,7 +265,7 @@ public class student_info extends Fragment{
                         Log.d("role", "Student Deleted from roles");
                     } else {
                       //  Toast.makeText(getActivity(), "error in deleting student role", Toast.LENGTH_LONG).show();
-                        Log.d("role", "error in query");
+                        Log.d("role deletion", "no role already");
                     }
                 } else {
                     //Toast.makeText(getActivity(), "error", Toast.LENGTH_LONG).show();
