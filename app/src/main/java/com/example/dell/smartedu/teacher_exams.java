@@ -169,6 +169,7 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
                                                     delText.setOnClickListener(new View.OnClickListener() {
                                                         public void onClick(View v) {
 
+                                                            delMarks(examid);
                                                             ParseObject.createWithoutData(ExamTable.TABLE_NAME, examid).deleteEventually();
 
 
@@ -233,6 +234,25 @@ public class teacher_exams extends BaseActivity implements FragmentDrawer.Fragme
 
 
 
+    }
+
+    void delMarks(String examid){
+
+        ParseQuery<ParseObject> studentQuery = ParseQuery.getQuery(MarksTable.TABLE_NAME);
+        studentQuery.whereEqualTo(MarksTable.EXAM_REF,ParseObject.createWithoutData(ExamTable.TABLE_NAME,examid));
+        studentQuery.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> studentListRet, ParseException e) {
+                if (e == null) {
+                    for(int i=0; i<studentListRet.size(); i++) {
+                        studentListRet.get(i).deleteEventually();
+                    }
+
+
+                } else {
+                    Log.d("marks deletion", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
 
